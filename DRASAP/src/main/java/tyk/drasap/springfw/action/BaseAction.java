@@ -28,12 +28,12 @@ public class BaseAction {
 	// --------------------------------------------------------- Methods
 
 	public BaseAction() {
-		this.category = Logger.getLogger(this.getClass().getName());
+		category = Logger.getLogger(this.getClass().getName());
 	}
 
 	public void setMessageSource(MessageSource ms) {
-		if (Objects.isNull(this.messageSource)) {
-			this.messageSource = ms;
+		if (Objects.isNull(messageSource)) {
+			messageSource = ms;
 		}
 	}
 }
