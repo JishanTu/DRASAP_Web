@@ -96,13 +96,25 @@ public class AclUpdateNoSequenceDB {
 
 		} catch (Exception e) {
 			// ロールバック
-			try { conn.rollback(); } catch (Exception e2) {}
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt1.close(); } catch (Exception e) {}
-			try { pstmt2.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt1.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt2.close();
+			} catch (Exception e) {
+			}
 		}
 		return aclUpdateNo;
 	}

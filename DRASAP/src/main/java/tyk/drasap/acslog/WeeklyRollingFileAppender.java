@@ -79,7 +79,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 	static final int TOP_OF_DAY = 3;
 	/** Given Day Of Week.
 	 * 1:Sunday, 2:Monday, 3:Tuesday, 4:Wednesday, 5:Thursday, 6:Friday, 7:Saturday */
-//	static final int TOP_OF_WEEK = 4;
+	//	static final int TOP_OF_WEEK = 4;
 	static final int GIVEN_DAY_OF_WEEK = 4; // 2013.09.27 yamagishi add.
 	static final int TOP_OF_MONTH = 5;
 
@@ -116,7 +116,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 	SimpleDateFormat sdf;
 	DrasapRollingCalendar rc = new DrasapRollingCalendar();
 
-    /*----------------------------------------------------------------------------*/
+	/*----------------------------------------------------------------------------*/
 
 	/**
 	 * The default constructor simply calls its FileAppender#FileAppender
@@ -171,6 +171,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 
 	/*----------------------------------------------------------------------------*/
 
+	@Override
 	public synchronized void setFile(String fileName, boolean append, boolean bufferedIO, int bufferSize) throws IOException {
 		super.setFile(fileName, append, this.bufferedIO, this.bufferSize);
 		if (append) {
@@ -179,6 +180,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 		}
 	}
 
+	@Override
 	public void activateOptions() {
 		super.activateOptions();
 		if (datePattern != null && fileName != null) {
@@ -216,7 +218,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 			LogLog.debug("Appender [" + name + "] to be rolled at midnight.");
 			break;
 		case GIVEN_DAY_OF_WEEK:
-//			LogLog.debug("Appender [" + name + "] to be rolled at start of week."); // 2013.09.27 yamagishi modified.
+			//			LogLog.debug("Appender [" + name + "] to be rolled at start of week."); // 2013.09.27 yamagishi modified.
 			LogLog.debug("Appender [" + name + "] to be rolled at the given day of week.");
 			break;
 		case TOP_OF_MONTH:
@@ -227,7 +229,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 		}
 	}
 
-    // This method computes the roll over period by looping over the periods,
+	// This method computes the roll over period by looping over the periods,
 	// starting with the shortest, and stopping when the r0 is different from from r1,
 	// where r0 is the epoch formatted according to the datePattern (supplied by the user)
 	// and r1 is the epoch+nextMillis(i) formatted according to the datePattern.
@@ -248,10 +250,10 @@ public class WeeklyRollingFileAppender extends FileAppender {
 				// formatting in GMT
 				String r0 = simpleDateFormat.format(epoch);
 				rollingCalendar.setType(i);
-//				Date next = new Date(rollingCalendar.getNextCheckMillis(epoch));
+				//				Date next = new Date(rollingCalendar.getNextCheckMillis(epoch));
 				Date next = new Date(rollingCalendar.getNextCheckMillis(epoch, getIntRollOverDow()));
 				String r1 = simpleDateFormat.format(next);
-//				System.out.println("Type = "+i+", r0 = "+r0+", r1 = "+r1);
+				//				System.out.println("Type = "+i+", r0 = "+r0+", r1 = "+r1);
 				if (r0 != null && r1 != null && !r0.equals(r1)) {
 					return i;
 				}
@@ -279,7 +281,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 		// It is too early to roll over because we are still within the
 		// bounds of the current interval. Rollover will occur once the
 		// next interval is reached.
-//		if (scheduledFilename.equals(datedFilename)) { // 2013.09.27 yamagishi modified.
+		//		if (scheduledFilename.equals(datedFilename)) { // 2013.09.27 yamagishi modified.
 		if (scheduledFilename.compareTo(datedFilename) >= 0) {
 			return;
 		}
@@ -289,7 +291,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 		try {
 			// This will also close the file. This is OK since multiple
 			// close operations are safe.
-			this.setFile(fileName, false, this.bufferedIO, this.bufferSize);
+			this.setFile(fileName, false, bufferedIO, bufferSize);
 		} catch (IOException e) {
 			errorHandler.error("setFile(" + fileName + ", false) call failed.");
 		}
@@ -313,13 +315,14 @@ public class WeeklyRollingFileAppender extends FileAppender {
 	 * Before actually logging, this method will check whether it is time to do a rollover.
 	 * If it is, it will schedule the next rollover time and then rollover.
 	 */
+	@Override
 	protected void subAppend(LoggingEvent event) {
 		// 日付ベースのローテーションが発生するかどうかチェックし、
 		// 発生する場合はローテーションを行う。
 		long n = System.currentTimeMillis();
 		if (n >= nextCheck) {
 			now.setTime(n);
-//			nextCheck = rc.getNextCheckMillis(now); // 2013.09.27 yamagishi modified.
+			//			nextCheck = rc.getNextCheckMillis(now); // 2013.09.27 yamagishi modified.
 			nextCheck = rc.getLatestCheckMillis(now, getIntRollOverDow());
 			try {
 				rollOver();
@@ -340,7 +343,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 	 */
 	private void rotateLogFiles() {
 		// close current file, and rename it to datedFilename
-		this.closeFile();
+		closeFile();
 
 		// ログファイル名に日付を付与する
 		File toFile = new File(scheduledFilename);
@@ -354,11 +357,12 @@ public class WeeklyRollingFileAppender extends FileAppender {
 
 	/*----------------------------------------------------------------------------*/
 
+	@Override
 	protected void setQWForFiles(Writer writer) {
-		this.qw = new CountingQuietWriter(writer, errorHandler);
+		qw = new CountingQuietWriter(writer, errorHandler);
 	}
 
-// 2013.09.27 yamagishi add. start
+	// 2013.09.27 yamagishi add. start
 	/**
 	 * The <b>RollOverDow</b> takes a string from 1:Sunday to 7:Saturday
 	 * This options determines the weekly rollover schedule.
@@ -379,7 +383,7 @@ public class WeeklyRollingFileAppender extends FileAppender {
 		}
 		return Integer.valueOf(rollOverDow);
 	}
-// 2013.09.27 yamagishi add. end
+	// 2013.09.27 yamagishi add. end
 
 	/**
 	 * The <b>DatePattern</b> takes a string in the same format as expected by

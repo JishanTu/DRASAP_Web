@@ -1,23 +1,31 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+﻿<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${empty sessionScope.user}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>図面登録依頼詳細</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+	<style type="text/css">
+		@import
+		url(
+		<%=request.getContextPath()%>/resources/css/default.css
+		);
+	</style>
 	<script type="text/javascript">
-	<!--
-		function act(param1,param2){
-			document.forms[0].action.value=param1;//アクション
-			document.forms[0].job.value=param2;//依頼ID,依頼内容,行番号のデータを取得する
+		// <!--
+		function act(param1, param2) {
+			document.forms[0].action.value = param1;//アクション
+			document.forms[0].job.value = param2;//依頼ID,依頼内容,行番号のデータを取得する
 			//alert("アクション = " + document.forms[0].action.value + ", job_id = " + document.forms[0].job_id.value);
 			var targetName = '_messege';//別の画面を開く
 
@@ -26,151 +34,163 @@
 			var w = screen.availWidth - 300;
 			var h = screen.availHeight - 300;
 
-			WO1=window.open("", targetName,
-						"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
-						//'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
-			WO1.window.moveTo(150,0);//画面の位置指定
+			WO1 = window.open("", targetName, "toolbar=no,resizable=yes,width=" + w
+					+ ",height=" + h);
+			//'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
+			WO1.window.moveTo(150, 0);//画面の位置指定
 			WO1.focus();
 
 			document.forms[0].submit();
 		}
-	//-->
+		//-->
 	</script>
 </head>
-<body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
-<html:form action="/req_ref">
-<input type="hidden" name="action"/>
-<input type="hidden" name="job"/>
-<font color="red" size="4" >
-	<logic:iterate id="errs" name="request_refForm" property="listErrors">
-		<li><bean:write name="errs" /></li>
-	</logic:iterate>
-</font>
-<html:errors />
-<table border="0" align="center">
-	<tr bgcolor="#CCCCCC">
-		<td nowrap="nowrap" align="center"><span class="normal10">依頼ID</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">状態</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">依頼内容</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
-		<td nowrap="nowrap" align="center"><span class="normal10">号口・号機</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">原図内容</span></td>
+<body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0"
+	  rightmargin="0" marginheight="0" marginwidth="0">
+<form action="<%=request.getContextPath()%>/req_ref" method="post">
+	<input type="hidden" name="action" /> <input type="hidden" name="job" />
+	<font color="red" size="4">
+		<c:if test="${not empty request_refForm.listErrors}">
+			<c:forEach var="error" items="${request_refForm.listErrors}">
+				<li><c:out value="${error}"/></li>
+			</c:forEach>
+		</c:if>
+	</font>
+	<form:errors path="*" cssClass="error-message" />
+	<table border="0" align="center">
+		<tr bgcolor="#CCCCCC">
+			<td nowrap="nowrap" align="center"><span class="normal10">依頼ID</span></td>
+			<td nowrap="nowrap" align="center"><span class="normal10">状態</span></td>
+			<td nowrap="nowrap" align="center"><span class="normal10">依頼内容</span></td>
+			<%-- // 2019.10.23 yamamoto modified. start
+    <td nowrap="nowrap" align="center"><span class="normal10">号口・号機</span></td>
+    <td nowrap="nowrap" align="center"><span class="normal10">原図内容</span></td>
 --%>
-		<td nowrap="nowrap" colspan="3" align="center"><span class="normal10">図番</span></td>
-<%--
-		<td nowrap="nowrap" align="center"><span class="normal10">部数</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">縮小</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">サイズ</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">出力先</span></td>
+			<td nowrap="nowrap" colspan="3" align="center"><span
+					class="normal10">図番</span></td>
+			<%--
+    <td nowrap="nowrap" align="center"><span class="normal10">部数</span></td>
+    <td nowrap="nowrap" align="center"><span class="normal10">縮小</span></td>
+    <td nowrap="nowrap" align="center"><span class="normal10">サイズ</span></td>
+    <td nowrap="nowrap" align="center"><span class="normal10">出力先</span></td>
 // 2019.10.23 yamamoto modified. end --%>
-		<td nowrap="nowrap" align="center" bgcolor="#FFFFFF"></td>
-	</tr>
-<logic:iterate id="items" name="request_refForm" property="iraiList">
-<%
-	tyk.drasap.genzu_irai.Request_RefElement e = (tyk.drasap.genzu_irai.Request_RefElement)items;
-	String stat = "";
-	String job_id =e.getJob_id();//依頼ID
-	String job_stat =e.getJob_stat();//状態
-	stat = job_stat;
-	if("0".equals(job_stat)){
-		job_stat = "依頼中";
-	}else{
-		job_stat = "完了";
-	}
-	String job_name =e.getJob_name();//依頼内容
-	String gouki =e.getGouki();//号口・号機
-	if(gouki == null){
-		gouki = "";
-	}
-	String genzu =e.getGenzu();//原図内容
-	if(genzu == null){
-		genzu = "";
-	}
-	String kaisi =e.getStart();//開始番号
-	if(kaisi == null){
-		kaisi = "";
-	}
-	String end =e.getEnd();//終了番号
-	if(end == null){
-		end = "";
-	}
-	String busuu =e.getBusuu();//部数
-	if(busuu == null){
-		busuu = "";
-	}
-	String syuku =e.getSyuku();//縮小
-	if(syuku == null){
-		syuku = "";
-	}
-	String sizu =e.getSize();//サイズ
-	if(sizu == null){
-		sizu = "";
-	}
-	String printer =e.getPrinter();//出力先
-	if(printer == null){
-		printer = "";
-	}
-	String messege =e.getMessege();//メッセージ(図面登録依頼、図面出力指示で使用)
-	if(messege == null){
-		messege = "";
-	}
-	String exist =e.getExist();//登録有無(図面登録依頼、図面出力指示で使用)
-	String tenkai_deta = "";
-	String sagyo_deta = "";
+			<td nowrap="nowrap" align="center" bgcolor="#FFFFFF"></td>
+		</tr>
+		<c:forEach var="item" items="${request_refForm.iraiList}">
 
-	if("図面登録依頼".equals(job_name) || "図面出力指示".equals(job_name)){
-		if(!"".equals(messege) || "0".equals(exist)){
-			tenkai_deta = "1";
-		}
-	}
-	String messege1 =e.getMessege1();//メッセージ(原図借用依頼、図面以外焼付で使用)
-	if(messege1 == null){
-		messege1 = "";
-	}
-	if("原図借用依頼".equals(job_name) || "図面以外焼付依頼".equals(job_name)){
-		if(!"".equals(messege1) || "2".equals(stat)){
-			sagyo_deta = "1";
-		}
-	}
-	String seq = e.getSeq();//シーケンス番号
-	String rowNo = e.getRowNo();//行番号
+		<c:set var="e" value="${item}"/>
+		<c:set var="stat" value=""/>
+		<c:set var="job_id" value="${e.job_id}"/>
+		<c:set var="job_stat" value="${e.job_stat}"/>
+		<c:choose>
+			<c:when test="${'0' eq job_stat}">
+				<c:set var="job_stat" value="依頼中"/>
+			</c:when>
+			<c:otherwise>
+				<c:set var="job_stat" value="完了"/>
+			</c:otherwise>
+		</c:choose>
+		<c:set var="job_name" value="${e.job_name}"/>
+		<c:set var="gouki" value="${e.gouki}"/>
+		<c:if test="${empty gouki}">
+			<c:set var="gouki" value=""/>
+		</c:if>
 
-	String job_list = job_id + "_" + job_name + "_" + rowNo;//メッセージありのリンクのデータ(図面登録依頼、図面出力指示で使用)
-	String str_Messege = "act('button_Mtenkai', '" + job_list + "')";//図面登録依頼、図面出力指示で使用
-	String str_Messege1 = "act('button_Msagyo', '" + job_list + "')";//原図借用依頼、図面以外焼付依頼で使用
+		<c:set var="genzu" value="${e.genzu}"/>
+		<c:if test="${empty genzu}">
+			<c:set var="gouki" value=""/>
+		</c:if>
 
-%>
+		<c:set var="kaisi" value="${e.start}"/>
+		<c:if test="${empty kaisi}">
+			<c:set var="kaisi" value=""/>
+		</c:if>
 
-<% 	if("依頼中".equals(job_stat)){ %>
-	<tr>
-<%	}else{ %>
-	<tr bgcolor="#CCCCFF">
-<%	} %>
-		<td nowrap="nowrap" align="center"><span class="normal10"><%= job_id %></span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10"><%= job_stat %></span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= job_name %>&nbsp;</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= gouki %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= genzu %>&nbsp;</span></td>
---%>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= kaisi %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">～</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= end %>&nbsp;</span></td>
-<%--
-		<td nowrap="nowrap" align="right"><span class="normal10">&nbsp;<%= busuu %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= syuku %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= sizu %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= printer %>&nbsp;</span></td>
-// 2019.10.23 yamamoto modified. end --%>
-<%	if("1".equals(tenkai_deta)){ %>
-		<td nowrap="nowrap" align="center" bgcolor="#FF3300"><a href="javascript:<%=str_Messege%>"><span class="normal10white">ﾒｯｾｰｼﾞ</span></a></td>
-	</tr>
-<%	}else if("1".equals(sagyo_deta)){ %>
-		<td nowrap="nowrap" align="center" bgcolor="#FF3300"><a href="javascript:<%=str_Messege1%>"><span class="normal10white">ﾒｯｾｰｼﾞ</span></a></td>
-	</tr>
-<%	} %>
-</logic:iterate>
-</table>
-</html:form>
+		<c:set var="end" value="${e.end}"/>
+		<c:if test="${empty end}">
+			<c:set var="end" value=""/>
+		</c:if>
+
+		<c:set var="busuu" value="${e.busuu}"/>
+		<c:if test="${empty busuu}">
+			<c:set var="busuu" value=""/>
+		</c:if>
+
+		<c:set var="syuku" value="${e.syuku}"/>
+		<c:if test="${empty syuku}">
+			<c:set var="syuku" value=""/>
+		</c:if>
+
+		<c:set var="size" value="${e.size}"/>
+		<c:if test="${empty size}">
+			<c:set var="size" value=""/>
+		</c:if>
+
+		<c:set var="printer" value="${e.printer}"/>
+		<c:if test="${empty printer}">
+			<c:set var="printer" value=""/>
+		</c:if>
+
+		<c:set var="messege" value="${e.messege}"/>
+		<c:if test="${empty messege}">
+			<c:set var="messege" value=""/>
+		</c:if>
+
+		<c:set var="exist" value="${e.exist}"/>
+		<c:set var="tenkai_deta" value=""/>
+		<c:set var="sagyo_deta" value=""/>
+
+		<c:set var="tenkai_deta"
+			   value="${('図面登録依頼' eq job_name or '図面出力指示' eq job_name) and (not empty messege or '0' eq exist) ? '1' : ''}"/>
+
+		<c:set var="messege1"
+			   value="${not empty e.messege1 ? e.messege1 : ''}"/>
+
+		<c:set var="sagyo_deta"
+			   value="${('原図借用依頼' eq job_name or '図面以外焼付依頼' eq job_name) and (not empty messege1 or '2' eq stat) ? '1' : ''}"/>
+
+
+		<c:set var="seq" value="${e.seq}"/>
+		<c:set var="rowNo" value="${e.rowNo}"/>
+
+		<c:set var="job_list" value="${job_id}_${job_name}_${rowNo}"/>
+		<c:set var="str_Messege"
+			   value="act('button_Mtenkai', '${job_list}')"/>
+		<c:set var="str_Messege1"
+			   value="act('button_Msagyo', '${job_list}')"/>
+
+		<c:choose>
+		<c:when test="${'依頼中' eq job_stat}">
+		<tr>
+			</c:when>
+			<c:otherwise>
+		<tr bgcolor="#CCCCFF">
+			</c:otherwise>
+			</c:choose>
+
+			<td nowrap="nowrap" align="center"><span class="normal10">${job_id}</span></td>
+			<td nowrap="nowrap" align="center"><span class="normal10">${job_stat}</span></td>
+			<td nowrap="nowrap" align="center"><span class="normal10">${job_name}</span></td>
+
+			<td nowrap="nowrap" align="center"><span class="normal10">${kaisi}</span></td>
+			<td nowrap="nowrap" align="center"><span class="normal10">～</span></td>
+			<td nowrap="nowrap" align="center"><span class="normal10">${end}</span></td>
+
+			<c:choose>
+			<c:when test="${'1' eq tenkai_deta}">
+			<td nowrap="nowrap" align="center" bgcolor="#FF3300"><a
+					href="javascript:${str_Messege}"> <span class="normal10white">ﾒｯｾｰｼﾞ</span>
+			</a></td>
+			</c:when>
+			<c:when test="${'1' eq sagyo_deta}">
+			<td nowrap="nowrap" align="center" bgcolor="#FF3300"><a
+					href="javascript:${str_Messege1}"> <span
+					class="normal10white">ﾒｯｾｰｼﾞ</span>
+			</a></td>
+			</c:when>
+			</c:choose>
+			</c:forEach>
+	</table>
+</form>
 </body>
-</html:html>
+</html>

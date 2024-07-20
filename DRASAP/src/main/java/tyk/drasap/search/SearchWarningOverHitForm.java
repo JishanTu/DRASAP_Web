@@ -1,19 +1,17 @@
 package tyk.drasap.search;
 
-import org.apache.struts.action.ActionForm;
-
 import tyk.drasap.common.StringCheck;
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * ŒŸõŒ”‚ªŒŸõŒxŒ”‚ğ’´‚¦‚½‚Æ‚«‚ÉAŒx‚·‚é‰æ–Ê
  *
  * @version 2013/09/13 yamagishi
  */
-public class SearchWarningOverHitForm extends ActionForm {
+public class SearchWarningOverHitForm extends BaseForm {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 1L;
 	String sqlWhere;
 	String sqlOrder;
 	String act;

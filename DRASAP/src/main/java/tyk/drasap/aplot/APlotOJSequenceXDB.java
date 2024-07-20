@@ -21,7 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * A-PLOTプリンタ出力用ID採番クラス.
@@ -53,11 +53,11 @@ public class APlotOJSequenceXDB {
 	public static final String JOB_ID_KIND3_DOC = "D";
 
 	/** Logger（log4j） */
-	@SuppressWarnings("deprecation")
-	private static Category category = Category.getInstance(APlotOJSequenceXDB.class.getName());
+	private static Logger category = Logger.getLogger(APlotOJSequenceXDB.class.getName());
 
 	/** コンストラクタ. */
-	private APlotOJSequenceXDB() { }
+	private APlotOJSequenceXDB() {
+	}
 
 	/**
 	 * OJ-ID連番管理テーブル(OJ_SEQUENCE_X)からJOBIDの連番を取得（ロックも兼ねる）.
@@ -68,13 +68,13 @@ public class APlotOJSequenceXDB {
 	 * @param yymm ID発番時のシステム日時の年月（YYMM形式）.
 	 * @return SQL文字列を返す.
 	 */
-	private static String createSQL_selectSeqNo( String schemaName, String kd1, String kd2, String kd3, String yymm ) {
+	private static String createSQL_selectSeqNo(String schemaName, String kd1, String kd2, String kd3, String yymm) {
 
 		// 連番を検索するSQLを返す（for update).
 		return String.format(
 				"SELECT SEQVAL FROM %s.OJ_SEQUENCE_X" +
-				" WHERE ID_KIND1 = '%s' AND ID_KIND2 = '%s' AND ID_KIND3 = '%s' AND YYMM = '%s' for update"
-				, schemaName, kd1, kd2, kd3, yymm);
+						" WHERE ID_KIND1 = '%s' AND ID_KIND2 = '%s' AND ID_KIND3 = '%s' AND YYMM = '%s' for update",
+				schemaName, kd1, kd2, kd3, yymm);
 	}
 
 	/**
@@ -87,13 +87,13 @@ public class APlotOJSequenceXDB {
 	 * @param seqNo 初期番号.
 	 * @return SQL文字列を返す.
 	 */
-	private static String createSQL_insertSeqNo( String schemaName, String kd1, String kd2, String kd3, String yymm, int seqNo) {
+	private static String createSQL_insertSeqNo(String schemaName, String kd1, String kd2, String kd3, String yymm, int seqNo) {
 
 		// 連番を作成するSQLを返す.
 		return String.format(
 				"INSERT INTO %s.OJ_SEQUENCE_X(ID_KIND1, ID_KIND2, ID_KIND3, YYMM, SEQVAL) values (" +
-				" '%s', '%s', '%s', '%s', %d)"
-				, schemaName, kd1, kd2, kd3, yymm, seqNo);
+						" '%s', '%s', '%s', '%s', %d)",
+				schemaName, kd1, kd2, kd3, yymm, seqNo);
 	}
 
 	/**
@@ -106,15 +106,14 @@ public class APlotOJSequenceXDB {
 	 * @param seqNo 次の番号.
 	 * @return SQL文字列を返す.
 	 */
-	private static String createSQL_updateSeqNo( String schemaName, String kd1, String kd2, String kd3, String yymm, int seqNo ) {
+	private static String createSQL_updateSeqNo(String schemaName, String kd1, String kd2, String kd3, String yymm, int seqNo) {
 
 		// 連番を更新するSQLを返す.
 		return String.format(
 				"UPDATE %s.OJ_SEQUENCE_X SET SEQVAL = %d " +
-				" WHERE ID_KIND1 = '%s' AND ID_KIND2 = '%s' AND ID_KIND3 = '%s' AND YYMM = '%s'"
-				, schemaName, seqNo, kd1, kd2, kd3, yymm);
+						" WHERE ID_KIND1 = '%s' AND ID_KIND2 = '%s' AND ID_KIND3 = '%s' AND YYMM = '%s'",
+				schemaName, seqNo, kd1, kd2, kd3, yymm);
 	}
-
 
 	/**
 	 * ジョブIDの割り振り.
@@ -128,7 +127,7 @@ public class APlotOJSequenceXDB {
 	 * @return 新しい連番.
 	 * @throws SQLException
 	 */
-	public static int getNewSeq(Connection conn, String schemaName, String kd1, String kd2, String kd3, String yymm ) throws SQLException {
+	public static int getNewSeq(Connection conn, String schemaName, String kd1, String kd2, String kd3, String yymm) throws SQLException {
 
 		int seqNo = -1;
 		Statement stmt = null;
@@ -139,12 +138,12 @@ public class APlotOJSequenceXDB {
 			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(createSQL_selectSeqNo(schemaName, kd1, kd2, kd3, yymm));
-			if ( rs.next() ){
+			if (rs.next()) {
 				seqNo = rs.getInt("SEQVAL");
 				// インクリメント.
 				seqNo++;
 			}
-			if ( seqNo <= 0 ) {
+			if (seqNo <= 0) {
 				// 未登録シーケンスNoなので初期値を1とする.
 				seqNo = 1;
 				// データを作成.
@@ -160,8 +159,12 @@ public class APlotOJSequenceXDB {
 			conn.rollback();
 			throw ex;
 		} finally {
-			if ( rs != null ) rs.close();
-			if ( stmt != null ) stmt.close();
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 		return seqNo;
 	}

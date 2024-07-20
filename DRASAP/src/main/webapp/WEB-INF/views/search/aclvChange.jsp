@@ -1,19 +1,21 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${sessionScope.user == null}">
+	<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+	</script>
+</c:if>
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<title>Drawing Search and Print System [アクセスレベル変更]</title>
 	<script type="text/javascript">
-	<!--
 		var browserName = navigator.appName;
 		function onLoad() {
                     var w = screen.availWidth;
@@ -24,12 +26,11 @@
                     window.moveTo(mx,my);//画面の位置指定
                     if (browserName != "Netscape") focus();
 		}
-	//-->
 	</script>
 </head>
 <frameset rows="75,*,30" framespacing="0" border="0" onload="onLoad()">
-<frame name="aclv_change_head" src="switch.do?prefix=/search&amp;page=/aclvChangeHead.jsp" />
-<frame name="aclv_change_body" src="switch.do?prefix=/search&amp;page=/aclvChangeBody.jsp" />
-<frame name="aclv_change_foot" src="switch.do?prefix=/search&amp;page=/aclvChangeFoot.jsp" />
+<frame name="aclv_change_head" src="switch.do?page=/search/aclvChangeHead.jsp" />
+<frame name="aclv_change_body" src="switch.do?page=/search/aclvChangeBody.jsp" />
+<frame name="aclv_change_foot" src="switch.do?page=/search/aclvChangeFoot.jsp" />
 </frameset>
-</html:html>
+</html>

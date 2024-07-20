@@ -14,7 +14,7 @@ public class ErrorUtility {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		ex.printStackTrace(pw);
-		
+
 		return sw.toString();
 	}
 

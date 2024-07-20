@@ -1,14 +1,14 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Cache-Control" content="no-cache" />
-<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 <style type="text/css">
 	.leftMenuItem {
 		background-color:#7A79A7;
@@ -52,8 +52,8 @@
 </script>
 </head>
 <body bgcolor="#F5F5DC" bottommargin="0" leftmargin="5" topmargin="5" rightmargin="5" marginheight="0" marginwidth="0">
-<html:form action="/masterMaintenanceMenu">
-<html:hidden property="act" />
+<form action="<%=request.getContextPath() %>/masterMaintenanceMenu" method = "post">
+<input type = "hidden" name = "act" value = ""/>
 <!-- left side -->
 <table align="left" border="0" cellspacing="0" cellpadding="0" style="width:200px;cursor:pointer;">
 	<tr><td>
@@ -89,7 +89,7 @@
 		</table>
 	</td></tr>
 </table>
-</html:form>
+</form>
 </body>
 </html>
 

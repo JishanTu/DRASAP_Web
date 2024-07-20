@@ -1,17 +1,15 @@
 package tyk.drasap.genzu_irai;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import tyk.drasap.common.User;
-
+import tyk.drasap.springfw.action.BaseAction;
 
 /**
  * @author KAWAI
@@ -19,23 +17,33 @@ import tyk.drasap.common.User;
  * この生成されたコメントの挿入されるテンプレートを変更するため
  * ウィンドウ > 設定 > Java > コード生成 > コードとコメント
  */
-public class RequestResultAction extends Action {
-	
+@Controller
+public class RequestResultAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
-	public ActionForward execute(
-			ActionMapping mapping,
-			ActionForm form,
+	/**
+	 * Method execute
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @param errors
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping("/req_result")
+	public String execute(
+			Request_listForm form,
 			HttpServletRequest request,
-			HttpServletResponse response)
+			HttpServletResponse response,
+			Model errors)
 			throws Exception {
 
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		if(user == null){
-			return mapping.findForward("timeout");
+		if (user == null) {
+			return "timeout";
 		}
-	
-		return(mapping.findForward("success"));			
-	}			
+
+		return "success";
+	}
 }

@@ -5,12 +5,12 @@
 <%@ page import="java.nio.charset.Charset" %>
 <%@ page import="java.io.IOException" %>
 <%@ page import="java.util.List" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page isELIgnored="false"%>
 
 <!DOCTYPE html>
-<html:html>
+<html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -24,115 +24,101 @@
 	vertical-align: top;
 }
 </style>
-	<script type="text/javascript">
-	<!--
-		window.name='login';
+<script type="text/javascript">
+	window.name='login';
+	// 直リンク禁止
+	var refinfo=document.referrer;
+	if (!refinfo){
+		location.replace('<%=request.getContextPath() %>/timeout');
+	}
+	// メッセージ１読み込み
+	function loadMessage1() {
+		var div = document.getElementById('message1');
 
-
-		// 直リンク禁止
-		var refinfo=document.referrer;
-		if (!refinfo)
-		{
-			location.replace('<%=request.getContextPath() %>/root/timeout.jsp');
-		}
-
-		// メッセージ１読み込み
-		function loadMessage1() 
-		{
-			var div = document.getElementById('message1');
-
-			var result = '<%= new UserDef().loadMessage(
-					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.login.message1.path")
-					,Charset.forName("Shift_JIS")) %>'
-
-			// テキストファイルの改行を置き換える
-			// htmlタグが使用されている場合は何もしない
-			result = replaceLineBreaksInTextFiles(result);
-			div.innerHTML = result;
-		}
-
-		// メッセージ２読み込み
-		function loadMessage2()
-		{
-			var ret = null;
-			var div = document.getElementById('message2');
-
-			var result = '<%= new UserDef().loadMessage(
-					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.login.message2.path")
-					,Charset.forName("Shift_JIS")) %>'
-
-			// テキストファイルの改行を置き換える
-			// htmlタグが使用されている場合は何もしない
-			result = replaceLineBreaksInTextFiles(result);
-	//		console.log("result" + result);
-			div.innerHTML = result;
-		}
-
-		// メッセージ３読み込み
-		function loadMessage3()
-		{
-			var div = document.getElementById('message3');
-
-			var result = '<%= new UserDef().loadMessage(
-					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.login.message3.path")
-					,Charset.forName("Shift_JIS")) %>'
-
-			// テキストファイルの改行を置き換える
-			// htmlタグが使用されている場合は何もしない
-			result = replaceLineBreaksInTextFiles(result);
-			div.innerHTML = result;
-		}
+		var result = '<%= new UserDef().loadMessage(
+				DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.login.message1.path")
+				,Charset.forName("Shift_JIS")) %>'
 
 		// テキストファイルの改行を置き換える
 		// htmlタグが使用されている場合は何もしない
-		function replaceLineBreaksInTextFiles(str)
-		{
-			// htmlタグ使用チェック (htmlコメントは除外)
-			var pattern = /<(".*?"|'.*?'|[^'"!])*?>/g;
-			var findRet = str.match(pattern);
-			if(findRet == null)
-			{
-				// htmlタグ未使用
-				// 改行コードを置換する
-				str = str.replace(/&#010;/g, '<br>');
-			}
+		result = replaceLineBreaksInTextFiles(result);
+		div.innerHTML = result;
+	}
 
-			return str;
+	// メッセージ２読み込み
+	function loadMessage2() {
+		var ret = null;
+		var div = document.getElementById('message2');
+
+		var result = '<%= new UserDef().loadMessage(
+				DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.login.message2.path")
+				,Charset.forName("Shift_JIS")) %>'
+
+		// テキストファイルの改行を置き換える
+		// htmlタグが使用されている場合は何もしない
+		result = replaceLineBreaksInTextFiles(result);
+//		console.log("result" + result);
+		div.innerHTML = result;
+	}
+
+	// メッセージ３読み込み
+	function loadMessage3() {
+		var div = document.getElementById('message3');
+
+		var result = '<%= new UserDef().loadMessage(
+				DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.login.message3.path")
+				,Charset.forName("Shift_JIS")) %>'
+
+		// テキストファイルの改行を置き換える
+		// htmlタグが使用されている場合は何もしない
+		result = replaceLineBreaksInTextFiles(result);
+		div.innerHTML = result;
+	}
+
+	// テキストファイルの改行を置き換える
+	// htmlタグが使用されている場合は何もしない
+	function replaceLineBreaksInTextFiles(str) {
+		// htmlタグ使用チェック (htmlコメントは除外)
+		var pattern = /<(".*?"|'.*?'|[^'"!])*?>/g;
+		var findRet = str.match(pattern);
+		if(findRet == null) {
+			// htmlタグ未使用
+			// 改行コードを置換する
+			str = str.replace(/&#010;/g, '<br>');
 		}
 
-	//-->
+		return str;
+	}
 	</script>
 	<script type="text/javascript">
-	<!--
-		// IEの場合、Broadcastはエラーになるので、Edgeのみ処理
-		const agent = window.navigator.userAgent.toLowerCase();
-		if(agent.indexOf('chrome') !== -1)
-		{
-			var IP;
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', '/DRASAP/getip');
-			xhr.send();
+        // IEの場合、Broadcastはエラーになるので、Edgeのみ処理
+        const agent = window.navigator.userAgent.toLowerCase();
+        if(agent.indexOf('chrome') !== -1)
+        {
+            var IP;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/DRASAP/getip');
+            xhr.send();
 
-			xhr.onreadystatechange = function()
-			{
-				if(xhr.readyState === 4 && xhr.status === 200)
-				{
-					IP = xhr.responseText;
-				}
-			}
+            xhr.onreadystatechange = function()
+            {
+                if(xhr.readyState === 4 && xhr.status === 200)
+                {
+                    IP = xhr.responseText;
+                }
+            }
 
-			var broadcast = new BroadcastChannel("DRASAP_LOGIN");
-			broadcast.addEventListener('message',({data})=>{
-				if(data === 'newlogin_' +IP)
-				{
-					var login = window.open('about:blank','_self');
-					login.close();
-				 }
-   			});
+            var broadcast = new BroadcastChannel("DRASAP_LOGIN");
+            broadcast.addEventListener('message',({data})=>{
+                if(data === 'newlogin_' +IP)
+                {
+                    var login = window.open('about:blank','_self');
+                    login.close();
+                 }
+            });
 
-		}
-	//-->
-	</script>
+        }
+    </script>
 </head>
 <body>
 	<!-- drasap.propertiesの「web.container」で判定して、
@@ -144,18 +130,20 @@
 	// if(!"mrdbsv01".equalsIgnoreCase(hostName) && "weblogic".equals(container)){
 	String dev = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("environment.dev");
 	if (!"true".equals(dev)) {	// 2013.08.27 yamagishi modifiled. end %>
-
-	<logic:redirect page="/root/loginNotEnabled.jsp" />
+	<script>
+		<%--	<logic:redirect page="/root/loginNotEnabled" />--%>
+		location.replace('<%=request.getContextPath() %>/switch.do?page=/root/loginNotEnabled.jsp');
+	</script>
 
 	<%	} %>
 
-	<html:img page="/img/DRASAPBanner.JPG" width="333" height="70" />
-	<html:img page="/img/CONFIDENTIALBanner.JPG" width="167" height="70" />
+	<img src="<%=request.getContextPath() %>/resources/img/DRASAPBanner.JPG" width="333" height="70" />
+    <img src="<%=request.getContextPath() %>/resources/img/CONFIDENTIALBanner.JPG" width="167" height="70" />
 
 	<!-- message1 -->
 	<div id="message1"></div>
 	<br />
-	<html:form action="/login">
+	<form action="<%=request.getContextPath() %>/login" method = "post">
 		<table>
 			<tr>
 				<td>
@@ -171,7 +159,23 @@
 				<td rowspan="3" class="errMsg">
 					<!-- エラーの表示 -->
 					<font color="RED">
-					<b><html:errors header="false" footer="false" /></b>
+					<ul>
+						<c:if test="${loginId != null}">
+							<c:forEach var="idmsg" items="${loginId}">
+								<li>${idmsg}</li>
+							</c:forEach>
+						</c:if>
+						<c:if test="${passwd != null}">
+							<c:forEach var="passwdmsg" items="${passwd}">
+								<li>${passwdmsg}</li>
+							</c:forEach>
+						</c:if>
+						<c:if test="${message != null}">
+							<c:forEach var="msg" items="${message}">
+								<li>${msg}</li>
+							</c:forEach>
+						</c:if>
+					</ul>
 					</font>
 				</td>
 			</tr>
@@ -189,14 +193,14 @@
 			</tr>
 			<tr>
 				<td>
-					<html:submit tabindex="3">ログイン / login</html:submit>
+					<input type="submit" value="ログイン / login" tabindex="3">
 				</td>
 				<td>
-					<!-- <input type="button" value="閉じる" onclick="self.close()" />	 -->
+					<!-- <input type="button" value="閉じる" onclick="self.close()" /> -->
 				</td>
 			</tr>
 		</table>
-	</html:form>
+	</form>
 	<br />
 	<!-- message2 -->
 	<div id="message2"></div>
@@ -211,4 +215,4 @@
 		loadMessage3();
 	</script>
 </body>
-</html:html>
+</html>

@@ -7,7 +7,7 @@ import tyk.drasap.common.StringCheck;
  * @author KAWAI
  */
 public class Request_listElement {
-	
+
 	String seq;//シーケンス番号
 	String job_id;//依頼ID
 	String rowNo;//行番号
@@ -38,34 +38,35 @@ public class Request_listElement {
 	String user_name;//ユーザ名
 	String busyo_name;//部署名
 	String hiddenMessage;//メッセージのhidden
-	String hiddenTouroku;//登録有無のhidden	
-	
-	
-	public Request_listElement(String newSeq, String newJob_id, String newZikan, String newIrai, String newZuban,
-								String newGouki, String newGenzu, String newBusuu, String newSyukusyou, String newSize,	 
-									String newUser_name, String newBusyo_name, String newMessage, String newRowNo,
-									String newTouroku, String newHiddenMessage, String newHiddenTouroku){
-										
-		this.seq = newSeq;	
-		this.job_id = newJob_id;
-		this.zikan = newZikan;
-		this.irai = newIrai;									
-		this.zuban = newZuban;
-		this.gouki = newGouki;
-		this.genzu = newGenzu;
-		this.busuu = newBusuu;
-		this.syukusyou = newSyukusyou;
-		this.size = newSize;
-		this.user_name = newUser_name;
-		this.busyo_name = newBusyo_name;
-		this.message = newMessage;
-		this.rowNo = newRowNo;
-		this.touroku = newTouroku;
-		this.hiddenMessage = newHiddenMessage;
-		this.hiddenTouroku = newHiddenTouroku;
+	String hiddenTouroku;//登録有無のhidden
 
-	}									
-	
+	public Request_listElement() {
+	}
+
+	public Request_listElement(String newSeq, String newJob_id, String newZikan, String newIrai, String newZuban,
+			String newGouki, String newGenzu, String newBusuu, String newSyukusyou, String newSize,
+			String newUser_name, String newBusyo_name, String newMessage, String newRowNo,
+			String newTouroku, String newHiddenMessage, String newHiddenTouroku) {
+		seq = newSeq;
+		job_id = newJob_id;
+		zikan = newZikan;
+		irai = newIrai;
+		zuban = newZuban;
+		gouki = newGouki;
+		genzu = newGenzu;
+		busuu = newBusuu;
+		syukusyou = newSyukusyou;
+		size = newSize;
+		user_name = newUser_name;
+		busyo_name = newBusyo_name;
+		message = newMessage;
+		rowNo = newRowNo;
+		touroku = newTouroku;
+		hiddenMessage = newHiddenMessage;
+		hiddenTouroku = newHiddenTouroku;
+
+	}
+
 	public String getKey() {
 		return key;
 	}
@@ -73,7 +74,7 @@ public class Request_listElement {
 	public void setKey(String key) {
 		this.key = key;
 	}
-		
+
 	public String getSeq() {
 		return seq;
 	}
@@ -81,7 +82,7 @@ public class Request_listElement {
 	public void setSeq(String seq) {
 		this.seq = seq;
 	}
-	
+
 	public String getJob_id() {
 		return job_id;
 	}
@@ -89,7 +90,7 @@ public class Request_listElement {
 	public void setJob_id(String job_id) {
 		this.job_id = job_id;
 	}
-	
+
 	public String getRowNo() {
 		return rowNo;
 	}
@@ -97,7 +98,7 @@ public class Request_listElement {
 	public void setRowNo(String rowNo) {
 		this.rowNo = rowNo;
 	}
-	
+
 	public String getZuban() {
 		return zuban;
 	}
@@ -105,7 +106,7 @@ public class Request_listElement {
 	public void setZuban(String zuban) {
 		this.zuban = zuban;
 	}
-	
+
 	public String getTouroku() {
 		return touroku;
 	}
@@ -113,7 +114,7 @@ public class Request_listElement {
 	public void setTouroku(String touroku) {
 		this.touroku = touroku;
 	}
-	
+
 	public String getMessage() {
 		return message;
 	}
@@ -122,7 +123,7 @@ public class Request_listElement {
 		// UTF-8に変更
 		this.message = StringCheck.latinToUtf8(message);
 	}
-	
+
 	public String getZyoutai() {
 		return zyoutai;
 	}
@@ -130,7 +131,7 @@ public class Request_listElement {
 	public void setZyoutai(String zyoutai) {
 		this.zyoutai = zyoutai;
 	}
-	
+
 	public String getZikan() {
 		return zikan;
 	}
@@ -138,7 +139,7 @@ public class Request_listElement {
 	public void setZikan(String zikan) {
 		this.zikan = zikan;
 	}
-	
+
 	public String getIrai() {
 		return irai;
 	}
@@ -146,7 +147,7 @@ public class Request_listElement {
 	public void setIrai(String irai) {
 		this.irai = irai;
 	}
-	
+
 	public String getSagyou() {
 		return sagyou;
 	}
@@ -154,7 +155,7 @@ public class Request_listElement {
 	public void setSagyou(String sagyou) {
 		this.sagyou = sagyou;
 	}
-	
+
 	public String getGouki() {
 		return gouki;
 	}
@@ -162,7 +163,7 @@ public class Request_listElement {
 	public void setGouki(String gouki) {
 		this.gouki = gouki;
 	}
-	
+
 	public String getGenzu() {
 		return genzu;
 	}
@@ -170,7 +171,7 @@ public class Request_listElement {
 	public void setGenzu(String genzu) {
 		this.genzu = genzu;
 	}
-	
+
 	public String getKaisi() {
 		return kaisi;
 	}
@@ -178,7 +179,7 @@ public class Request_listElement {
 	public void setKaisi(String kaisi) {
 		this.kaisi = kaisi;
 	}
-	
+
 	public String getOwari() {
 		return owari;
 	}
@@ -186,7 +187,7 @@ public class Request_listElement {
 	public void setOwari(String owari) {
 		this.owari = owari;
 	}
-		
+
 	public String getBusuu() {
 		return busuu;
 	}
@@ -194,7 +195,7 @@ public class Request_listElement {
 	public void setBusuu(String busuu) {
 		this.busuu = busuu;
 	}
-	
+
 	public String getSyukusyou() {
 		return syukusyou;
 	}
@@ -202,7 +203,7 @@ public class Request_listElement {
 	public void setSyukusyou(String syukusyou) {
 		this.syukusyou = syukusyou;
 	}
-	
+
 	public String getSize() {
 		return size;
 	}
@@ -210,7 +211,7 @@ public class Request_listElement {
 	public void setSize(String size) {
 		this.size = size;
 	}
-	
+
 	public String getIraisya() {
 		return iraisya;
 	}
@@ -218,7 +219,7 @@ public class Request_listElement {
 	public void setIraisya(String iraisya) {
 		this.iraisya = iraisya;
 	}
-	
+
 	public String getBusyo() {
 		return busyo;
 	}
@@ -226,7 +227,7 @@ public class Request_listElement {
 	public void setBusyo(String busyo) {
 		this.busyo = busyo;
 	}
-	
+
 	public String getIraikubun() {
 		return iraikubun;
 	}
@@ -234,7 +235,7 @@ public class Request_listElement {
 	public void setIraikubun(String iraikubun) {
 		this.iraikubun = iraikubun;
 	}
-	
+
 	public String getStamp_flag() {
 		return stamp_flag;
 	}
@@ -242,7 +243,7 @@ public class Request_listElement {
 	public void setStamp_flag(String stamp_flag) {
 		this.stamp_flag = stamp_flag;
 	}
-	
+
 	public String getPrinter_id() {
 		return printer_id;
 	}
@@ -250,7 +251,7 @@ public class Request_listElement {
 	public void setPrinter_id(String printer_id) {
 		this.printer_id = printer_id;
 	}
-	
+
 	public String getJob_date() {
 		return job_date;
 	}
@@ -258,7 +259,7 @@ public class Request_listElement {
 	public void setJob_date(String job_date) {
 		this.job_date = job_date;
 	}
-	
+
 	public String getOutput_stat() {
 		return output_stat;
 	}
@@ -266,7 +267,7 @@ public class Request_listElement {
 	public void setOutput_stat(String output_stat) {
 		this.output_stat = output_stat;
 	}
-		
+
 	public String getOutput_date() {
 		return output_date;
 	}
@@ -274,7 +275,7 @@ public class Request_listElement {
 	public void setOutput_date(String output_date) {
 		this.output_date = output_date;
 	}
-	
+
 	public String getUser_id() {
 		return user_id;
 	}
@@ -282,7 +283,7 @@ public class Request_listElement {
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
-	
+
 	public String getUser_name() {
 		return user_name;
 	}
@@ -290,7 +291,7 @@ public class Request_listElement {
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
 	}
-	
+
 	public String getBusyo_name() {
 		return busyo_name;
 	}
@@ -298,7 +299,7 @@ public class Request_listElement {
 	public void setBusyo_name(String busyo_name) {
 		this.busyo_name = busyo_name;
 	}
-	
+
 	public String getHiddenMessage() {
 		return hiddenMessage;
 	}
@@ -306,7 +307,7 @@ public class Request_listElement {
 	public void setHiddenMessage(String hiddenMessage) {
 		this.hiddenMessage = hiddenMessage;
 	}
-	
+
 	public String getHiddenTouroku() {
 		return hiddenTouroku;
 	}

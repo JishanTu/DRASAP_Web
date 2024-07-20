@@ -1,9 +1,10 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="tyk.drasap.search.*,tyk.drasap.common.*" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
-<html:html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page isELIgnored="false"%>
+
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -118,7 +119,7 @@
 --%>
 
 		// ログインページに遷移 (履歴クリア。戻るボタンで戻れない)
-		top.location.replace('<%=request.getContextPath() %>/root/login.jsp');
+		top.location.replace('<%=request.getContextPath() %>/login');
 
 		// ウィンドウ移動
 //		moveWindow();
@@ -168,4 +169,4 @@
 <%		} %>
 
 </body>
-</html:html>
+</html>

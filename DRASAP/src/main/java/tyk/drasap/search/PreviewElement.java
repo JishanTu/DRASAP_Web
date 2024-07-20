@@ -10,13 +10,12 @@ public class PreviewElement implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public PreviewElement() {
-		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
-	private String drwgNo = "";			// 図番
-	private String fileName = "";		// ファイル名
-	private String pathName = "";		// ディレクトリのフルパス
-	private String drwgSize = "";		// 図番サイズ
+	private String drwgNo = ""; // 図番
+	private String fileName = ""; // ファイル名
+	private String pathName = ""; // ディレクトリのフルパス
+	private String drwgSize = ""; // 図番サイズ
 
 	/**
 	 * getDrwgNo
@@ -25,6 +24,7 @@ public class PreviewElement implements Serializable {
 	public String getdrwgNo() {
 		return drwgNo;
 	}
+
 	/**
 	 * setDrwgNo
 	 * @param DrwgNo The DrwgNo to set.
@@ -40,6 +40,7 @@ public class PreviewElement implements Serializable {
 	public String getDrwgSize() {
 		return drwgSize;
 	}
+
 	/**
 	 * setDrwgSize
 	 * @param drwgSize The drwgSize to set.
@@ -55,6 +56,7 @@ public class PreviewElement implements Serializable {
 	public String getFileName() {
 		return fileName;
 	}
+
 	/**
 	 * setFileName
 	 * @param fileName The fileName to set.
@@ -70,6 +72,7 @@ public class PreviewElement implements Serializable {
 	public String getPathName() {
 		return pathName;
 	}
+
 	/**
 	 * setPathName
 	 * @param pathName The pathName to set.

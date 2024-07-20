@@ -4,7 +4,7 @@
 
 package tyk.drasap.genzu_irai;
 
-import org.apache.struts.action.ActionForm;
+import tyk.drasap.springfw.form.BaseForm;
 
 /** 
  * RequestPriForm.java created by EasyStruts - XsltGen.
@@ -14,13 +14,7 @@ import org.apache.struts.action.ActionForm;
  * XDoclet definition:
  * @struts:form name="requestPriForm"
  */
-public class RequestPriForm extends ActionForm {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class RequestPriForm extends BaseForm {
 	// --------------------------------------------------------- Instance Variables
 
 	// --------------------------------------------------------- Methods

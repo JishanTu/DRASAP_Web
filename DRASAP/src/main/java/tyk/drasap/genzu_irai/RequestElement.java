@@ -7,15 +7,15 @@ package tyk.drasap.genzu_irai;
  * ウィンドウ > 設定 > Java > コード生成 > コードとコメント
  */
 public class RequestElement {
-	
+
 	String id;//プリンタID
 	String name;//プリンタ名
 
-	public RequestElement(String newId, String newName){
-		this.id = newId;
-		this.name = newName;
+	public RequestElement(String newId, String newName) {
+		id = newId;
+		name = newName;
 	}
-	
+
 	/**
 	 * Returns the id.
 	 * @return String
@@ -23,7 +23,7 @@ public class RequestElement {
 	public String getId() {
 		return id;
 	}
-	
+
 	/**
 	 * Returns the name.
 	 * @return String
@@ -31,5 +31,5 @@ public class RequestElement {
 	public String getName() {
 		return name;
 	}
-	
+
 }

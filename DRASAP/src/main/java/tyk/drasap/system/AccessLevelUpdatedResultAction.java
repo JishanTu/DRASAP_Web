@@ -1,9 +1,6 @@
 package tyk.drasap.system;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.*;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -14,8 +11,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,40 +20,44 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.filechooser.FileSystemView;
 
-import org.apache.log4j.Category;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.MessageResources;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.User;
 import tyk.drasap.errlog.ErrorLoger;
+import tyk.drasap.springfw.action.BaseAction;
+import tyk.drasap.springfw.utils.MessageSourceUtil;
 
 /**
  * アクセスレベル更新結果処理アクション
  *
  * @author 2013/07/23 yamagishi
  */
-public class AccessLevelUpdatedResultAction extends Action {
-	private static Category category = Category.getInstance(AccessLevelUpdatedResultAction.class.getName());
-
+@Controller
+public class AccessLevelUpdatedResultAction extends BaseAction {
+	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
 	/**
 	 * Method execute
-	 * @param ActionMapping mapping
-	 * @param ActionForm form
-	 * @param HttpServletRequest request
-	 * @param HttpServletResponse response
-	 * @return ActionForward
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @param errors
+	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@PostMapping("/accessLevelUpdatedResult")
+	public Object execute(
+			AccessLevelUpdatedResultForm form,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model errors)
+			throws Exception {
 
 		if (category.isDebugEnabled()) {
 			category.debug("start");
@@ -65,29 +66,32 @@ public class AccessLevelUpdatedResultAction extends Action {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
-			return mapping.findForward("timeout");
+			return "timeout";
 		}
 
-		ActionMessages errors = new ActionMessages();
-		MessageResources resources = getResources(request);
+		//ActionMessages errors = new ActionMessages();
+		//MessageResources resources = getResources(request);
 
 		// アクセスレベル一括更新ツールの使用権限なしの場合
 		if (user.getAclBatchUpdateFlag() == null || user.getAclBatchUpdateFlag().length() <= 0) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.nopermission", "アクセスレベル更新結果画面"));
-			saveErrors(request, errors);
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.nopermission", new Object[] { "アクセスレベル更新結果画面" }, null));
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
 			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclBatchUpdate.nopermission", "アクセスレベル更新結果画面"));
+				category.error(messageSource.getMessage("system.aclBatchUpdate.nopermission", new Object[] { "アクセスレベル更新結果画面" }, null));
 			}
-			return mapping.findForward("noPermission");
+			return "noPermission";
 		}
 
-		AccessLevelUpdatedResultForm accessLevelUpdatedResultForm = (AccessLevelUpdatedResultForm) form;
+		AccessLevelUpdatedResultForm accessLevelUpdatedResultForm = form;
 		if ("init".equals(request.getParameter("act"))) {
 			accessLevelUpdatedResultForm.setAct("init");
+		} else if ("download".equals(request.getParameter("act"))) {
+			accessLevelUpdatedResultForm.setAct("download");
 		}
 		accessLevelUpdatedResultForm.clearErrorMsg();
 		String fileName = request.getParameter("FILE_NAME");
@@ -96,26 +100,30 @@ public class AccessLevelUpdatedResultAction extends Action {
 		if ("init".equals(accessLevelUpdatedResultForm.getAct())) {
 			setFormLinkAclLogData(accessLevelUpdatedResultForm);
 			// エラー確認
-			if (!errors.isEmpty()) {
-				saveErrors(request, errors);
-				return mapping.findForward("error");
+			if (!Objects.isNull(errors.getAttribute("message"))) {
+				//saveErrors(request, errors);
+				request.setAttribute("errors", errors);
+				return "error";
 			}
-			return mapping.findForward("init");
-
-		} else if ("download".equals(accessLevelUpdatedResultForm.getAct())) {
-			doDownload(response, fileName, user, errors, resources);
+			session.removeAttribute("accessLevelUpdatedResultForm");
+			session.setAttribute("accessLevelUpdatedResultForm", accessLevelUpdatedResultForm);
+			return "init";
+		}
+		if ("download".equals(accessLevelUpdatedResultForm.getAct())) {
+			doDownload(response, fileName, user, errors);
 			// エラー確認
-			if (!errors.isEmpty()) {
-				saveErrors(request, errors);
-				return mapping.findForward("error");
+			if (!Objects.isNull(errors.getAttribute("message"))) {
+				//saveErrors(request, errors);
+				request.setAttribute("errors", errors);
+				return "error";
 			}
-			return null;
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 
 		if (category.isDebugEnabled()) {
 			category.debug("end");
 		}
-		return mapping.findForward("init");
+		return "init";
 	}
 
 	/**
@@ -131,9 +139,15 @@ public class AccessLevelUpdatedResultAction extends Action {
 		Properties drasapProperties = DrasapPropertiesFactory.getDrasapProperties(this);
 
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
+		}
 		String filePath = apServerHome + drasapProperties.getProperty("tyk.result.updated.log.path");
 		String[] paths = filePath.split("\\" + File.separator);
 		String fileName = paths[paths.length - 1];
@@ -157,12 +171,11 @@ public class AccessLevelUpdatedResultAction extends Action {
 			}
 		}
 		// 更新日時の降順でソート
-		ArrayList<Map.Entry<String, Long>> sortedFiles =
-				new ArrayList<Map.Entry<String, Long>>(sortMap.entrySet());
-		Collections.sort(sortedFiles, new Comparator<Map.Entry<String, Long>>() {
+		ArrayList<Entry<String, Long>> sortedFiles = new ArrayList<Entry<String, Long>>(sortMap.entrySet());
+		Collections.sort(sortedFiles, new Comparator<Entry<String, Long>>() {
 			@Override
 			public int compare(Entry<String, Long> entry1, Entry<String, Long> entry2) {
-				return ((Long) entry2.getValue()).compareTo((Long) entry1.getValue());
+				return entry2.getValue().compareTo(entry1.getValue());
 			}
 		});
 
@@ -197,7 +210,7 @@ public class AccessLevelUpdatedResultAction extends Action {
 	 * @param resources
 	 */
 	private void doDownload(HttpServletResponse response, String fileName, User user,
-			ActionMessages errors, MessageResources resources) {
+			Model errors) {
 
 		if (category.isDebugEnabled()) {
 			category.debug("アクセスレベル更新結果ダウンロード実行処理の開始");
@@ -206,20 +219,26 @@ public class AccessLevelUpdatedResultAction extends Action {
 		Properties drasapProperties = DrasapPropertiesFactory.getDrasapProperties(this);
 
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
+		}
 
 		// ファイル名を確認
 		if (fileName == null || fileName.length() <= 0) {
 			// for ユーザー
-			ActionMessage error = new ActionMessage("system.aclUpdatedResult.download.failed", ("ファイル名 " + fileName));
-			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			//ActionMessage error = messageSource.getMessage("system.aclUpdatedResult.download.failed", ("ファイル名 " + fileName));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclUpdatedResult.download.failed", new Object[] { "ファイル名 " + fileName }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.csv"), user.getSys_id());
 			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclUpdatedResult.download.failed", ("ファイル名 " + fileName)));
+				category.error(messageSource.getMessage("system.aclUpdatedResult.download.failed", new Object[] { "ファイル名 " + fileName }, null));
 			}
 			return;
 		}
@@ -231,15 +250,15 @@ public class AccessLevelUpdatedResultAction extends Action {
 		filePath = folderPath + File.separator + fileName;
 
 		// ACL更新結果ログファイルがあるか確認する
-		if (!(new File(filePath)).exists()) {
+		if (!new File(filePath).exists()) {
 			// for ユーザー
-			ActionMessage error = new ActionMessage("system.aclUpdatedResult.download.failed", ("ファイルパス " + filePath));
-			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			//ActionMessage error = messageSource.getMessage("system.aclUpdatedResult.download.failed", ("ファイルパス " + filePath));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclUpdatedResult.download.failed", new Object[] { "ファイルパス " + filePath }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.csv"), user.getSys_id());
 			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclUpdatedResult.download.failed", ("ファイルパス " + filePath)));
+				category.error(messageSource.getMessage("system.aclUpdatedResult.download.failed", new Object[] { "ファイルパス " + filePath }, null));
 			}
 			return;
 		}
@@ -253,8 +272,8 @@ public class AccessLevelUpdatedResultAction extends Action {
 		try {
 			response.setContentType("application/octet-stream");
 			// 文字化け対応
-			response.setHeader("Content-Disposition","attachment;" +
-				" filename=" + new String(streamFileName.getBytes("Windows-31J"),"ISO8859_1"));
+			response.setHeader("Content-Disposition", "attachment;" +
+					" filename=" + new String(streamFileName.getBytes("Windows-31J"), "ISO8859_1"));
 			response.setContentLength((int) f.length());
 
 			in = new BufferedInputStream(new FileInputStream(f));
@@ -265,26 +284,37 @@ public class AccessLevelUpdatedResultAction extends Action {
 			}
 			out.flush();
 
-		} catch(Exception e) {
-			try { response.reset(); } catch (Exception e2) {}
+		} catch (Exception e) {
+			try {
+				response.reset();
+			} catch (Exception e2) {
+			}
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclUpdatedResult.download.failed", ErrorUtility.error2String(e)));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclUpdatedResult.download.failed", new Object[] { ErrorUtility.error2String(e) }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
 			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclUpdatedResult.download.failed", ErrorUtility.error2String(e)));
+				category.error(messageSource.getMessage("system.aclUpdatedResult.download.failed", new Object[] { ErrorUtility.error2String(e) }, null));
 			}
 
 		} finally {
 			// CLOSE処理
-			try { if (in != null) in.close(); } catch (Exception e) {}
 			try {
-				if (out != null) out.close();
+				if (in != null) {
+					in.close();
+				}
+			} catch (Exception e) {
+			}
+			try {
+				if (out != null) {
+					out.close();
+				}
 				if (category.isDebugEnabled()) {
 					category.debug("out.close()");
 				}
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 		}
 		if (category.isDebugEnabled()) {
 			category.debug("アクセスレベル更新結果ダウンロード実行処理の終了");

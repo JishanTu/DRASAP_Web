@@ -21,7 +21,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * A-PLOTプリンタの配布先マスタ情報を管理するクラス.
@@ -30,13 +30,10 @@ import org.apache.log4j.Category;
  *
  * @author hideki_sugiyama
  */
-@SuppressWarnings("serial")
 public class APlotRecipientMasterDB extends AbstractAPlotSchemaBase {
 
-
 	/** Logger（log4j） */
-	@SuppressWarnings("deprecation")
-	private static Category category = Category.getInstance(APlotRecipientMasterDB.class.getName());
+	private static Logger category = Logger.getLogger(APlotRecipientMasterDB.class.getName());
 
 	/**
 	 * コンストラクタ.
@@ -46,18 +43,17 @@ public class APlotRecipientMasterDB extends AbstractAPlotSchemaBase {
 		super(schema);
 	}
 
-
 	/**
 	 * 配布先マスタテーブル(RECIPIENT_MASTER)からプリンタ情報を取得.
 	 * @param schemaName スキーマ名.
 	 * @param ids プリンターID（配列）
 	 * @return SQL文字列.
 	 */
-	private static String selectAPlotRecipientMaster(String schemaName, String[] ids ) {
+	private static String selectAPlotRecipientMaster(String schemaName, String[] ids) {
 		StringBuilder sb = new StringBuilder("");
-		for ( String i : ids ) {
+		for (String i : ids) {
 			i = i.trim();
-			if ( sb.length() > 0 ) {
+			if (sb.length() > 0) {
 				sb.append(", ");
 			}
 			sb.append(String.format("'%s'", i));
@@ -67,7 +63,6 @@ public class APlotRecipientMasterDB extends AbstractAPlotSchemaBase {
 				schemaName,
 				schemaName, sb.toString());
 	}
-
 
 	/**
 	 * プリンタIDからA-PLOT配布先マスタを取得する.
@@ -85,7 +80,7 @@ public class APlotRecipientMasterDB extends AbstractAPlotSchemaBase {
 		ResultSet rs = stmt.executeQuery(selectAPlotRecipientMaster(schemaName, ids));
 		try {
 			// 取得した情報からスキーマ名を取得.
-			while(rs.next()){
+			while (rs.next()) {
 				//
 				APlotRecipientMasterDB data = new APlotRecipientMasterDB(schemaName);
 				//
@@ -114,10 +109,14 @@ public class APlotRecipientMasterDB extends AbstractAPlotSchemaBase {
 			category.fatal("A-PLOT出図配布先マスタ取得でSQLエラー", ex);
 			throw ex;
 		} finally {
-			if ( rs != null ) rs.close();
+			if (rs != null) {
+				rs.close();
+			}
 		}
 
-		if ( list.size() > 0 ) return list.toArray(new APlotRecipientMasterDB[0]);
+		if (list.size() > 0) {
+			return list.toArray(new APlotRecipientMasterDB[0]);
+		}
 		// データなしの場合はNULLを返す.
 		return null;
 	}

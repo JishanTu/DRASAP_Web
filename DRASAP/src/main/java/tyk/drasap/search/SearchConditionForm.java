@@ -4,19 +4,16 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-
 import tyk.drasap.common.StringCheck;
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * @version 2013/06/26 yamagishi
  */
-public class SearchConditionForm extends ActionForm {
+public class SearchConditionForm extends BaseForm {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 1L;
 	String act = "";// Actionクラスで処理を分けるための属性
 	ArrayList<String> conditionNameList;// 検索項目プルダウンの名称リスト
 	ArrayList<String> conditionKeyList;// 検索項目プルダウンのKeyリスト
@@ -65,7 +62,7 @@ public class SearchConditionForm extends ActionForm {
 	String C_label7 = "名前";
 	String C_label8 = "部署名";
 	String C_label9 = "複数図番"; // 2013.06.27 yamagishi add.
-// 2019.09.25 yamamoto add. start
+	// 2019.09.25 yamamoto add. start
 	String C_label10 = "パスワード変更";
 	String C_label11 = "ログアウト";
 	String C_label12 = "原図庫作業依頼";
@@ -74,10 +71,10 @@ public class SearchConditionForm extends ActionForm {
 	String C_label15 = "アクセスレベル一括更新";
 	String C_label16 = "アクセスレベル更新結果";
 	// 2019.09.25 yamamoto add. end
-// 2020.03.10 yamamoto add. start
+	// 2020.03.10 yamamoto add. start
 	String C_label17 = "図番指定順";
-// 2020.03.10 yamamoto add. end
-// 2013.06.27 yamagishi add. start
+	// 2020.03.10 yamamoto add. end
+	// 2013.06.27 yamagishi add. start
 	public final char C_LABEL1_LINE_NO = 1;
 	public final char C_LABEL2_LINE_NO = 2;
 	public final char C_LABEL3_LINE_NO = 3;
@@ -87,8 +84,8 @@ public class SearchConditionForm extends ActionForm {
 	public final char C_LABEL7_LINE_NO = 7;
 	public final char C_LABEL8_LINE_NO = 8;
 	public final char C_LABEL9_LINE_NO = 22;
-// 2013.06.27 yamagishi add. end
-// 2019.09.25 yamamoto add. start
+	// 2013.06.27 yamagishi add. end
+	// 2019.09.25 yamamoto add. start
 	public final char C_LABEL10_LINE_NO = 23;
 	public final char C_LABEL11_LINE_NO = 24;
 	public final char C_LABEL12_LINE_NO = 25;
@@ -97,53 +94,55 @@ public class SearchConditionForm extends ActionForm {
 	public final char C_LABEL15_LINE_NO = 28;
 	public final char C_LABEL16_LINE_NO = 29;
 	public final char C_LABEL17_LINE_NO = 32; // 図番指定順
-// 2019.09.25 yamamoto add. end
+	// 2019.09.25 yamamoto add. end
 	// help message
 	String searchHelpMsg = "";
-// 2019.09.25 yamamoto add. start
+	// 2019.09.25 yamamoto add. start
 	// Error message
 	String logoutErrMsg = "";
 	String changeLangErrMsg = "";
-// 2019.09.25 yamamoto add. end
-// 2020.03.17 yamamoto add. start
+	// 2019.09.25 yamamoto add. end
+	// 2020.03.17 yamamoto add. start
 	String listOrderErrMsg = "";
-// 2020.03.17 yamamoto add. end
+
+	// 2020.03.17 yamamoto add. end
 	// --------------------------------------- method
 	/* (非 Javadoc)
 	 * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
 	 */
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
+	public void reset(HttpServletRequest request) {
 		// SELECTの初期化
-		condition1="";
-		condition2="";
-		condition3="";
-		condition4="";
-		condition5="";
-		sortOrder1="";
-		sortOrder2="";
-		sortOrder3="";
-		sortOrder4="";
-		sortOrder5="";
-		displayCount="";
+		condition1 = "";
+		condition2 = "";
+		condition3 = "";
+		condition4 = "";
+		condition5 = "";
+		sortOrder1 = "";
+		sortOrder2 = "";
+		sortOrder3 = "";
+		sortOrder4 = "";
+		sortOrder5 = "";
+		displayCount = "";
 		// CHECKBOXの初期化
-		onlyNewest=false;
-		orderDrwgNo=false;
+		onlyNewest = false;
+		orderDrwgNo = false;
 		// RADIOの初期化
-		eachCondition="";
+		eachCondition = "AND";
 		//
-		act="";
-		condition1Value="";
-		condition2Value="";
-		condition3Value="";
-		condition4Value="";
-		condition5Value="";
-		sortWay1="";
-		sortWay2="";
-		sortWay3="";
-		sortWay4="";
-		sortWay5="";
-		multipleDrwgNo=""; // 2013.06.27 yamagishi add.
+		act = "";
+		condition1Value = "";
+		condition2Value = "";
+		condition3Value = "";
+		condition4Value = "";
+		condition5Value = "";
+		sortWay1 = "";
+		sortWay2 = "";
+		sortWay3 = "";
+		sortWay4 = "";
+		sortWay5 = "";
+		multipleDrwgNo = ""; // 2013.06.27 yamagishi add.
 	}
+
 	// --------------------------------------- getter,setter
 	/**
 	 * @return
@@ -490,6 +489,7 @@ public class SearchConditionForm extends ActionForm {
 	public void setSortOrderNameList(ArrayList<String> list) {
 		sortOrderNameList = list;
 	}
+
 	/**
 	 * @return
 	 */
@@ -532,7 +532,7 @@ public class SearchConditionForm extends ActionForm {
 		act = string;
 	}
 
-// 2013.06.26 yamagishi add. start
+	// 2013.06.26 yamagishi add. start
 	/**
 	 * multipleDrwgNoを取得します。
 	 * @return multipleDrwgNo
@@ -540,6 +540,7 @@ public class SearchConditionForm extends ActionForm {
 	public String getMultipleDrwgNo() {
 		return multipleDrwgNo;
 	}
+
 	/**
 	 * multipleDrwgNoを設定します。
 	 * @param multipleDrwgNo multipleDrwgNo
@@ -548,7 +549,7 @@ public class SearchConditionForm extends ActionForm {
 		// UTF-8へ変換する
 		this.multipleDrwgNo = StringCheck.latinToUtf8(multipleDrwgNo);
 	}
-// 2013.06.26 yamagishi add. end
+	// 2013.06.26 yamagishi add. end
 
 	/**
 	 * @return
@@ -661,42 +662,55 @@ public class SearchConditionForm extends ActionForm {
 	public void setDispAttr6(String string) {
 		dispAttr6 = string;
 	}
+
 	public String getC_label1() {
 		return C_label1;
 	}
+
 	public String getC_label2() {
 		return C_label2;
 	}
+
 	public String getC_label3() {
 		return C_label3;
 	}
+
 	public String getC_label4() {
 		return C_label4;
 	}
+
 	public void setC_label1(String c_label1) {
 		C_label1 = c_label1;
 	}
+
 	public void setC_label2(String c_label2) {
 		C_label2 = c_label2;
 	}
+
 	public void setC_label3(String c_label3) {
 		C_label3 = c_label3;
 	}
+
 	public void setC_label4(String c_label4) {
 		C_label4 = c_label4;
 	}
+
 	public String getC_label5() {
 		return C_label5;
 	}
+
 	public void setC_label5(String c_label5) {
 		C_label5 = c_label5;
 	}
+
 	public String getLanguage() {
 		return language;
 	}
+
 	public void setLanguage(String language) {
 		this.language = language;
 	}
+
 	/**
 	 * Returns Help Message
 	 * @return String
@@ -712,47 +726,56 @@ public class SearchConditionForm extends ActionForm {
 	public void setSearchHelpMsg(String searchHelpMsg) {
 		this.searchHelpMsg = StringCheck.latinToUtf8(searchHelpMsg);
 	}
+
 	public String getC_label6() {
 		return C_label6;
 	}
+
 	public void setC_label6(String c_label6) {
 		C_label6 = c_label6;
 	}
+
 	public String getC_label7() {
 		return C_label7;
 	}
+
 	public void setC_label7(String c_label7) {
 		C_label7 = c_label7;
 	}
+
 	public String getC_label8() {
 		return C_label8;
 	}
+
 	public void setC_label8(String c_label8) {
 		C_label8 = c_label8;
 	}
-// 2013.06.27 yamagishi add. start
+
+	// 2013.06.27 yamagishi add. start
 	/**
 	 * C_label9を取得します。
 	 * @return C_label9
 	 */
 	public String getC_label9() {
-	    return C_label9;
+		return C_label9;
 	}
+
 	/**
 	 * C_label9を設定します。
 	 * @param C_label9 C_label9
 	 */
 	public void setC_label9(String C_label9) {
-	    this.C_label9 = C_label9;
+		this.C_label9 = C_label9;
 	}
-// 2013.06.27 yamagishi add. end
-// 2019.09.25 yamamoto add. start
+
+	// 2013.06.27 yamagishi add. end
+	// 2019.09.25 yamamoto add. start
 	/**
 	 * C_label10を設定します。
 	 * @param C_label10 C_label10
 	 */
 	public void setC_label10(String C_label10) {
-	    this.C_label10 = C_label10;
+		this.C_label10 = C_label10;
 	}
 
 	/**
@@ -760,7 +783,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return C_label10
 	 */
 	public String getC_label10() {
-	    return C_label10;
+		return C_label10;
 	}
 
 	/**
@@ -768,7 +791,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return C_label11
 	 */
 	public String getC_label11() {
-	    return C_label11;
+		return C_label11;
 	}
 
 	/**
@@ -776,7 +799,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param C_label11 C_label11
 	 */
 	public void setC_label11(String C_label11) {
-	    this.C_label11 = C_label11;
+		this.C_label11 = C_label11;
 	}
 
 	/**
@@ -784,7 +807,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return C_label12
 	 */
 	public String getC_label12() {
-	    return C_label12;
+		return C_label12;
 	}
 
 	/**
@@ -792,7 +815,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param C_label12 C_label12
 	 */
 	public void setC_label12(String C_label12) {
-	    this.C_label12 = C_label12;
+		this.C_label12 = C_label12;
 	}
 
 	/**
@@ -800,7 +823,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return C_label13
 	 */
 	public String getC_label13() {
-	    return C_label13;
+		return C_label13;
 	}
 
 	/**
@@ -808,7 +831,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param C_label13 C_label13
 	 */
 	public void setC_label13(String C_label13) {
-	    this.C_label13 = C_label13;
+		this.C_label13 = C_label13;
 	}
 
 	/**
@@ -816,7 +839,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return C_label14
 	 */
 	public String getC_label14() {
-	    return C_label14;
+		return C_label14;
 	}
 
 	/**
@@ -824,7 +847,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param C_label14 C_label14
 	 */
 	public void setC_label14(String C_label14) {
-	    this.C_label14 = C_label14;
+		this.C_label14 = C_label14;
 	}
 
 	/**
@@ -832,7 +855,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return C_label15
 	 */
 	public String getC_label15() {
-	    return C_label15;
+		return C_label15;
 	}
 
 	/**
@@ -840,7 +863,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param C_label15 C_label15
 	 */
 	public void setC_label15(String C_label15) {
-	    this.C_label15 = C_label15;
+		this.C_label15 = C_label15;
 	}
 
 	/**
@@ -848,7 +871,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return C_label16
 	 */
 	public String getC_label16() {
-	    return C_label16;
+		return C_label16;
 	}
 
 	/**
@@ -856,7 +879,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param C_label16 C_label16
 	 */
 	public void setC_label16(String C_label16) {
-	    this.C_label16 = C_label16;
+		this.C_label16 = C_label16;
 	}
 
 	/**
@@ -864,7 +887,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return C_label17
 	 */
 	public String getC_label17() {
-	    return C_label17;
+		return C_label17;
 	}
 
 	/**
@@ -872,7 +895,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param C_label17 C_label17
 	 */
 	public void setC_label17(String C_label17) {
-	    this.C_label17 = C_label17;
+		this.C_label17 = C_label17;
 	}
 
 	/**
@@ -880,7 +903,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return logoutErrMsg
 	 */
 	public String getLogoutErrMsg() {
-	    return logoutErrMsg;
+		return logoutErrMsg;
 	}
 
 	/**
@@ -888,7 +911,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param str logoutErrMsg
 	 */
 	public void setLogoutErrMsg(String str) {
-	    this.logoutErrMsg = StringCheck.latinToUtf8(str);
+		logoutErrMsg = StringCheck.latinToUtf8(str);
 	}
 
 	/**
@@ -896,7 +919,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @return changeLangErrMsg
 	 */
 	public String getChangeLangErrMsg() {
-	    return changeLangErrMsg;
+		return changeLangErrMsg;
 	}
 
 	/**
@@ -904,16 +927,17 @@ public class SearchConditionForm extends ActionForm {
 	 * @param str changeLangErrMsg
 	 */
 	public void setChangeLangErrMsg(String str) {
-	    this.changeLangErrMsg = StringCheck.latinToUtf8(str);
+		changeLangErrMsg = StringCheck.latinToUtf8(str);
 	}
+
 	// 2019.09.25 yamamoto add. end
-// 2020.03.17 yamamoto add. end
+	// 2020.03.17 yamamoto add. end
 	/**
 	 * listOrderErrMsgを取得します。
 	 * @return listOrderErrMsg
 	 */
 	public String getlistOrderErrMsg() {
-	    return listOrderErrMsg;
+		return listOrderErrMsg;
 	}
 
 	/**
@@ -921,7 +945,7 @@ public class SearchConditionForm extends ActionForm {
 	 * @param str listOrderErrMsg
 	 */
 	public void setlistOrderErrMsg(String str) {
-	    this.listOrderErrMsg = StringCheck.latinToUtf8(str);
+		listOrderErrMsg = StringCheck.latinToUtf8(str);
 	}
-// 2020.03.17 yamamoto add. end
+	// 2020.03.17 yamamoto add. end
 }

@@ -1,20 +1,28 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="tyk.drasap.system.*" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
-<%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+﻿<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page import="tyk.drasap.system.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ page import="tyk.drasap.system.TableMaintenanceForm"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${empty sessionScope.user}">
+	<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+	</script>
+</c:if>
+<html>
 <head>
 <title>DRASAP [マスターテーブルメンテナンス]</title>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Cache-Control" content="no-cache" />
-<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+<style type="text/css">
+@import
+url(
+<%=request.getContextPath()%>/resources/css/default.css
+);
+</style>
 <script type="text/javascript">
 <!--
 browserName = navigator.appName;
@@ -108,99 +116,115 @@ function submitFunc(parm){
 //--->
 </script>
 </head>
-<body bgcolor="#F5F5DC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
-<html:form action="/tableMaintenance">
-<html:hidden property="act" />
-<html:hidden property="updateIndex" />
-<!--------------- ヘッダ -------------------------------->
-<nested:root name="tableMaintenanceForm">
-<table align="center" border="0" cellspacing="0" cellpadding="0" class="normal12">
-	<tr>
-		<td>テーブル名称</td>
-		<td><nested:select property="selectTable" onchange="submitFunc('SEARCH')">
-			<html:options labelName="tableMaintenanceForm" labelProperty="tableList"
-					name="tableMaintenanceForm" property="tableList" />
-		</nested:select></td>
-		<td>&nbsp;&nbsp;&nbsp;where&nbsp;&nbsp;</td>
-		<td align="center" nowrap="nowrap">
-		<nested:text property="whereStr" /></td>
-		<td align="center" nowrap="nowrap">
-		<input type="button" value="検索" onclick="submitFunc('WHERESEARCH')" /></td>
-		<td><span class="normal12">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-		<td><span class="normal12">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-		<td><span class="normal12">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-		<td><span class="normal12">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-		<td align="center" nowrap="nowrap">
-		<input type="button" value="前ページ" onclick="submitFunc('PREVPAGE')" /></td>
-		<td>&nbsp;&nbsp;&nbsp;</td>
-		<td align="center" nowrap="nowrap">
-		<input type="button" value="次ページ" onclick="submitFunc('NEXTPAGE')" /></td>
-		<td>&nbsp;&nbsp;&nbsp;</td>
-		<td align="center" nowrap="nowrap">
-		<nested:select property="selectPage" onchange="submitFunc('DIRECTPAGE')" > >
-				<html:options labelName="tableMaintenanceForm" labelProperty="pageNameList"
-						name="tableMaintenanceForm" property="pageList" />
-		</nested:select></td>
-		<td><span class="normal12">／</span></td>
-		<td><span class="normal12"><nested:write property="recCount" /></span></td>
-	</tr>
-</table>
-<br />
-<table align="center" border="1" cellspacing="0" cellpadding="0" class="normal10">
-		<tr>
-		<nested:iterate id="attrList" type="tyk.drasap.system.TableMaintenanceElement"
-			name="tableMaintenanceForm" property="attrList" scope="session">
-			<td nowrap="nowrap"  bgcolor="#A1A0C0">
-			<nested:write property="column_name" /></td>
-		</nested:iterate>
-		<nested:notEmpty property="recList" scope="session">
-		<td nowrap="nowrap" bgcolor="#A1A0C0">選択</td>
-		</nested:notEmpty>
-		</tr>
-		<nested:iterate id="RecList" type="tyk.drasap.system.TableMaintenanceRec" indexId="idx"
-			name="tableMaintenanceForm" property="recList" scope="session">
-		<tr>
-			<nested:iterate id="ValList" type="tyk.drasap.system.TableMaintenanceVal" indexId="col_Idx"
-			 property="valList" scope="session">
-				<td nowrap="nowrap">
-				<%if (((TableMaintenanceForm)session.getAttribute("tableMaintenanceForm")).getAttrList(col_Idx).isKey()) { %>
-					<%if (((TableMaintenanceForm)session.getAttribute("tableMaintenanceForm")).getRecList(idx).isNew()) { %>
-						<nested:text style="<%=ValList.getDispStyle()%>" property="val" onchange='<%= "changeValue(" + idx+ ")" %>' />
-					<% } else { %>
-						<nested:write property="val" />
-					<% } %>
-				<% } else { %>
-					<nested:text style="<%=ValList.getDispStyle()%>" property="val" onchange='<%= "changeValue(" + idx+ ")" %>' />
-				<% } %>
-				</td>
-			</nested:iterate>
-			<td nowrap="nowrap">&nbsp;<nested:checkbox property="check" />&nbsp;</td>
-			<nested:hidden property="new" />
-		</tr>
-		</nested:iterate>
-</table>
-<table align="center" border="0" cellspacing="0" cellpadding="0">
-			<tr><td>&nbsp;</td></tr>
+<body bgcolor="#F5F5DC" bottommargin="0" leftmargin="0" topmargin="0"
+	rightmargin="0" marginheight="0" marginwidth="0">
+	<form action="<%=request.getContextPath()%>/tableMaintenance"
+		method="post">
+		<input type="hidden" name="act" value="" /> <input type="hidden"
+			name="updateIndex" value="" />
+		<!--------------- ヘッダ -------------------------------->
+
+		<table align="center" border="0" cellspacing="0" cellpadding="0"
+			class="normal12">
 			<tr>
-			<td align="center" nowrap="nowrap">
-			<input type="button" value="レコード追加" onclick="submitFunc('ADDRECORD')" /></td>
-			<td>&nbsp;&nbsp;&nbsp;</td>
-			<td align="center" nowrap="nowrap">
-			<input type="button" value="更新" onclick="submitFunc('UPDATE')" /></td>
-			<td>&nbsp;&nbsp;&nbsp;</td>
-			<td align="center" nowrap="nowrap">
-			<input type="button" value="削除" onclick="submitFunc('DELETE')" /></td>
-			<td>&nbsp;&nbsp;&nbsp;</td>
-			<td align="center" nowrap="nowrap">
-			<input type="button" value="エクスポート" onclick="submitFunc('EXPORT')" /></td>
-			<td>&nbsp;&nbsp;&nbsp;</td>
+				<td>テーブル名称</td>
+				<td><select name="selectTable" onchange="submitFunc('SEARCH')">
+						<c:forEach var="table"
+							items="${sessionScope.tableMaintenanceForm.tableList}">
+							<option value="<c:out value='${table}' />"><c:out
+									value='${table}' /></option>
+						</c:forEach>
+				</select></td>
+				<td>&nbsp;&nbsp;&nbsp;where&nbsp;&nbsp;</td>
+				<td align="center" nowrap="nowrap"><input type="text"
+					name="whereStr"
+					value="<c:out value='${tableMaintenanceForm.whereStr}' />" /></td>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="検索" onclick="submitFunc('WHERESEARCH')" /></td>
+				<td><span class="normal12">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+				<td><span class="normal12">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+				<td><span class="normal12">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+				<td><span class="normal12">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="前ページ" onclick="submitFunc('PREVPAGE')" /></td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="次ページ" onclick="submitFunc('NEXTPAGE')" /></td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+				<td align="center" nowrap="nowrap"><select name="selectPage"
+					onchange="submitFunc('DIRECTPAGE')">
+						<c:forEach var="page" items="${tableMaintenanceForm.pageList}">
+							<option value="<c:out value='${page.value}' />"><c:out
+									value='${page.label}' /></option>
+						</c:forEach>
+				</select></td>
+				<td><span class="normal12">／</span></td>
+				<td><span class="normal12"><c:out
+							value="${tableMaintenanceForm.recCount}" /></span></td>
 			</tr>
-</table>
-</nested:root>
-</html:form>
-<html:form action="/tableMaintenance" enctype="multipart/form-data">
-<html:hidden property="act" value="inport" />
-<!--
+		</table>
+		<br />
+		<table align="center" border="1" cellspacing="0" cellpadding="0"
+			class="normal10">
+			<tr>
+				<c:forEach var="attr"
+					items="${sessionScope.tableMaintenanceForm.attrList}">
+					<td nowrap="nowrap" bgcolor="#A1A0C0"><c:out
+							value="${attr.column_name}" /></td>
+				</c:forEach>
+				<c:if test="${not empty sessionScope.tableMaintenanceForm.recList}">
+					<td nowrap="nowrap" bgcolor="#A1A0C0">選択</td>
+				</c:if>
+			</tr>
+			<c:forEach var="rec"
+				items="${sessionScope.tableMaintenanceForm.recList}"
+				varStatus="recStatus">
+				<tr>
+					<c:forEach var="val" items="${rec.valList}" varStatus="valStatus">
+						<td nowrap="nowrap"><c:choose>
+								<c:when
+									test="${sessionScope.tableMaintenanceForm.attrList[valStatus.index].key && rec.new}">
+									<input type="text" style="${val.dispStyle}" name="val"
+										value="${val}" onchange="changeValue(${recStatus.index})" />
+								</c:when>
+								<c:otherwise>
+									<c:out value="${val}" />
+								</c:otherwise>
+							</c:choose></td>
+					</c:forEach>
+					<td nowrap="nowrap">&nbsp;<input type="checkbox" name="check"
+						value="${check}" />&nbsp;
+					</td>
+					<input type="hidden" name="new" value="${new}" />
+				</tr>
+			</c:forEach>
+
+
+		</table>
+		<table align="center" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="レコード追加" onclick="submitFunc('ADDRECORD')" /></td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="更新" onclick="submitFunc('UPDATE')" /></td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="削除" onclick="submitFunc('DELETE')" /></td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="エクスポート" onclick="submitFunc('EXPORT')" /></td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+		</table>
+	</form>
+	<form action="<%=request.getContextPath()%>/tableMaintenance"
+		enctype="multipart/form-data">
+		<input type="hidden" name="act" value="inport" />
+		<!--
 <table align="center" border="0" cellspacing="0" cellpadding="0">
 			<td>
   			<html:file property="fileUp" size="64" />
@@ -208,15 +232,23 @@ function submitFunc(parm){
 			</td>
 </table>
 -->
-<table align="center" border="0" cellspacing="0" cellpadding="0">
-<tr><td><br/></td></tr><tr><td><br/></td></tr>
-<nested:iterate id="errorMessage" type="java.lang.String"
-				name="tableMaintenanceForm" property="errorMsg" scope="session" >
-	<tr><td style="color:#FF0000"><bean:write name="errorMessage" /></td></tr>
-</nested:iterate>
-</table>
-</html:form>
+		<table align="center" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td><br /></td>
+			</tr>
+			<tr>
+				<td><br /></td>
+			</tr>
+			<c:forEach var="errorMessage"
+				items="${sessionScope.tableMaintenanceForm.errorMsg}">
+				<tr>
+					<td style="color: #FF0000">${errorMessage}</td>
+				</tr>
+			</c:forEach>
+
+		</table>
+	</form>
 </body>
-</html:html>
+</html>
 
 

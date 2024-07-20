@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 
-import org.apache.log4j.Category;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -26,14 +25,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.upload.FormFile;
-import org.apache.struts.util.MessageResources;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import tyk.drasap.change_acllog.ChangeAclLogger;
 import tyk.drasap.common.AclUpdatableConditionMasterDB;
@@ -41,7 +38,6 @@ import tyk.drasap.common.AclUpdateNoSequenceDB;
 import tyk.drasap.common.AclUpload;
 import tyk.drasap.common.AclUploadDB;
 import tyk.drasap.common.AclvMasterDB;
-import tyk.drasap.common.DataSourceFactory;
 import tyk.drasap.common.DrasapInfo;
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
@@ -50,38 +46,36 @@ import tyk.drasap.common.TableInfo;
 import tyk.drasap.common.TableInfoDB;
 import tyk.drasap.common.User;
 import tyk.drasap.errlog.ErrorLoger;
+import tyk.drasap.springfw.action.BaseAction;
+import tyk.drasap.springfw.utils.MessageSourceUtil;
 
 /**
  * アクセスレベル一括更新処理アクション
  *
  * @author 2013/07/03 yamagishi
  */
-public class AccessLevelBatchUpdateAction extends Action {
-	private static DataSource ds;
-	private static Category category = Category.getInstance(AccessLevelBatchUpdateAction.class.getName());
-	static{
-		try {
-			ds = DataSourceFactory.getOracleDataSource();
-		} catch (Exception e) {
-			if (category.isInfoEnabled()) {
-				category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-			}
-		}
-	}
+@Controller
+public class AccessLevelBatchUpdateAction extends BaseAction {
+	// --------------------------------------------------------- Instance Variables
 	private final String DEFAULT_CHARSET = "Windows-31J";
 
 	// --------------------------------------------------------- Methods
 	/**
 	 * Method execute
-	 * @param ActionMapping mapping
-	 * @param ActionForm form
-	 * @param HttpServletRequest request
-	 * @param HttpServletResponse response
-	 * @return ActionForward
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @param errors
+	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@PostMapping("/accessLevelBatchUpdate")
+	public Object execute(
+			AccessLevelBatchUpdateForm form,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model errors)
+			throws Exception {
 
 		if (category.isDebugEnabled()) {
 			category.debug("start");
@@ -90,78 +84,101 @@ public class AccessLevelBatchUpdateAction extends Action {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
-			return mapping.findForward("timeout");
+			return "timeout";
 		}
+		session.removeAttribute("aclBatchUpdateFlag");
 
-		ActionMessages errors = new ActionMessages();
-		MessageResources resources = getResources(request);
+		//ActionMessages errors = new ActionMessages();
+		//MessageResources resources = getResources(request);
 
 		if (user.getAclBatchUpdateFlag() == null || user.getAclBatchUpdateFlag().length() <= 0) {
 			// アクセスレベル一括更新ツールの使用権限なし
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.nopermission", "アクセスレベル一括更新画面"));
-			saveErrors(request, errors);
-			return mapping.findForward("noPermission");
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.nopermission", new Object[] { "アクセスレベル一括更新画面" }, null));
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
+			return "noPermission";
 		}
 
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
-		AccessLevelBatchUpdateForm accessLevelBatchUpdateForm = (AccessLevelBatchUpdateForm) form;
+		AccessLevelBatchUpdateForm accessLevelBatchUpdateForm = form;
 		if ("init".equals(request.getParameter("act"))) {
 			accessLevelBatchUpdateForm.setAct("init");
 		}
 		accessLevelBatchUpdateForm.clearErrorMsg();
 
-		//
 		if ("init".equals(accessLevelBatchUpdateForm.getAct())) {
-			String aclUpdateNo = accessLevelBatchUpdateForm.getAclUpdateNo();
-			if (aclUpdateNo != null && aclUpdateNo.length() > 0) {
-				setFormUploadData(accessLevelBatchUpdateForm, drasapInfo, user, errors, resources);
-				// エラー確認
-				if (!errors.isEmpty()) {
-					saveErrors(session, errors);
-					session.setAttribute("accessLevelBatchUpdate.erros", "1");
-					return mapping.findForward("error");
-				}
-			}
-			return mapping.findForward("init");
+			//			String aclUpdateNo = accessLevelBatchUpdateForm.getAclUpdateNo();
+			//			if (aclUpdateNo != null && aclUpdateNo.length() > 0) {
+			//				setFormUploadData(accessLevelBatchUpdateForm, drasapInfo, user, errors);
+			//				// エラー確認
+			//				if (!Objects.isNull(errors.getAttribute("message"))) {
+			//					session.setAttribute("errors", errors);
+			//					//saveErrors(session, errors);
+			//					session.setAttribute("accessLevelBatchUpdate.erros", "1");
+			//					return "error";
+			//				}
+			//			}
+			return "init";
 
-		} else if ("upload".equals(accessLevelBatchUpdateForm.getAct())) {
-			doUpload(accessLevelBatchUpdateForm, drasapInfo, user, errors, resources);
+		}
+		if ("upload".equals(accessLevelBatchUpdateForm.getAct())) {
+			doUpload(accessLevelBatchUpdateForm, drasapInfo, user, errors);
 			// エラー確認
-			if (!errors.isEmpty()) {
-				saveErrors(session, errors);
+			if (!Objects.isNull(errors.getAttribute("message"))) {
+				session.setAttribute("errors", errors);
 				session.setAttribute("accessLevelBatchUpdate.erros", "1");
-				return mapping.findForward("error");
+				return "error";
 			}
-			return mapping.findForward("upload");
+			session.setAttribute("aclBatchUpdateFlag", "true");
+			session.setAttribute("accessLevelBatchUpdateForm", accessLevelBatchUpdateForm);
+			return "upload";
 
-		} else if ("update".equals(accessLevelBatchUpdateForm.getAct())) {
-			doUpdate(accessLevelBatchUpdateForm, user, errors, resources);
+		}
+		if ("update".equals(accessLevelBatchUpdateForm.getAct())) {
+			accessLevelBatchUpdateForm = (AccessLevelBatchUpdateForm) session.getAttribute("accessLevelBatchUpdateForm");
+			doUpdate(accessLevelBatchUpdateForm, user, errors);
 			// エラー確認
-			if (!errors.isEmpty()) {
-				saveErrors(session, errors);
+			if (!Objects.isNull(errors.getAttribute("message"))) {
+				session.setAttribute("errors", errors);
 				session.setAttribute("accessLevelBatchUpdate.erros", "1");
-				return mapping.findForward("error");
+				return "error";
 			}
 
 			// 完了メッセージ設定
-			ActionMessages info = new ActionMessages();
-			info.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.update.success"));
-			saveMessages(session, info);
+			//ActionMessages info = new ActionMessages();
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.update.success", null, null));
+			//saveMessages(session, info);
+			session.setAttribute("info", errors);
 			session.setAttribute("accessLevelBatchUpdate.info", "1");
 
-			return mapping.findForward("update");
+			return "update";
 
-		} else if ("close".equals(accessLevelBatchUpdateForm.getAct())) {
+		}
+		if ("close".equals(accessLevelBatchUpdateForm.getAct())) {
 			doClose(accessLevelBatchUpdateForm, user);
 			session.removeAttribute("accessLevelBatchUpdateForm");
 			// Ajaxリクエストの為、フォワードさせない
-			return null;
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 
 		if (category.isDebugEnabled()) {
 			category.debug("end");
 		}
-		return mapping.findForward("init");
+		//		session.setAttribute("accessLevelBatchUpdateForm", accessLevelBatchUpdateForm);
+		//		return "init";
+		accessLevelBatchUpdateForm = (AccessLevelBatchUpdateForm) session.getAttribute("accessLevelBatchUpdateForm");
+		String aclUpdateNo = accessLevelBatchUpdateForm.getAclUpdateNo();
+		if (aclUpdateNo != null && aclUpdateNo.length() > 0) {
+			setFormUploadData(accessLevelBatchUpdateForm, drasapInfo, user, errors);
+			// エラー確認
+			if (!Objects.isNull(errors.getAttribute("message"))) {
+				session.setAttribute("errors", errors);
+				//saveErrors(session, errors);
+				session.setAttribute("accessLevelBatchUpdate.erros", "1");
+				return "error";
+			}
+		}
+		return "update";
 	}
 
 	// 画面表示データ取得
@@ -175,7 +192,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 	 * @param resources
 	 */
 	private void setFormUploadData(AccessLevelBatchUpdateForm accessLevelBatchUpdateForm, DrasapInfo drasapInfo,
-			User user, ActionMessages errors, MessageResources resources) {
+			User user, Model errors) {
 
 		if (category.isDebugEnabled()) {
 			category.debug("表示データ取得処理の開始");
@@ -193,16 +210,19 @@ public class AccessLevelBatchUpdateAction extends Action {
 
 		} catch (Exception e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.init.failed", ErrorUtility.error2String(e)));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.init.failed", new Object[] { ErrorUtility.error2String(e) }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
- 			// for MUR
+			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclBatchUpdate.init.failed", ErrorUtility.error2String(e)));
+				category.error(messageSource.getMessage("system.aclBatchUpdate.init.failed", new Object[] { ErrorUtility.error2String(e) }, null));
 			}
 
 		} finally {
-			try { conn.close(); } catch (Exception e) {}
+			try {
+				conn.close();
+			} catch (Exception e) {
+			}
 		}
 
 		if (category.isDebugEnabled()) {
@@ -220,7 +240,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 	 * @param resources
 	 */
 	private void doUpload(AccessLevelBatchUpdateForm accessLevelBatchUpdateForm, DrasapInfo drasapInfo,
-			User user, ActionMessages errors, MessageResources resources) {
+			User user, Model errors) {
 
 		if (category.isDebugEnabled()) {
 			category.debug("アップロード処理の開始");
@@ -229,25 +249,27 @@ public class AccessLevelBatchUpdateAction extends Action {
 		Properties drasapProperties = DrasapPropertiesFactory.getDrasapProperties(this);
 
 		// アップロードファイル取得
-		FormFile aclUploadFile = accessLevelBatchUpdateForm.getUploadFile();
-		String fileName = aclUploadFile.getFileName();
-		String sheetName = drasapProperties.getProperty("tyk.upload.file.sheet.name");								// シート名
+		MultipartFile aclUploadFile = accessLevelBatchUpdateForm.getUploadFile();
+		//String fileName = aclUploadFile.getName();
+		String fileName = aclUploadFile.getOriginalFilename();
+		String sheetName = drasapProperties.getProperty("tyk.upload.file.sheet.name"); // シート名
 
-		int firstRowNum = Integer.parseInt(drasapProperties.getProperty("tyk.upload.file.start.row.num"));			// 開始行
-		int firstColumnNum = Integer.parseInt(drasapProperties.getProperty("tyk.upload.file.start.column.num"));	// 開始列
-		int skipCount = 0;																							// スキップ行数カウンタ
-		int skipRowsMax = Integer.parseInt(drasapProperties.getProperty("tyk.upload.file.skip.rows.max"));			// 最大スキップ行数
+		int firstRowNum = Integer.parseInt(drasapProperties.getProperty("tyk.upload.file.start.row.num")); // 開始行
+		int firstColumnNum = Integer.parseInt(drasapProperties.getProperty("tyk.upload.file.start.column.num")); // 開始列
+		int skipCount = 0; // スキップ行数カウンタ
+		int skipRowsMax = Integer.parseInt(drasapProperties.getProperty("tyk.upload.file.skip.rows.max")); // 最大スキップ行数
 
-		String aclUpdateType = drasapProperties.getProperty("tyk.upload.aclupdateno.type.batchUpdate");				// ACL更新種別
+		String aclUpdateType = drasapProperties.getProperty("tyk.upload.aclupdateno.type.batchUpdate"); // ACL更新種別
 
 		String lfileName = fileName.toLowerCase();
 		if (lfileName == null || lfileName.length() <= 0) {
 			// アップロードファイルが入力されていない場合
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.upload.required.file"));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.upload.required.file", null, null));
 			return;
-		} else if (!lfileName.endsWith("xls") && !lfileName.endsWith("xlsx")) {
+		}
+		if (!lfileName.endsWith("xls") && !lfileName.endsWith("xlsx")) {
 			// アップロードファイルがExcelファイルでない場合
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.upload.file.format"));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.upload.file.format", null, null));
 			return;
 		}
 
@@ -282,9 +304,9 @@ public class AccessLevelBatchUpdateAction extends Action {
 			}
 
 			in = new BufferedInputStream(aclUploadFile.getInputStream());
-			Workbook book = WorkbookFactory.create(in);	// Book.
-			Sheet sheet = book.getSheet(sheetName);	// Sheet.
-			Row row = null;	// Row.
+			Workbook book = WorkbookFactory.create(in); // Book.
+			Sheet sheet = book.getSheet(sheetName); // Sheet.
+			Row row = null; // Row.
 			FormulaEvaluator evaluator = book.getCreationHelper().createFormulaEvaluator();
 
 			AclUpload aclUploadXls = null;
@@ -297,7 +319,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 					break;
 				}
 
-				row = sheet.getRow(i);	// row.
+				row = sheet.getRow(i); // row.
 				if (row == null) {
 					skipCount++;
 					continue;
@@ -324,13 +346,13 @@ public class AccessLevelBatchUpdateAction extends Action {
 			for (AclUpload aclUpload : aclUploadList) {
 
 				// アップロードデータのチェック実行
-				checkUploadData(aclUpload, itemNoShortSet, resources, conn);
+				checkUploadData(aclUpload, itemNoShortSet, conn);
 				// ACLアップロードデータ登録
 				resultCount += AclUploadDB.insertAclUpload(aclUpload, conn);
 				itemNoShortSet.add(aclUpload.getItemNoShort()); // 重複チェック用に品番を追加
 			}
 			// アップロードデータのチェック実行（1物2品番）
-			resultCount += checkUploadData(aclUpdateNo, resources, conn);
+			resultCount += checkUploadData(aclUpdateNo, conn);
 
 			if (category.isDebugEnabled()) {
 				category.debug("ACLアップロードデータテーブル登録:" + resultCount + "件");
@@ -338,18 +360,26 @@ public class AccessLevelBatchUpdateAction extends Action {
 			}
 		} catch (Exception e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.upload.failed", ErrorUtility.error2String(e)));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.upload.failed", new Object[] { ErrorUtility.error2String(e) }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
- 			// for MUR
+			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclBatchUpdate.upload.failed", ErrorUtility.error2String(e)));
+				category.error(messageSource.getMessage("system.aclBatchUpdate.upload.failed", new Object[] { ErrorUtility.error2String(e) }, null));
 			}
 
 		} finally {
 			// CLOSE処理
-			try { conn.close(); } catch (Exception e) {}
-			try { if (in != null) in.close(); } catch (Exception e) {}
+			try {
+				conn.close();
+			} catch (Exception e) {
+			}
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -369,73 +399,83 @@ public class AccessLevelBatchUpdateAction extends Action {
 
 		// アップロード用インスタンス生成
 		AclUpload aclUpload = new AclUpload();
-		aclUpload.setAclUpdateNo(aclUpdateNo);	// 管理NO
-		aclUpload.setUserId(user.getId());		// ユーザID
-		aclUpload.setUserName(user.getName());	// 氏名
+		aclUpload.setAclUpdateNo(aclUpdateNo); // 管理NO
+		aclUpload.setUserId(user.getId()); // ユーザID
+		aclUpload.setUserName(user.getName()); // 氏名
 
 		int columnCount = 0; // カラム設定済みカウンタ
 
-		String value = null;
-		if ((value = this.getStringCellValue(row, columnIndex, evaluator)) != null) {
-			aclUpload.setMachineJp(StringCheck.trimWsp(value));	// 装置
+		String value = getStringCellValue(row, columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setMachineJp(StringCheck.trimWsp(value)); // 装置
 			columnCount++;
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null) {
-			aclUpload.setMachineNo(StringCheck.trimWsp(value));	// 装置NO
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setMachineNo(StringCheck.trimWsp(value)); // 装置NO
 			columnCount++;
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null) {
-			aclUpload.setDrwgNo(StringCheck.trimWsp(value));	// 手配図番
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setDrwgNo(StringCheck.trimWsp(value)); // 手配図番
 			columnCount++;
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null) {
-			aclUpload.setMachineCode(StringCheck.trimWsp(value));	// 装置コード
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setMachineCode(StringCheck.trimWsp(value)); // 装置コード
 			columnCount++;
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null) {
-			aclUpload.setDetailNo(StringCheck.trimWsp(value));	// 明細番号
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setDetailNo(StringCheck.trimWsp(value)); // 明細番号
 			columnCount++;
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null) {
-			aclUpload.setPages(StringCheck.trimWsp(value));	// 頁
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setPages(StringCheck.trimWsp(value)); // 頁
 			columnCount++;
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null) {
-			aclUpload.setItemNo(StringCheck.trimWsp(value));	// 品番
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setItemNo(StringCheck.trimWsp(value)); // 品番
 			columnCount++;
 
 			// trim処理。ハイフン「-」を除く。
 			String itemNoShort = StringCheck.trimWsp(value).replace("-", "");
 			// 半角大文字に変換する
 			itemNoShort = StringCheck.changeDbToSbAscii(itemNoShort).toUpperCase();
-			aclUpload.setItemNoShort(itemNoShort);	// 品番（空白、ハイフン「-」を除いた半角大文字）
+			aclUpload.setItemNoShort(itemNoShort); // 品番（空白、ハイフン「-」を除いた半角大文字）
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null
 				&& StringCheck.trimWsp(value).length() > 0) {
 			if (drasapInfo.getCorrespondingValue().equals(StringCheck.trimWsp(value))) {
-				aclUpload.setCorrespondingFlag("1");	// 該当図: 該当
+				aclUpload.setCorrespondingFlag("1"); // 該当図: 該当
 			}
 			columnCount++;
 		} else {
-			aclUpload.setCorrespondingFlag("0");	// 該当図: 非該当
+			aclUpload.setCorrespondingFlag("0"); // 該当図: 非該当
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null
 				&& StringCheck.trimWsp(value).length() > 0) {
 			if (drasapInfo.getConfidentialValue().equals(StringCheck.trimWsp(value))) {
-				aclUpload.setConfidentialFlag("2");	// 機密管理図: 秘
+				aclUpload.setConfidentialFlag("2"); // 機密管理図: 秘
 			} else if (drasapInfo.getStrictlyConfidentialValue().equals(StringCheck.trimWsp(value))) {
-				aclUpload.setConfidentialFlag("3");	// 機密管理図: 極秘
+				aclUpload.setConfidentialFlag("3"); // 機密管理図: 極秘
 			}
 			columnCount++;
 		} else {
-			aclUpload.setConfidentialFlag("1");	// 機密管理図: 関係者外秘
+			aclUpload.setConfidentialFlag("1"); // 機密管理図: 関係者外秘
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null) {
-			aclUpload.setGrpCode(StringCheck.trimWsp(value));	// グループ
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setGrpCode(StringCheck.trimWsp(value)); // グループ
 			columnCount++;
 		}
-		if ((value = this.getStringCellValue(row, ++columnIndex, evaluator)) != null) {
-			aclUpload.setItemName(StringCheck.trimWsp(value));	// 品名（規格型式）
+		value = getStringCellValue(row, ++columnIndex, evaluator);
+		if (value != null) {
+			aclUpload.setItemName(StringCheck.trimWsp(value)); // 品名（規格型式）
 			columnCount++;
 		}
 
@@ -447,15 +487,15 @@ public class AccessLevelBatchUpdateAction extends Action {
 			accessLevelMap = AclvMasterDB.getPreUpdateAcl(
 					aclUpload.getItemNoShort(), conn);
 			if (accessLevelMap.size() > 0) {
-				aclUpload.setPreUpdateAcl(accessLevelMap.get("ACL_ID"));		// 変更前アクセスレベル
-				aclUpload.setPreUpdateAclName(accessLevelMap.get("ACL_NAME"));	// 変更前アクセスレベル名
+				aclUpload.setPreUpdateAcl(accessLevelMap.get("ACL_ID")); // 変更前アクセスレベル
+				aclUpload.setPreUpdateAclName(accessLevelMap.get("ACL_NAME")); // 変更前アクセスレベル名
 			}
 			// 変更後ACL情報取得
 			accessLevelMap = AclvMasterDB.getPostUpdateAcl(
 					aclUpload.getGrpCode(), aclUpload.getCorrespondingFlag(), aclUpload.getConfidentialFlag(), conn);
 			if (accessLevelMap.size() > 0) {
-				aclUpload.setPostUpdateAcl(accessLevelMap.get("ACL_ID"));		// 変更後アクセスレベル
-				aclUpload.setPostUpdateAclName(accessLevelMap.get("ACL_NAME"));	// 変更後アクセスレベル名
+				aclUpload.setPostUpdateAcl(accessLevelMap.get("ACL_ID")); // 変更後アクセスレベル
+				aclUpload.setPostUpdateAclName(accessLevelMap.get("ACL_NAME")); // 変更後アクセスレベル名
 			}
 			return aclUpload;
 		}
@@ -472,8 +512,8 @@ public class AccessLevelBatchUpdateAction extends Action {
 	private String getStringCellValue(Row row, int columnIndex, FormulaEvaluator evaluator) {
 
 		String value = null;
-		Cell cell = row.getCell(columnIndex);	// cell.
-		CellValue cellValue = null;				// cell.(evaluated)
+		Cell cell = row.getCell(columnIndex); // cell.
+		CellValue cellValue = null; // cell.(evaluated)
 
 		if (cell == null) {
 			return null;
@@ -512,7 +552,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 				if (DateUtil.isCellDateFormatted(cell)) {
 					// 日付（yyyy/MM/dd）
 					value = new SimpleDateFormat("yyyy/MM/dd")
-							.format((cellValue.getNumberValue()));
+							.format(cellValue.getNumberValue());
 				} else {
 					// 数値
 					value = String.valueOf((long) cellValue.getNumberValue());
@@ -542,7 +582,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 	 * @param resources
 	 * @param conn
 	 */
-	private void checkUploadData(AclUpload aclUpload, HashSet<String> itemNoShortSet, MessageResources resources,
+	private void checkUploadData(AclUpload aclUpload, HashSet<String> itemNoShortSet,
 			Connection conn) throws Exception {
 
 		TableInfo tableInfo = TableInfoDB.getTableInfoArray("ACL_UPLOAD_TABLE", conn);
@@ -551,93 +591,103 @@ public class AccessLevelBatchUpdateAction extends Action {
 		int length = 0;
 		// 入力値チェック
 
+		value = aclUpload.getItemNo();
 		// 必須（品番）
-		if ((value = aclUpload.getItemNo()) == null || value.length() <= 0) {
-			aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "品番が未入力です"));
-		// 必須（グループ）
+		if (value == null || value.length() <= 0) {
+			aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "品番が未入力です" }, null));
+			// 必須（グループ）
 		} else if ((value = aclUpload.getGrpCode()) == null || value.length() <= 0) {
-			aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "グループが未入力です"));
+			aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "グループが未入力です" }, null));
 		}
 
+		value = aclUpload.getMachineJp();
 		// 桁数（装置）
-		if ((value = aclUpload.getMachineJp()) != null
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("MACHINE_JP").getData_length())) {
 			aclUpload.setMachineJp(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "装置の入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "装置の入力データが長すきます" }, null));
 			}
 		}
+		value = aclUpload.getMachineNo();
 		// 桁数（装置NO）
-		if ((value = aclUpload.getMachineNo()) != null
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("MACHINE_NO").getData_length())) {
 			aclUpload.setMachineNo(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "装置NOの入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "装置NOの入力データが長すきます" }, null));
 			}
 		}
+		value = aclUpload.getDrwgNo();
 		// 桁数（手配図番）
-		if ((value = aclUpload.getDrwgNo()) != null
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("DRWG_NO").getData_length())) {
 			aclUpload.setDrwgNo(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "手配図番の入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "手配図番の入力データが長すきます" }, null));
 			}
 		}
 		// 桁数（装置コード）
-		if ((value = aclUpload.getMachineCode()) != null
+		value = aclUpload.getMachineCode();
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("MACHINE_CODE").getData_length())) {
 			aclUpload.setMachineCode(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "装置コードの入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "装置コードの入力データが長すきます" }, null));
 			}
 		}
 		// 桁数（明細番号）
-		if ((value = aclUpload.getDetailNo()) != null
+		value = aclUpload.getDetailNo();
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("DETAIL_NO").getData_length())) {
 			aclUpload.setDetailNo(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "明細番号の入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "明細番号の入力データが長すきます" }, null));
 			}
 		}
 		// 桁数（頁）
-		if ((value = aclUpload.getPages()) != null
+		value = aclUpload.getPages();
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("PAGES").getData_length())) {
 			aclUpload.setPages(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "頁の入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "頁の入力データが長すきます" }, null));
 			}
 		}
 		// 桁数（品番）
-		if ((value = aclUpload.getItemNo()) != null
+		value = aclUpload.getItemNo();
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("ITEM_NO").getData_length())) {
 			aclUpload.setItemNo(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "品番の入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "品番の入力データが長すきます" }, null));
 			}
 		}
 		// 桁数（グループ）
-		if ((value = aclUpload.getGrpCode()) != null
+		value = aclUpload.getGrpCode();
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("GRP_CODE").getData_length())) {
 			aclUpload.setGrpCode(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "グループの入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "グループの入力データが長すきます" }, null));
 			}
 		}
 		// 桁数（品名(規格型式)）
-		if ((value = aclUpload.getItemName()) != null
+		value = aclUpload.getItemName();
+		if (value != null
 				&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("ITEM_NAME").getData_length())) {
 			aclUpload.setItemName(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
 			// メッセージ
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "品名(規格型式)の入力データが長すきます"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "品名(規格型式)の入力データが長すきます" }, null));
 			}
 		}
 
@@ -646,7 +696,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 			if (aclUpload.getPreUpdateAcl().equals(aclUpload.getPostUpdateAcl())) {
 				// メッセージ
 				if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-					aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.required.file.input", "アクセスレベルが変更されていません"));
+					aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "アクセスレベルが変更されていません" }, null));
 				}
 			}
 		}
@@ -659,13 +709,14 @@ public class AccessLevelBatchUpdateAction extends Action {
 		// 図番登録済みチェック
 		if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
 			if (getIndexDbCount(aclUpload.getItemNoShort(), conn) <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.nodata.drwgNo"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.nodata.drwgNo", null, null));
 			}
 		}
 		// 変更後ACL存在チェック
 		if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-			if ((value = aclUpload.getPostUpdateAcl()) == null || value.length() <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.nodata.acl", "変更後"));
+			value = aclUpload.getPostUpdateAcl();
+			if (value == null || value.length() <= 0) {
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.nodata.acl", new Object[] { "変更後" }, null));
 			}
 		}
 		// 重複チェック（データ内の同一複数図番）
@@ -674,16 +725,16 @@ public class AccessLevelBatchUpdateAction extends Action {
 					aclUpload.getAclUpdateNo(), aclUpload.getItemNoShort(), aclUpload.getPreUpdateAcl(), aclUpload.getPostUpdateAcl(), conn);
 			if (count <= 0) {
 				if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
-					aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.notequal.overlapped.drwgNo.acl"));
+					aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.notequal.overlapped.drwgNo.acl", null, null));
 				}
-				AclUploadDB.updateMessage(aclUpload.getAclUpdateNo(), resources.getMessage("system.aclBatchUpdate.upload.notequal.overlapped.drwgNo.acl"), conn, aclUpload.getItemNoShort());
+				AclUploadDB.updateMessage(aclUpload.getAclUpdateNo(), messageSource.getMessage("system.aclBatchUpdate.upload.notequal.overlapped.drwgNo.acl", null, null), conn, aclUpload.getItemNoShort());
 			}
 		}
 		// 変更前後ACL判断チェック（ACL変更可否判断マスタ参照）
 		if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
 			if (AclUpdatableConditionMasterDB.getAclUpdatableConditionCount(
 					aclUpload.getPreUpdateAcl(), aclUpload.getPostUpdateAcl(), conn) <= 0) {
-				aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.upload.nopermission.update.acl"));
+				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.nopermission.update.acl", null, null));
 			}
 		}
 	}
@@ -695,7 +746,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 	 * @param resources
 	 * @param conn
 	 */
-	private long checkUploadData(String aclUpdateNo, MessageResources resources, Connection conn)
+	private long checkUploadData(String aclUpdateNo, Connection conn)
 			throws Exception {
 
 		long resultCount = 0;
@@ -707,47 +758,49 @@ public class AccessLevelBatchUpdateAction extends Action {
 		String value = null;
 		boolean createNew = false;
 		for (HashMap<String, String> drwgNoMap : drwgNoMapList) {
+			value = drwgNoMap.get("MESSAGE");
 			// 図番エラーチェック
-			if ((value = drwgNoMap.get("MESSAGE")) != null && value.length() > 0) {
+			if (value != null && value.length() > 0) {
 				// 処理終了。次の図番へ
 				continue;
 
-			// 1物2品番整合性チェック
-			} else if ( ((value = drwgNoMap.get("ID1_DRWG_NO")) == null || value.length() <= 0) ||
-						((value = drwgNoMap.get("ID1_TWIN_DRWG_NO")) == null || value.length() <= 0) ||
-						((value = drwgNoMap.get("ID2_DRWG_NO")) == null || value.length() <= 0) ||
-						((value = drwgNoMap.get("ID2_TWIN_DRWG_NO")) == null || value.length() <=0) ) {
-				AclUploadDB.updateMessage(aclUpdateNo, resources.getMessage("system.aclBatchUpdate.upload.nodata.twinDrwgNo"), conn, drwgNoMap.get("ITEM_NO_SHORT"));
+				// 1物2品番整合性チェック
+			}
+			value = drwgNoMap.get("ID1_DRWG_NO");
+			if (value == null || value.length() <= 0 ||
+					(value = drwgNoMap.get("ID1_TWIN_DRWG_NO")) == null || value.length() <= 0 ||
+					(value = drwgNoMap.get("ID2_DRWG_NO")) == null || value.length() <= 0 ||
+					(value = drwgNoMap.get("ID2_TWIN_DRWG_NO")) == null || value.length() <= 0) {
+				AclUploadDB.updateMessage(aclUpdateNo, messageSource.getMessage("system.aclBatchUpdate.upload.nodata.twinDrwgNo", null, null), conn, drwgNoMap.get("ITEM_NO_SHORT"));
 
-			// 1物2品番ACLチェック
+				// 1物2品番ACLチェック
 			} else {
 
 				// 対応図番がない場合、1物2品番対応図番をACLアップロードデータテーブルに追加
 				twinDrwgNo = null;
 				createNew = false;
-				if ((value = drwgNoMap.get("TWIN_DRWG_NO")) == null || value.length() <= 0) {
+				value = drwgNoMap.get("TWIN_DRWG_NO");
+				if (value == null || value.length() <= 0) {
 
-					if (((value = drwgNoMap.get("ID1_TWIN_DRWG_NO")) != null) && value.length() > 0) {
+					value = drwgNoMap.get("ID1_TWIN_DRWG_NO");
+					if (value != null && value.length() > 0) {
 						// 属性情報．図番 ⇒ 1物2品番対応図番を取得し、コピー登録
 						twinDrwgNo = value;
-						AclUploadDB.insertSelectTwinDrwgNo(aclUpdateNo, drwgNoMap.get("ITEM_NO_SHORT"), conn);
 					} else {
 						// 属性情報．1物2品番対応図番 ⇒ 図番を取得し、コピー登録
 						twinDrwgNo = drwgNoMap.get("ID2_DRWG_NO");
-						AclUploadDB.insertSelectTwinDrwgNo(aclUpdateNo, drwgNoMap.get("ITEM_NO_SHORT"), conn);
 					}
+					AclUploadDB.insertSelectTwinDrwgNo(aclUpdateNo, drwgNoMap.get("ITEM_NO_SHORT"), conn);
 					createNew = true; // 対応図番を追加作成
 				} else {
 					twinDrwgNo = drwgNoMap.get("TWIN_DRWG_NO");
 				}
 
 				// 変更前アクセスレベル比較
-				if (!drwgNoMap.get("ID1_PRE_UPDATE_ACL").equals(drwgNoMap.get("ID2_PRE_UPDATE_ACL"))) {
-					AclUploadDB.updateMessage(aclUpdateNo, resources.getMessage("system.aclBatchUpdate.upload.notequal.twin.drwgNo.acl"), conn, drwgNoMap.get("ITEM_NO_SHORT"), twinDrwgNo);
+				if (!drwgNoMap.get("ID1_PRE_UPDATE_ACL").equals(drwgNoMap.get("ID2_PRE_UPDATE_ACL")) || !createNew && !drwgNoMap.get("POST_UPDATE_ACL").equals(drwgNoMap.get("TWIN_POST_UPDATE_ACL"))) {
+					AclUploadDB.updateMessage(aclUpdateNo, messageSource.getMessage("system.aclBatchUpdate.upload.notequal.twin.drwgNo.acl", null, null), conn, drwgNoMap.get("ITEM_NO_SHORT"), twinDrwgNo);
 
-				// 変更後アクセスレベル比較（※追加作成時はコピー登録なのでチェックしない）
-				} else if (!createNew && !drwgNoMap.get("POST_UPDATE_ACL").equals(drwgNoMap.get("TWIN_POST_UPDATE_ACL"))) {
-					AclUploadDB.updateMessage(aclUpdateNo, resources.getMessage("system.aclBatchUpdate.upload.notequal.twin.drwgNo.acl"), conn, drwgNoMap.get("ITEM_NO_SHORT"), twinDrwgNo);
+					// 変更後アクセスレベル比較（※追加作成時はコピー登録なのでチェックしない）
 				}
 			}
 		}
@@ -778,8 +831,14 @@ public class AccessLevelBatchUpdateAction extends Action {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return count;
 	}
@@ -793,7 +852,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 	 * @param resources
 	 */
 	private void doUpdate(AccessLevelBatchUpdateForm accessLevelBatchUpdateForm, User user,
-			ActionMessages errors, MessageResources resources) {
+			Model errors) {
 
 		if (category.isDebugEnabled()) {
 			category.debug("更新処理の開始");
@@ -809,28 +868,31 @@ public class AccessLevelBatchUpdateAction extends Action {
 
 			if (aclUploadList.size() <= 0) {
 				// 更新可能なアップロードデータが0件の場合
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.update.nodata"));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.update.nodata", null, null));
 				return;
 			}
 
 			// 属性情報テーブルを更新
-			long count = updateIndexDb(aclUploadList, user, errors, resources, conn);
+			long count = updateIndexDb(aclUploadList, user, errors, conn);
 			if (category.isDebugEnabled()) {
 				category.debug("属性情報テーブル更新:" + count + "件");
 			}
 
 		} catch (Exception e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.update.aclv", ErrorUtility.error2String(e)));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.update.aclv", new Object[] { ErrorUtility.error2String(e) }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
- 			// for MUR
+			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclBatchUpdate.update.aclv", ErrorUtility.error2String(e)));
+				category.error(messageSource.getMessage("system.aclBatchUpdate.update.aclv", new Object[] { ErrorUtility.error2String(e) }, null));
 			}
 
 		} finally {
-			try { conn.close(); } catch (Exception e) {}
+			try {
+				conn.close();
+			} catch (Exception e) {
+			}
 		}
 
 		if (category.isDebugEnabled()) {
@@ -848,7 +910,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 	 * @param conn
 	 */
 	private long updateIndexDb(ArrayList<AclUpload> aclUploadList, User user,
-			ActionMessages errors, MessageResources resources, Connection conn) throws Exception {
+			Model errors, Connection conn) throws Exception {
 
 		long count = 0;
 
@@ -888,7 +950,7 @@ public class AccessLevelBatchUpdateAction extends Action {
 						}
 						if (rs.getLong("COUNT") <= 0) {
 							// 別トランザクションによって図番ACLが更新済みの場合、エラー。
-							aclUpload.setMessage(resources.getMessage("system.aclBatchUpdate.update.excusive.acl"));
+							aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.update.excusive.acl", null, null));
 							// 更新処理をしないでlogへ書き出し
 							ChangeAclLogger.logging(user, aclUpload); // ACL変更ログ
 							// ロールバック
@@ -923,15 +985,16 @@ public class AccessLevelBatchUpdateAction extends Action {
 					try {
 						// ロールバック
 						conn.rollback();
-					} catch (Exception e2) {}
+					} catch (Exception e2) {
+					}
 
 					// for ユーザー
-					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.update.aclv", ErrorUtility.error2String(e)));
+					MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.update.aclv", new Object[] { ErrorUtility.error2String(e) }, null));
 					// for システム管理者
 					ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"), user.getSys_id());
 					// for MUR
 					if (category.isInfoEnabled()) {
-						category.error(resources.getMessage("system.aclBatchUpdate.update.aclv", ErrorUtility.error2String(e)));
+						category.error(messageSource.getMessage("system.aclBatchUpdate.update.aclv", new Object[] { ErrorUtility.error2String(e) }, null));
 					}
 
 					aclUpload.setMessage(e.getMessage()); // ACL変更ログ
@@ -941,14 +1004,29 @@ public class AccessLevelBatchUpdateAction extends Action {
 			}
 		} catch (Exception e) {
 			// ロールバック
-			try { conn.rollback(); } catch (Exception e2) {};
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt1.close(); } catch (Exception e) {}
-			try { pstmt2.close(); } catch (Exception e) {}
-			try { pstmt3.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt1.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt2.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt3.close();
+			} catch (Exception e) {
+			}
 		}
 		return count;
 	}
@@ -985,7 +1063,10 @@ public class AccessLevelBatchUpdateAction extends Action {
 				category.error("ACLアップロードデータテーブルの削除に失敗(" + ErrorUtility.error2String(e) + ")");
 			}
 		} finally {
-			try { conn.close(); } catch (Exception e) {}
+			try {
+				conn.close();
+			} catch (Exception e) {
+			}
 		}
 
 		if (category.isDebugEnabled()) {

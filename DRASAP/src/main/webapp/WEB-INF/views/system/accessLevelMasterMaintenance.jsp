@@ -1,19 +1,27 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib uri="/tags/struts-bean" prefix="bean"%>
-<%@ taglib uri="/tags/struts-html" prefix="html"%>
-<%@ taglib uri="/tags/struts-logic" prefix="logic"%>
-<%@ taglib uri="/tags/struts-nested" prefix="nested"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ page isELIgnored="false"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
+<c:if test="${empty sessionScope.user}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Cache-Control" content="no-cache" />
-<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+<style type="text/css">
+@import
+url(
+<%=request.getContextPath()%>/resources/css/default.css
+);
+</style>
 <script type="text/javascript">
 <!--
 	browserName = navigator.appName;
@@ -60,59 +68,77 @@
 //--->
 </script>
 </head>
-<body bgcolor="#F5F5DC" bottommargin="0" leftmargin="5" topmargin="5" rightmargin="5" marginheight="0" marginwidth="0">
-<html:form action="/accessLevelMasterMaintenance">
-	<html:hidden property="act" />
-	<table name="List" align="center" border="1" cellspacing="0" cellpadding="0" class="normal12">
-		<tr bgcolor="#A1A0C0">
-			<td>アクセスレベルＩＤ</td>
-			<td>アクセスレベル名</td>
-			<td>更新有／無</td>
-		</tr>
-		<nested:iterate id="accessLevelMasterMaintenanceElement" type="tyk.drasap.system.AccessLevelMasterMaintenanceElement"
-			indexId="idx" name="accessLevelMasterMaintenanceForm" property="recList" scope="session">
-			<tr>
-				<td nowrap="nowrap"><nested:equal value="true" property="new" scope="session">
-					<nested:text style="<%=accessLevelMasterMaintenanceElement.getAclIdStyle()%>" property="aclId"
-						onchange='<%= "changeValue(" + idx + ")" %>' />
-				</nested:equal> <nested:equal value="false" property="new" scope="session">
-					<nested:write property="aclId" />
-				</nested:equal></td>
-				<td nowrap="nowrap"><nested:text property="aclName" onchange='<%= "changeValue(" + idx + ")" %>' /></td>
-				<td nowrap="nowrap"><nested:checkbox property="update" /> <nested:hidden property="new" /></td>
-
+<body bgcolor="#F5F5DC" bottommargin="0" leftmargin="5" topmargin="5"
+	rightmargin="5" marginheight="0" marginwidth="0">
+	<form
+		action="<%=request.getContextPath() %>/accessLevelMasterMaintenance"
+		method="post">
+		<input type="hidden" name="act" value="" />
+		<table name="List" align="center" border="1" cellspacing="0"
+			cellpadding="0" class="normal12">
+			<tr bgcolor="#A1A0C0">
+				<td>アクセスレベルＩＤ</td>
+				<td>アクセスレベル名</td>
+				<td>更新有／無</td>
 			</tr>
-		</nested:iterate>
-	</table>
-	<table align="center" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<td align="center" nowrap="nowrap"><input type="button" value="レコード追加" onclick="backPage('ADDRECORD')" /></td>
-			<td>&nbsp;&nbsp;&nbsp;</td>
-			<td align="center" nowrap="nowrap"><input type="button" value="更新" onclick="backPage('UPDATE')" /></td>
-			<td>&nbsp;&nbsp;&nbsp;</td>
-			<td align="center" nowrap="nowrap"><input type="button" value="削除" onclick="backPage('DELETE')" /></td>
-		</tr>
-	</table>
-	<table align="center" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<td><br />
-			</td>
-		</tr>
-		<tr>
-			<td><br />
-			</td>
-		</tr>
-		<nested:iterate id="errorMessage" type="java.lang.String" name="accessLevelMasterMaintenanceForm" property="errorMsg"
-			scope="session">
+			<c:forEach var="accessLevelMasterMaintenanceElement"
+				items="${sessionScope.accessLevelMasterMaintenanceForm.recList}"
+				varStatus="status">
+				<tr>
+					<td nowrap="nowrap"><c:choose>
+							<c:when test="${accessLevelMasterMaintenanceElement.new == true}">
+								<input type="text"
+									style="<c:out value='${accessLevelMasterMaintenanceElement.aclIdStyle}' />"
+									name="aclId"
+									value="<c:out value='${accessLevelMasterMaintenanceElement.aclId}' />"
+									onchange="changeValue(<c:out value='${status.index}' />)" />
+							</c:when>
+							<c:otherwise>
+								<c:out value="${accessLevelMasterMaintenanceElement.aclId}" />
+							</c:otherwise>
+						</c:choose></td>
+					<td nowrap="nowrap"><input type="text" name="aclName"
+						value="<c:out value='${accessLevelMasterMaintenanceElement.aclName}' />"
+						onchange="changeValue(<c:out value='${status.index}' />)" /></td>
+					<td nowrap="nowrap"><input type="checkbox" name="update"
+						value="true"
+						<c:if test="${accessLevelMasterMaintenanceElement.update}">checked</c:if> />
+						<input type="hidden" name="new"
+						value="<c:out value='${accessLevelMasterMaintenanceElement.new}' />" />
+					</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<table align="center" border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td style="color:#FF0000"><bean:write name="errorMessage" /></td>
+				<td>&nbsp;</td>
 			</tr>
-		</nested:iterate>
-	</table>
-</html:form>
+			<tr>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="レコード追加" onclick="backPage('ADDRECORD')" /></td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="更新" onclick="backPage('UPDATE')" /></td>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="削除" onclick="backPage('DELETE')" /></td>
+			</tr>
+		</table>
+		<table align="center" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td><br /></td>
+			</tr>
+			<tr>
+				<td><br /></td>
+			</tr>
+			<c:forEach var="errorMessage"
+				items="${sessionScope.accessLevelMasterMaintenanceForm.errorMsg}">
+				<tr>
+					<td style="color: #FF0000"><c:out value="${errorMessage}" /></td>
+				</tr>
+			</c:forEach>
+		</table>
+	</form>
 </body>
 </html>
 

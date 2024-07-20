@@ -1,19 +1,20 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="tyk.drasap.search.*,tyk.drasap.common.*" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
-<%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${empty sessionScope.user}">
+    <script>
+        location.replace('<%=request.getContextPath() %>/timeout');
+    </script>
+</c:if>
+<html>
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-type" />
 <meta content="no-cache" http-equiv="Pragma" />
 <meta content="no-cache" http-equiv="Cache-Control" />
-<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 <style type="text/css">
 <!--
 .deleteBtn {
@@ -32,7 +33,6 @@
 -->
 </style>
 <script type="text/javascript">
-<!--
     browserName = navigator.appName;
     function onLoad() {
         parent.parent.condition.document.body.style.cursor="";
@@ -57,15 +57,18 @@
 	parent.parent.condition.document.forms[0].act.value="search";// 隠し属性actに'search'をセット
 	parent.parent.condition.document.forms[0].target="result";// targetは'result'
 	parent.parent.condition.document.forms[0].submit();
-//        parent.location.href = "switch.do?prefix=/search&amp;page=/searchResult.jsp";
     }
-//-->
 </script>
 </head>
-<body marginwidth="0" marginheight="0" bgcolor="#ffffff" rightmargin="0" topmargin="0" leftmargin="0" bottommargin="0" onload="onLoad()">
-<bean:define id="deleteDwgForm" type="tyk.drasap.search.DeleteDwgForm" name="deleteDwgForm" scope="session" />
-<span class="deleteBtn" ><input type="button" style="width:80px;" onclick="submitFunc('DELETE')" value="削除" id="deleteButton" <%=(deleteDwgForm.isDeleteOK()?"":"disabled") %> /></span>
-<span class="goBackBtn" ><input type="button" onclick="backSearchResult()" value="　戻る　" id="backButton" /></span>
+<body marginwidth="0" marginheight="0" bgcolor="#ffffff" style="margin: 0; padding: 0;" onload="onLoad()">
+<c:set var="deleteDwgForm" scope="session" value="${sessionScope.deleteDwgForm}" />
+<span class="deleteBtn">
+    <input type="button" style="width:80px;" onclick="submitFunc('DELETE')" value="削除" id="deleteButton" ${empty deleteDwgForm or not deleteDwgForm.deleteOK ? 'disabled' : ''} />
+</span>
+<span class="goBackBtn">
+    <input type="button" onclick="backSearchResult()" value="　戻る　" id="backButton" />
+</span>
 </body>
-</html:html>
+
+</html>
 

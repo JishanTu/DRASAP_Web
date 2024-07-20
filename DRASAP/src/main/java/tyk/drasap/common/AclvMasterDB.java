@@ -15,7 +15,7 @@ import java.util.HashMap;
  * @version 2013/09/13 yamagishi
  */
 public class AclvMasterDB {
-// 2013.09.14 yamagishi modified. start
+	// 2013.09.14 yamagishi modified. start
 	/**
 	 * アクセスレベルマスターからアクセスレベルIDのリストを取得
 	 * @param printerIdArray
@@ -30,9 +30,9 @@ public class AclvMasterDB {
 		Statement stmt1 = null;
 		ResultSet rs1 = null;
 		try {
-//			StringBuffer sbSql1 = new StringBuffer("select * from ACCESS_LEVEL_MASTER where STATUS='1'");
-//			sbSql1.append(" order by ACL_ID");
-			StringBuffer sbSql1 = new StringBuffer("select ACL_ID from ACCESS_LEVEL_MASTER order by ACL_ID");
+			//			StringBuffer sbSql1 = new StringBuffer("select * from ACCESS_LEVEL_MASTER where STATUS='1'");
+			//			sbSql1.append(" order by ACL_ID");
+			StringBuilder sbSql1 = new StringBuilder("select ACL_ID from ACCESS_LEVEL_MASTER order by ACL_ID");
 			//
 			stmt1 = conn.createStatement();
 			rs1 = stmt1.executeQuery(sbSql1.toString());
@@ -45,15 +45,21 @@ public class AclvMasterDB {
 
 		} finally {
 			// CLOSE処理
-			try { rs1.close(); } catch (Exception e) {}
-			try { stmt1.close(); } catch (Exception e) {}
+			try {
+				rs1.close();
+			} catch (Exception e) {
+			}
+			try {
+				stmt1.close();
+			} catch (Exception e) {
+			}
 		}
 		//
 		return aclvIdList;
 	}
-// 2013.09.14 yamagishi modified. end
+	// 2013.09.14 yamagishi modified. end
 
-// 2013.07.13 yamagishi add. start
+	// 2013.07.13 yamagishi add. start
 	/**
 	 * 図面のアクセスレベルから、該当図面であるかを判定して返す。
 	 * @param drwgNo 図番
@@ -82,10 +88,16 @@ public class AclvMasterDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try{ rs.close(); } catch (Exception e) {}
-			try{ pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
-		return (count > 0);
+		return count > 0;
 	}
 
 	/**
@@ -110,15 +122,21 @@ public class AclvMasterDB {
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				accessLevelMap.put("ACL_ID", rs.getString("ACL_ID"));	// アクセスレベル
-				accessLevelMap.put("ACL_NAME", rs.getString("ACL_NAME"));	// アクセスレベル名
+				accessLevelMap.put("ACL_ID", rs.getString("ACL_ID")); // アクセスレベル
+				accessLevelMap.put("ACL_NAME", rs.getString("ACL_NAME")); // アクセスレベル名
 			}
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return accessLevelMap;
 	}
@@ -149,21 +167,27 @@ public class AclvMasterDB {
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				accessLevelMap.put("ACL_ID", rs.getString("ACL_ID"));	// アクセスレベル
-				accessLevelMap.put("ACL_NAME", rs.getString("ACL_NAME"));	// アクセスレベル名
+				accessLevelMap.put("ACL_ID", rs.getString("ACL_ID")); // アクセスレベル
+				accessLevelMap.put("ACL_NAME", rs.getString("ACL_NAME")); // アクセスレベル名
 			}
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return accessLevelMap;
 	}
-// 2013.07.13 yamagishi add. end
+	// 2013.07.13 yamagishi add. end
 
-// 2013.07.24 yamagishi add. start
+	// 2013.07.24 yamagishi add. start
 	/**
 	 * 属性情報テーブルのレコード（1物2品番情報）をMapで返す。
 	 * @param drwgNo
@@ -178,12 +202,12 @@ public class AclvMasterDB {
 		ResultSet rs = null;
 		ResultSetMetaData metaData = null;
 		try {
-			String sql = "select id1.DRWG_NO      as DRWG_NO, "          +
-								"id1.TWIN_DRWG_NO as ID1_TWIN_DRWG_NO, " +
-								"id2.DRWG_NO      as ID2_TWIN_DRWG_NO, " +
-								"id1.ACL_ID       as ACL_ID, "           +
-								"id2.ACL_ID       as TWIN_ACL_ID, "      +
-								"id2.PROHIBIT     as TWIN_PROHIBIT "     +
+			String sql = "select id1.DRWG_NO      as DRWG_NO, " +
+					"id1.TWIN_DRWG_NO as ID1_TWIN_DRWG_NO, " +
+					"id2.DRWG_NO      as ID2_TWIN_DRWG_NO, " +
+					"id1.ACL_ID       as ACL_ID, " +
+					"id2.ACL_ID       as TWIN_ACL_ID, " +
+					"id2.PROHIBIT     as TWIN_PROHIBIT " +
 					"from INDEX_DB id1 " +
 					"left outer join INDEX_DB id2 on id1.DRWG_NO = id2.TWIN_DRWG_NO " + // 1物2品番図番
 					"where id1.DRWG_NO = ? " +
@@ -207,8 +231,14 @@ public class AclvMasterDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return drwgNoMap;
 	}
@@ -227,7 +257,7 @@ public class AclvMasterDB {
 		ResultSet rs = null;
 		try {
 			// sql
-			StringBuffer sql = new StringBuffer("select ACL_ID, ACL_NAME " +
+			StringBuilder sql = new StringBuilder("select ACL_ID, ACL_NAME " +
 					"from ACCESS_LEVEL_MASTER " +
 					"where ACL_ID in (");
 			for (int i = 0; i < aclIds.length; i++) {
@@ -252,10 +282,16 @@ public class AclvMasterDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return aclMap;
 	}
-// 2013.07.24 yamagishi add. end
+	// 2013.07.24 yamagishi add. end
 }

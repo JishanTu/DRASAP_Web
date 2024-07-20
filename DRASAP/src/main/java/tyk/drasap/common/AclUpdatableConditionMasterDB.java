@@ -40,8 +40,14 @@ public class AclUpdatableConditionMasterDB {
 			throw e;
 		} finally {
 			// CLOSEèàóù
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return count;
 	}

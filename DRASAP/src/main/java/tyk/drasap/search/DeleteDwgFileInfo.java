@@ -13,42 +13,49 @@ public class DeleteDwgFileInfo {
 	HashMap<String, String> linkDwgParmMap = new HashMap<String, String>();// リンクタグで使用するパラメータを格納するMap
 	// ------------------------------------------------------- コンストラクタ
 	// ------------------------------------------------------- getter,setter
+
 	/**
 	 * @return
 	 */
 	public String getFileId() {
 		return fileId;
 	}
+
 	/**
 	 * @param list
 	 */
 	public void setFileId(String val) {
-	    fileId = val;
+		fileId = val;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getFileName() {
 		return fileName;
 	}
+
 	/**
 	 * @param list
 	 */
 	public void setFileName(String val) {
-	    fileName = val;
+		fileName = val;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getFilePath() {
 		return filePath;
 	}
+
 	/**
 	 * @param list
 	 */
 	public void setFilePath(String val) {
-	    filePath = val;
+		filePath = val;
 	}
+
 	/**
 	 * @return
 	 */

@@ -3,18 +3,24 @@ package tyk.drasap.common;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Objects;
 
-import org.apache.log4j.Category;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.ui.Model;
 
 /**
  * ユーザーマスターと対応したDBクラス。
  * @version 2013/09/17 yamagishi
  */
 public class UserDB {
-	private static Category category = Category.getInstance(UserDB.class.getName());
+	private static Logger category = Logger.getLogger(UserDB.class.getName());
 
 	/** パスワード最大桁数 */
 	public static final int PASSWORD_MAX_LENGTH = 20;
@@ -31,11 +37,12 @@ public class UserDB {
 	 * @throws Exception
 	 */
 	public static boolean addUserInfo(User user, String id, Connection conn)
-						throws Exception {
+			throws Exception {
 		// パスワードチェックしない。
 		// ダミーパスワードとして "" を渡す。
 		return addUserInfo(user, id, "", false, conn);
 	}
+
 	/**
 	 * 取得したユーザー情報を、userに付加する。
 	 * 成功すれば trueを返す。
@@ -48,10 +55,77 @@ public class UserDB {
 	 * @throws Exception
 	 */
 	public static boolean addUserInfo(User user, String id, String passwd, Connection conn)
-						throws Exception {
+			throws Exception {
 		// パスワードチェックする
 		return addUserInfo(user, id, passwd, true, conn);
 	}
+
+	/**
+	 * パスワードの有効期限チェック
+	 * @param user
+	 * @param errors
+	 * @param conn
+	 * @return　 0: 変更無 <br/> 1: 変更有(パスワードがユーザID) <br/> 2: 変更有(有効期限切れ)
+	 * @throws Exception
+	 */
+	public static int checkPasswordExpiry(User user, Model errors, Connection conn) throws Exception {
+		String userId = user.getId();
+		String currentPass = UserDB.getPassword(userId, conn);
+
+		if (StringUtils.isEmpty(currentPass) || userId.equals(currentPass)) {
+			// パスワード未設定 もしくは パスワードがユーザIDと同じ
+			return 1;
+		}
+
+		/*
+		 *  パスワード有効期限の確認
+		 */
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Calendar passwdUpCalendar = Calendar.getInstance();
+
+		// パスワード定義ファイルから値取得
+		UserDef userdef = new UserDef();
+		HashMap<String, String> passwdDefMap = userdef.getPasswdDefinition(errors);
+
+		// パスワード有効期限日数チェック
+		int pwdLmtDay = Integer.parseInt(passwdDefMap.get(UserDef.PWD_LMT_DAY));
+
+		// 現在日時の取得
+		Calendar nowCal = Calendar.getInstance();
+
+		// 時分秒をクリア
+		nowCal.clear(Calendar.MINUTE);
+		nowCal.clear(Calendar.SECOND);
+		nowCal.clear(Calendar.MILLISECOND);
+		nowCal.set(Calendar.HOUR_OF_DAY, 0);
+
+		// パスワード設定日取得
+		Date pwdUpDate = user.getPasswdUpdDate();
+
+		if (pwdUpDate == null) {
+			// パスワード設定日が未設定の場合は再設定対象
+			return 2;
+		}
+
+		passwdUpCalendar.setTime(pwdUpDate); // DATE -> Calendar
+
+		// パスワード設定日 + 有効期限日数
+		passwdUpCalendar.add(Calendar.DATE, pwdLmtDay);
+
+		Date passwdLimitDate = passwdUpCalendar.getTime(); // Calendar -> DATE
+		Date nowDate = nowCal.getTime(); // Calendar -> DATE
+
+		category.debug("Now Date=" + sdf.format(nowDate));
+		category.debug("Password Limit Date=" + sdf.format(passwdLimitDate));
+
+		// パスワード設定日 + 有効期限日数 < 現在日時の場合はパスワード変更
+		if (nowDate.after(passwdLimitDate)) {
+			return 2;
+		}
+
+		return 0;
+	}
+
 	/**
 	 * 取得したユーザー情報を、userに付加する。
 	 * 成功すれば trueを返す。
@@ -66,121 +140,120 @@ public class UserDB {
 	 * @throws Exception
 	 */
 	public static boolean addUserInfo(User user, String id, String passwd, boolean checkPswd, Connection conn)
-						throws Exception {
+			throws Exception {
 		// idを大文字に
 		id = id.toUpperCase();
-//		passwd = passwd.toUpperCase();
+		//		passwd = passwd.toUpperCase();
 		//
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		try{
+		try {
 			// idで検索を行う
 			// そこでStatementに変更。 '04.Mar.2 Hirata
 			// 発効、失効を見るように変更
 			pstmt = conn.prepareStatement("select *" +
-						" from USER_MASTER, DEPARTMENT_MASTER" +
-						" where USER_MASTER.DEPT_CODE=DEPARTMENT_MASTER.DEPT_CODE(+)" +
-						" and TRIM(USER_ID)=?" +
-						// 発効日・・・nullまたは今日以前(今日を含む)
-						" and (VALID_DATE is null or TRUNC(VALID_DATE) <= TRUNC(sysdate))" +
-						// 失効日・・・nullまたは今日より後(今日は含まない)
-						" and (EXPIRED_DATE is null or TRUNC(sysdate) < TRUNC(EXPIRED_DATE))");
+					" from USER_MASTER, DEPARTMENT_MASTER" +
+					" where USER_MASTER.DEPT_CODE=DEPARTMENT_MASTER.DEPT_CODE(+)" +
+					" and TRIM(USER_ID)=?" +
+					// 発効日・・・nullまたは今日以前(今日を含む)
+					" and (VALID_DATE is null or TRUNC(VALID_DATE) <= TRUNC(sysdate))" +
+					// 失効日・・・nullまたは今日より後(今日は含まない)
+					" and (EXPIRED_DATE is null or TRUNC(sysdate) < TRUNC(EXPIRED_DATE))");
 			pstmt.setString(1, id.trim());
 			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				String passwd_M = rs.getString("PASSWD");
-				// パスワードチェックが不要、またはパスワードが一致したら
-				// 変更 '04/04/13 by Hirata
-				if (!checkPswd || passwd.equals(passwd_M)) {
-					// ユーザー情報をuserにセットする
-					user.setId(id);
-					user.setName(rs.getString("USER_NAME"));
-					user.setNameE(rs.getString("ALPH_NAME"));
-					user.setDept(rs.getString("DEPT_CODE"));
-					user.setDeptName(rs.getString("DEPARTMENT"));
-					user.setSearchSelCol1(rs.getString("SEARCH_SELCOL1"));
-					user.setSearchSelCol2(rs.getString("SEARCH_SELCOL2"));
-					user.setSearchSelCol3(rs.getString("SEARCH_SELCOL3"));
-					user.setSearchSelCol4(rs.getString("SEARCH_SELCOL4"));
-					user.setSearchSelCol5(rs.getString("SEARCH_SELCOL5"));
-					user.setViewSelCol1(rs.getString("VIEW_SELCOL1"));
-					user.setViewSelCol2(rs.getString("VIEW_SELCOL2"));
-					user.setViewSelCol3(rs.getString("VIEW_SELCOL3"));
-					user.setViewSelCol4(rs.getString("VIEW_SELCOL4"));
-					user.setViewSelCol5(rs.getString("VIEW_SELCOL5"));
-					user.setViewSelCol6(rs.getString("VIEW_SELCOL6"));
-					user.setDisplayCount(rs.getString("DISPLAY_COUNT"));
-					user.setAdminFlag(rs.getString("ADMIN_FLAG"));// 管理者フラグ
-					user.setPosition(rs.getString("POSITION"));// 職位
-// 2013.07.24 yamagishi add. start
-					user.setAclUpdateFlag(rs.getString("ACL_UPDATE_FLAG"));				// アクセスレベル変更許可フラグ
-					user.setAclBatchUpdateFlag(rs.getString("ACL_BATCH_UPDATE_FLAG"));	// アクセスレベル一括更新ツール許可フラグ
-					user.setDlManagerFlag(rs.getString("DL_MANAGER_FLAG"));				// ＤＬマネージャ利用可能フラグ
-// 2013.07.24 yamagishi add. end
-// 2019.09.20 yamamoto add. start
-					user.setPasswdUpdDate(rs.getDate("PASSWD_UPD_DATE")); // パスワード設定日
-					user.setReproUserFlag(rs.getString("REPRO_USER_FLAG")); // 原図庫ユーザフラグ
-					user.setDwgRegReqFlag(rs.getString("DWG_REG_REQ_FLAG")); // 図面登録依頼フラグ
-// 2019.09.20 yamamoto add. end
-// 2020.02.10 yamamoto add. start
-					user.setMultiPdfFlag(rs.getString("MULTI_PDF_FLAG")); // マルチPDF出力許可フラグ
-// 2020.02.10 yamamoto add. end
-					String defaultUserGroup = rs.getString("USER_GRP_CODE");// 原価部門の利用者グループ
-					user.setDefaultUserGroup(defaultUserGroup);
-					// 利用可能な全ての利用者グループを取得
-					ArrayList<String> userGroupCodeArray = new ArrayList<String>();
-					if(defaultUserGroup != null){// 原価部門の利用者グループ
-						userGroupCodeArray.add(defaultUserGroup);
-					}
-					if ((rs.getString("USER_GRP_CODE01")) != null) {// ユーザーマスタの利用者グループ01
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE01"));
-					}
-					if ((rs.getString("USER_GRP_CODE02")) != null) {// ユーザーマスタの利用者グループ02
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE02"));
-					}
-					if ((rs.getString("USER_GRP_CODE03")) != null) {// ユーザーマスタの利用者グループ03
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE03"));
-					}
-					if ((rs.getString("USER_GRP_CODE04")) != null) {// ユーザーマスタの利用者グループ04
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE04"));
-					}
-					if ((rs.getString("USER_GRP_CODE05")) != null) {// ユーザーマスタの利用者グループ05
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE05"));
-					}
-					if ((rs.getString("USER_GRP_CODE06")) != null) {// ユーザーマスタの利用者グループ06
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE06"));
-					}
-					if ((rs.getString("USER_GRP_CODE07")) != null) {// ユーザーマスタの利用者グループ07
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE07"));
-					}
-					if ((rs.getString("USER_GRP_CODE08")) != null) {// ユーザーマスタの利用者グループ08
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE08"));
-					}
-					if ((rs.getString("USER_GRP_CODE09")) != null) {// ユーザーマスタの利用者グループ09
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE09"));
-					}
-					if ((rs.getString("USER_GRP_CODE10")) != null) {// ユーザーマスタの利用者グループ10
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE10"));
-					}
-// 2013.09.17 yamagishi add. start
-					while (rs.next()) {
-						// ユーザが複数の原価部門に所属している場合
-						userGroupCodeArray.add(rs.getString("USER_GRP_CODE"));// 原価部門の利用者グループ
-					}
-// 2013.09.17 yamagishi add. end
-					ArrayList<UserGroup> userGroupes = UserGroupDB.getUserGroupArray(userGroupCodeArray, conn);
-					// 取得した利用者グループを、userにaddしていく
-					for (int i = 0; i < userGroupes.size(); i++) {
-						user.addUserGroup(userGroupes.get(i));
-					}
-
-					return true;
-				} else {
-					// パスワードが一致しない
-					return false;
-				}
-			} else {
+			if (!rs.next()) {
 				// ユーザーIDが一致しない
+				return false;
+			}
+			String passwd_M = rs.getString("PASSWD");
+			// パスワードチェックが不要、またはパスワードが一致したら
+			// 変更 '04/04/13 by Hirata
+			if (!checkPswd || passwd.equals(passwd_M)) {
+				// ユーザー情報をuserにセットする
+				user.setId(id);
+				user.setName(rs.getString("USER_NAME"));
+				user.setNameE(rs.getString("ALPH_NAME"));
+				user.setDept(rs.getString("DEPT_CODE"));
+				user.setDeptName(rs.getString("DEPARTMENT"));
+				user.setSearchSelCol1(rs.getString("SEARCH_SELCOL1"));
+				user.setSearchSelCol2(rs.getString("SEARCH_SELCOL2"));
+				user.setSearchSelCol3(rs.getString("SEARCH_SELCOL3"));
+				user.setSearchSelCol4(rs.getString("SEARCH_SELCOL4"));
+				user.setSearchSelCol5(rs.getString("SEARCH_SELCOL5"));
+				user.setViewSelCol1(rs.getString("VIEW_SELCOL1"));
+				user.setViewSelCol2(rs.getString("VIEW_SELCOL2"));
+				user.setViewSelCol3(rs.getString("VIEW_SELCOL3"));
+				user.setViewSelCol4(rs.getString("VIEW_SELCOL4"));
+				user.setViewSelCol5(rs.getString("VIEW_SELCOL5"));
+				user.setViewSelCol6(rs.getString("VIEW_SELCOL6"));
+				user.setDisplayCount(rs.getString("DISPLAY_COUNT"));
+				user.setAdminFlag(rs.getString("ADMIN_FLAG"));// 管理者フラグ
+				user.setPosition(rs.getString("POSITION"));// 職位
+				// 2013.07.24 yamagishi add. start
+				user.setAclUpdateFlag(rs.getString("ACL_UPDATE_FLAG")); // アクセスレベル変更許可フラグ
+				user.setAclBatchUpdateFlag(rs.getString("ACL_BATCH_UPDATE_FLAG")); // アクセスレベル一括更新ツール許可フラグ
+				user.setDlManagerFlag(rs.getString("DL_MANAGER_FLAG")); // ＤＬマネージャ利用可能フラグ
+				// 2013.07.24 yamagishi add. end
+				// 2019.09.20 yamamoto add. start
+				user.setPasswdUpdDate(rs.getDate("PASSWD_UPD_DATE")); // パスワード設定日
+				user.setReproUserFlag(rs.getString("REPRO_USER_FLAG")); // 原図庫ユーザフラグ
+				user.setDwgRegReqFlag(rs.getString("DWG_REG_REQ_FLAG")); // 図面登録依頼フラグ
+				// 2019.09.20 yamamoto add. end
+				// 2020.02.10 yamamoto add. start
+				user.setMultiPdfFlag(rs.getString("MULTI_PDF_FLAG")); // マルチPDF出力許可フラグ
+				// 2020.02.10 yamamoto add. end
+				String defaultUserGroup = rs.getString("USER_GRP_CODE");// 原価部門の利用者グループ
+				user.setDefaultUserGroup(defaultUserGroup);
+				// 利用可能な全ての利用者グループを取得
+				ArrayList<String> userGroupCodeArray = new ArrayList<String>();
+				if (defaultUserGroup != null) {// 原価部門の利用者グループ
+					userGroupCodeArray.add(defaultUserGroup);
+				}
+				if (rs.getString("USER_GRP_CODE01") != null) {// ユーザーマスタの利用者グループ01
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE01"));
+				}
+				if (rs.getString("USER_GRP_CODE02") != null) {// ユーザーマスタの利用者グループ02
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE02"));
+				}
+				if (rs.getString("USER_GRP_CODE03") != null) {// ユーザーマスタの利用者グループ03
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE03"));
+				}
+				if (rs.getString("USER_GRP_CODE04") != null) {// ユーザーマスタの利用者グループ04
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE04"));
+				}
+				if (rs.getString("USER_GRP_CODE05") != null) {// ユーザーマスタの利用者グループ05
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE05"));
+				}
+				if (rs.getString("USER_GRP_CODE06") != null) {// ユーザーマスタの利用者グループ06
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE06"));
+				}
+				if (rs.getString("USER_GRP_CODE07") != null) {// ユーザーマスタの利用者グループ07
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE07"));
+				}
+				if (rs.getString("USER_GRP_CODE08") != null) {// ユーザーマスタの利用者グループ08
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE08"));
+				}
+				if (rs.getString("USER_GRP_CODE09") != null) {// ユーザーマスタの利用者グループ09
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE09"));
+				}
+				if (rs.getString("USER_GRP_CODE10") != null) {// ユーザーマスタの利用者グループ10
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE10"));
+				}
+				// 2013.09.17 yamagishi add. start
+				while (rs.next()) {
+					// ユーザが複数の原価部門に所属している場合
+					userGroupCodeArray.add(rs.getString("USER_GRP_CODE"));// 原価部門の利用者グループ
+				}
+				// 2013.09.17 yamagishi add. end
+				ArrayList<UserGroup> userGroupes = UserGroupDB.getUserGroupArray(userGroupCodeArray, conn);
+				// 取得した利用者グループを、userにaddしていく
+				for (int i = 0; i < userGroupes.size(); i++) {
+					user.addUserGroup(userGroupes.get(i));
+				}
+
+				return true;
+			} else {
+				// パスワードが一致しない
 				return false;
 			}
 
@@ -189,8 +262,14 @@ public class UserDB {
 
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -212,24 +291,24 @@ public class UserDB {
 		//
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		try{
+		try {
 			// idで検索を行う
 			// 発効、失効を見る
 			pstmt = conn.prepareStatement("select *" +
-						" from USER_MASTER, DEPARTMENT_MASTER" +
-						" where USER_MASTER.DEPT_CODE=DEPARTMENT_MASTER.DEPT_CODE(+)" +
-						" and TRIM(USER_ID)=?" +
-						// 発効日・・・nullまたは今日以前(今日を含む)
-						" and (VALID_DATE is null or TRUNC(VALID_DATE) <= TRUNC(sysdate))" +
-						// 失効日・・・nullまたは今日より後(今日は含まない)
-						" and (EXPIRED_DATE is null or TRUNC(sysdate) < TRUNC(EXPIRED_DATE))");
+					" from USER_MASTER, DEPARTMENT_MASTER" +
+					" where USER_MASTER.DEPT_CODE=DEPARTMENT_MASTER.DEPT_CODE(+)" +
+					" and TRIM(USER_ID)=?" +
+					// 発効日・・・nullまたは今日以前(今日を含む)
+					" and (VALID_DATE is null or TRUNC(VALID_DATE) <= TRUNC(sysdate))" +
+					// 失効日・・・nullまたは今日より後(今日は含まない)
+					" and (EXPIRED_DATE is null or TRUNC(sysdate) < TRUNC(EXPIRED_DATE))");
 			pstmt.setString(1, id.trim());
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				passwd = rs.getString("PASSWD");
 
 				// パスワードが未設定の場合は空文字を設定する
-				if(passwd == null) {
+				if (passwd == null) {
 					passwd = "";
 				}
 			}
@@ -239,8 +318,14 @@ public class UserDB {
 
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 
 		return passwd;
@@ -260,48 +345,61 @@ public class UserDB {
 		// idを大文字に
 		id = id.toUpperCase();
 		//
-		PreparedStatement pstmt = null;
+		Statement pstmt = null;
 		ResultSet rs = null;
-		try{
+		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 			Date nowDate = new Date();
 
 			// 現在日時の取得
-//			Calendar nowCal = Calendar.getInstance();
-//
-//			// 時分秒をクリア
-//		    nowCal.clear(Calendar.MINUTE);
-//		    nowCal.clear(Calendar.SECOND);
-//		    nowCal.clear(Calendar.MILLISECOND);
-//		    nowCal.set(Calendar.HOUR_OF_DAY, 0);
-//		    Date nowDate = (Date) nowCal.getTime(); // Calendar -> DATE
+			//			Calendar nowCal = Calendar.getInstance();
+			//
+			//			// 時分秒をクリア
+			//		    nowCal.clear(Calendar.MINUTE);
+			//		    nowCal.clear(Calendar.SECOND);
+			//		    nowCal.clear(Calendar.MILLISECOND);
+			//		    nowCal.set(Calendar.HOUR_OF_DAY, 0);
+			//		    Date nowDate = (Date) nowCal.getTime(); // Calendar -> DATE
 
 			// password更新
-			pstmt = conn.prepareStatement(
-					"update USER_MASTER" +
-					" set PASSWD=?" +
+			pstmt = conn.createStatement();
+			String sql = "update USER_MASTER" +
+					" set PASSWD='" + passwd.trim() + "'" +
 					"     ,PASSWD_UPD_DATE=TO_DATE('" + sdf.format(nowDate) + "','YYYY/MM/DD')" +
-					" where USER_ID=?");
-			pstmt.setString(1, passwd.trim());
+					" where USER_ID='" + id.trim() + "'";
+			//            pstmt.setString(1, passwd.trim());
 			category.debug("nowdate:" + sdf.format(nowDate));
-//			pstmt.setString(2, sdf.format(nowDate));
-			pstmt.setString(2, id.trim());
+			//			pstmt.setString(2, sdf.format(nowDate));
+			//          pstmt.setString(2, id.trim());
 
 			category.debug("SQL:" + pstmt.toString());
-			rs = pstmt.executeQuery();
+			pstmt.executeUpdate(sql);
 
 			// コミット
 			conn.commit();
 
 		} catch (Exception e) {
 			// ロールバック
-			try{ conn.rollback(); } catch(Exception e2){}
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			throw e;
 
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				if (Objects.nonNull(rs)) {
+					rs.close();
+				}
+			} catch (Exception e) {
+			}
+			try {
+				if (Objects.nonNull(pstmt)) {
+					pstmt.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 

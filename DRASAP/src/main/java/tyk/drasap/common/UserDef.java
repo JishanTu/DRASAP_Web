@@ -1,9 +1,6 @@
 package tyk.drasap.common;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,26 +17,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.lang.NumberUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Category;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.log4j.Logger;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
+import org.springframework.validation.support.BindingAwareConcurrentModel;
 
-import tyk.drasap.change_passwd.ChangePasswdAction;
+import tyk.drasap.springfw.utils.MessageSourceUtil;
 
-
+@Component
 public class UserDef {
 
-	private static Category category = Category.getInstance(ChangePasswdAction.class.getName());
+	private static Logger category = Logger.getLogger(UserDef.class.getName());
 
 	/** パスワード最小桁数 */
 	public static final String PWD_MIN_LEN = "PWD_MIN_LEN";
 	/** パスワード組合せ制約 */
-	public static  final String PWD_VAL_ROLE = "PWD_VAL_ROLE";
+	public static final String PWD_VAL_ROLE = "PWD_VAL_ROLE";
 	/** パスワード有効期限日数 */
-	public static  final String PWD_LMT_DAY = "PWD_LMT_DAY";
+	public static final String PWD_LMT_DAY = "PWD_LMT_DAY";
 
 	/** パスワード最小桁数(デフォルト) */
 	private static final int DEFALUT_PWD_MIN_LEN = 4;
@@ -49,7 +47,6 @@ public class UserDef {
 	private static final int DEFALUT_PWD_LMT_DAY = 120;
 
 	public UserDef() {
-		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
 	/**
@@ -62,12 +59,15 @@ public class UserDef {
 	public String loadMessage(String Filepath, Charset charSet) {
 
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null)
+		if (apServerHome == null) {
 			apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null)
+		}
+		if (apServerHome == null) {
 			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null)
+		}
+		if (apServerHome == null) {
 			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		}
 
 		String str = "";
 		List<String> lines = null;
@@ -75,7 +75,7 @@ public class UserDef {
 		StringBuilder sb = null;
 
 		try {
-			path = Paths.get( apServerHome + Filepath);
+			path = Paths.get(apServerHome + Filepath);
 			lines = Files.readAllLines(path, charSet);
 
 			// 行区切りでカンマが画面に表示されるため、除去する
@@ -106,14 +106,18 @@ public class UserDef {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public HashMap<String, String> getPasswdDefinition(ActionMessages errors) throws FileNotFoundException, IOException {
+	public HashMap<String, String> getPasswdDefinition(Model errors) throws FileNotFoundException, IOException {
+		MessageSource messageSource = MessageSourceUtil.getMessageSource();
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null)
+		if (apServerHome == null) {
 			apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null)
+		}
+		if (apServerHome == null) {
 			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null)
+		}
+		if (apServerHome == null) {
 			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		}
 
 		String passwdDefFile = apServerHome
 				+ DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.passwddef.passwd.path");
@@ -129,7 +133,7 @@ public class UserDef {
 
 		try {
 			File file = new File(passwdDefFile);
-			if(!file.exists()){
+			if (!file.exists()) {
 				// ファイルが存在しない場合は空ファイル作成
 				file.createNewFile();
 			}
@@ -138,19 +142,19 @@ public class UserDef {
 			reader = new BufferedReader(new FileReader(passwdDefFile));
 
 			while ((lineData = reader.readLine()) != null) {
-				if(lineData.startsWith("^#")) {
+				if (lineData.startsWith("#") || StringUtils.isBlank(lineData)) {
 					continue;
 				}
 				// パスワード最小桁数
-				if (lineData.indexOf( PWD_MIN_LEN + "=") == 0) {
+				if (lineData.indexOf(PWD_MIN_LEN + "=") == 0) {
 					tmpValue = lineData.replace(PWD_MIN_LEN + "=", "");
 
 					// 未設定または10進数の整数(自然数と0)以外の場合は初期値設定
-					if (StringUtils.isNotEmpty(tmpValue) && (NumberUtils.isDigits(tmpValue))) {
+					if (StringUtils.isNotEmpty(tmpValue) && NumberUtils.isDigits(tmpValue)) {
 						try {
 							pwdMinLen = Integer.parseInt(tmpValue);
 							// パスワード最小桁数が最大桁数を超えないようにする
-							if(pwdMinLen > UserDB.PASSWORD_MAX_LENGTH) {
+							if (pwdMinLen > UserDB.PASSWORD_MAX_LENGTH) {
 								pwdMinLen = UserDB.PASSWORD_MAX_LENGTH;
 							}
 						} catch (NumberFormatException e) {
@@ -159,7 +163,7 @@ public class UserDef {
 					continue;
 
 				} // パスワード組合せ制約
-				else if (lineData.indexOf( PWD_VAL_ROLE + "=") == 0) {
+				if (lineData.indexOf(PWD_VAL_ROLE + "=") == 0) {
 					tmpValue = lineData.replace(PWD_VAL_ROLE + "=", "");
 
 					// 未設定の場合は初期値設定
@@ -169,11 +173,11 @@ public class UserDef {
 					continue;
 
 				} // パスワード有効期限日数
-				else if (lineData.indexOf( PWD_LMT_DAY + "=") == 0) {
+				if (lineData.indexOf(PWD_LMT_DAY + "=") == 0) {
 					tmpValue = lineData.replace(PWD_LMT_DAY + "=", "");
 
 					// 未設定または10進数の整数(自然数と0)以外の場合は初期値設定
-					if (StringUtils.isNotEmpty(tmpValue) && (NumberUtils.isDigits(tmpValue))) {
+					if (StringUtils.isNotEmpty(tmpValue) && NumberUtils.isDigits(tmpValue)) {
 						try {
 							pwdLmtDay = Integer.parseInt(tmpValue);
 						} catch (NumberFormatException e) {
@@ -188,19 +192,22 @@ public class UserDef {
 			passwdDefMap.put(PWD_LMT_DAY, Integer.toString(pwdLmtDay));
 
 		} catch (FileNotFoundException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.notound", e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message",
+					messageSource.getMessage("search.failed.view.file.notound", new Object[] { e.getMessage() }, null));
 			category.error(errors.toString());
 			throw e;
 
 		} catch (IOException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.IOExceltion", e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource
+					.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() }, null));
 			category.error(errors.toString());
 			throw e;
 
 		} finally {
 			try {
-				if (reader != null)
+				if (reader != null) {
 					reader.close();
+				}
 			} catch (IOException e1) {
 			}
 		}
@@ -217,23 +224,26 @@ public class UserDef {
 
 		String msg = "";
 
-		ActionErrors errors = new ActionErrors();
+		MessageSource messageSource = MessageSourceUtil.getMessageSource();
+		BindingAwareConcurrentModel errors = new BindingAwareConcurrentModel();
 		HashMap<String, String> passwdDefMap = null;
 
 		try {
 			// properties取得
 			ProfileString prop = null;
 			try {
-				prop = new ProfileString(this, "resources/application.properties");
+				prop = new ProfileString(this, "application.properties");
 			} catch (FileNotFoundException e) {
-				errors.add(ActionMessages.GLOBAL_MESSAGE,
-						new ActionMessage("search.failed.view.file.notound", e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message",
+						messageSource.getMessage("search.failed.view.file.notound", new Object[] { e.getMessage() },
+								null));
 				category.error(errors.toString());
 				throw new UserException(e);
 
 			} catch (IOException e) {
-				errors.add(ActionMessages.GLOBAL_MESSAGE,
-						new ActionMessage("search.failed.view.file.IOExceltion", e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message",
+						messageSource.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() },
+								null));
 				category.error(errors.toString());
 				throw new UserException(e);
 			}
@@ -259,32 +269,32 @@ public class UserDef {
 			category.debug("pwdValRole=" + pwdValRole);
 			category.error("pwdValRole=" + pwdValRole);
 
-			List<String> strList = new ArrayList();
+			List<String> strList = new ArrayList<>();
 			char[] roleChars = pwdValRole.toCharArray();
 			for (int i = 0; i < roleChars.length; i++) {
 				char c = roleChars[i];
 
 				// A: 大文字英字
-				if(c == '\u0041') {
+				if (c == '\u0041') {
 					strList.add(prop.getValue("chgpasswd.constraints.Uppercase"));
 				}
 				// a: 小文字英字
-				else if(c == '\u0061') {
+				else if (c == '\u0061') {
 					strList.add(prop.getValue("chgpasswd.constraints.Lowercase"));
 				}
 				// 1: 数字
-				else if(c == '\u0031') {
+				else if (c == '\u0031') {
 					strList.add(prop.getValue("chgpasswd.constraints.Number"));
 				}
 				// K: 記号
-				else if(c == '\u004b') {
+				else if (c == '\u004b') {
 					String symbols = prop.getValue("chgpasswd.input.allowedSymbols");
 					String cons = prop.getValue("chgpasswd.constraints.Symbol");
 					strList.add(MessageFormat.format(cons, symbols));
 				}
 			}
 
-			if(strList.size() != 0) {
+			if (strList.size() != 0) {
 				// パスワード組合せ制約が設定されている場合のみメッセージを返す
 				String msgText = prop.getValue("chgpasswd.failed.combination.passwd");
 				msg = MessageFormat.format(msgText, strList.toString());

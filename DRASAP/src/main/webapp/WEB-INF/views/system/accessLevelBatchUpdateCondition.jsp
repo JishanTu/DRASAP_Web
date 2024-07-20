@@ -1,18 +1,22 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${sessionScope.user == null}">
+    <script>
+        location.replace('<%=request.getContextPath() %>/timeout');
+    </script>
+</c:if>
+<c:set var="accessLevelBatchUpdateForm" value="${sessionScope.accessLevelBatchUpdateForm}" />
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>アクセスレベル一括更新</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/<bean:write name="default_css" scope="session" /> );</style>
+	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<style type="text/css">
 	.management {
 	    position: absolute;
@@ -92,21 +96,21 @@
 		}
 		// 更新
 		function doUpdate() {
-			document.forms[0].action = '<%=request.getContextPath() %>/accessLevelBatchUpdate.do';
+			document.forms[0].action = '<%=request.getContextPath() %>/accessLevelBatchUpdate';
 			document.forms[0].act.value = 'update';// 隠し属性actにをセット
 			document.forms[0].target = "_top";// ターゲットは画面全体
 			document.forms[0].submit();
 		}
 		// アップロード
 		function doUpload() {
-			document.forms[0].action = '<%=request.getContextPath() %>/accessLevelBatchUpdate.do';
+			document.forms[0].action = '<%=request.getContextPath() %>/accessLevelBatchUpdate';
 			document.forms[0].act.value = 'upload';// 隠し属性actにをセット
 			document.forms[0].target = "_top";// ターゲットは画面全体
 			document.forms[0].submit();
 		}
 		// ダウンロード
 		function doDownload() {
-			document.forms[0].action = '<%=request.getContextPath() %>/accessLevelDownload.do';<%--//DL用のURLをセット--%>
+			document.forms[0].action = '<%=request.getContextPath() %>/accessLevelDownload';<%--//DL用のURLをセット--%>
 			document.forms[0].dlFileType.value = "1";// 表示内容をExcelファイルでダウンロード
 			document.forms[0].target = "acl_list";// ターゲットは一覧表示部
 			document.forms[0].submit();
@@ -115,15 +119,15 @@
 	</script>
 </head>
 <body bgcolor="#CCCCCC" style="margin: 0;">
-<html:form action="/accessLevelBatchUpdate"  enctype="multipart/form-data">
-	<html:hidden property="act" />
-	<html:hidden property="aclUpdateNo" />
-	<input type="hidden" name="dlFileType" />
+<form action="<%=request.getContextPath() %>/accessLevelBatchUpdate" enctype = "multipart/form-data" method = "post">
+    <input type = "hidden" name = "act" value = ""/>
+    <input type = "hidden" name = "aclUpdateNo" value = "${accessLevelBatchUpdateForm.aclUpdateNo}"/>
+	<input type="hidden" name="dlFileType" value = ""/>
 <!--================ ヘッダ ==================================-->
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
 	<tr>
 		<td width="100%" height="20px;" align="center" colspan="3">
-			<html:link forward="accessLevelDownload" target="acl_list" name="accessLevelBatchUpdateForm" property="linkParmMap" style="text-decoration: underline;" styleClass="normal10blue">雛形ファイルのダウンロード</html:link>
+			<a href="<%=request.getContextPath() %>/accessLevelDownload.do?dlFileType=0" target="acl_list" class="normal10blue" style = "text-decoration: underline;">雛形ファイルのダウンロード</a>
 		</td>
 		<td />
 	</tr>
@@ -132,8 +136,8 @@
 			<table border="0">
 				<tr>
 					<td nowrap="nowrap">
-						<span class="normal10">アップロードファイル</span>
-							<html:file property="uploadFile" size="100" />
+						<label class="normal10">アップロードファイル</label>
+						<input type="file" name="uploadFile" size="100">
 					</td>
 					<td>
 						&nbsp;<input type="button" value="アップロード" onclick="doUpload();lockButtons();" style="width: 100px;" />
@@ -153,9 +157,9 @@
     // 2019.12.26 yamamoto mod end %>
 		</td>
 		<td width="25%">
-			<span style="background-color: #EEEEEE;" class="normal12">管理NO</span>&nbsp;<bean:write name="accessLevelBatchUpdateForm" property="aclUpdateNo" />&nbsp;&nbsp;
-			<span style="background-color: #EEEEEE;" class="normal12">品番数</span>&nbsp;<bean:write name="accessLevelBatchUpdateForm" property="itemNoCount" />&nbsp;
-		</td>
+			<span style="background-color: #EEEEEE;" class="normal12">管理NO</span>&nbsp;<c:out value="${accessLevelBatchUpdateForm.aclUpdateNo}" />&nbsp;&nbsp;
+            <span style="background-color: #EEEEEE;" class="normal12">品番数</span>&nbsp;<c:out value="${accessLevelBatchUpdateForm.itemNoCount}" />&nbsp;
+        </td>
 		<td width="10%" align="right">
 				<table border="0">
 					<tr>
@@ -166,6 +170,6 @@
 		<td width="60%" />
 	</tr>
 </table>
-</html:form>
+</form>
 </body>
-</html:html>
+</html>

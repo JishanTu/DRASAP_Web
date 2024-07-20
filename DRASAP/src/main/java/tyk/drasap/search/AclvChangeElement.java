@@ -19,24 +19,26 @@ public class AclvChangeElement {
 	 * SearchResultElementを元にする。
 	 */
 	public AclvChangeElement(SearchResultElement searchResultElement) {
-		this.drwgNo = searchResultElement.drwgNo;
-		this.drwgNoFormated = searchResultElement.drwgNoFormated;
-		this.oldAclId = searchResultElement.getAttr("ACL_ID");// アクセルレベル値
-		this.newAclId = this.oldAclId;
-		this.oldProhibit = searchResultElement.getAttr("PROHIBIT");
-		this.newProhibit = this.oldProhibit;
+		drwgNo = searchResultElement.drwgNo;
+		drwgNoFormated = searchResultElement.drwgNoFormated;
+		oldAclId = searchResultElement.getAttr("ACL_ID");// アクセルレベル値
+		newAclId = oldAclId;
+		oldProhibit = searchResultElement.getAttr("PROHIBIT");
+		newProhibit = oldProhibit;
 	}
+
 	/**
 	 * 変更前と比較して、データの変更があるか?
 	 * 比較するのはアクセスレベルID,使用禁止区分
 	 * @return 変更があれば true
 	 */
-	public boolean isModified(){
+	public boolean isModified() {
 		// アクセスレベルID、使用禁止区分のいずれかが変更されていれば
 		// true
-		return !(this.newAclId.equals(this.oldAclId) &&
-					this.newProhibit.equals(this.oldProhibit));
+		return !(newAclId.equals(oldAclId) &&
+				newProhibit.equals(oldProhibit));
 	}
+
 	// --------------------------------------------- getter,setter
 	/**
 	 * @return

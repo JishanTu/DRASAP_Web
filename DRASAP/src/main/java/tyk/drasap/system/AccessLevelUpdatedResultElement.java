@@ -40,7 +40,7 @@ public class AccessLevelUpdatedResultElement {
 	 * @return
 	 */
 	public String getFileTypeDescription() {
-		return (fileTypeDescription != null) ? fileTypeDescription : "";
+		return fileTypeDescription != null ? fileTypeDescription : "";
 	}
 
 	/**
@@ -49,11 +49,12 @@ public class AccessLevelUpdatedResultElement {
 	public Date getLastModified() {
 		return lastModified;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getLastModifiedFormatted() {
-		return (lastModified != null) ? sdf.format(lastModified) : "";
+		return lastModified != null ? sdf.format(lastModified) : "";
 	}
 
 	/**

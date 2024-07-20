@@ -2,50 +2,50 @@ package tyk.drasap.search;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
+import org.springframework.context.MessageSource;
+import org.springframework.ui.Model;
 
 import tyk.drasap.common.User;
+import tyk.drasap.springfw.form.BaseForm;
+import tyk.drasap.springfw.utils.MessageSourceUtil;
 
-/** 
+/**
  * LoginForm.java created by EasyStruts - XsltGen.
  * http://easystruts.sf.net
  * created on 12-10-2003
- * 
+ *
  * XDoclet definition:
  * @struts:form name="LoginForm"
  */
-public class Management_LoginForm extends ActionForm {
+public class Management_LoginForm extends BaseForm {
 	/**
-	 * 
+	 *
 	 */
-	private static final long serialVersionUID = 1L;
 	private String passwd;
 
 	// --------------------------------------------------------- Methods
 
-	/** 
+	/**
 	 * Method validate
 	 * @param ActionMapping mapping
 	 * @param HttpServletRequest request
 	 * @return ActionErrors
 	 */
-	public ActionErrors validate(ActionMapping mapping,HttpServletRequest request) {
-		ActionErrors errors = new ActionErrors();
-		
-		User user = (User)request.getSession().getAttribute("user");
+	@Override
+	public Model validate(HttpServletRequest request, Model errors, MessageSource messageSource) {
+		//        ActionErrors errors = new ActionErrors();
+
+		User user = (User) request.getSession().getAttribute("user");
 
 		// 入力チェック・・・Password
-		if(passwd == null || passwd.length()==0){
-			errors.add("passwd", new ActionMessage("search.required." + user.getLanKey(),"Password"));
+		if (passwd == null || passwd.length() == 0) {
+			MessageSourceUtil.addAttribute(errors, "passwd", messageSource.getMessage("search.required." + user.getLanKey(), new Object[] { "Password" }, null));
 		}
 		return errors;
 	}
 
 	// --------------------------------------------------------- getter,setter
-	/** 
+	/**
 	 * Returns the passwd.
 	 * @return String
 	 */
@@ -53,7 +53,7 @@ public class Management_LoginForm extends ActionForm {
 		return passwd;
 	}
 
-	/** 
+	/**
 	 * Set the passwd.
 	 * @param passwd The passwd to set
 	 */

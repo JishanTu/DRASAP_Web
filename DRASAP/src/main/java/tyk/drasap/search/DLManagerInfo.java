@@ -1,6 +1,6 @@
 package tyk.drasap.search;
 
-import org.apache.struts.util.MessageResources;
+import org.springframework.context.MessageSource;
 
 /**
  * DLマネージャのリクエスト情報を保持するクラス
@@ -11,10 +11,10 @@ public class DLManagerInfo {
 
 	String act = null;
 	String labelMessage = null;
-	MessageResources resources = null;
+	MessageSource resources = null;
 
 	/** constructor */
-	public DLManagerInfo(String act, MessageResources resources) {
+	public DLManagerInfo(String act, MessageSource resources) {
 		this.act = act;
 		this.resources = resources;
 	}
@@ -24,7 +24,7 @@ public class DLManagerInfo {
 	 * @return act
 	 */
 	public String getAct() {
-		return act;
+		return this.act;
 	}
 
 	/**
@@ -32,8 +32,9 @@ public class DLManagerInfo {
 	 * @return labelMessage
 	 */
 	public String getLabelMessage() {
-		return labelMessage;
+		return this.labelMessage;
 	}
+
 	/**
 	 * labelMessageを設定します。
 	 * @param labelMessage labelMessage
@@ -47,33 +48,36 @@ public class DLManagerInfo {
 	 * @return true/false
 	 */
 	public boolean isActOpen() {
-		return "open".equals(act);
+		return "open".equals(this.act);
 	}
+
 	/**
 	 * 保存ボタン押下時のアクションか判定。
 	 * @return true/false
 	 */
 	public boolean isActSave() {
-		return "save".equals(act);
+		return "save".equals(this.act);
 	}
+
 	/**
 	 * DLマネージャエラー発生時のアクションか判定。
 	 * @return true/false
 	 */
 	public boolean isActError() {
-		return "error".equals(act);
+		return "error".equals(this.act);
 	}
 
 	/**
 	 * @see MessageResources.getMessage(String key)
 	 */
 	public String getMessage(String key) {
-		return resources.getMessage(key);
+		return this.resources.getMessage(key, null, null);
 	}
+
 	/**
 	 * @see MessageResources.getMessage(String key Object arg0)
 	 */
 	public String getMessage(String key, Object arg0) {
-		return resources.getMessage(key, arg0);
+		return this.resources.getMessage(key, new Object[] { arg0 }, null);
 	}
 }

@@ -2,10 +2,12 @@ package tyk.drasap.root;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
+
+import tyk.drasap.springfw.form.BaseForm;
+import tyk.drasap.springfw.utils.MessageSourceUtil;
 
 /**
  * LoginForm.java created by EasyStruts - XsltGen.
@@ -15,11 +17,11 @@ import org.apache.struts.action.ActionMessage;
  * XDoclet definition:
  * @struts:form name="LoginForm"
  */
-public class LoginForm extends ActionForm {
+@Component
+public class LoginForm extends BaseForm {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 1L;
 	private String passwd;
 	private String id;
 
@@ -31,32 +33,31 @@ public class LoginForm extends ActionForm {
 	 * @param HttpServletRequest request
 	 * @return ActionErrors
 	 */
-	public ActionErrors validate(ActionMapping mapping,HttpServletRequest request) {
-		ActionErrors errors = new ActionErrors();
-
+	@Override
+	public Model validate(HttpServletRequest request, Model errors, MessageSource messageSource) {
 		// クッキーから言語設定を取得
-//		CookieManage langCookie = new CookieManage();
-//		String lanKey = langCookie.getCookie (request, null, "Language");
-//		if (lanKey == null || lanKey.length() == 0) lanKey = "Japanese";
+		//		CookieManage langCookie = new CookieManage();
+		//		String lanKey = langCookie.getCookie (request, null, "Language");
+		//		if (lanKey == null || lanKey.length() == 0) lanKey = "Japanese";
 
 		// 入力チェック・・・Id
-		if(id == null || id.length() == 0){
+		if (id == null || id.length() == 0) {
 			// 入力されていなければ
-			errors.add("loginId", new ActionMessage("root.required","ID"));
-//			if (lanKey.equals("Japanese")) {
-//				errors.add("loginId", new ActionMessage("root.required.jp","Id"));
-//			} else {
-//				errors.add("loginId", new ActionMessage("root.required.en","Id"));
-//			}
+			MessageSourceUtil.addAttribute(errors, "loginId", messageSource.getMessage("root.required", new Object[] { "ID" }, null));
+			//			if (lanKey.equals("Japanese")) {
+			//				MessageSourceUtil.addAttribute(errors, "loginId", messageSource.getMessage("root.required.jp","Id"));
+			//			} else {
+			//				MessageSourceUtil.addAttribute(errors, "loginId", messageSource.getMessage("root.required.en","Id"));
+			//			}
 		}
 		// 入力チェック・・・Password
-		if(passwd == null || passwd.length() == 0){
-			errors.add("passwd", new ActionMessage("root.required","Password"));
-//			if (lanKey.equals("Japanese")) {
-//				errors.add("passwd", new ActionMessage("root.required.jp","Password"));
-//			} else {
-//				errors.add("passwd", new ActionMessage("root.required.en","Password"));
-//			}
+		if (passwd == null || passwd.length() == 0) {
+			MessageSourceUtil.addAttribute(errors, "passwd", messageSource.getMessage("root.required", new Object[] { "Password" }, null));
+			//			if (lanKey.equals("Japanese")) {
+			//				MessageSourceUtil.addAttribute(errors, "passwd", messageSource.getMessage("root.required.jp","Password"));
+			//			} else {
+			//				MessageSourceUtil.addAttribute(errors, "passwd", messageSource.getMessage("root.required.en","Password"));
+			//			}
 		}
 		return errors;
 	}

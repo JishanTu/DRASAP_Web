@@ -4,64 +4,71 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import tyk.drasap.common.User;
+import tyk.drasap.springfw.action.BaseAction;
 
-/** 
+/**
  * マスターメンテナンスメニューのAction。
  */
-public class MasterMaintenanceMenuAction extends Action {
-//	private static Category category = Category.getInstance(MasterMaintenanceMenuAction.class.getName());
-
+@Controller
+public class MasterMaintenanceMenuAction extends BaseAction {
+	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
-
-	/** 
+	/**
 	 * Method execute
-	 * @param ActionMapping mapping
-	 * @param ActionForm form
-	 * @param HttpServletRequest request
-	 * @param HttpServletResponse response
-	 * @return ActionForward
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @param errors
+	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,	HttpServletResponse response) throws Exception {
-//		category.debug("start");
-		MasterMaintenanceMenuForm masterMaintenanceMenuForm = (MasterMaintenanceMenuForm) form;
+	@PostMapping("/masterMaintenanceMenu")
+	public String execute(
+			MasterMaintenanceMenuForm form,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model errors)
+			throws Exception {
+		//		category.debug("start");
+		MasterMaintenanceMenuForm masterMaintenanceMenuForm = form;
 		//
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		if(user == null){
-			return mapping.findForward("timeout");
+		if (user == null) {
+			return "timeout";
 		}
-		if("adminSettingList".equals(masterMaintenanceMenuForm.getAct())){
-			return mapping.findForward("adminSettingList");
-		} else if("userGroupMaster".equals(masterMaintenanceMenuForm.getAct())){
-			return mapping.findForward("userGroupMaster");
-		} else if("deptMaster".equals(masterMaintenanceMenuForm.getAct())){
-			return mapping.findForward("deptMaster");
-		} else if("userMaster".equals(masterMaintenanceMenuForm.getAct())){
-			return mapping.findForward("userMaster");
-		} else if("accessLevelMaster".equals(masterMaintenanceMenuForm.getAct())){
-			return mapping.findForward("accessLevelMaster");
-		} else if("userGroupAclRelation".equals(masterMaintenanceMenuForm.getAct())){
-			return mapping.findForward("userGroupAclRelation");
-		} else if("tableMaintenance".equals(masterMaintenanceMenuForm.getAct())){
-			return mapping.findForward("tableMaintenance");
-		} else if ("logout".equals(masterMaintenanceMenuForm.getAct())){
-		    session.invalidate();
-			return mapping.findForward("logout");
+		if ("adminSettingList".equals(masterMaintenanceMenuForm.getAct())) {
+			return "adminSettingList";
 		}
-		
-		return mapping.findForward("success");
+		if ("userGroupMaster".equals(masterMaintenanceMenuForm.getAct())) {
+			return "userGroupMaster";
+		}
+		if ("deptMaster".equals(masterMaintenanceMenuForm.getAct())) {
+			return "deptMaster";
+		}
+		if ("userMaster".equals(masterMaintenanceMenuForm.getAct())) {
+			return "userMaster";
+		} else if ("accessLevelMaster".equals(masterMaintenanceMenuForm.getAct())) {
+			return "accessLevelMaster";
+		} else if ("userGroupAclRelation".equals(masterMaintenanceMenuForm.getAct())) {
+			return "userGroupAclRelation";
+		} else if ("tableMaintenance".equals(masterMaintenanceMenuForm.getAct())) {
+			return "tableMaintenance";
+		} else if ("logout".equals(masterMaintenanceMenuForm.getAct())) {
+			session.invalidate();
+			return "logout";
+		}
+
+		return "success";
 	}
-//	private void removeAttribute(HttpSession session) {
-//		session.removeAttribute("accessLevelMasterMaintenanceForm");
-//		session.removeAttribute("adminSettingListForm");
-//		session.removeAttribute("tableMaintenanceForm");
-//	}
+	//	private void removeAttribute(HttpSession session) {
+	//		session.removeAttribute("accessLevelMasterMaintenanceForm");
+	//		session.removeAttribute("adminSettingListForm");
+	//		session.removeAttribute("tableMaintenanceForm");
+	//	}
 }

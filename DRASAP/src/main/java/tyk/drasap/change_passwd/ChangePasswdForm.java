@@ -1,6 +1,3 @@
-/**
- *
- */
 package tyk.drasap.change_passwd;
 
 import java.io.FileNotFoundException;
@@ -14,12 +11,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Category;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.log4j.Logger;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 
 import tyk.drasap.common.DataSourceFactory;
 import tyk.drasap.common.DrasapPropertiesFactory;
@@ -30,27 +25,27 @@ import tyk.drasap.common.UserDB;
 import tyk.drasap.common.UserDef;
 import tyk.drasap.common.UserException;
 import tyk.drasap.errlog.ErrorLoger;
+import tyk.drasap.springfw.form.BaseForm;
+import tyk.drasap.springfw.utils.MessageSourceUtil;
 
 /**
  * @author tetsuya_yamamoto
  *
  */
-public class ChangePasswdForm extends ActionForm {
-
+@Component
+public class ChangePasswdForm extends BaseForm {
 	/**
 	 *
 	 */
-	private static Category category = Category.getInstance(ChangePasswdAction.class.getName());
+	private static Logger category = Logger.getLogger(ChangePasswdAction.class.getName());
 	private static DataSource ds;
-	static{
-		try{
+	static {
+		try {
 			ds = DataSourceFactory.getOracleDataSource();
-		} catch(Exception e){
+		} catch (Exception e) {
 			category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
 		}
 	}
-
-	private static final long serialVersionUID = 1L;
 
 	private String oldpass;
 	private String newpass;
@@ -60,7 +55,6 @@ public class ChangePasswdForm extends ActionForm {
 	 *
 	 */
 	public ChangePasswdForm() {
-		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
 	/**
@@ -69,18 +63,19 @@ public class ChangePasswdForm extends ActionForm {
 	 * @param HttpServletRequest request
 	 * @return ActionErrors
 	 */
-	public ActionErrors validate(ActionMapping mapping,HttpServletRequest request) {
-		ActionErrors errors = new ActionErrors();
+	@Override
+	public Model validate(HttpServletRequest request, Model errors, MessageSource messageSource) {
+		//ActionErrors errors = new ActionErrors();
 
 		// セッションからuser情報取得
-		User user = (User)request.getSession().getAttribute("user");
+		User user = (User) request.getSession().getAttribute("user");
 
 		// sessionタイムアウトの確認
-		if(user == null){
+		if (user == null) {
 			// エラーメッセージは空で返す。
 			// JSPの方でエラーメッセージ表示前に
 			// セッションタイムアウトページに転送するため。
-			errors.add(new ActionMessages());
+			MessageSourceUtil.addAttribute(errors, "message", "");
 			return errors;
 		}
 
@@ -88,22 +83,24 @@ public class ChangePasswdForm extends ActionForm {
 			// properties取得
 			ProfileString prop = null;
 			try {
-				prop = new ProfileString(this, "resources/application.properties");
+				prop = new ProfileString(this, "application.properties");
 			} catch (FileNotFoundException e) {
-				errors.add(ActionMessages.GLOBAL_MESSAGE,
-						new ActionMessage("search.failed.view.file.notound", e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message",
+						messageSource.getMessage("search.failed.view.file.notound", new Object[] { e.getMessage() },
+								null));
 				category.error(errors.toString());
 				throw new UserException();
 
 			} catch (IOException e) {
-				errors.add(ActionMessages.GLOBAL_MESSAGE,
-						new ActionMessage("search.failed.view.file.IOExceltion", e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message",
+						messageSource.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() },
+								null));
 				category.error(errors.toString());
 				throw new UserException();
 			}
 
 			// フォームはすべて入力済みか？
-			if(isInputPassword(errors, prop) == false) {
+			if (isInputPassword(errors, prop, messageSource) == false) {
 				// 未入力項目がある場合はチェック終了
 				throw new UserException();
 			}
@@ -111,54 +108,56 @@ public class ChangePasswdForm extends ActionForm {
 			// 2バイト文字または入力不可の記号はエラー
 			char[] passChars = newpass.toCharArray();
 			char[] symbols = prop.getValue("chgpasswd.input.allowedSymbols").toCharArray();
-			for(char pass : passChars) {
-				if (('\u0041' <= pass && pass <= '\u005a') // 大文字 A - Z
-						|| ('\u0061' <= pass && pass <= '\u007a') // 小文字 a - z
-						|| ('\u0030' <= pass && pass <= '\u0039')) { // 数字 0 - 9
+			for (char pass : passChars) {
+				if ('\u0041' <= pass && pass <= '\u005a' // 大文字 A - Z
+						|| '\u0061' <= pass && pass <= '\u007a' // 小文字 a - z
+						|| '\u0030' <= pass && pass <= '\u0039') { // 数字 0 - 9
 					// OK 次の文字へ
 					continue;
 				}
 				// 記号チェック
 				boolean chkFlg = false;
-				for(char s : symbols) {
+				for (char s : symbols) {
 					if (s == pass) {
 						// 入力可能な記号
 						chkFlg = true;
+						break;
 					}
 				}
-				if(!chkFlg) {
+				if (!chkFlg) {
 					// 入力不可の記号
-					errors.add("illegalString",
-							new ActionMessage("chgpasswd.failed.Illegal.passwd"));
+					MessageSourceUtil.addAttribute(errors, "illegalString",
+							messageSource.getMessage("chgpasswd.failed.Illegal.passwd", null, null));
 					break;
 				}
 			}
 
 			// 現在のパスワードチェック
-			checkCurrentPassword(user, prop, errors);
+			checkCurrentPassword(user, prop, errors, messageSource);
 
 			// 新しいパスワードは現在のパスワードとは異なるか？
 			if (oldpass.equals(newpass)) {
 				// 一致
-				errors.add("matcholdpassword",
-						new ActionMessage("chgpasswd.failed.match.oldpassword"));
+				MessageSourceUtil.addAttribute(errors, "matcholdpassword",
+						messageSource.getMessage("chgpasswd.failed.match.oldpassword", null, null));
 			}
 
 			// 新しいパスワードと確認パスワードは同じか？
-			if (!(newpass.equals(newPassConfirm))) {
+			if (!newpass.equals(newPassConfirm)) {
 				// 不一致
-				errors.add("disagreement",
-						new ActionMessage("chgpasswd.failed.missmatch.newpasswd"));
+				MessageSourceUtil.addAttribute(errors, "disagreement",
+						messageSource.getMessage("chgpasswd.failed.missmatch.newpasswd", null, null));
 			}
 
 			// IDとPasswordが同じ場合はエラー
-			if(newpass.equals(user.getId())) {
+			if (newpass.equals(user.getId())) {
 				// IDと一致
-				errors.add("matchUserID", new ActionMessage("chgpasswd.failed.match.userId"));
+				MessageSourceUtil.addAttribute(errors, "matchUserID",
+						messageSource.getMessage("chgpasswd.failed.match.userId", null, null));
 			}
 
 			// パスワード整合性チェック
-			checkPasswordIntegrity(errors, prop);
+			checkPasswordIntegrity(errors, prop, messageSource);
 
 		} catch (UserException e) {
 			category.error(errors.toString());
@@ -174,31 +173,34 @@ public class ChangePasswdForm extends ActionForm {
 	 * @param prop
 	 * @return
 	 */
-	private boolean isInputPassword (ActionErrors errors, ProfileString prop) {
+	private boolean isInputPassword(Model errors, ProfileString prop, MessageSource messageSource) {
 
 		boolean inputFlag = true;
 
 		// 入力チェック oldpass
 		if (oldpass == null || oldpass.length() == 0) {
 			// 未入力
-			errors.add("passwd", new ActionMessage("chgpasswd.required",
-					"" + prop.getValue("chgpasswd.name.oldpasswd.jp"),
-					"" + prop.getValue("chgpasswd.name.oldpasswd.en")));
+			MessageSourceUtil.addAttribute(errors, "passwd", messageSource.getMessage("chgpasswd.required",
+					new Object[] { "" + prop.getValue("chgpasswd.name.oldpasswd.jp"),
+							"" + prop.getValue("chgpasswd.name.oldpasswd.en") },
+					null));
 			inputFlag = false;
 		}
 		// 入力チェック newpass
 		if (newpass == null || newpass.length() == 0) {
 			// 未入力
-			errors.add("newPass", new ActionMessage("chgpasswd.required",
-					"" + prop.getValue("chgpasswd.name.newpasswd.jp"),
-					"" + prop.getValue("chgpasswd.name.newpasswd.en")));
+			MessageSourceUtil.addAttribute(errors, "newPass", messageSource.getMessage("chgpasswd.required",
+					new Object[] { "" + prop.getValue("chgpasswd.name.newpasswd.jp"),
+							"" + prop.getValue("chgpasswd.name.newpasswd.en") },
+					null));
 			inputFlag = false;
 
 		}
 		// 入力チェック・・・Re-enter
 		if (newPassConfirm == null || newPassConfirm.length() == 0) {
 			// 未入力
-			errors.add("Re-enter", new ActionMessage("chgpasswd.required.re-enter"));
+			MessageSourceUtil.addAttribute(errors, "Re-enter",
+					messageSource.getMessage("chgpasswd.required.re-enter", null, null));
 			inputFlag = false;
 		}
 
@@ -213,36 +215,40 @@ public class ChangePasswdForm extends ActionForm {
 	 * @param errors
 	 * @throws UserException
 	 */
-	private void checkCurrentPassword(User user, ProfileString prop, ActionErrors errors) throws UserException {
+	private void checkCurrentPassword(User user, ProfileString prop, Model errors, MessageSource messageSource) throws UserException {
 		Connection conn = null;
 		String currentPassDB = null;
-		try{
+		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(true);// 非トランザクション
 
 			currentPassDB = UserDB.getPassword(user.getId(), conn);
 
-		} catch(Exception e){
+		} catch (Exception e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage("root.failed.get.userinfo", e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message",
+					messageSource.getMessage("root.failed.get.userinfo", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
-						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
+					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			// for MUR
 			category.error("ユーザー情報の取得に失敗\n" + ErrorUtility.error2String(e));
 			throw new UserException(e);
 
 		} finally {
-			try{ conn.close(); } catch(Exception e) {}
+			try {
+				conn.close();
+			} catch (Exception e) {
+			}
 		}
 
-	    if(!oldpass.equals(currentPassDB)) {
-	    	// 現在のパスワード不一致
-			errors.add("currentPasswordMissmatch",
-					new ActionMessage("chgpasswd.missmatch",
-							"" + prop.getValue("chgpasswd.name.oldpasswd.jp"),
-							"" + prop.getValue("chgpasswd.name.oldpasswd.en")));
+		if (!oldpass.equals(currentPassDB)) {
+			// 現在のパスワード不一致
+			MessageSourceUtil.addAttribute(errors, "currentPasswordMissmatch",
+					messageSource.getMessage("chgpasswd.missmatch",
+							new Object[] { "" + prop.getValue("chgpasswd.name.oldpasswd.jp"),
+									"" + prop.getValue("chgpasswd.name.oldpasswd.en") },
+							null));
 			throw new UserException(errors.toString());
 		}
 	}
@@ -254,7 +260,7 @@ public class ChangePasswdForm extends ActionForm {
 	 * @param prop
 	 * @throws UserException
 	 */
-	private void checkPasswordIntegrity(ActionErrors errors, ProfileString prop) throws UserException {
+	private void checkPasswordIntegrity(Model errors, ProfileString prop, MessageSource messageSource) throws UserException {
 
 		HashMap<String, String> passwdDefMap = null;
 
@@ -265,16 +271,16 @@ public class ChangePasswdForm extends ActionForm {
 
 		} catch (FileNotFoundException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage("root.failed.get.userinfo", e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message",
+					messageSource.getMessage("root.failed.get.userinfo", new Object[] { e.getMessage() }, null));
 			// for MUR
 			category.error("パスワード定義ファイル取得に失敗\n" + ErrorUtility.error2String(e));
 			throw new UserException(e);
 
 		} catch (IOException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage("root.failed.get.userinfo", e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message",
+					messageSource.getMessage("root.failed.get.userinfo", new Object[] { e.getMessage() }, null));
 			// for MUR
 			category.error("パスワード定義ファイル取得に失敗\n" + ErrorUtility.error2String(e));
 			throw new UserException(e);
@@ -284,13 +290,14 @@ public class ChangePasswdForm extends ActionForm {
 		int pwdMinLen = Integer.parseInt(passwdDefMap.get(UserDef.PWD_MIN_LEN));
 		category.debug("pwdMinLen=" + pwdMinLen);
 
-		if(newpass.length() < pwdMinLen) {
+		if (newpass.length() < pwdMinLen) {
 			// パスワード最小桁数不足
-			errors.add("MissingDigits",
-					new ActionMessage("chgpasswd.failed.missingdigits.passwd", "" + pwdMinLen));
+			MessageSourceUtil.addAttribute(errors, "MissingDigits",
+					messageSource.getMessage("chgpasswd.failed.missingdigits.passwd", new Object[] { "" + pwdMinLen },
+							null));
 		}
 
-		List<String> strList = new ArrayList();
+		List<String> strList = new ArrayList<>();
 
 		// パスワード組合せ制約チェック
 		String pwdValRole = passwdDefMap.get(UserDef.PWD_VAL_ROLE);
@@ -303,64 +310,64 @@ public class ChangePasswdForm extends ActionForm {
 			char c = roleChars[i];
 
 			// A: 大文字英字
-			if(c == '\u0041') {
+			if (c == '\u0041') {
 				strList.add(prop.getValue("chgpasswd.constraints.Uppercase"));
 
 				char[] newPassChars = newpass.toCharArray();
 				int j = 0;
 				for (j = 0; j < newPassChars.length; j++) {
 					char pass = newPassChars[j];
-					if (('\u0041' <= pass && pass <= '\u005a') ) { // 大文字 A - Z
+					if ('\u0041' <= pass && pass <= '\u005a') { // 大文字 A - Z
 						// チェックOK
 						break;
 					}
 				}
 
-				if(j >= newPassChars.length) {
+				if (j >= newPassChars.length) {
 					// チェックNG
 					isPasswdComb = false;
 				}
 			}
 			// a: 小文字英字
-			else if(c == '\u0061') {
+			else if (c == '\u0061') {
 				strList.add(prop.getValue("chgpasswd.constraints.Lowercase"));
 
 				char[] newPassChars = newpass.toCharArray();
 				int j = 0;
 				for (j = 0; j < newPassChars.length; j++) {
 					char pass = newPassChars[j];
-					if (('\u0061' <= pass && pass <= '\u007a') ) { // 小文字 a - z
+					if ('\u0061' <= pass && pass <= '\u007a') { // 小文字 a - z
 						// チェックOK
 						break;
 					}
 				}
 
-				if(j >= newPassChars.length) {
+				if (j >= newPassChars.length) {
 					// チェックNG
 					isPasswdComb = false;
 				}
 			}
 			// 1: 数字
-			else if(c == '\u0031') {
+			else if (c == '\u0031') {
 				strList.add(prop.getValue("chgpasswd.constraints.Number"));
 
 				char[] newPassChars = newpass.toCharArray();
 				int j = 0;
 				for (j = 0; j < newPassChars.length; j++) {
 					char pass = newPassChars[j];
-					if (('\u0030' <= pass && pass <= '\u0039') ) { // 数字 0 - 9
+					if ('\u0030' <= pass && pass <= '\u0039') { // 数字 0 - 9
 						// チェックOK
 						break;
 					}
 				}
 
-				if(j >= newPassChars.length) {
+				if (j >= newPassChars.length) {
 					// チェックNG
 					isPasswdComb = false;
 				}
 			}
 			// K: 記号
-			else if(c == '\u004b') {
+			else if (c == '\u004b') {
 				String symbols = prop.getValue("chgpasswd.input.allowedSymbols");
 				String cons = prop.getValue("chgpasswd.constraints.Symbol");
 				strList.add(MessageFormat.format(cons, symbols));
@@ -370,23 +377,24 @@ public class ChangePasswdForm extends ActionForm {
 				char[] passChars = newpass.toCharArray();
 				char[] symbolChars = symbols.toCharArray();
 
-				for(char pass : passChars) {
-					if (('\u0041' <= pass && pass <= '\u005a') // 大文字 A - Z
-							|| ('\u0061' <= pass && pass <= '\u007a') // 小文字 a - z
-							|| ('\u0030' <= pass && pass <= '\u0039')) { // 数字 0 - 9
+				for (char pass : passChars) {
+					if ('\u0041' <= pass && pass <= '\u005a' // 大文字 A - Z
+							|| '\u0061' <= pass && pass <= '\u007a' // 小文字 a - z
+							|| '\u0030' <= pass && pass <= '\u0039') { // 数字 0 - 9
 						// 次の文字へ
 						continue;
 					}
 					// 記号チェック
-					for(char s : symbolChars) {
+					for (char s : symbolChars) {
 						if (s == pass) {
 							// 入力可能な記号
 							chkFlg = true;
+							break;
 						}
 					}
 				}
 
-				if(!chkFlg) {
+				if (!chkFlg) {
 					// 記号無し
 					// チェックNG
 					isPasswdComb = false;
@@ -394,10 +402,11 @@ public class ChangePasswdForm extends ActionForm {
 			}
 		}
 
-		if(isPasswdComb == false) {
+		if (isPasswdComb == false) {
 			// パスワード組合せ制約違反
-			errors.add("FailedPasswordIntegrity",
-					new ActionMessage("chgpasswd.failed.combination.passwd", strList.toString()));
+			MessageSourceUtil.addAttribute(errors, "FailedPasswordIntegrity",
+					messageSource.getMessage("chgpasswd.failed.combination.passwd", new Object[] { strList.toString() },
+							null));
 			throw new UserException(strList.toString());
 		}
 	}
@@ -416,7 +425,7 @@ public class ChangePasswdForm extends ActionForm {
 	 * @param oldpasswd The passwd to set
 	 */
 	public void setOldpass(String oldpasswd) {
-		this.oldpass = oldpasswd;
+		oldpass = oldpasswd;
 	}
 
 	/**

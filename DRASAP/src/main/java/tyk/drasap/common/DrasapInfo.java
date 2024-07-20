@@ -9,8 +9,8 @@ package tyk.drasap.common;
  */
 public class DrasapInfo {
 	String viewDBDrive = "F:";
-	int searchWarningCount=1000;// 検索における警告件数
-	int searchLimitCount=20000;// 検索における打切件数(利用可能最大件数)
+	int searchWarningCount = 1000;// 検索における警告件数
+	int searchLimitCount = 20000;// 検索における打切件数(利用可能最大件数)
 	//String mabikiDpi="200";// ビュワーでA0LからA0に間引く処理での解像度dpi・・・廃止 '04.Mar.2
 	int printRequestMax = 100;// 参考図出力最大件数
 	int aclvChangablePosition = 999;// アクセスレベル変更可能な職位
@@ -22,57 +22,59 @@ public class DrasapInfo {
 	String viewStampL = "10";// 閲覧用スタンプ位置(L)
 	String viewStampDeep = "70";// 閲覧用スタンプ文字濃度
 	String viewStampDateFormat = "yyyy/MM/dd";// 閲覧用スタンプ日付形式
-									// SimpleDateFormatで使う文字列を保持
-// 2013.07.12 yamagishi add. start
-	String correspondingStampW = "1"; 		// 該当図用スタンプ位置(W方向)
-	String correspondingStampL = "17820";	// 該当図用スタンプ位置(L方向)
-	String correspondingStampDeep = "180";	// 該当図用スタンプ文字濃淡
-	String correspondingStampStr = "★";	// 該当図用スタンプ文字
-// 2013.07.12 yamagishi add. end
+	// SimpleDateFormatで使う文字列を保持
+	// 2013.07.12 yamagishi add. start
+	String correspondingStampW = "1"; // 該当図用スタンプ位置(W方向)
+	String correspondingStampL = "17820"; // 該当図用スタンプ位置(L方向)
+	String correspondingStampDeep = "180"; // 該当図用スタンプ文字濃淡
+	String correspondingStampStr = "★"; // 該当図用スタンプ文字
+	// 2013.07.12 yamagishi add. end
 	boolean dispDrwgNoWithView = true;// 閲覧用スタンプでの図番を印字する？
 	int multipleDrwgNoMax = 1000; // 2013.06.27 yamagishi add.
-// 2013.07.10 yamagishi add. start
+	// 2013.07.10 yamagishi add. start
 	String correspondingValue = "●";
 	String confidentialValue = "▲";
 	String strictlyConfidentialValue = "●";
-// 2013.07/10 yamagishi add. end
+	// 2013.07/10 yamagishi add. end
 
 	// ---------------------------------------------------------- コンストラクタ
 	/**
 	 * コンストラクタ
 	 */
-// 2013.07.10 yamagishi modified. start
-//	public DrasapInfo(String viewDBDrive, String newSearchWarningCount, String newSearchLimitCount,
-//			String newPrintRequestMax, String newAclvChangablePosition,
-//			String newMinimumIuputDrwgChar,
-//			String newMabiki100dpiSize,	String newMabiki200dpiSize,
-//			String newViewStampW, String newViewStampL, String newViewStampDeep,
-//			String newViewStampDateFormat, String newDispDrwgNoWithView) {
+	// 2013.07.10 yamagishi modified. start
+	//	public DrasapInfo(String viewDBDrive, String newSearchWarningCount, String newSearchLimitCount,
+	//			String newPrintRequestMax, String newAclvChangablePosition,
+	//			String newMinimumIuputDrwgChar,
+	//			String newMabiki100dpiSize,	String newMabiki200dpiSize,
+	//			String newViewStampW, String newViewStampL, String newViewStampDeep,
+	//			String newViewStampDateFormat, String newDispDrwgNoWithView) {
 	public DrasapInfo(String viewDBDrive, String newSearchWarningCount, String newSearchLimitCount,
 			String newPrintRequestMax, String newAclvChangablePosition,
 			String newMinimumIuputDrwgChar,
-			String newMabiki100dpiSize,	String newMabiki200dpiSize,
+			String newMabiki100dpiSize, String newMabiki200dpiSize,
 			String newViewStampW, String newViewStampL, String newViewStampDeep,
 			String newViewStampDateFormat, String newDispDrwgNoWithView,
 			String newMultipleDrwgNoMax,
 			String newCorrespondingValue, String newConfidentialValue, String newStrictlyConfidentialValue,
 			String newCorrespondingStampW, String newCorrespondingStampL,
 			String newCorrespondingStampDeep, String newCorrespondingStampStr) {
-// 2013.07.10 yamagishi modified. end
+		// 2013.07.10 yamagishi modified. end
 
-		if (viewDBDrive != null) this.viewDBDrive = viewDBDrive;
+		if (viewDBDrive != null) {
+			this.viewDBDrive = viewDBDrive;
+		}
 		// 検索における警告件数
-		if(newSearchWarningCount != null){
-			try{
+		if (newSearchWarningCount != null) {
+			try {
 				this.searchWarningCount = Integer.parseInt(newSearchWarningCount);
-			} catch(NumberFormatException ne){
+			} catch (NumberFormatException ne) {
 			}
 		}
 		// 検索における打切件数(利用可能最大件数)
-		if(newSearchLimitCount != null){
-			try{
+		if (newSearchLimitCount != null) {
+			try {
 				this.searchLimitCount = Integer.parseInt(newSearchLimitCount);
-			} catch(NumberFormatException ne){
+			} catch (NumberFormatException ne) {
 			}
 		}
 		// 間引き処理の解像度・・・廃止 '04.Mar.2
@@ -80,49 +82,49 @@ public class DrasapInfo {
 		//	mabikiDpi = newMabikiDpi;
 		//}
 		// 参考図出力における最大件数
-		if(newPrintRequestMax != null){
-			try{
+		if (newPrintRequestMax != null) {
+			try {
 				this.printRequestMax = Integer.parseInt(newPrintRequestMax);
-			} catch(NumberFormatException ne){
+			} catch (NumberFormatException ne) {
 			}
 		}
 		// アクセスレベル変更可能な職位
-		if(newAclvChangablePosition != null){
-			try{
+		if (newAclvChangablePosition != null) {
+			try {
 				this.aclvChangablePosition = Integer.parseInt(newAclvChangablePosition);
-			} catch(NumberFormatException ne){
+			} catch (NumberFormatException ne) {
 			}
 		}
 		// 検索における図番属性の最低限の文字数
-		if(newMinimumIuputDrwgChar != null){
-			try{
+		if (newMinimumIuputDrwgChar != null) {
+			try {
 				this.minimumIuputDrwgChar = Integer.parseInt(newMinimumIuputDrwgChar);
-			} catch(NumberFormatException ne){
+			} catch (NumberFormatException ne) {
 			}
 		}
 		// 100dpiに間引きする図面サイズ
-		if(newMabiki100dpiSize != null){
+		if (newMabiki100dpiSize != null) {
 			this.mabiki100dpiSize = newMabiki100dpiSize;
 		}
 		// 200dpiに間引きする図面サイズ
-		if(newMabiki200dpiSize != null){
+		if (newMabiki200dpiSize != null) {
 			this.mabiki200dpiSize = newMabiki200dpiSize;
 		}
 		// 閲覧用スタンプ位置(W)
-		if(newViewStampW != null){
+		if (newViewStampW != null) {
 			this.viewStampW = newViewStampW;
 		}
 		// 閲覧用スタンプ位置(L)
-		if(newViewStampL != null){
+		if (newViewStampL != null) {
 			this.viewStampL = newViewStampL;
 		}
 		// 閲覧用スタンプ文字濃度
-		if(newViewStampDeep != null){
+		if (newViewStampDeep != null) {
 			this.viewStampDeep = newViewStampDeep;
 		}
 		// 閲覧用スタンプ日付形式
-		if(newViewStampDateFormat != null){
-			if(newViewStampDateFormat.equals("1")){
+		if (newViewStampDateFormat != null) {
+			if ("1".equals(newViewStampDateFormat)) {
 				// 1なら
 				this.viewStampDateFormat = "yy/MM/dd";
 			} else {
@@ -131,11 +133,11 @@ public class DrasapInfo {
 			}
 		}
 		// 閲覧用スタンプでの図番を印字する？
-		if(newDispDrwgNoWithView != null){
+		if (newDispDrwgNoWithView != null) {
 			// 1なら図番を印字する
 			this.dispDrwgNoWithView = "1".equals(newDispDrwgNoWithView);
 		}
-// 2013.06.27 yamagishi add. start
+		// 2013.06.27 yamagishi add. start
 		// 複数図番指定時の検索可能件数
 		if (newMultipleDrwgNoMax != null) {
 			try {
@@ -143,8 +145,8 @@ public class DrasapInfo {
 			} catch (NumberFormatException ne) {
 			}
 		}
-// 2013.06.27 yamagishi add. end
-// 2013.07.10 yamagishi add. start
+		// 2013.06.27 yamagishi add. end
+		// 2013.07.10 yamagishi add. start
 		// 該当図入力値
 		if (newCorrespondingValue != null) {
 			this.correspondingValue = newCorrespondingValue;
@@ -173,160 +175,169 @@ public class DrasapInfo {
 		if (newCorrespondingStampStr != null) {
 			this.correspondingStampStr = newCorrespondingStampStr;
 		}
-// 2013.07.10 yamagishi add. end
+		// 2013.07.10 yamagishi add. end
 	}
+
 	// ---------------------------------------------------------- getter,setter
 	/**
 	 * @return
 	 */
 	public int getSearchLimitCount() {
-		return searchLimitCount;
+		return this.searchLimitCount;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getSearchWarningCount() {
-		return searchWarningCount;
+		return this.searchWarningCount;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getPrintRequestMax() {
-		return printRequestMax;
+		return this.printRequestMax;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getAclvChangablePosition() {
-		return aclvChangablePosition;
+		return this.aclvChangablePosition;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getMinimumIuputDrwgChar() {
-		return minimumIuputDrwgChar;
+		return this.minimumIuputDrwgChar;
 	}
 
-// 2013.07.02 yamagishi add. start
+	// 2013.07.02 yamagishi add. start
 	/**
 	 * correspondingStampWを取得します。
 	 * @return correspondingStampW
 	 */
 	public String getCorrespondingStampW() {
-		return correspondingStampW;
+		return this.correspondingStampW;
 	}
+
 	/**
 	 * correspondingStampLを取得します。
 	 * @return correspondingStampL
 	 */
 	public String getCorrespondingStampL() {
-		return correspondingStampL;
+		return this.correspondingStampL;
 	}
+
 	/**
 	 * correspondingStampDeepを取得します。
 	 * @return correspondingStampDeep
 	 */
 	public String getCorrespondingStampDeep() {
-		return correspondingStampDeep;
+		return this.correspondingStampDeep;
 	}
+
 	/**
 	 * correspondingStampStrを取得します。
 	 * @return correspondingStampStr
 	 */
 	public String getCorrespondingStampStr() {
-		return correspondingStampStr;
+		return this.correspondingStampStr;
 	}
-// 2013.07.02 yamagishi add. end
+	// 2013.07.02 yamagishi add. end
 
 	/**
 	 * @return
 	 */
 	public boolean isDispDrwgNoWithView() {
-		return dispDrwgNoWithView;
+		return this.dispDrwgNoWithView;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getViewStampDateFormat() {
-		return viewStampDateFormat;
+		return this.viewStampDateFormat;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getViewStampDeep() {
-		return viewStampDeep;
+		return this.viewStampDeep;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getViewStampL() {
-		return viewStampL;
+		return this.viewStampL;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getViewStampW() {
-		return viewStampW;
+		return this.viewStampW;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getMabiki100dpiSize() {
-		return mabiki100dpiSize;
+		return this.mabiki100dpiSize;
 	}
 
 	/**
 	 * @return
 	 */
 	public String getMabiki200dpiSize() {
-		return mabiki200dpiSize;
+		return this.mabiki200dpiSize;
 	}
+
 	public String getViewDBDrive() {
-		return viewDBDrive;
+		return this.viewDBDrive;
 	}
+
 	public void setViewDBDrive(String viewDBDrive) {
 		this.viewDBDrive = viewDBDrive;
 	}
-// 2013.06.27 yamagishi add. start
+
+	// 2013.06.27 yamagishi add. start
 	/**
 	 * multipleDrwgNoMaxを取得します。
 	 * @return multipleDrwgNoMax
 	 */
 	public int getMultipleDrwgNoMax() {
-		return multipleDrwgNoMax;
+		return this.multipleDrwgNoMax;
 	}
-// 2013.06.27 yamagishi add. end
+	// 2013.06.27 yamagishi add. end
 
-// 2013.07.10 yamagishi add. start
+	// 2013.07.10 yamagishi add. start
 	/**
 	 * correspondingValueを取得します。
 	 * @return correspondingValue
 	 */
 	public String getCorrespondingValue() {
-		return correspondingValue;
+		return this.correspondingValue;
 	}
+
 	/**
 	 * confidentialValueを取得します。
 	 * @return confidentialValue
 	 */
 	public String getConfidentialValue() {
-		return confidentialValue;
+		return this.confidentialValue;
 	}
+
 	/**
 	 * strictlyConfidentialValueを取得します。
 	 * @return strictlyConfidentialValue
 	 */
 	public String getStrictlyConfidentialValue() {
-		return strictlyConfidentialValue;
+		return this.strictlyConfidentialValue;
 	}
-// 2013.07.10 yamagishi add. end
+	// 2013.07.10 yamagishi add. end
 }

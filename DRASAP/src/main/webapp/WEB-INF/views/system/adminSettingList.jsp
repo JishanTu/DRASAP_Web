@@ -1,8 +1,12 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib uri="/tags/struts-bean" prefix="bean"%>
-<%@ taglib uri="/tags/struts-html" prefix="html"%>
-<%@ taglib uri="/tags/struts-logic" prefix="logic"%>
-<%@ taglib uri="/tags/struts-nested" prefix="nested"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ page import="tyk.drasap.system.AdminSettingListElement" %>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,42 +14,51 @@
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Cache-Control" content="no-cache" />
-<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
 <style type="text/css">
-	.headFrame {
-		position:relative;
-		margin:0px;
-		padding:0px;
-		height:100px;
-	}
-	.ListHeadFrame {
-		position:absolute;
-		width:100%;
-		margin:0px;
-		padding:0px;
+@import
+url(
+<%=request.getContextPath()%>/resources/css/default.css
+);
+</style>
+<style type="text/css">
+.headFrame {
+	position: relative;
+	margin: 0px;
+	padding: 0px;
+	height: 100px;
+}
+
+.ListHeadFrame {
+	position: absolute;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
 	/*	margin-right:15px;*/
 	/*	border:1px solid #FF0000;*/
-		bottom:0px;
-	}
-	.ListHead {
-		position:relative;
-		margin:0px;
-		padding:0px;
-		top:1px;
-	}
-	.bodyFrame {
-		position:relative;
-		margin:0px;
-		padding:0px;
-		overflow:auto;
+	bottom: 0px;
+}
+
+.ListHead {
+	position: relative;
+	margin: 0px;
+	padding: 0px;
+	top: 1px;
+}
+
+.bodyFrame {
+	position: relative;
+	margin: 0px;
+	padding: 0px;
+	overflow: auto;
 	/*	border:1px solid #FF0000;*/
-	}
-	.footFrame {
-		position:relative;
-		margin:0px;
-		padding:0px;
-		height:50px;
-	}
+}
+
+.footFrame {
+	position: relative;
+	margin: 0px;
+	padding: 0px;
+	height: 50px;
+}
 </style>
 <script type="text/javascript">
 <!--
@@ -108,53 +121,69 @@
 //--->
 </script>
 </head>
-<body bgcolor="#F5F5DC" onload="init()" onresize="frameResize()" bottommargin="0" leftmargin="0" topmargin="5"
-	rightmargin="0" marginheight="0" marginwidth="0">
-<html:form action="/adminSettingList">
-	<html:hidden property="act" />
-	<html:hidden property="updateIndex" />
+<body bgcolor="#F5F5DC" onload="init()" onresize="frameResize()"
+	bottommargin="0" leftmargin="0" topmargin="5" rightmargin="0"
+	marginheight="0" marginwidth="0">
+	<form action="<%=request.getContextPath()%>/adminSettingList"
+		method="post">
+		<input type="hidden" name="act" value="" /> <input type="hidden"
+			name="updateIndex" value="" />
 
-	<table id="ListHead" border="1" cellspacing="0" cellpadding="0" class="normal10">
-		<colgroup span="5">
-			<col style="width:280px;"></col>
-			<col style="width:180px;"></col>
-			<col style="width:80px;"></col>
-			<col style="width:140px;"></col>
-			<col style="width:120px;"></col>
-		</colgroup>
-		<tr bgcolor="#A1A0C0">
-			<td nowrap="nowrap" align="center">項目名称</td>
-			<td nowrap="nowrap" align="center">設定値</td>
-			<td nowrap="nowrap" align="center">ステータス</td>
-			<td nowrap="nowrap" align="center">更新日</td>
-			<td nowrap="nowrap" align="center">更新有／無</td>
-		</tr>
-		<nested:root name="adminSettingListForm">
-			<nested:iterate id="adminSettingListElement" type="tyk.drasap.system.AdminSettingListElement" indexId="idx"
-				name="adminSettingListForm" property="adminSettingList" scope="session">
+		<table id="ListHead" border="1" cellspacing="0" cellpadding="0"
+			class="normal10">
+			<colgroup span="5">
+				<col style="width: 280px;"></col>
+				<col style="width: 180px;"></col>
+				<col style="width: 80px;"></col>
+				<col style="width: 140px;"></col>
+				<col style="width: 120px;"></col>
+			</colgroup>
+			<tr bgcolor="#A1A0C0">
+				<td nowrap="nowrap" align="center">項目名称</td>
+				<td nowrap="nowrap" align="center">設定値</td>
+				<td nowrap="nowrap" align="center">ステータス</td>
+				<td nowrap="nowrap" align="center">更新日</td>
+				<td nowrap="nowrap" align="center">更新有／無</td>
+			</tr>
+			<c:forEach var="adminSettingListElement"
+				items="${sessionScope.adminSettingListForm.adminSettingList}">
 				<tr>
-					<td nowrap="nowrap">&nbsp; <nested:write property="itemName" />&nbsp;</td>
-					<td nowrap="nowrap">&nbsp; <nested:text property="val" onchange='<%= "changeValue(" + idx+ ")" %>' />&nbsp;</td>
-					<td align="center" nowrap="nowrap"><nested:select property="status" onchange='<%= "changeValue(" + idx + ")" %>'>
-						<html:options labelName="adminSettingListForm" labelProperty="statsuNameList" name="adminSettingListForm"
-							property="statusList" />
-					</nested:select></td>
-					<td nowrap="nowrap">&nbsp; <nested:write property="modifiedDate" />&nbsp;</td>
-					<td nowrap="nowrap" align="center">&nbsp; <nested:checkbox property="update" />&nbsp;</td>
-
+					<td nowrap="nowrap">&nbsp; <c:out
+							value="${adminSettingListElement.itemName}" />&nbsp;
+					</td>
+					<td nowrap="nowrap">&nbsp; <input type="text" name="val"
+						value="<c:out value='${adminSettingListElement.val}' />"
+						onchange="changeValue(<c:out value='${status.index}' />)" />&nbsp;
+					</td>
+					<td align="center" nowrap="nowrap"><select name="status"
+						onchange="changeValue(<c:out value='${status.index}' />)">
+							<c:forEach var="status"
+								items="${adminSettingListElement.statusList}">
+								<option value="<c:out value='${status}' />"
+									<c:if test="${status eq adminSettingListElement.status}">selected</c:if>><c:out
+										value="${fn:toUpperCase(status)}" /></option>
+							</c:forEach>
+					</select></td>
+					<td nowrap="nowrap">&nbsp; <c:out
+							value="${adminSettingListElement.modifiedDate}" />&nbsp;
+					</td>
+					<td nowrap="nowrap" align="center">&nbsp; <input
+						type="checkbox" name="update"
+						<c:if test="${adminSettingListElement.update}">checked</c:if> />&nbsp;
+					</td>
 				</tr>
-			</nested:iterate>
-		</nested:root>
-	</table>
-	<table align="center" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<td align="center" nowrap="nowrap"><input type="button" value="更新" onclick="submitFunc('UPDATE')" /></td>
-		</tr>
-	</table>
-</html:form>
+			</c:forEach>
+		</table>
+		<table align="center" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center" nowrap="nowrap"><input type="button"
+					value="更新" onclick="submitFunc('UPDATE')" /></td>
+			</tr>
+		</table>
+	</form>
 </body>
 </html>
 

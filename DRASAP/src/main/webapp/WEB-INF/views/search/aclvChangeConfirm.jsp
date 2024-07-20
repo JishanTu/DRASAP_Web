@@ -1,12 +1,16 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isELIgnored="false"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${sessionScope.user == null}">
+	<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+	</script>
+</c:if>
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="Pragma" content="no-cache" />
@@ -14,8 +18,8 @@
 	<title>Drawing Search and Print System [アクセスレベル変更前確認]</title>
 </head>
 <frameset rows="75,*,30" framespacing="0" border="0">
-<frame name="aclv_changeConfirm_head" src="switch.do?prefix=/search&amp;page=/aclvChangeConfirmHead.jsp" />
-<frame name="aclv_changeConfirm_body" src="switch.do?prefix=/search&amp;page=/aclvChangeConfirmBody.jsp" />
-<frame name="aclv_changeConfirm_foot" src="switch.do?prefix=/search&amp;page=/aclvChangeConfirmFoot.jsp" />
+<frame name="aclv_changeConfirm_head" src="switch.do?page=/search/aclvChangeConfirmHead.jsp" />
+<frame name="aclv_changeConfirm_body" src="switch.do?page=/search/aclvChangeConfirmBody.jsp" />
+<frame name="aclv_changeConfirm_foot" src="switch.do?page=/search/aclvChangeConfirmFoot.jsp" />
 </frameset>
-</html:html>
+</html>

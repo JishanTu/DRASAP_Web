@@ -1,0 +1,36 @@
+{
+  "forwards" : [ {
+    "name" : "timeout",
+    "path" : "/root/timeout.jsp"
+  }, {
+    "name" : "genzu_irai_request",
+    "path" : "/req.do"
+  }, {
+    "name" : "search_search_Main",
+    "path" : "/search/searchMain.jsp"
+  }, {
+    "name" : "genzu_irai_request_list",
+    "path" : "/genzu_irai/requestt_list.jsp"
+  }, {
+    "name" : "genzu_irai_request_ref",
+    "path" : "/genzu_irai/requestt_ref.jsp"
+  }, {
+    "name" : "acl_batch_update",
+    "path" : "/system/accessLevelBatchUpdate.jsp"
+  }, {
+    "name" : "acl_updated_result",
+    "path" : "/system/accessLevelUpdatedResult.jsp"
+  }, {
+    "name" : "accessLevelDownload",
+    "path" : "/accessLevelDownload.do"
+  }, {
+    "name" : "accessLevelLogDownload",
+    "path" : "/accessLevelUpdatedResult.do"
+  }, {
+    "name" : "start_change_passwd_success",
+    "path" : "/search/searchMain.jsp"
+  }, {
+    "name" : "preview",
+    "path" : "/preview.do"
+  } ]
+}

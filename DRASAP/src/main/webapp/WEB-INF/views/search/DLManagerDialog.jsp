@@ -1,22 +1,29 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.net.*, tyk.drasap.common.*, tyk.drasap.search.*" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<bean:define id="user" type="User" name="user" scope="session" />
+<c:if test="${empty sessionScope.user}">
+    <script>
+        location.replace('<%=request.getContextPath() %>/timeout');
+    </script>
+</c:if>
+<c:set var="user" scope="session" value="${new User()}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<logic:equal name="user" property="language" value="Japanese">
-<title>DLマネージャ</title>
-</logic:equal>
-<logic:notEqual name="user" property="language" value="Japanese">
-<title>DL Manager</title>
-</logic:notEqual>
+<c:choose>
+  <c:when test="${user.language eq 'Japanese'}">
+    <title>DLマネージャ</title>
+  </c:when>
+  <c:otherwise>
+    <title>DL Manager</title>
+  </c:otherwise>
+</c:choose>
+
 <meta http-equiv="Pragma" content="no-cache"></meta>
 <meta http-equiv="Cache-Control" content="no-cache"></meta>
 <style type="text/css">
@@ -33,7 +40,6 @@ applet {
 </style>
 <script type="text/javascript" src="<%=request.getContextPath() %>/js/deployJava.js"></script>
 <script type="text/javascript">
-<!--
 	// ロード時に実行する。
 	runDLManager();
 
@@ -63,9 +69,11 @@ applet {
 			height:'100',
 			style:'margin:0px;padding:0px;'
 		};
+		var saveFlagValue = "${user.getDLManagerSaveEnabledFlag()}";
+		var languageValue = "${user.getLanguage()}";
 		var parameters = {
 			jnlp_href:'<%=request.getContextPath() %>/DLManager/DLManager.jnlp',
-			downloadUrl:'<%= (url.getProtocol() + "://" + url.getHost() + ":" + url.getPort() + request.getContextPath() + "/search/switch.do") %>',
+			downloadUrl:'<%= (url.getProtocol() + "://" + url.getHost() + ":" + url.getPort() + request.getContextPath() + "/switch.do") %>',
 			prefix:'/search',
 			page:'/preview.do',
 			drwgSize:'<%= dlmInfo.getPrintSize() %>',
@@ -73,8 +81,8 @@ applet {
 			fileName:'<%= dlmInfo.getFileName() %>',
 			pathName:'<%= URLEncoder.encode(dlmInfo.getPathName(), "UTF-8") %>',
 			drwgNo:'<%= dlmInfo.getDrwgNo() %>',
-			saveFlag:'<%= user.getDLManagerSaveEnabledFlag() %>',
-			language:'<%= user.getLanguage() %>',
+		    saveFlag:saveFlagValue,
+	        language:languageValue,	
 			domain:'<%= url.getHost() %>',
 			sid:'<%= session.getId() %>'
 		};
@@ -82,7 +90,6 @@ applet {
 		deployJava.setInstallerType('kernel');
 		deployJava.runApplet(attributes, parameters, version);
 	}
-//-->
 </script>
 </head>
 <body onload="onLoad()" style='background-color: #D4D0C8;'>

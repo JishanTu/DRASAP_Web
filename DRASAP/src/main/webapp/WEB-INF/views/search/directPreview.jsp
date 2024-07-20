@@ -1,32 +1,41 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="java.util.*,java.net.URLEncoder" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+﻿<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page import="java.util.*,java.net.URLEncoder"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
+<c:if test="${empty sessionScope.user}">
+	<script>
+        location.replace('<%=request.getContextPath() %>/timeout');
+    </script>
+</c:if>
 <html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Cache-Control" content="no-cache" />
-	<title>Drawing Search and Print System [プレビュー]</title>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<title>Drawing Search and Print System [プレビュー]</title>
 </head>
-<body bgcolor="#FFFFFF"><font style="font-family: 'ＭＳ Ｐゴシック','ＭＳ ゴシック';">
-<br />
-<center>
-<!-- タイトル -->
-<b><font size="5" color="#0033CC">DRASAP</font></b>&nbsp;&nbsp;&nbsp;&nbsp;
-<font color="#0066FF">Drawing Search and Print System</font>
-<!-- エラーの表示 -->
-<html:errors />
-<logic:notPresent name="hasError" scope="request"><!-- エラーでないときに表示 -->
-	<hr />
-</logic:notPresent>
-<br />
-<input type="button" value="Close" onclick="window.close()" />
-</center>
-</font></body>
+<body bgcolor="#FFFFFF">
+	<font style="font-family: 'ＭＳ Ｐゴシック', 'ＭＳ ゴシック';"> <br/>
+		<div style="text-align: center;">
+			<!-- タイトル -->
+			<b><font size="5" color="#0033CC">DRASAP</font></b>&nbsp;&nbsp;&nbsp;&nbsp;
+			<font color="#0066FF">Drawing Search and Print System</font>
+			<!-- エラーの表示 -->
+			<c:forEach var="error" items="${errors}">
+				<font color="red"><c:out value="${error}" /></font>
+				<br/>
+			</c:forEach>
+			<!-- エラーがない場合、水平線を表示 -->
+			<c:if test="${empty hasError}">
+				<hr/>
+			</c:if>
+			<br/>
+			<!-- 閉じるボタン -->
+			<input type="button" value="Close" onclick="window.close()" />
+		</div>
+	</font>
+</body>
 </html>

@@ -1,19 +1,24 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="tyk.drasap.search.*,tyk.drasap.common.*" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<%@ page isELIgnored="false"%>
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${sessionScope.user == null}">
+    <script>
+        location.replace('<%=request.getContextPath() %>/timeout');
+    </script>
+</c:if>
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>Drawing Search and Print System [図面検索]</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/<bean:write name="default_css" scope="session" /> );</style>
+	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<style type="text/css">
 	.management {
 	    position: absolute;
@@ -23,7 +28,6 @@
 	}
 	</style>
 	<script type="text/javascript">
-	<!--
 		document.onkeydown = keys;
 		function keys(){
 			switch (event.keyCode ){
@@ -63,7 +67,7 @@
 		}
 		function management() {
 			targetName = '_drasap_management_login';
-			targetUrl = '<%=request.getContextPath() %>/switch.do?prefix=/search&page=/management_Login.jsp';
+			targetUrl = '<%=request.getContextPath() %>/switch.do?page=/search/management_Login.jsp';
 			var WO1;
 			var w = screen.availWidth;
 			var h = screen.availHeight-50;
@@ -101,32 +105,35 @@
 			document.oncontextmenu = disableOnContextMenu;
 		}
 		<%-- 2013.07.16 yamagishi add. end --%>
-	//-->
 	</script>
 </head>
 <%-- 2013.07.16 yamagishi modified.
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0"> --%>
 <body style="background-color: #CCCCCC; margin: 0;" onload="onLoad()">
-<html:form action="/result" >
+<form action="<%=request.getContextPath() %>/result"  method = "post">
 <!--================ ヘッダ ==================================-->
-<bean:define id="searchResultForm" type="SearchResultForm" name="searchResultForm" scope="session" />
+<c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
 	<tr>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
 				<tr><td nowrap="nowrap"><span class="normal10">
-					<b><bean:write name="searchResultForm" property="h_label1"/></b></span></td></tr>
+					<b>${searchResultForm.h_label1 }</b></span></td></tr>
 			</table></td>
 		<td><span class="normal10">
-			<input type="button" value="<%=searchResultForm.getH_label2()%>" onclick="checkOnAll()" />
-			<input type="button" value="<%=searchResultForm.getH_label3()%>" onclick="checkOffAll()" />
+			<input type="button" value="${searchResultForm.h_label2 }" onclick="checkOnAll()" />
+			<input type="button" value="${searchResultForm.h_label3 }" onclick="checkOffAll()" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="button" value="<%=searchResultForm.getH_label4()%>" onclick="doRefresh()" />
+			<input type="button" value="${searchResultForm.h_label4 }" onclick="doRefresh()" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<%=searchResultForm.getH_label5()%>&nbsp;<html:select property="outputPrinter">
-				<html:options labelName="searchResultForm" labelProperty="printerNameList"
-								name="searchResultForm" property="printerKeyList" />
-			</html:select></span></td>
+			${searchResultForm.h_label5 }&nbsp;
+			<select name="outputPrinter">
+				<c:forEach items="${searchResultForm.printerKeyList}"
+					var="outputPrinterKey" varStatus="loop">
+					<option value="${outputPrinterKey}" selected>${searchResultForm.printerNameList[loop.index]}</option>
+				</c:forEach>
+			</select>
+			</span></td>
 	</tr>
 </table>
 <%// admin_flag='2'のユーザのみ
@@ -138,33 +145,18 @@ if (me.isDelAdmin()) { %>
 <table border="1">
 	<tr>
 		<td>
-			<span class="normal10"><%=searchResultForm.getH_label6()%></span></td>
-		<td><html:select property="dispAttr1">
-					<html:options labelName="searchResultForm" labelProperty="dispNameList"
-									name="searchResultForm" property="dispKeyList" />
-				</html:select></td>
-		<td><html:select property="dispAttr2">
-					<html:options labelName="searchResultForm" labelProperty="dispNameList"
-									name="searchResultForm" property="dispKeyList" />
-				</html:select></td>
-		<td><html:select property="dispAttr3">
-					<html:options labelName="searchResultForm" labelProperty="dispNameList"
-									name="searchResultForm" property="dispKeyList" />
-				</html:select></td>
-		<td><html:select property="dispAttr4">
-					<html:options labelName="searchResultForm" labelProperty="dispNameList"
-									name="searchResultForm" property="dispKeyList" />
-				</html:select></td>
-		<td><html:select property="dispAttr5">
-					<html:options labelName="searchResultForm" labelProperty="dispNameList"
-									name="searchResultForm" property="dispKeyList" />
-				</html:select></td>
-		<td><html:select property="dispAttr6">
-					<html:options labelName="searchResultForm" labelProperty="dispNameList"
-									name="searchResultForm" property="dispKeyList" />
-				</html:select></td>
+			<span class="normal10">${sessionScope.searchResultForm.h_label6 }</span></td>
+		 <c:forEach begin="1" end="6" var="index">
+        <td>
+            <select name="dispAttr${index}">
+                <c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+                    <option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
+                </c:forEach>
+            </select>
+        </td>
+    </c:forEach>
 	</tr>
 </table>
-</html:form>
+</form>
 </body>
-</html:html>
+</html>

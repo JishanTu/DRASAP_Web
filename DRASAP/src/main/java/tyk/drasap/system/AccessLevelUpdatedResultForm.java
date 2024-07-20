@@ -4,20 +4,17 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * アクセスレベル更新結果画面に対応
  *
  * @author 2013/07/23 yamagishi
  */
-public class AccessLevelUpdatedResultForm extends ActionForm {
+public class AccessLevelUpdatedResultForm extends BaseForm {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 6095166441763377913L;
 	String act; // 処理を分けるための属性
 	ArrayList<String> errorMsg = new ArrayList<String>();
 	ArrayList<AccessLevelUpdatedResultElement> accessLevelUpdatedResultList = new ArrayList<AccessLevelUpdatedResultElement>(); // 更新結果ログ情報を格納する
@@ -29,7 +26,7 @@ public class AccessLevelUpdatedResultForm extends ActionForm {
 	}
 
 	// --------------------------------------------------------- Methods
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
+	public void reset(HttpServletRequest request) {
 	}
 
 	// --------------------------------------------------------- getter,setter
@@ -39,6 +36,7 @@ public class AccessLevelUpdatedResultForm extends ActionForm {
 	public String getAct() {
 		return act;
 	}
+
 	/**
 	 * @param string
 	 */
@@ -52,12 +50,14 @@ public class AccessLevelUpdatedResultForm extends ActionForm {
 	public ArrayList<String> getErrorMsg() {
 		return errorMsg;
 	}
+
 	/**
 	 * @param string
 	 */
 	public void addErrorMsg(String string) {
 		errorMsg.add(string);
 	}
+
 	/**
 	 * @param string
 	 */
@@ -72,6 +72,7 @@ public class AccessLevelUpdatedResultForm extends ActionForm {
 	public ArrayList<AccessLevelUpdatedResultElement> getAccessLevelUpdatedResultList() {
 		return accessLevelUpdatedResultList;
 	}
+
 	/**
 	 * accessLevelUpdatedResultListを設定します。
 	 * @param accessLevelUpdatedResultList
@@ -87,6 +88,7 @@ public class AccessLevelUpdatedResultForm extends ActionForm {
 	public long getFileCount() {
 		return fileCount;
 	}
+
 	/**
 	 * fileCountを設定します。
 	 * @param fileCount fileCount

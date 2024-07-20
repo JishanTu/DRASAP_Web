@@ -1,11 +1,14 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
+<c:if test="${empty sessionScope.user}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
 
 <html>
 	<head>
@@ -14,7 +17,6 @@
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Cache-Control" content="no-cache" />
 	<script type="text/javascript">
-	<!--
 		browserName = navigator.appName;
 		var WO1;
 		var w = screen.availWidth;
@@ -24,14 +26,13 @@
 		window.resizeTo(w, h);
 		window.moveTo(xPos,yPos);//画面の位置指定
 		if (browserName != "Netscape") focus();
-	//-->
 	</script>
 	</head>
 
 <frameset rows="45,*,35" framespacing="0" border="0">
-<frame name="list_head" src="<%=request.getContextPath() %>/genzu_irai/req_print.do" />
-<frame name="list_body" src="<%=request.getContextPath() %>/genzu_irai/req_list.do" />
-<frame name="list_foot" src="<%=request.getContextPath() %>/genzu_irai/req_result.do" />
+<frame name="list_head" src="<%=request.getContextPath() %>/req_print.do" />
+<frame name="list_body" src="<%=request.getContextPath() %>/req_list.do" />
+<frame name="list_foot" src="<%=request.getContextPath() %>/req_result.do" />
 
 </frameset>
 </html>

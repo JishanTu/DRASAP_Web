@@ -11,222 +11,224 @@ public class StringCheck {
 	 * @param sorce trim‚³‚ê‚é•¶š—ñ
 	 * @return trim‚µ‚½Œ‹‰Ê
 	 */
-	public static String trimWsp(String sorce){
+	public static String trimWsp(String sorce) {
 		int startIndex = -1;
 		char[] ca = sorce.toCharArray();
 		// ‚Ü‚¸æ“ªˆÊ’u‚ğ‹‚ß‚é
-		for(int i = 0; i < ca.length; i++){
+		for (int i = 0; i < ca.length; i++) {
 			// ”¼ŠpƒXƒy[ƒXA‘SŠpƒXƒy[ƒX‚Å‚È‚¯‚ê‚Î
-			if(ca[i] != ' ' && ca[i] != '@'){
+			if (ca[i] != ' ' && ca[i] != '@') {
 				startIndex = i;
 				break;// ƒ‹[ƒv‚ğ”²‚¯‚é
 			}
 		}
-		if(startIndex == -1){// ‘S‚Ätrim‘ÎÛ‚Æ‚È‚Á‚½ê‡
+		if (startIndex == -1) {// ‘S‚Ätrim‘ÎÛ‚Æ‚È‚Á‚½ê‡
 			return "";
 		}
 		// Ÿ‚ÉŒã”öˆÊ’u‚ğ‹‚ß‚é
 		int endIndex = ca.length;
-		for(int i = ca.length - 1; i >= 0; i--){
+		for (int i = ca.length - 1; i >= 0; i--) {
 			// ”¼ŠpƒXƒy[ƒXA‘SŠpƒXƒy[ƒX‚Å‚È‚¯‚ê‚Î
-			if(ca[i] != ' ' && ca[i] != '@'){
+			if (ca[i] != ' ' && ca[i] != '@') {
 				endIndex = i + 1;
 				break;// ƒ‹[ƒv‚ğ”²‚¯‚é
 			}
 		}
 		return sorce.substring(startIndex, endIndex);
 	}
+
 	/**
 	 * ‘SŠp‚Ì‰p”A‹L†‚ğ”¼Šp‚É‚·‚é
 	 * @param sorce
 	 * @return
 	 */
 	public static String changeDbToSbAscii(String sorce) {
-		StringBuffer target = new StringBuffer(sorce.length());
-		if(sorce != null){
-			for(int i = 0; i < sorce.length(); i++){
+		StringBuilder target = new StringBuilder();
+		if (sorce != null) {
+			target = new StringBuilder(sorce.length());
+			for (int i = 0; i < sorce.length(); i++) {
 				String sub = sorce.substring(i, i + 1);
 				String temp = sub;
 				// ”š‚É‚Â‚¢‚Ä
-				if(sub.equals("‚O")){
+				if ("‚O".equals(sub)) {
 					target.append("0");
-				} else if(sub.equals("‚P")){
+				} else if ("‚P".equals(sub)) {
 					target.append("1");
-				} else if(sub.equals("‚Q")){
+				} else if ("‚Q".equals(sub)) {
 					target.append("2");
-				} else if(sub.equals("‚R")){
+				} else if ("‚R".equals(sub)) {
 					target.append("3");
-				} else if(sub.equals("‚S")){
+				} else if ("‚S".equals(sub)) {
 					target.append("4");
-				} else if(sub.equals("‚T")){
+				} else if ("‚T".equals(sub)) {
 					target.append("5");
-				} else if(sub.equals("‚U")){
+				} else if ("‚U".equals(sub)) {
 					target.append("6");
-				} else if(sub.equals("‚V")){
+				} else if ("‚V".equals(sub)) {
 					target.append("7");
-				} else if(sub.equals("‚W")){
+				} else if ("‚W".equals(sub)) {
 					target.append("8");
-				} else if(sub.equals("‚X")){
+				} else if ("‚X".equals(sub)) {
 					target.append("9");
-				} else if(sub.equals("‚`")){// ‘å•¶š‰pš‚É‚Â‚¢‚Ä
+				} else if ("‚`".equals(sub)) {// ‘å•¶š‰pš‚É‚Â‚¢‚Ä
 					target.append("A");
-				} else if(sub.equals("‚a")){
+				} else if ("‚a".equals(sub)) {
 					target.append("B");
-				} else if(sub.equals("‚b")){
+				} else if ("‚b".equals(sub)) {
 					target.append("C");
-				} else if(sub.equals("‚c")){
+				} else if ("‚c".equals(sub)) {
 					target.append("D");
-				} else if(sub.equals("‚d")){
+				} else if ("‚d".equals(sub)) {
 					target.append("E");
-				} else if(sub.equals("‚e")){
+				} else if ("‚e".equals(sub)) {
 					target.append("F");
-				} else if(sub.equals("‚f")){
+				} else if ("‚f".equals(sub)) {
 					target.append("G");
-				} else if(sub.equals("‚g")){
+				} else if ("‚g".equals(sub)) {
 					target.append("H");
-				} else if(sub.equals("‚h")){
+				} else if ("‚h".equals(sub)) {
 					target.append("I");
-				} else if(sub.equals("‚i")){
+				} else if ("‚i".equals(sub)) {
 					target.append("J");
-				} else if(sub.equals("‚j")){
+				} else if ("‚j".equals(sub)) {
 					target.append("K");
-				} else if(sub.equals("‚k")){
+				} else if ("‚k".equals(sub)) {
 					target.append("L");
-				} else if(sub.equals("‚l")){
+				} else if ("‚l".equals(sub)) {
 					target.append("M");
-				} else if(sub.equals("‚m")){
+				} else if ("‚m".equals(sub)) {
 					target.append("N");
-				} else if(sub.equals("‚n")){
+				} else if ("‚n".equals(sub)) {
 					target.append("O");
-				} else if(sub.equals("‚o")){
+				} else if ("‚o".equals(sub)) {
 					target.append("P");
-				} else if(sub.equals("‚p")){
+				} else if ("‚p".equals(sub)) {
 					target.append("Q");
-				} else if(sub.equals("‚q")){
+				} else if ("‚q".equals(sub)) {
 					target.append("R");
-				} else if(sub.equals("‚r")){
+				} else if ("‚r".equals(sub)) {
 					target.append("S");
-				} else if(sub.equals("‚s")){
+				} else if ("‚s".equals(sub)) {
 					target.append("T");
-				} else if(sub.equals("‚t")){
+				} else if ("‚t".equals(sub)) {
 					target.append("U");
-				} else if(sub.equals("‚u")){
+				} else if ("‚u".equals(sub)) {
 					target.append("V");
-				} else if(sub.equals("‚v")){
+				} else if ("‚v".equals(sub)) {
 					target.append("W");
-				} else if(sub.equals("‚w")){
+				} else if ("‚w".equals(sub)) {
 					target.append("X");
-				} else if(sub.equals("‚x")){
+				} else if ("‚x".equals(sub)) {
 					target.append("Y");
-				} else if(sub.equals("‚y")){
+				} else if ("‚y".equals(sub)) {
 					target.append("Z");
-				} else if(sub.equals("‚")){// q•¶š‰pš‚É‚Â‚¢‚Ä
+				} else if ("‚".equals(sub)) {// q•¶š‰pš‚É‚Â‚¢‚Ä
 					target.append("a");
-				} else if(sub.equals("‚‚")){
+				} else if ("‚‚".equals(sub)) {
 					target.append("b");
-				} else if(sub.equals("‚ƒ")){
+				} else if ("‚ƒ".equals(sub)) {
 					target.append("c");
-				} else if(sub.equals("‚„")){
+				} else if ("‚„".equals(sub)) {
 					target.append("d");
-				} else if(sub.equals("‚…")){
+				} else if ("‚…".equals(sub)) {
 					target.append("e");
-				} else if(sub.equals("‚†")){
+				} else if ("‚†".equals(sub)) {
 					target.append("f");
-				} else if(sub.equals("‚‡")){
+				} else if ("‚‡".equals(sub)) {
 					target.append("g");
-				} else if(sub.equals("‚ˆ")){
+				} else if ("‚ˆ".equals(sub)) {
 					target.append("h");
-				} else if(sub.equals("‚‰")){
+				} else if ("‚‰".equals(sub)) {
 					target.append("i");
-				} else if(sub.equals("‚Š")){
+				} else if ("‚Š".equals(sub)) {
 					target.append("j");
-				} else if(sub.equals("‚‹")){
+				} else if ("‚‹".equals(sub)) {
 					target.append("k");
-				} else if(sub.equals("‚Œ")){
+				} else if ("‚Œ".equals(sub)) {
 					target.append("l");
-				} else if(sub.equals("‚")){
+				} else if ("‚".equals(sub)) {
 					target.append("m");
-				} else if(sub.equals("‚")){
+				} else if ("‚".equals(sub)) {
 					target.append("n");
-				} else if(sub.equals("‚")){
+				} else if ("‚".equals(sub)) {
 					target.append("o");
-				} else if(sub.equals("‚")){
+				} else if ("‚".equals(sub)) {
 					target.append("p");
-				} else if(sub.equals("‚‘")){
+				} else if ("‚‘".equals(sub)) {
 					target.append("q");
-				} else if(sub.equals("‚’")){
+				} else if ("‚’".equals(sub)) {
 					target.append("r");
-				} else if(sub.equals("‚“")){
+				} else if ("‚“".equals(sub)) {
 					target.append("s");
-				} else if(sub.equals("‚”")){
+				} else if ("‚”".equals(sub)) {
 					target.append("t");
-				} else if(sub.equals("‚•")){
+				} else if ("‚•".equals(sub)) {
 					target.append("u");
-				} else if(sub.equals("‚–")){
+				} else if ("‚–".equals(sub)) {
 					target.append("v");
-				} else if(sub.equals("‚—")){
+				} else if ("‚—".equals(sub)) {
 					target.append("w");
-				} else if(sub.equals("‚˜")){
+				} else if ("‚˜".equals(sub)) {
 					target.append("x");
-				} else if(sub.equals("‚™")){
+				} else if ("‚™".equals(sub)) {
 					target.append("y");
-				} else if(sub.equals("‚š")){
+				} else if ("‚š".equals(sub)) {
 					target.append("z");
-				} else if(sub.equals("D")){// ‹L†‚É‚Â‚¢‚Ä
+				} else if ("D".equals(sub)) {// ‹L†‚É‚Â‚¢‚Ä
 					target.append(".");
-				} else if(sub.equals("C")){
+				} else if ("C".equals(sub)) {
 					target.append(",");
-				} else if(sub.equals("^")){
+				} else if ("^".equals(sub)) {
 					target.append("/");
-				} else if(sub.equals("ƒ")){
+				} else if ("ƒ".equals(sub)) {
 					target.append("<");
-				} else if(sub.equals("„")){
+				} else if ("„".equals(sub)) {
 					target.append(">");
-				} else if(sub.equals("H")){
+				} else if ("H".equals(sub)) {
 					target.append("?");
-				} else if(sub.equals("Q")){
+				} else if ("Q".equals(sub)) {
 					target.append("_");
-				} else if(sub.equals("G")){
+				} else if ("G".equals(sub)) {
 					target.append(";");
-				} else if(sub.equals("F")){
+				} else if ("F".equals(sub)) {
 					target.append(":");
-				} else if(sub.equals("{")){
+				} else if ("{".equals(sub)) {
 					target.append("+");
-				} else if(sub.equals("–")){
+				} else if ("–".equals(sub)) {
 					target.append("*");
-				} else if(sub.equals("p")){
+				} else if ("p".equals(sub)) {
 					target.append("}");
-				} else if(sub.equals("—")){
+				} else if ("—".equals(sub)) {
 					target.append("@");
-				} else if(sub.equals("e")){
+				} else if ("e".equals(sub)) {
 					target.append("`");
-				} else if(sub.equals("o")){
+				} else if ("o".equals(sub)) {
 					target.append("{");
-				} else if(sub.equals("I")){
+				} else if ("I".equals(sub)) {
 					target.append("!");
-				} else if(sub.equals("”")){
+				} else if ("”".equals(sub)) {
 					target.append("#");
-				} else if(sub.equals("")){
+				} else if ("".equals(sub)) {
 					target.append("$");
-				} else if(sub.equals("“")){
+				} else if ("“".equals(sub)) {
 					target.append("%");
-				} else if(sub.equals("•")){
+				} else if ("•".equals(sub)) {
 					target.append("&");
-				} else if(sub.equals("f")){
+				} else if ("f".equals(sub)) {
 					target.append("'");
-				} else if(sub.equals("i")){
+				} else if ("i".equals(sub)) {
 					target.append("(");
-				} else if(sub.equals("j")){
+				} else if ("j".equals(sub)) {
 					target.append(")");
-				} else if(sub.equals("|")){
+				} else if ("|".equals(sub)) {
 					target.append("-");
-				} else if(sub.equals("O")){
+				} else if ("O".equals(sub)) {
 					target.append("^");
-				} else if(sub.equals("")){
+				} else if ("".equals(sub)) {
 					target.append("=");
-				} else if(sub.equals("b")){
+				} else if ("b".equals(sub)) {
 					target.append("|");
-				} else if(sub.equals("@")){
+				} else if ("@".equals(sub)) {
 					target.append(" ");
 
 				} else {// ‚»‚êˆÈŠO
@@ -236,21 +238,22 @@ public class StringCheck {
 		}
 		return target.toString();
 	}
+
 	/**
 	 * •¶šƒR[ƒh‚ğƒ‰ƒeƒ“(ISO-8859-1)‚©‚çUTF-8‚É•ÏX‚·‚é
 	 * @param src
 	 * @return
 	 */
-	public static String latinToUtf8(String src){
-		try{
-// 2013.09.04 yamagishi modified. start
+	public static String latinToUtf8(String src) {
+		try {
+			// 2013.09.04 yamagishi modified. start
 			// Filter‚ÅƒfƒtƒHƒ‹ƒg•¶šƒR[ƒh‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚ÍA•ÏŠ·•s—vB
-//			src = new String(src.getBytes("ISO-8859-1"),"UTF-8");
+			//			src = new String(src.getBytes("ISO-8859-1"),"UTF-8");
 			if (SetCharacterEncodingFilter.DEFAULT_ENCODING == null) {
 				src = new String(src.getBytes("ISO-8859-1"), "UTF-8");
 			}
-// 2013.09.04 yamagishi modified. end
-		}catch(Exception e){
+			// 2013.09.04 yamagishi modified. end
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return src;

@@ -2,42 +2,42 @@ package tyk.drasap.system;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
+import org.springframework.context.MessageSource;
+import org.springframework.ui.Model;
 
-/** 
+import tyk.drasap.springfw.form.BaseForm;
+
+/**
  * EasyStruts created by EasyStruts - XsltGen.
  * http://easystruts.sf.net
  * created on 12-10-2003
- * 
+ *
  * XDoclet definition:
  * @struts:form name="LoginForm"
  */
-public class SystemMaintenanceLoginForm extends ActionForm {
+public class SystemMaintenanceLoginForm extends BaseForm {
 	/**
-	 * 
+	 *
 	 */
-	private static final long serialVersionUID = 1L;
 	private String act;
 	private String passwd;
 	private String id;
 
 	// --------------------------------------------------------- Methods
 
-	/** 
+	/**
 	 * Method validate
 	 * @param ActionMapping mapping
 	 * @param HttpServletRequest request
 	 * @return ActionErrors
 	 */
-	public ActionErrors validate(ActionMapping mapping,HttpServletRequest request) {
-		ActionErrors errors = new ActionErrors();
+	@Override
+	public Model validate(HttpServletRequest request, Model errors, MessageSource messageSource) {
 		return errors;
 	}
 
 	// --------------------------------------------------------- getter,setter
-	/** 
+	/**
 	 * Returns the passwd.
 	 * @return String
 	 */
@@ -45,7 +45,7 @@ public class SystemMaintenanceLoginForm extends ActionForm {
 		return passwd;
 	}
 
-	/** 
+	/**
 	 * Set the passwd.
 	 * @param passwd The passwd to set
 	 */
@@ -53,7 +53,7 @@ public class SystemMaintenanceLoginForm extends ActionForm {
 		this.passwd = passwd;
 	}
 
-	/** 
+	/**
 	 * Returns the id.
 	 * @return String
 	 */
@@ -61,7 +61,7 @@ public class SystemMaintenanceLoginForm extends ActionForm {
 		return id;
 	}
 
-	/** 
+	/**
 	 * Set the id.
 	 * @param id The id to set
 	 */

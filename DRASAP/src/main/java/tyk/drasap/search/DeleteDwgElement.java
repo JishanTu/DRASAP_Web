@@ -8,10 +8,10 @@ import java.util.HashMap;
  * テーブルメンテナンス用。
  */
 public class DeleteDwgElement {
-	//ArrayList<String> valList = new ArrayList<String>();// 
+	//ArrayList<String> valList = new ArrayList<String>();//
 	String drwgNo;
 	String drwgType;
-	ArrayList<String> valList = new ArrayList<String>();// 
+	ArrayList<String> valList = new ArrayList<String>();//
 	HashMap<String, String> linkDwgParmMap = new HashMap<String, String>();// リンクタグで使用するパラメータを格納するMap
 	// ------------------------------------------------------- コンストラクタ
 	// ------------------------------------------------------- getter,setter

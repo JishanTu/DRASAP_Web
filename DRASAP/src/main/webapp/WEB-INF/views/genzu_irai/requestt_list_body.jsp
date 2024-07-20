@@ -1,116 +1,73 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+﻿<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	<title>図面登録依頼リスト</title>
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<title>図面登録依頼リスト</title>
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<style type="text/css">
+@import url(<%=request.getContextPath()%>/resources/css/default.css);
+</style>
 </head>
-<body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
-<font color="red" size="4" >
-	<logic:iterate id="errs" name="request_listForm" property="listErrors">
-		<li><bean:write name="errs"/></li>
-	</logic:iterate>
-</font>
-<html:form action="/req_list" >
-<html:hidden property="action" />
-<table border="0" align="center">
-	<tr bgcolor="#CCCCCC">
-		<td nowrap="nowrap" align="center"><span class="normal10">チェック</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">依頼ID</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">時間</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">依頼内容</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">図番</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
-		<td nowrap="nowrap" align="center"><span class="normal10">号口・号機</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">原図内容</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">部数</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">縮小</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">サイズ</span></td>
-// 2019.10.23 yamamoto modified. end --%>
-		<td nowrap="nowrap" align="center"><span class="normal10">メッセージ</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">依頼者</span></td>
-		<td nowrap="nowrap" align="left"><span class="normal10">部署名</span></td>
-	</tr>
-	<logic:iterate id="item" name="request_listForm" property="iraiList">
-<%
-		tyk.drasap.genzu_irai.Request_listElement e = (tyk.drasap.genzu_irai.Request_listElement)item;
-		String job_id = e.getJob_id();//ジョブId
-		String zikan = e.getZikan();//依頼日時
-		String irai = e.getIrai();//依頼内容
-		String zuban = e.getZuban();//図番
-		if(zuban == null){
-			zuban = "";
-		}
-		String gouki = e.getGouki();//号口・号機
-		if(gouki == null){
-			gouki = "";
-		}
-		String genzu = e.getGenzu();//原図内容
-		if(genzu == null){
-			genzu = "";
-		}
-		String busuu = e.getBusuu();//部数
-		if(busuu == null){
-			busuu = "";
-		}
-		String syukusyou = e.getSyukusyou();//縮小
-		if(syukusyou == null){
-			syukusyou = "";
-		}
-		String size1 = e.getSize();//サイズ
-		if(size1 == null){
-			size1 = "";
-		}
-		String iraisya = e.getUser_name();//依頼者
-		String busyo = e.getBusyo_name();//部署名
-
-%>
-
-
-	<tr>
-		<td>
-			<html:select name="item" property="touroku" indexed="true">
-				<html:options labelName="request_listForm" labelProperty="checkNameList" name="request_listForm" property="checkKeyList" />
-			</html:select>
-		</td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= job_id %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= zikan %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= irai %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= zuban %>&nbsp;</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= gouki %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= genzu %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="right"><span class="normal10">&nbsp;<%= busuu %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= syukusyou %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= size1 %>&nbsp;</span></td>
-// 2019.10.23 yamamoto modified. end --%>
-		<td nowrap="nowrap" align="center">
-			<html:select name="item" property="message" indexed="true">
-				<html:options labelName="request_listForm" labelProperty="messageNameList" name="request_listForm" property="messageNameList" />
-			</html:select>
-		</td>
-		<td nowrap="nowrap" align="center"><span class="normal10">&nbsp;<%= iraisya %>&nbsp;</span></td>
-		<td nowrap="nowrap" align="left"><span class="normal10">&nbsp;<%= busyo %>&nbsp;</span></td>
-	</tr>
-	<html:hidden name="item" property="job_id" indexed="true"/>
-	<html:hidden name="item" property="zikan" indexed="true"/>
-	<html:hidden name="item" property="zuban" indexed="true"/>
-	<html:hidden name="item" property="gouki" indexed="true"/>
-	<html:hidden name="item" property="genzu" indexed="true"/>
-	<html:hidden name="item" property="busuu" indexed="true"/>
-	<html:hidden name="item" property="syukusyou" indexed="true"/>
-	<html:hidden name="item" property="size" indexed="true"/>
-	<html:hidden name="item" property="busyo" indexed="true"/>
-	<html:hidden name="item" property="rowNo" indexed="true"/>
-	<html:hidden name="item" property="hiddenMessage" indexed="true"/>
-	<html:hidden name="item" property="hiddenTouroku" indexed="true"/>
-</logic:iterate>
-</table>
-</html:form>
+<body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0"
+    rightmargin="0" marginheight="0" marginwidth="0">
+    <font color="red" size="4"> 
+        <c:forEach var="err" items="${request_listForm.listErrors}">
+            <li><c:out value="${err}" /></li>
+        </c:forEach>
+    </font>
+    <form action="<%=request.getContextPath() %>/req_list" method="post">
+        <input type="hidden" name="action" value="${action}" />
+        <table border="0" align="center" name="iraiList">
+            <tr bgcolor="#CCCCCC">
+                <td nowrap="nowrap" align="center"><span class="normal10">チェック</span></td>
+                <td nowrap="nowrap" align="center"><span class="normal10">依頼ID</span></td>
+                <td nowrap="nowrap" align="center"><span class="normal10">時間</span></td>
+                <td nowrap="nowrap" align="center"><span class="normal10">依頼内容</span></td>
+                <td nowrap="nowrap" align="center"><span class="normal10">図番</span></td>
+                <td nowrap="nowrap" align="center"><span class="normal10">メッセージ</span></td>
+                <td nowrap="nowrap" align="center"><span class="normal10">依頼者</span></td>
+                <td nowrap="nowrap" align="left"><span class="normal10">部署名</span></td>
+            </tr>
+            <c:forEach var="e" items="${request_listForm.iraiList}" varStatus="loop">
+                <tr>
+                    <td>
+                        <select name="iraiList[${loop.index}].touroku">
+                            <c:forEach items="${request_listForm.checkKeyList}" var="checkKey" varStatus="innerLoop">
+                                <option value="${checkKey}">${request_listForm.checkNameList[innerLoop.index]}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+                    <td nowrap="nowrap" align="center"><span class="normal10">${e.job_id}</span></td>
+                    <td nowrap="nowrap" align="center"><span class="normal10">${e.zikan}</span></td>
+                    <td nowrap="nowrap" align="center"><span class="normal10">${e.irai}</span></td>
+                    <td nowrap="nowrap" align="center"><span class="normal10">${e.zuban}</span></td>
+                    <td nowrap="nowrap" align="center">
+                        <select name="iraiList[${loop.index}].message">
+                            <c:forEach items="${request_listForm.messageNameList}" var="messageName" varStatus="innerLoop">
+                                <option value="${messageName}">${request_listForm.messageNameList[innerLoop.index]}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+                    <td nowrap="nowrap" align="center"><span class="normal10">${e.user_name}</span></td>
+                    <td nowrap="nowrap" align="left"><span class="normal10">${e.busyo_name}</span></td>
+                </tr>
+                <input type="hidden" name="iraiList[${loop.index}].job_id" value="${e.job_id}" />
+                <input type="hidden" name="iraiList[${loop.index}].rowNo" value="${e.rowNo}" />
+                <input type="hidden" name="iraiList[${loop.index}].zikan" value="${e.zikan}" />
+                <input type="hidden" name="iraiList[${loop.index}].zuban" value="${e.zuban}" />
+                <input type="hidden" name="iraiList[${loop.index}].gouki" value="${empty e.gouki ? '' : e.gouki}" />
+                <input type="hidden" name="iraiList[${loop.index}].genzu" value="${empty e.genzu ? '' : e.genzu}" />
+                <input type="hidden" name="iraiList[${loop.index}].busuu" value="${empty e.busuu ? '' : e.busuu}" />
+                <input type="hidden" name="iraiList[${loop.index}].syukusyou" value="${empty e.syukusyou ? '' : e.syukusyou}" />
+                <input type="hidden" name="iraiList[${loop.index}].size" value="${empty e.size ? '' : e.size}" />
+                <input type="hidden" name="iraiList[${loop.index}].busyo" value="${e.busyo_name}" />
+                <input type="hidden" name="iraiList[${loop.index}].hiddenMessage" value="${e.hiddenMessage}" />
+                <input type="hidden" name="iraiList[${loop.index}].hiddenTouroku" value="${e.hiddenTouroku}" />
+            </c:forEach>
+        </table>
+    </form>
 </body>
 </html>

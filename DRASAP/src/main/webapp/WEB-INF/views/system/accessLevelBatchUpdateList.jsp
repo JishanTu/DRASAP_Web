@@ -1,21 +1,32 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="tyk.drasap.search.*,tyk.drasap.common.*" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+﻿<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page import="tyk.drasap.search.*,tyk.drasap.common.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isELIgnored="false"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${sessionScope.user == null}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
+<html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	<title>アクセスレベル一括更新</title>
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/<bean:write name="default_css" scope="session" /> );</style>
-	<script type="text/javascript">
-	<!--
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<title>アクセスレベル一括更新</title>
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<style type="text/css">
+@import
+url(
+<%=request.getContextPath()
+%>/resources/css/<%=session.getAttribute(
+"default_css"
+)%>
+);
+</style>
+<script type="text/javascript">
 	document.onkeydown = keys;
 	function keys() {
 		switch (event.keyCode) {
@@ -35,87 +46,100 @@
 		nowProcessing = document.getElementById("nowProcessing");
 		nowProcessing.style.visibility = "visible";
 	}
-	//-->
 	</script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
-<html:form action="/accessLevelBatchUpdate">
-<html:hidden property="act" />
-<bean:define id="itemNoCount" type="java.lang.Long"
-			name="accessLevelBatchUpdateForm" property="itemNoCount" scope="session" />
-<logic:present name="accessLevelBatchUpdate.info" scope="session">
-		<ul style="color: blue; font-size: 12pt;">
-			<li><html:messages id="info"  message="true" /><bean:write name="info" /></li>
-		</ul>
-</logic:present>
-<% session.removeAttribute("accessLevelBatchUpdate.info"); %>
-<%	// 検索結果がなければ表示する
-	if (itemNoCount == 0) { %>
-		<ul style="color: red; font-size: 12pt;">
-			<li>検索結果は0件です。</li>
-		</ul>
-<%	} %>
-<table border="0" cellspacing="1" cellpadding="0">
-	<%-- userを定義する --%>
-	<bean:define id="user" type="User" name="user" scope="session" />
-	<logic:iterate id="aclUpload" type="AclUpload" indexId="idx" name="accessLevelBatchUpdateForm" property="uploadList" scope="session">
-		<% // 見出し部分を 15件毎につける
-		if ((idx.intValue() % 15) == 0) { %>
-			<tr>
-				<td />
-				<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span class="normal10">品番</span></td>
-				<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span class="normal10">品名（規格型式）</span></td>
-				<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span class="normal10">グループ</span></td>
-				<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span class="normal10">該当図</span></td>
-				<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span class="normal10">機密管理図</span></td>
-				<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span class="normal10">変更前ACL</span></td>
-				<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span class="normal10">変更後ACL</span></td>
-				<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span class="normal10">メッセージ</span></td>
-			</tr>
-		<% } %>
-		<% // 使用禁止なら行の色を変更する
-			String bgcolor1 = "#FFFFFF";
-			if (aclUpload.getMessage() != null && aclUpload.getMessage().length() > 0) {
-				bgcolor1 = "#FF66FF";
-			}
-		%>
-		<tr bgcolor="<%= bgcolor1 %>">
-			<td style="background-color: #FFFFFF;"><div style="width: 10;" /></td>
-			<td nowrap="nowrap">
-				<span class="normal12">&nbsp;<bean:write name="aclUpload" property="itemNo" />&nbsp;</span>
-			</td>
-			<td nowrap="nowrap">
-				<span class="normal12">&nbsp;<bean:write name="aclUpload" property="itemName" />&nbsp;</span>
-			</td>
-			<td nowrap="nowrap">
-				<span class="normal12">&nbsp;<bean:write name="aclUpload" property="grpCode" />&nbsp;</span>
-			</td>
-			<td nowrap="nowrap" align="center">
-				<span class="normal12">&nbsp;<bean:write name="aclUpload" property="correspondingValue" />&nbsp;</span>
-			</td>
-			<td nowrap="nowrap" align="center">
-				<span class="normal12">&nbsp;<bean:write name="aclUpload" property="confidentialValue" />&nbsp;</span>
-			</td>
-			<td nowrap="nowrap">
-				<span class="normal12">&nbsp;<bean:write name="aclUpload" property="preUpdateAclName" />&nbsp;</span>
-			</td>
-			<td nowrap="nowrap">
-				<span class="normal12">&nbsp;<bean:write name="aclUpload" property="postUpdateAclName" />&nbsp;</span>
-			</td>
-			<td nowrap="nowrap">
-				<span class="normal12">&nbsp;<bean:write name="aclUpload" property="message" />&nbsp;</span>
-			</td>
-		</tr>
-	</logic:iterate>
-</table>
-<table class="nowsearch" id="nowProcessing" style="visibility: hidden;">
-<tr valign="middle">
-<td align="center" style="font-size:18pt; color:#0000FF;">
-処理中・・・・
-</td>
-</tr>
-</table>
+	<form action="<%=request.getContextPath() %>/accessLevelBatchUpdate"
+		method="post">
+		<input type="hidden" name="act" value="" />
+		<c:set var="itemNoCount" value="${sessionScope.accessLevelBatchUpdateForm.itemNoCount}" />
+		<c:if test="${not empty sessionScope.accessLevelBatchUpdate.info}">
+			<ul style="color: blue; font-size: 12pt;">
+				<li><c:out value="${sessionScope.accessLevelBatchUpdate.info}" /></li>
+			</ul>
+		</c:if>
+		<% session.removeAttribute("accessLevelBatchUpdate.info"); %>
+		<%-- <c:if test="${itemNoCount == 0}"> --%>
+		<c:if test="${itemNoCount == 0 or empty itemNoCount}">
+			<ul style="color: red; font-size: 12pt;">
+				<li>検索結果は0件です。</li>
+			</ul>
+		</c:if>
+		<table border="0" cellspacing="1" cellpadding="0">
+			<%-- userを定義する --%>
+			<c:set var="user" value="${sessionScope.user}" />
+			<c:set var="idx" value="0" />
+			<c:forEach var="aclUpload"
+				items="${sessionScope.accessLevelBatchUpdateForm.uploadList}"
+				varStatus="status">
+				<c:set var="idx" value="${status.index + 1}" />
 
-</html:form>
+				<%-- 見出し部分を 15件毎につける --%>
+				<c:if test="${idx % 15 == 1}">
+					<tr>
+						<td />
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
+							class="normal10">品番</span></td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
+							class="normal10">品名（規格型式）</span></td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
+							class="normal10">グループ</span></td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
+							class="normal10">該当図</span></td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
+							class="normal10">機密管理図</span></td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
+							class="normal10">変更前ACL</span></td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
+							class="normal10">変更後ACL</span></td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
+							class="normal10">メッセージ</span></td>
+					</tr>
+				</c:if>
+
+				<%-- 使用禁止なら行の色を変更する --%>
+				<c:set var="bgcolor1" value="#FFFFFF" />
+				<c:if test="${not empty aclUpload.message}">
+					<c:set var="bgcolor1" value="#FF66FF" />
+				</c:if>
+
+				<tr bgcolor="<c:out value="${bgcolor1}" />">
+					<td style="background-color: #FFFFFF;"><div style="width: 10;"></div></td>
+					<td nowrap="nowrap"><span class="normal12">&nbsp;<c:out
+								value="${aclUpload.itemNo}" />&nbsp;
+					</span></td>
+					<td nowrap="nowrap"><span class="normal12">&nbsp;<c:out
+								value="${aclUpload.itemName}" />&nbsp;
+					</span></td>
+					<td nowrap="nowrap"><span class="normal12">&nbsp;<c:out
+								value="${aclUpload.grpCode}" />&nbsp;
+					</span></td>
+					<td nowrap="nowrap" align="center"><span class="normal12">&nbsp;<c:out
+								value="${aclUpload.correspondingValue}" />&nbsp;
+					</span></td>
+					<td nowrap="nowrap" align="center"><span class="normal12">&nbsp;<c:out
+								value="${aclUpload.confidentialValue}" />&nbsp;
+					</span></td>
+					<td nowrap="nowrap"><span class="normal12">&nbsp;<c:out
+								value="${aclUpload.preUpdateAclName}" />&nbsp;
+					</span></td>
+					<td nowrap="nowrap"><span class="normal12">&nbsp;<c:out
+								value="${aclUpload.postUpdateAclName}" />&nbsp;
+					</span></td>
+					<td nowrap="nowrap"><span class="normal12">&nbsp;<c:out
+								value="${aclUpload.message}" />&nbsp;
+					</span></td>
+				</tr>
+			</c:forEach>
+		</table>
+		<table class="nowsearch" id="nowProcessing"
+			style="visibility: hidden;">
+			<tr valign="middle">
+				<td align="center" style="font-size: 18pt; color: #0000FF;">
+					処理中・・・・</td>
+			</tr>
+		</table>
+
+	</form>
 </body>
-</html:html>
+</html>

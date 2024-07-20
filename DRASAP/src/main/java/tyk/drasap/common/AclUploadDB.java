@@ -40,8 +40,14 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return count;
 	}
@@ -100,8 +106,14 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return aclUploadList;
 	}
@@ -161,8 +173,14 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return aclUploadList;
 	}
@@ -189,27 +207,27 @@ public class AclUploadDB {
 			pstmt = conn.prepareStatement(sql);
 
 			int paramIndex = 0;
-			pstmt.setString(++paramIndex, aclUpload.getAclUpdateNo());			// 管理NO
-			pstmt.setString(++paramIndex, aclUpload.getUserId());				// ユーザID
-			pstmt.setString(++paramIndex, aclUpload.getUserName());				// 氏名
-			pstmt.setString(++paramIndex, aclUpload.getRecordNo());				// レコード番号
-			pstmt.setString(++paramIndex, aclUpload.getMachineJp());			// 装置
-			pstmt.setString(++paramIndex, aclUpload.getMachineNo());			// 装置NO
-			pstmt.setString(++paramIndex, aclUpload.getDrwgNo());				// 手配図番
-			pstmt.setString(++paramIndex, aclUpload.getMachineCode());			// 装置コード
-			pstmt.setString(++paramIndex, aclUpload.getDetailNo());				// 明細番号
-			pstmt.setString(++paramIndex, aclUpload.getPages());				// 頁
-			pstmt.setString(++paramIndex, aclUpload.getItemNo());				// 品番
-			pstmt.setString(++paramIndex, aclUpload.getItemNoShort());			// 品番（空白、ハイフン「-」を除いた半角大文字）
-			pstmt.setString(++paramIndex, aclUpload.getCorrespondingFlag());	// 該当図区分
-			pstmt.setString(++paramIndex, aclUpload.getConfidentialFlag());		// 機密管理図区分
-			pstmt.setString(++paramIndex, aclUpload.getGrpCode());				// グループ
-			pstmt.setString(++paramIndex, aclUpload.getPreUpdateAcl());			// 変更前アクセスレベル
-			pstmt.setString(++paramIndex, aclUpload.getPreUpdateAclName());		// 変更前アクセスレベル名
-			pstmt.setString(++paramIndex, aclUpload.getPostUpdateAcl());		// 変更後アクセスレベル
-			pstmt.setString(++paramIndex, aclUpload.getPostUpdateAclName());	// 変更後アクセスレベル名
-			pstmt.setString(++paramIndex, aclUpload.getItemName());				// 品名（規格型式）
-			pstmt.setString(++paramIndex, aclUpload.getMessage());				// メッセージ
+			pstmt.setString(++paramIndex, aclUpload.getAclUpdateNo()); // 管理NO
+			pstmt.setString(++paramIndex, aclUpload.getUserId()); // ユーザID
+			pstmt.setString(++paramIndex, aclUpload.getUserName()); // 氏名
+			pstmt.setString(++paramIndex, aclUpload.getRecordNo()); // レコード番号
+			pstmt.setString(++paramIndex, aclUpload.getMachineJp()); // 装置
+			pstmt.setString(++paramIndex, aclUpload.getMachineNo()); // 装置NO
+			pstmt.setString(++paramIndex, aclUpload.getDrwgNo()); // 手配図番
+			pstmt.setString(++paramIndex, aclUpload.getMachineCode()); // 装置コード
+			pstmt.setString(++paramIndex, aclUpload.getDetailNo()); // 明細番号
+			pstmt.setString(++paramIndex, aclUpload.getPages()); // 頁
+			pstmt.setString(++paramIndex, aclUpload.getItemNo()); // 品番
+			pstmt.setString(++paramIndex, aclUpload.getItemNoShort()); // 品番（空白、ハイフン「-」を除いた半角大文字）
+			pstmt.setString(++paramIndex, aclUpload.getCorrespondingFlag()); // 該当図区分
+			pstmt.setString(++paramIndex, aclUpload.getConfidentialFlag()); // 機密管理図区分
+			pstmt.setString(++paramIndex, aclUpload.getGrpCode()); // グループ
+			pstmt.setString(++paramIndex, aclUpload.getPreUpdateAcl()); // 変更前アクセスレベル
+			pstmt.setString(++paramIndex, aclUpload.getPreUpdateAclName()); // 変更前アクセスレベル名
+			pstmt.setString(++paramIndex, aclUpload.getPostUpdateAcl()); // 変更後アクセスレベル
+			pstmt.setString(++paramIndex, aclUpload.getPostUpdateAclName()); // 変更後アクセスレベル名
+			pstmt.setString(++paramIndex, aclUpload.getItemName()); // 品名（規格型式）
+			pstmt.setString(++paramIndex, aclUpload.getMessage()); // メッセージ
 			resultCount += pstmt.executeUpdate();
 
 			// コミット
@@ -217,11 +235,17 @@ public class AclUploadDB {
 
 		} catch (Exception e) {
 			// ロールバック
-			try { conn.rollback(); } catch (Exception e2) {}
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return resultCount;
 	}
@@ -257,7 +281,10 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return resultCount;
 	}
@@ -289,7 +316,10 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return resultCount;
 	}
@@ -329,7 +359,8 @@ public class AclUploadDB {
 				aclUpload.setUserName(rs.getString("USER_NAME"));
 
 				// 属性情報テーブル更新用にフォーマット
-				if ((value = rs.getString("ITEM_NO_SHORT")) != null && value.length() > 0) {
+				value = rs.getString("ITEM_NO_SHORT");
+				if (value != null && value.length() > 0) {
 					aclUpload.setItemNo(value);
 					// trim処理。ハイフン「-」を除く。
 					itemNoShort = StringCheck.trimWsp(value).replace("-", "");
@@ -359,8 +390,14 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return aclUploadList;
 	}
@@ -400,7 +437,10 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return resultCount;
 	}
@@ -440,8 +480,14 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return count;
 	}
@@ -462,24 +508,24 @@ public class AclUploadDB {
 		ResultSet rs = null;
 		ResultSetMetaData metaData = null;
 		try {
-			String sql = "select org.ITEM_NO_SHORT    as ITEM_NO_SHORT, "        +
-								"twin.ITEM_NO_SHORT   as TWIN_DRWG_NO, "         +
-								"org.POST_UPDATE_ACL  as POST_UPDATE_ACL, "      +
-								"twin.POST_UPDATE_ACL as TWIN_POST_UPDATE_ACL, " +
-								"org.MESSAGE          as MESSAGE, "              +
-								"id1.DRWG_NO          as ID1_DRWG_NO, "          +
-								"id1.TWIN_DRWG_NO     as ID1_TWIN_DRWG_NO, "     +
-								"id1.ACL_ID           as ID1_PRE_UPDATE_ACL, "   +
-								"id2.DRWG_NO          as ID2_DRWG_NO, "          +
-								"id2.TWIN_DRWG_NO     as ID2_TWIN_DRWG_NO, "     +
-								"id2.ACL_ID           as ID2_PRE_UPDATE_ACL "    +
+			String sql = "select org.ITEM_NO_SHORT    as ITEM_NO_SHORT, " +
+					"twin.ITEM_NO_SHORT   as TWIN_DRWG_NO, " +
+					"org.POST_UPDATE_ACL  as POST_UPDATE_ACL, " +
+					"twin.POST_UPDATE_ACL as TWIN_POST_UPDATE_ACL, " +
+					"org.MESSAGE          as MESSAGE, " +
+					"id1.DRWG_NO          as ID1_DRWG_NO, " +
+					"id1.TWIN_DRWG_NO     as ID1_TWIN_DRWG_NO, " +
+					"id1.ACL_ID           as ID1_PRE_UPDATE_ACL, " +
+					"id2.DRWG_NO          as ID2_DRWG_NO, " +
+					"id2.TWIN_DRWG_NO     as ID2_TWIN_DRWG_NO, " +
+					"id2.ACL_ID           as ID2_PRE_UPDATE_ACL " +
 					"from ACL_UPLOAD_TABLE org " +
 					"left outer join INDEX_DB id1 on id1.DRWG_NO = org.ITEM_NO_SHORT and id1.TWIN_DRWG_NO is not null " + // アップロードデータ．図番で検索
 					"left outer join INDEX_DB id2 on id2.TWIN_DRWG_NO = org.ITEM_NO_SHORT " + // アップロードデータ．1物2品番図番で検索
 					"left outer join ACL_UPLOAD_TABLE twin on twin.ACL_UPDATE_NO = org.ACL_UPDATE_NO and twin.ITEM_NO_SHORT = nvl(id1.TWIN_DRWG_NO, ID2.DRWG_NO) " + // アップロードデータ内で1物2品番を検索
 					"where org.ACL_UPDATE_NO = ? " +
 					"and (id1.DRWG_NO is not null or id1.TWIN_DRWG_NO is not null or " +
-						" id2.DRWG_NO is not null or id2.TWIN_DRWG_NO is not null)";
+					" id2.DRWG_NO is not null or id2.TWIN_DRWG_NO is not null)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, aclUpdateNo);
 			rs = pstmt.executeQuery();
@@ -502,8 +548,14 @@ public class AclUploadDB {
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return drwgNoMapList;
 	}
@@ -524,36 +576,36 @@ public class AclUploadDB {
 		PreparedStatement pstmt = null;
 		try {
 			conn.setAutoCommit(false);
-			String sql = "insert into ACL_UPLOAD_TABLE "		+
-					"select  aut.ACL_UPDATE_NO, "				+	// ACL_UPDATE_NO
-							"aut.USER_ID, " 					+	// USER_ID
-							"aut.USER_NAME, "					+	// USER_NAME
-							"lpad(tmp.NEW_RECORD_NO,8,'0'), "	+	// RECORD_NO
-							"id.MACHINE_JP, "					+	// MACHINE_JP
-							"id.MACHINE_NO, "					+	// MACHINE_NO
-							"aut.DRWG_NO, "						+	// DRWG_NO
-							"aut.MACHINE_CODE, "				+	// MACHINE_CODE
-							"aut.DETAIL_NO, "					+	// DETAIL_NO
-							"aut.PAGES, "						+	// PAGES
-							"id.DRWG_NO, "						+	// ITEM_NO
-							"id.DRWG_NO, "						+	// ITEM_NO_SHORT
-							"aut.CORRESPONDING_FLAG, "			+	// CORRESPONDING_FLAG
-							"aut.CONFIDENTIAL_FLAG, "			+	// CONFIDENTIAL_FLAG
-							"aut.GRP_CODE, "					+	// GRP_CODE
-							"id.ACL_ID, "						+	// PRE_UPDATE_ACL
-							"alm.ACL_NAME , "					+	// PRE_UPDATE_ACL_NAME
-							"aut.POST_UPDATE_ACL, "				+	// POST_UPDATE_ACL
-							"aut.POST_UPDATE_ACL_NAME, "		+	// POST_UPDATE_ACL_NAME
-							"id.MACHINE_JP, "					+	// ITEM_NAME
-							"null, "							+	// MESSAGE
-							"null "								+	// ACL_UPDATE
-					"from INDEX_DB id " 						+
-					"inner join ACL_UPLOAD_TABLE aut on aut.ITEM_NO_SHORT = id.TWIN_DRWG_NO "	+
-					"left outer join ACCESS_LEVEL_MASTER alm on alm.ACL_ID = id.ACL_ID, "		+
+			String sql = "insert into ACL_UPLOAD_TABLE " +
+					"select  aut.ACL_UPDATE_NO, " + // ACL_UPDATE_NO
+					"aut.USER_ID, " + // USER_ID
+					"aut.USER_NAME, " + // USER_NAME
+					"lpad(tmp.NEW_RECORD_NO,8,'0'), " + // RECORD_NO
+					"id.MACHINE_JP, " + // MACHINE_JP
+					"id.MACHINE_NO, " + // MACHINE_NO
+					"aut.DRWG_NO, " + // DRWG_NO
+					"aut.MACHINE_CODE, " + // MACHINE_CODE
+					"aut.DETAIL_NO, " + // DETAIL_NO
+					"aut.PAGES, " + // PAGES
+					"id.DRWG_NO, " + // ITEM_NO
+					"id.DRWG_NO, " + // ITEM_NO_SHORT
+					"aut.CORRESPONDING_FLAG, " + // CORRESPONDING_FLAG
+					"aut.CONFIDENTIAL_FLAG, " + // CONFIDENTIAL_FLAG
+					"aut.GRP_CODE, " + // GRP_CODE
+					"id.ACL_ID, " + // PRE_UPDATE_ACL
+					"alm.ACL_NAME , " + // PRE_UPDATE_ACL_NAME
+					"aut.POST_UPDATE_ACL, " + // POST_UPDATE_ACL
+					"aut.POST_UPDATE_ACL_NAME, " + // POST_UPDATE_ACL_NAME
+					"id.MACHINE_JP, " + // ITEM_NAME
+					"null, " + // MESSAGE
+					"null " + // ACL_UPDATE
+					"from INDEX_DB id " +
+					"inner join ACL_UPLOAD_TABLE aut on aut.ITEM_NO_SHORT = id.TWIN_DRWG_NO " +
+					"left outer join ACCESS_LEVEL_MASTER alm on alm.ACL_ID = id.ACL_ID, " +
 					"(select to_number(max(RECORD_NO))+1 as NEW_RECORD_NO from ACL_UPLOAD_TABLE where ACL_UPDATE_NO = ?) tmp " +
-					"where aut.ACL_UPDATE_NO = ? and aut.ITEM_NO_SHORT = ? and rownum <= 1 "	+
-					"and not exists ("															+
-						"select * from ACL_UPLOAD_TABLE ine where ine.ACL_UPDATE_NO = aut.ACL_UPDATE_NO and ine.ITEM_NO_SHORT = id.DRWG_NO" +
+					"where aut.ACL_UPDATE_NO = ? and aut.ITEM_NO_SHORT = ? and rownum <= 1 " +
+					"and not exists (" +
+					"select * from ACL_UPLOAD_TABLE ine where ine.ACL_UPDATE_NO = aut.ACL_UPDATE_NO and ine.ITEM_NO_SHORT = id.DRWG_NO" +
 					")";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, aclUpdateNo);
@@ -566,11 +618,17 @@ public class AclUploadDB {
 
 		} catch (Exception e) {
 			// ロールバック
-			try { conn.rollback(); } catch (Exception e2) {}
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			throw e;
 		} finally {
 			// CLOSE処理
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 		return resultCount;
 	}

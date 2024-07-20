@@ -1,20 +1,23 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page isELIgnored="false"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
+<c:if test="${sessionScope.user == null}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/tr/xhtml1/DTD/xhtml1-frameset.dtd">
-<html:html>
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<title>アクセスレベル一括更新</title>
 	<script type="text/javascript">
-	<!--
 		document.onkeydown = keys;
 		function keys() {
 			switch (event.keyCode ) {
@@ -24,16 +27,17 @@
 					break;
 			}
 		}
-	//-->
 	</script>
 </head>
 <frameset rows="100,*" framespacing="0" border="0">
-<frame name="acl_condition" src="<%=request.getContextPath() %>/system/accessLevelBatchUpdateCondition.jsp" />
-<logic:present name="accessLevelBatchUpdate.erros" scope="session">
-<frame name="acl_list" src="switch.do?prefix=&amp;page=/system/accessLevelBatchUpdate_error.jsp" />
-</logic:present>
-<logic:notPresent name="accessLevelBatchUpdate.erros" scope="session">
-<frame name="acl_list" src="<%=request.getContextPath() %>/system//accessLevelBatchUpdateList.jsp" />
-</logic:notPresent>
+<frame name="acl_condition" src="switch.do?page=/system/accessLevelBatchUpdateCondition.jsp" />
+<c:if test="${sessionScope.accessLevelBatchUpdate.erros != null}">
+<frame name="acl_list" src="switch.do?page=/system/accessLevelBatchUpdate_error.jsp" />
+</c:if>
+
+<c:if test="${sessionScope.accessLevelBatchUpdate.erros == null}">
+<frame name="acl_list" src="switch.do?page=/system/accessLevelBatchUpdateList.jsp" />
+</c:if>
+
 </frameset>
-</html:html>
+</html>

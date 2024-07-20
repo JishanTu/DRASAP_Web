@@ -1,28 +1,41 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
-<%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
+﻿<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<html:html>
+<%-- ログイン情報の確認 --%>
+<%-- ログイン情報の確認 --%>
+<c:if test="${empty sessionScope.user}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
+
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>Drawing Search and Print System [図面登録作業者からのメッセージ]</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+	<style type="text/css">
+		@import
+		url(
+		<%=request.getContextPath()%>/resources/css/default.css
+		);
+	</style>
 </head>
-<body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
-<font color="red" size="4" >
-	<logic:iterate id="errs" name="request_refForm" property="listErrors">
-		<li><bean:write name="errs" /></li>
-	</logic:iterate>
+<body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0"
+	  rightmargin="0" marginheight="0" marginwidth="0">
+<font color="red" size="4"> <c:if
+		test="${not empty request_refForm.listErrors}">
+	<c:forEach var="error" items="${request_refForm.listErrors}">
+		<li><c:out value="${error}" /></li>
+	</c:forEach>
+</c:if>
 </font>
 
-<bean:define id="touroku" name="request_refForm" property="touroku" type="java.lang.String"/>
+<c:set var="touroku" value="${request_refForm.touroku}" />
+
 <br />
 <table border="0" align="center">
 	<tr bgcolor="#FFFF99">
@@ -30,65 +43,77 @@
 		<td align="center"><span class="normal12">依頼内容</span></td>
 	</tr>
 	<tr>
-		<td><span class="normal12">&nbsp;<bean:write name="request_refForm" property="job_id"/>&nbsp;</span></td>
-		<td><span class="normal12">&nbsp;<bean:write name="request_refForm" property="job_name"/>&nbsp;</span></td>
+		<td><span class="normal12">&nbsp;<c:out
+				value="${request_refForm.job_id}" />&nbsp;
+			</span></td>
+		<td><span class="normal12">&nbsp;<c:out
+				value="${request_refForm.job_name}" />&nbsp;
+			</span></td>
+
 	</tr>
 </table>
 <hr width="80%" />
 <table border="0" align="center">
 	<tr bgcolor="#CCCCCC">
-		<td bgcolor="#FFFFFF"/>
-<%-- // 2019.10.23 yamamoto modified. start --%>
+		<td bgcolor="#FFFFFF" />
+		<%-- // 2019.10.23 yamamoto modified. start --%>
 		<td align="center"><span class="normal12">図番</span></td>
-<%--
-		<td align="center"><span class="normal12">号口・号機</span></td>
-		<td align="center"><span class="normal12">原図内容</span></td>
+		<%--
+    <td align="center"><span class="normal12">号口・号機</span></td>
+    <td align="center"><span class="normal12">原図内容</span></td>
 // 2019.10.23 yamamoto modified. end --%>
 		<td align="center"><span class="normal12">メッセージ</span></td>
 	</tr>
 
-<logic:iterate id="item" name="request_refForm" property="iraiList">
-<%
-	tyk.drasap.genzu_irai.Request_RefElement e = (tyk.drasap.genzu_irai.Request_RefElement)item;
-	String irai = e.getJob_name();
-	String start_no = e.getStart();//番号
-	String gouki = e.getGouki();//号口・号機
-	if(gouki == null){
-		gouki = "";
-	}
-	String genzu = e.getGenzu();//原図内容
-	if(genzu == null){
-		genzu = "";
-	}
-	String messege = e.getMessege();//メッセージ
-	if(messege == null){
-		messege = "";
-	}
-	String gensi = "";
-	String exist = e.getExist();//登録有無
-	if("0".equals(exist)){
-		gensi = "1";
-	}
-%>
+	<c:forEach var="item" items="${request_refForm.iraiList}">
+		<c:set var="e" value="${item}" />
 
+		<c:set var="irai" value="${e.job_name}" />
+		<c:set var="start_no" value="${e.start}" />
 
-	<tr>
-<%	if("1".equals(gensi)){ %>
-		<td bgcolor="#FF3300"><span class="normal12white">原紙なし</span></td>
-<%	}else{ %>
-		<td>&nbsp;</td>
-<%	} %>
-		<td><span class="normal12">&nbsp;<%= start_no %>&nbsp;</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
+		<c:set var="gouki" value="${e.gouki}" />
+		<c:if test="${empty gouki} }">
+			<c:set var="gouki" value="" />
+		</c:if>
+
+		<c:set var="genzu" value="${e.genzu}" />
+		<c:if test="${empty genzu} }">
+			<c:set var="genzu" value="" />
+		</c:if>
+
+		<c:set var="messege" value="${e.messege}" />
+		<c:if test="${empty messege} }">
+			<c:set var="messege" value="" />
+		</c:if>
+
+		<c:set var="gensi" value="" />
+		<c:set var="exist" value="${e.exist}" />
+		<c:if test="${'0' eq exist} }">
+			<c:set var="gensi" value="1" />
+		</c:if>
+		<tr>
+			<c:choose>
+				<c:when test="${'1' eq gensi}">
+					<td bgcolor="#FF3300"><span class="normal12white">原紙なし</span></td>
+				</c:when>
+				<c:otherwise>
+					<td>&nbsp;</td>
+				</c:otherwise>
+			</c:choose>
+
+			<td><span class="normal12">&nbsp;${start_no}&nbsp;</span></td>
+				<%-- // 2019.10.23 yamamoto modified. start
 		<td><span class="normal12">&nbsp;<%= gouki %>&nbsp;</span></td>
 		<td><span class="normal12">&nbsp;<%= genzu %>&nbsp;</span></td>
 // 2019.10.23 yamamoto modified. end --%>
-		<td><span class="normal12">&nbsp;<%= messege %>&nbsp;</span></td>
-	</tr>
-</logic:iterate>
+			<td><span class="normal12">&nbsp;${messege}&nbsp;</span></td>
+		</tr>
+	</c:forEach>
 </table>
 <br />
 <hr width="80%" />
-<center><input type="button" value="Close" onclick="javascript:window.close()" /></center>
+<div style="text-align: center;">
+	<input type="button" value="Close" onclick="javascript:window.close()" />
+</div>
 </body>
-</html:html>
+</html>

@@ -1,11 +1,12 @@
 package tyk.drasap.change_acllog;
 
-import static tyk.drasap.common.DrasapUtil.defaultString;
+import static tyk.drasap.common.DrasapUtil.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import tyk.drasap.common.AclUpload;
 import tyk.drasap.common.User;
+
 /**
  * <PRE>
  * アクセスレベル変更ログを出力するクラス。
@@ -14,7 +15,7 @@ import tyk.drasap.common.User;
  * @author 2013/07/11 yamagishi
  */
 public class ChangeAclLogger {
-	private static Category category = Category.getInstance(ChangeAclLogger.class.getName());
+	private static Logger category = Logger.getLogger(ChangeAclLogger.class.getName());
 
 	// ------------------------------------------- Method
 	/**
@@ -72,33 +73,33 @@ public class ChangeAclLogger {
 
 		// 「YYMMDDhhmmss,」については
 		// "log4j.properties"にパターン登録されている
-		StringBuffer buff = new StringBuffer();
-		buff.append(aclUpdateNo);			// 管理No
+		StringBuilder buff = new StringBuilder();
+		buff.append(aclUpdateNo); // 管理No
 		buff.append(',');
-		buff.append(user.getId());			// ユーザーID
+		buff.append(user.getId()); // ユーザーID
 		buff.append(',');
-		buff.append(user.getName());		// 氏名
+		buff.append(user.getName()); // 氏名
 		buff.append(',');
-		buff.append(drwgNo);				// 図番
+		buff.append(drwgNo); // 図番
 		buff.append(',');
-		String procedure = (message != null && message.length() > 0) ? "無し" : "更新";
-		buff.append(procedure);				// 処置
+		String procedure = message != null && message.length() > 0 ? "無し" : "更新";
+		buff.append(procedure); // 処置
 		buff.append(',');
 		if (preUpdateAcl != null && preUpdateAcl.length() > 0) {
-			buff.append(preUpdateAcl);		// 変更前アクセスレベル
+			buff.append(preUpdateAcl); // 変更前アクセスレベル
 		}
 		if (preUpdateAclName != null && preUpdateAclName.length() > 0) {
 			buff.append('（');
-			buff.append(preUpdateAclName);	// 変更前アクセスレベル名
+			buff.append(preUpdateAclName); // 変更前アクセスレベル名
 			buff.append('）');
 		}
 		buff.append(',');
 		if (postUpdateAcl != null && postUpdateAcl.length() > 0) {
-			buff.append(postUpdateAcl);		// 変更後アクセスレベル
+			buff.append(postUpdateAcl); // 変更後アクセスレベル
 		}
 		if (postUpdateAclName != null && postUpdateAclName.length() > 0) {
 			buff.append('（');
-			buff.append(postUpdateAclName);	// 変更後アクセスレベル名
+			buff.append(postUpdateAclName); // 変更後アクセスレベル名
 			buff.append('）');
 		}
 		buff.append(',');

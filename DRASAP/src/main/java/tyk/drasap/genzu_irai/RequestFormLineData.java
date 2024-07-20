@@ -13,12 +13,12 @@ public class RequestFormLineData {
 	private String busuu;//部数
 	private String syukusyou;//縮小区分
 	private String size;//縮小サイズ
-	
+
 	/**
 	 * コンストラクタ
 	 */
 	public RequestFormLineData(String gouki, String genzu, String kaisiNo, String syuuryouNo,
-				String busuu, String syukusyou, String size) {
+			String busuu, String syukusyou, String size) {
 		this.gouki = gouki;// 号機
 		this.genzu = genzu;// 原図内容
 		this.kaisiNo = kaisiNo;// 開始番号

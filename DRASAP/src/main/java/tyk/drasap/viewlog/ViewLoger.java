@@ -2,7 +2,7 @@ package tyk.drasap.viewlog;
 
 import java.text.NumberFormat;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * Webからのビューイングでのログを出力するクラス。
@@ -10,7 +10,7 @@ import org.apache.log4j.Category;
  * @author fumi
  */
 public class ViewLoger {
-	private static Category category = Category.getInstance(ViewLoger.class.getName());
+	private static Logger category = Logger.getLogger(ViewLoger.class.getName());
 	private static NumberFormat nf = NumberFormat.getInstance();
 
 	/**
@@ -18,37 +18,41 @@ public class ViewLoger {
 	 * メモリ情報はプリントされる。
 	 * @param drwgNo
 	 * @param message
-	 */	
-	public static void error(String drwgNo, String message){
+	 */
+	public static void error(String drwgNo, String message) {
 		error(drwgNo, message, true);
 	}
+
 	/**
 	 * エラーLevelでログする。
 	 * @param drwgNo
 	 * @param message
 	 * @param printMemoryCondition メモリ情報をプリントするなら true
 	 */
-	public static void error(String drwgNo, String message, boolean printMemoryCondition){
+	public static void error(String drwgNo, String message, boolean printMemoryCondition) {
 		category.error(createMessage(drwgNo, message, printMemoryCondition));
 	}
+
 	/**
 	 * インフォメーションLevelでログする。
 	 * メモリ情報はプリントされる。
 	 * @param drwgNo
 	 * @param message
-	 */	
-	public static void info(String drwgNo, String message){
+	 */
+	public static void info(String drwgNo, String message) {
 		info(drwgNo, message, true);
 	}
+
 	/**
 	 * インフォメーションLevelでログする。
 	 * @param drwgNo
 	 * @param message
 	 * @param printMemoryCondition メモリ情報をプリントするなら true
 	 */
-	public static void info(String drwgNo, String message, boolean printMemoryCondition){
+	public static void info(String drwgNo, String message, boolean printMemoryCondition) {
 		category.info(createMessage(drwgNo, message, printMemoryCondition));
 	}
+
 	/**
 	 * 与えられた情報を元に、メッセージを作成する。
 	 * @param drwgNo
@@ -56,15 +60,15 @@ public class ViewLoger {
 	 * @param printMemoryCondition メモリ情報をプリントするなら true
 	 * @return
 	 */
-	private static String createMessage(String drwgNo, String message, boolean printMemoryCondition){
-		StringBuffer sb = new StringBuffer();
+	private static String createMessage(String drwgNo, String message, boolean printMemoryCondition) {
+		StringBuilder sb = new StringBuilder();
 		// Java 仮想マシン内の空きメモリの量をkb単位で
-		if(printMemoryCondition){
+		if (printMemoryCondition) {
 			sb.append(" Free=");
-			sb.append(nf.format(Runtime.getRuntime().freeMemory()/1024));
+			sb.append(nf.format(Runtime.getRuntime().freeMemory() / 1024));
 			sb.append("kb; ");
 			sb.append("Total=");
-			sb.append(nf.format(Runtime.getRuntime().totalMemory()/1024));
+			sb.append(nf.format(Runtime.getRuntime().totalMemory() / 1024));
 			sb.append("kb; ");
 			// 1.3.1では未対応
 			//sb.append("Max=");
@@ -75,7 +79,7 @@ public class ViewLoger {
 		sb.append(drwgNo);
 		sb.append("; ");
 		sb.append(message);
-		
+
 		return sb.toString();
 	}
 

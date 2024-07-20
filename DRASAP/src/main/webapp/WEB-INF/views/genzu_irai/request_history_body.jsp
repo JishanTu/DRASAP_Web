@@ -1,12 +1,15 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="tyk.drasap.genzu_irai.*" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
+<c:if test="${empty sessionScope.user}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
 
 <html>
 <head>
@@ -14,17 +17,18 @@
 	<title>図面登録依頼履歴</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 </head>
 <body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
 <font color="red" size="4" ><ul>
-	<logic:iterate id="error" name="requestHistoryForm" property="errors" scope="session">
-		<li><bean:write name="error"/></li>
-	</logic:iterate>
-	<%	// 検索結果がなければ表示する
-		if(((RequestHistoryForm)session.getAttribute("requestHistoryForm")).getHistoryList().size() == 0){ %>
-		<li>0件です。</li>
-	<% } %>
+	<c:forEach var="err"
+			items="${requestHistoryForm.errors}">
+			<li><c:out value="${err}" /></li>
+		</c:forEach>
+
+	<c:if test="${empty requestScope.requestHistoryForm.historyList}">
+    <li>0件です。</li>
+</c:if>
 </ul></font>
 <table border="0" align="center">
 	<tr bgcolor="#CCCCCC">
@@ -44,25 +48,35 @@
 		<td align="center"><span class="normal10">依頼者</span></td>
 		<td align="center"><span class="normal10">部署名</span></td>
 	</tr>
-	<logic:iterate id="history" name="requestHistoryForm" property="historyList" scope="session">
-		<tr>
-			<td nowrap="nowrap"><span class="normal10"><bean:write name="history" property="completeDate" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="completeUser" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="requestDate" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="jobName" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="drwgNo" /></span></td>
-<%-- // 2019.10.23 yamamoto modified. start
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="goukiNo" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="genzuContent" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="copies" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="scaleMode" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="scaleSize" /></span></td>
-// 2019.10.23 yamamoto modified. end --%>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="message" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="requestUser" /></span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10"><bean:write name="history" property="deptName" /></span></td>
-		</tr>
-	</logic:iterate>
+	<c:forEach var="history" items="${requestHistoryForm.historyList}">
+    <tr>
+        <td nowrap="nowrap">
+            <span class="normal10"><c:out value="${history.completeDate}" /></span>
+        </td>
+        <td nowrap="nowrap" align="center">
+            <span class="normal10"><c:out value="${history.completeUser}" /></span>
+        </td>
+        <td nowrap="nowrap" align="center">
+            <span class="normal10"><c:out value="${history.requestDate}" /></span>
+        </td>
+        <td nowrap="nowrap" align="center">
+            <span class="normal10"><c:out value="${history.jobName}" /></span>
+        </td>
+        <td nowrap="nowrap" align="center">
+            <span class="normal10"><c:out value="${history.drwgNo}" /></span>
+        </td>
+        <!-- 其他属性的输出 -->
+        <td nowrap="nowrap" align="center">
+            <span class="normal10"><c:out value="${history.message}" /></span>
+        </td>
+        <td nowrap="nowrap" align="center">
+            <span class="normal10"><c:out value="${history.requestUser}" /></span>
+        </td>
+        <td nowrap="nowrap" align="center">
+            <span class="normal10"><c:out value="${history.deptName}" /></span>
+        </td>
+    </tr>
+</c:forEach>
 </table>
 </body>
 </html>

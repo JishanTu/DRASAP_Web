@@ -23,29 +23,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 
-import org.apache.log4j.Category;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.pdflib.PDFlibException;
 import com.pdflib.pdflib;
 
 import tyk.drasap.acslog.AccessLoger;
 import tyk.drasap.common.AclvMasterDB;
-import tyk.drasap.common.DataSourceFactory;
 import tyk.drasap.common.DrasapInfo;
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.DrasapUtil;
@@ -53,6 +47,9 @@ import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.User;
 import tyk.drasap.common.UserException;
 import tyk.drasap.errlog.ErrorLoger;
+import tyk.drasap.springfw.action.BaseAction;
+import tyk.drasap.springfw.form.BaseForm;
+import tyk.drasap.springfw.utils.MessageSourceUtil;
 import tyk.drasap.viewlog.ViewLoger;
 
 /**
@@ -73,77 +70,72 @@ import tyk.drasap.viewlog.ViewLoger;
  *
  * @version 2013/06/14 yamagishi
  */
-@SuppressWarnings("deprecation")
-public class PreviewAction extends Action {
-	private static Category category = Category.getInstance(PreviewAction.class.getName());
-    protected String lock = "";
+@Controller
+public class PreviewAction extends BaseAction {
+	// --------------------------------------------------------- Instance Variables
+	protected String lock = "";
 
-    /** 図面検索画面のact属性 MULTI_PDF */
-    private String ACT_MULTI_PDF = "MULTI_PDF";
+	/** 図面検索画面のact属性 MULTI_PDF */
+	private String ACT_MULTI_PDF = "MULTI_PDF";
 
-    /** 図面検索画面のact属性 PDF_ZIP */
-    private String ACT_PDF_ZIP = "PDF_ZIP";
+	/** 図面検索画面のact属性 PDF_ZIP */
+	private String ACT_PDF_ZIP = "PDF_ZIP";
 
-// 2013.07.16 yamagishi add. start
-	private static DataSource ds;
-	static{
-		try{
-			ds = DataSourceFactory.getOracleDataSource();
-		} catch(Exception e){
-			category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-		}
-	}
-// 2013.07.16 yamagishi add. end
 	// --------------------------------------------------------- Methods
 
 	/**
 	 * Method execute
-	 * @param ActionMapping mapping
-	 * @param ActionForm form
-	 * @param HttpServletRequest request
-	 * @param HttpServletResponse response
-	 * @return ActionForward
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @param errors
+	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-		HttpServletRequest request,HttpServletResponse response) throws Exception {
+	@PostMapping("/preview")
+	public String execute(
+			BaseForm form,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model errors)
+			throws Exception {
 		category.debug("start");
 		// 準備段階
-		ActionMessages errors = new ActionMessages();
+		//ActionMessages errors = new ActionMessages();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
-		ServletContext context = getServlet().getServletContext();
-		String tempDirName = context.getRealPath("temp");// テンポラリのフォルダのフルパス
+		// テンポラリのフォルダのフルパス
+		String tempDirName = DrasapUtil.getRealTempPath(request);
 		// 2019.10.17 yamamoto add start.
 		SearchResultForm searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-//		session.removeAttribute("searchResultForm");// sessionから削除
+		//		session.removeAttribute("searchResultForm");// sessionから削除
 		// 2019.10.17 yamamoto add end.
 
 		// DLマネージャからのリクエスト情報		// 2013.08.02 yamagishi add. start
 		DLManagerInfo dlmInfo = null;
 		if ("1".equals(request.getParameter("DLM_REQ"))) {
-			dlmInfo = new DLManagerInfo(request.getParameter("act"), getResources(request));
-		}	// end
+			dlmInfo = new DLManagerInfo(request.getParameter("act"), messageSource);
+		} // end
 
 		// sessionタイムアウトの確認
-		if(user == null){
-			if (dlmInfo != null) {	// 2013.08.01 yamagishi add. start
+		if (user == null) {
+			if (dlmInfo != null) { // 2013.08.01 yamagishi add. start
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "無効なログインです。もう一度ログインを行ってください。");
 				return null;
-			}	// end
-			return mapping.findForward("timeout");
+			} // end
+			return "timeout";
 		}
-		if (dlmInfo != null && dlmInfo.isActError()) {	// 2013.08.02 yamagishi add. start
+		if (dlmInfo != null && dlmInfo.isActError()) { // 2013.08.02 yamagishi add. start
 			// DLマネージャでエラーが発生している場合
 			doErrorLog(user, dlmInfo);
 			return null;
-		}	// end
+		} // end
 
 		// MultiTIFF出力
 		if (searchResultForm != null) {
-			if ((ACT_MULTI_PDF.equals(searchResultForm.getAct()))
-				|| (ACT_PDF_ZIP.equals(searchResultForm.getAct()))) {
+			if (ACT_MULTI_PDF.equals(searchResultForm.getAct())
+					|| ACT_PDF_ZIP.equals(searchResultForm.getAct())) {
 
 				// act属性を保持
 				String act = searchResultForm.getAct();
@@ -152,13 +144,14 @@ public class PreviewAction extends Action {
 				session.setAttribute("searchResultForm", searchResultForm);
 
 				// MultiTIFF作成後にPDF変換を行う
-				doMultiPDF(searchResultForm, drasapInfo, user, response, errors, act );
+				doMultiPDF(searchResultForm, drasapInfo, user, response, errors, request, act);
 
-				if(!errors.isEmpty()){
+				if (!Objects.isNull(errors.getAttribute("message"))) {
 					// エラーが発生
-					saveErrors(request, errors);
+					//saveErrors(request, errors);
+					request.setAttribute("errors", errors);
 					category.error("==> doMultiPDF error");
-					return mapping.findForward("error");
+					return "error";
 				}
 
 				return null;
@@ -169,7 +162,7 @@ public class PreviewAction extends Action {
 		String drwgNo = request.getParameter("DRWG_NO");// 図番
 		String fileName = request.getParameter("FILE_NAME");// ファイル名
 		String pathName = request.getParameter("PATH_NAME");// ディレクトリのフルパス
-		pathName = drasapInfo.getViewDBDrive() + File.separator +  pathName;
+		pathName = drasapInfo.getViewDBDrive() + pathName.replace("/", "\\");
 		String drwgSize = request.getParameter("DRWG_SIZE");// 図番サイズ
 		String pdfFlug = request.getParameter("PDF");// PDFに変換する?
 
@@ -181,43 +174,45 @@ public class PreviewAction extends Action {
 		final String ORIGIN_FILE_NAME = pathName + File.separator + fileName;// 元の原図ファイル・・・絶対消すな
 
 		// 閲覧フォーマットフラグチェック
-		if (pdfFlug == null || pdfFlug.length() == 0 || pdfFlug.equals("null")) {
+		if (pdfFlug == null || pdfFlug.length() == 0 || "null".equals(pdfFlug)) {
 			// 閲覧フォーマットフラグ設定エラー
-// 2013.08.02 yamagishi add. start
+			// 2013.08.02 yamagishi add. start
 			if (dlmInfo != null) {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST,
 						dlmInfo.getMessage("search.failed.view.invalid.setting." + user.getLanKey(), ORIGIN_FILE_NAME));
 				category.error("==> error");
 				return null;
 			}
-// 2013.08.02 yamagishi add. end
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.invalid.setting." + user.getLanKey(),ORIGIN_FILE_NAME));
-			saveErrors(request, errors);
+			// 2013.08.02 yamagishi add. end
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.invalid.setting." + user.getLanKey(), new Object[] { ORIGIN_FILE_NAME }, null));
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
 			category.error("==> error");
-			return mapping.findForward("error");
+			return "error";
 		}
-		String convertPdf = pdfFlug.toLowerCase();	// "tiff", "printablePdf", "noprintPdf"
+		String convertPdf = pdfFlug.toLowerCase(); // "tiff", "printablePdf", "noprintPdf"
 
 		// 念のため元の原図があるか確認する '04.Mar.2 Hirata
-		if(! (new File(ORIGIN_FILE_NAME)).exists()){
+		if (!new File(ORIGIN_FILE_NAME).exists()) {
 			// 元の原図が存在しない
-// 2013.08.02 yamagishi add. start
+			// 2013.08.02 yamagishi add. start
 			if (dlmInfo != null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND,
 						dlmInfo.getMessage("search.failed.view.nofile." + user.getLanKey(), ORIGIN_FILE_NAME));
 				category.error("==> error");
 				return null;
 			}
-// 2013.08.02 yamagishi add. end
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.nofile." + user.getLanKey(),ORIGIN_FILE_NAME));
-			saveErrors(request, errors);
+			// 2013.08.02 yamagishi add. end
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.nofile." + user.getLanKey(), new Object[] { ORIGIN_FILE_NAME }, null));
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
 			category.error("==> error");
-			return mapping.findForward("error");
+			return "error";
 		}
 
 		String outFileName = ORIGIN_FILE_NAME;// ストリームに流す対象のファイル名
 
-// 2013.07.01 yamagishi add. start
+		// 2013.07.01 yamagishi add. start
 		// バナー処理追加
 		Connection conn = null;
 		conn = ds.getConnection();
@@ -226,13 +221,13 @@ public class PreviewAction extends Action {
 		if (AclvMasterDB.isCorresponding(drwgNo, conn)) {
 			// 一時的なファイル名を変更する。
 			String newOutFileName = tempDirName + File.separator + user.getId()
-					+ "_" + drwgNo + "_" + (new Date().getTime()) + ".tif";
+					+ "_" + drwgNo + "_" + new Date().getTime() + ".tif";
 
 			doCorrespondingBanner(outFileName, newOutFileName,
 					drasapInfo.getCorrespondingStampStr(),
 					drasapInfo.getCorrespondingStampW(), drasapInfo.getCorrespondingStampL(),
 					drasapInfo.getViewStampDeep(),
-					(drasapInfo.isDispDrwgNoWithView() ? drwgNo : null), // 図番を印字しない場合、nullを渡す
+					drasapInfo.isDispDrwgNoWithView() ? drwgNo : null, // 図番を印字しない場合、nullを渡す
 					user, errors, dlmInfo);
 
 			// 変換前のファイルがオリジナルでなければ、削除する
@@ -241,23 +236,23 @@ public class PreviewAction extends Action {
 					category.debug(outFileName + " を削除した");
 				}
 			}
-			if (!errors.isEmpty()) {
+			if (!Objects.isNull(errors.getAttribute("message"))) {
 				// バナー処理でエラーが発生していたら
-// 2013.08.02 yamagishi add. start
+				// 2013.08.02 yamagishi add. start
 				if (dlmInfo != null) {
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, dlmInfo.getLabelMessage());
 					category.error("==> error");
 					return null;
 				}
-// 2013.08.02 yamagishi add. end
-				saveErrors(request, errors);
+				// 2013.08.02 yamagishi add. end
+				//saveErrors(request, errors);
+				request.setAttribute("errors", errors);
 				category.error("==> error");
-				return mapping.findForward("error");
-			} else {
-				outFileName = newOutFileName;// バナー処理後のファイル名に変更する
+				return "error";
 			}
+			outFileName = newOutFileName;// バナー処理後のファイル名に変更する
 		}
-// 2013.07.01 yamagishi add. end
+		// 2013.07.01 yamagishi add. end
 
 		// 処理手順を変更 '04.Apr.8 by MUR/Hirata
 		// 新) スタンプ合成 --> 間引き処理
@@ -265,126 +260,127 @@ public class PreviewAction extends Action {
 		// 理由・・・スタンプ合成すると 100dpiが400dpiになってしまうため
 
 		// バナーを押す
-		if(user.isViewStamp()){// ビューでバナーするなら
+		if (user.isViewStamp()) {// ビューでバナーするなら
 			//String newOutFileName = tempDirName + File.separator + session.getId() + "_" + (new Date().getTime());
 			// WebLogicだとやたらにセッションIDが長いため、一時的なファイル名を変更する。
 			String newOutFileName = tempDirName + File.separator + user.getId() + "_"
-										+ drwgNo + "_" + (new Date().getTime()) + ".tif";
+					+ drwgNo + "_" + new Date().getTime() + ".tif";
 
 			doBanner(outFileName, newOutFileName,
 					drasapInfo.getViewStampW(), drasapInfo.getViewStampL(), drasapInfo.getViewStampDeep(),
 					drasapInfo.getViewStampDateFormat(),
 					// 図番を印字しない場合、nullを渡す
-					(drasapInfo.isDispDrwgNoWithView() ? drwgNo : null),
-//					user, errors);	// 2013.08.02 yamagishi modified.
+					drasapInfo.isDispDrwgNoWithView() ? drwgNo : null,
+					//					user, errors);	// 2013.08.02 yamagishi modified.
 					user, errors, dlmInfo);
 			// 変換前のファイルがオリジナルでなければ、削除する
-			if(! ORIGIN_FILE_NAME.equals(outFileName)){
-				if(new File(outFileName).delete()){
+			if (!ORIGIN_FILE_NAME.equals(outFileName)) {
+				if (new File(outFileName).delete()) {
 					category.debug(outFileName + " を削除した");
 				}
 			}
-			if(!errors.isEmpty()){
+			if (!Objects.isNull(errors.getAttribute("message"))) {
 				// バナー処理でエラーが発生していたら
-// 2013.08.02 yamagishi add. start
+				// 2013.08.02 yamagishi add. start
 				if (dlmInfo != null) {
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, dlmInfo.getLabelMessage());
 					category.error("==> error");
 					return null;
 				}
-// 2013.08.02 yamagishi add. end
-				saveErrors(request, errors);
+				// 2013.08.02 yamagishi add. end
+				//saveErrors(request, errors);
+				request.setAttribute("errors", errors);
 				category.error("==> error");
-				return mapping.findForward("error");
-			} else{
-				outFileName = newOutFileName;// バナー処理後のファイル名に変更する
+				return "error";
 			}
+			outFileName = newOutFileName;// バナー処理後のファイル名に変更する
 
 		}
 
 		// 間引きが必要か判定する
 		// 間引きサイズの未設定にも対応する。'04.Jul.19変更 by Hirata。
 		String mabikiDpi = null;// 間引きのdpi
-		if(drasapInfo.getMabiki100dpiSize() != null &&
-				DrasapUtil.compareDrwgSize(drwgSize, drasapInfo.getMabiki100dpiSize()) >= 0){
+		if (drasapInfo.getMabiki100dpiSize() != null &&
+				DrasapUtil.compareDrwgSize(drwgSize, drasapInfo.getMabiki100dpiSize()) >= 0) {
 			// 図面サイズ >= 100dpiのサイズ、なら
 			mabikiDpi = "100";
-		} else if(drasapInfo.getMabiki200dpiSize() != null &&
-				DrasapUtil.compareDrwgSize(drwgSize, drasapInfo.getMabiki200dpiSize()) >= 0){
+		} else if (drasapInfo.getMabiki200dpiSize() != null &&
+				DrasapUtil.compareDrwgSize(drwgSize, drasapInfo.getMabiki200dpiSize()) >= 0) {
 			// 図面サイズ >= 200dpiのサイズ、なら
 			mabikiDpi = "200";
 		}
-		if(mabikiDpi != null){
+		if (mabikiDpi != null) {
 			// 間引き対象なら、取得した「間引きのdpi」で間引き
 			// 間引きしたファイル名
 			// String newOutFileName = tempDirName + File.separator + session.getId() + "_" + (new Date().getTime());
 			// WebLogicだとやたらにセッションIDが長いため、一時的なファイル名を変更する。
 			String newOutFileName = tempDirName + File.separator + user.getId() + "_"
-										+ drwgNo + "_" + (new Date().getTime()) + ".tif";
+					+ drwgNo + "_" + new Date().getTime() + ".tif";
 
-//			doMabiki(outFileName, newOutFileName, mabikiDpi, user, errors, drwgNo);	// 2013.08.02 yamagishi modified.
+			//			doMabiki(outFileName, newOutFileName, mabikiDpi, user, errors, drwgNo);	// 2013.08.02 yamagishi modified.
 			doMabiki(outFileName, newOutFileName, mabikiDpi, user, errors, drwgNo, dlmInfo);
 			// 変換前のファイルがオリジナルでなければ、削除する
-			if(! ORIGIN_FILE_NAME.equals(outFileName)){
-				if(new File(outFileName).delete()){
+			if (!ORIGIN_FILE_NAME.equals(outFileName)) {
+				if (new File(outFileName).delete()) {
 					category.debug(outFileName + " を削除した");
 				}
 			}
-			if(!errors.isEmpty()){
+			if (!Objects.isNull(errors.getAttribute("message"))) {
 				// 間引き処理でエラーが発生していたら
-// 2013.08.02 yamagishi add. start
+				// 2013.08.02 yamagishi add. start
 				if (dlmInfo != null) {
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, dlmInfo.getLabelMessage());
 					category.error("==> error");
 					return null;
 				}
-// 2013.08.02 yamagishi add. end
-				saveErrors(request, errors);
+				// 2013.08.02 yamagishi add. end
+				//saveErrors(request, errors);
+				request.setAttribute("errors", errors);
 				category.error("==> error");
-				return mapping.findForward("error");
+				return "error";
 			}
 			outFileName = newOutFileName;// 間引きしたファイル名に変更する
 		}
 
 		// PDFに変換する
-		if(convertPdf.equalsIgnoreCase("printablePdf") || convertPdf.equalsIgnoreCase("noprintPdf")){
+		if ("printablePdf".equalsIgnoreCase(convertPdf) || "noprintPdf".equalsIgnoreCase(convertPdf)) {
 			// PDF変換後のファイル名
 			// String newOutFileName = tempDirName + File.separator + session.getId() + "_" + (new Date().getTime());
 			// WebLogicだとやたらにセッションIDが長いため、一時的なファイル名を変更する。
 			String newOutFileName = tempDirName + File.separator + user.getId() + "_"
-										+ drwgNo + "_" + (new Date().getTime()) + ".pdf";
-//			tifToPdf(outFileName, newOutFileName, user, errors, drwgNo, convertPdf.equalsIgnoreCase("printablePdf")?true:false);	// 2013.08.02 yamagishi modified.
-			tifToPdf(outFileName, newOutFileName, user, errors, drwgNo, convertPdf.equalsIgnoreCase("printablePdf") ? true : false, dlmInfo, 1, false);
+					+ drwgNo + "_" + new Date().getTime() + ".pdf";
+			//			tifToPdf(outFileName, newOutFileName, user, errors, drwgNo, convertPdf.equalsIgnoreCase("printablePdf")?true:false);	// 2013.08.02 yamagishi modified.
+			tifToPdf(outFileName, newOutFileName, user, errors, drwgNo, "printablePdf".equalsIgnoreCase(convertPdf) == true, dlmInfo, 1, false);
 			// 変換前のファイルがオリジナルでなければ、削除する
-			if(! ORIGIN_FILE_NAME.equals(outFileName)){
-				if(new File(outFileName).delete()){
+			if (!ORIGIN_FILE_NAME.equals(outFileName)) {
+				if (new File(outFileName).delete()) {
 					category.debug(outFileName + " を削除した");
 				}
 			}
-			if(!errors.isEmpty()){
+			if (!Objects.isNull(errors.getAttribute("message"))) {
 				// PDF処理でエラーが発生していたら
-// 2013.08.02 yamagishi modified. start
+				// 2013.08.02 yamagishi modified. start
 				if (dlmInfo != null) {
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, dlmInfo.getLabelMessage());
 					category.error("==> error");
 					return null;
 				}
-// 2013.08.02 yamagishi modified. end
-				saveErrors(request, errors);
+				// 2013.08.02 yamagishi modified. end
+				//saveErrors(request, errors);
+				request.setAttribute("errors", errors);
 				category.error("==> error");
-				return mapping.findForward("error");
-			} else{
-				outFileName = newOutFileName;// PDF変換したしたファイル名に変更する
+				return "error";
 			}
+			outFileName = newOutFileName;// PDF変換したしたファイル名に変更する
 		}
 
 		// ストリームに流す
 		File f = new File(outFileName);
 		String streamFileName = fileName;// ヘッダにセットするファイル名
-		if(convertPdf.equalsIgnoreCase("printablePdf") || convertPdf.equalsIgnoreCase("noprintPdf")){
+		if ("printablePdf".equalsIgnoreCase(convertPdf) || "noprintPdf".equalsIgnoreCase(convertPdf)) {
 			// PDF変換した場合
 			int lastIndex = streamFileName.lastIndexOf('.');
-			if(lastIndex == -1){
+			if (lastIndex == -1) {
 				// ファイル名に'.'がない場合・・・後ろに'.pdf'を
 				streamFileName += ".pdf";
 			} else {
@@ -397,35 +393,38 @@ public class PreviewAction extends Action {
 		// その場合でも、オリジナルのファイル以外を削除したいので、try,catchする
 		BufferedOutputStream out = null;
 		BufferedInputStream in = null;
-		try{
+		try {
 			response.setContentType("application/octet-stream");
-			response.setHeader("Content-Disposition","attachment;" +
-				" filename=" + new String(streamFileName.getBytes("Windows-31J"),"ISO8859_1"));
+			response.setHeader("Content-Disposition", "attachment;" +
+					" filename=" + new String(streamFileName.getBytes("Windows-31J"), "ISO8859_1"));
 			//このままだと日本語が化ける
 			//response.setHeader("Content-Disposition","attachment; filename=" + fileName);
-			response.setContentLength((int)f.length());
+			response.setContentLength((int) f.length());
 
 			out = new BufferedOutputStream(response.getOutputStream());
 			in = new BufferedInputStream(new FileInputStream(f));
 			int c;
-			while ((c = in.read()) != -1){
+			while ((c = in.read()) != -1) {
 				out.write(c);
 			}
 
 			out.flush();
 
-		} finally{
+		} finally {
 			// CLOSE処理
-			try{ in.close(); } catch(Exception e){}
-			try{
+			try {
+				in.close();
+			} catch (Exception e) {
+			}
+			try {
 				out.close();
 				category.debug("out.close()");
-			}catch(Exception e){
+			} catch (Exception e) {
 			}
 
 			// オリジナルのファイルでなければ、削除する
-			if(! ORIGIN_FILE_NAME.equals(outFileName)){
-				if(f.delete()){
+			if (!ORIGIN_FILE_NAME.equals(outFileName)) {
+				if (f.delete()) {
 					category.debug(outFileName + " を削除した");
 				}
 			}
@@ -433,7 +432,7 @@ public class PreviewAction extends Action {
 		// アクセスログを
 		// '04.Nov.23 図番もロギングするように
 		// 2005-Mar-4変更 他システムからの呼び出しではシステムIDをロギングする。
-//		AccessLoger.loging(user, AccessLoger.FID_DISP_DRWG, drwgNo, sysId);		// 2013.08.02 yamagishi modified.
+		//		AccessLoger.loging(user, AccessLoger.FID_DISP_DRWG, drwgNo, sysId);		// 2013.08.02 yamagishi modified.
 		if (dlmInfo != null && dlmInfo.isActSave()) {
 			AccessLoger.loging(user, AccessLoger.FID_SAVE, drwgNo, sysId);
 		} else {
@@ -452,39 +451,45 @@ public class PreviewAction extends Action {
 	 * @param errors
 	 * @param dlmInfo
 	 */
-	private void doMabiki(String inFile, String outFile, String dpi, User user, ActionMessages errors,
-//							String drwgNo){		// 2013.08.02 yamagishi modified.
-							String drwgNo, DLManagerInfo dlmInfo) {
+	private void doMabiki(String inFile, String outFile, String dpi, User user, Model errors,
+			//							String drwgNo){		// 2013.08.02 yamagishi modified.
+			String drwgNo, DLManagerInfo dlmInfo) {
 		category.debug("間引き処理の開始");
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "間引き処理の開始");
-		if(! (new File(inFile)).exists()){
+		if (!new File(inFile).exists()) {
 			ViewLoger.error(drwgNo, "間引き対象が存在しません。" + inFile);
 		}
 
 		BufferedReader br = null;
 		Process process = null;
-		try{
-// 2013.06.14 yamagishi modified. start
-//			String beaHome = System.getenv("BEA_HOME");
-//			if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
-//			if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-//			String mabikiPath = beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.mabiki.path");
+		try {
+			// 2013.06.14 yamagishi modified. start
+			//			String beaHome = System.getenv("BEA_HOME");
+			//			if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
+			//			if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
+			//			String mabikiPath = beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.mabiki.path");
 			String apServerHome = System.getenv(BEA_HOME);
-			if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-			if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-			if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+			if (apServerHome == null) {
+				apServerHome = System.getenv(CATALINA_HOME);
+			}
+			if (apServerHome == null) {
+				apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+			}
+			if (apServerHome == null) {
+				apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+			}
 
 			String mabikiPath = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.mabiki.path");
-// 2013.06.14 yamagishi modified. end
-			StringBuffer sbCmd = new StringBuffer(mabikiPath);
+			// 2013.06.14 yamagishi modified. end
+			StringBuilder sbCmd = new StringBuilder(mabikiPath);
 			sbCmd.append(' ');
 			sbCmd.append(inFile);// 間引き対象ファイル
 			sbCmd.append(' ');
 			sbCmd.append(outFile);// 間引き後の出力ファイル
 			sbCmd.append(' ');
 			sbCmd.append(dpi);// 解像度
-	        synchronized (lock) {
+			synchronized (lock) {
 				process = Runtime.getRuntime().exec(sbCmd.toString());
 				// プロセスからの標準出力を捨てる
 				br = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -495,13 +500,13 @@ public class PreviewAction extends Action {
 					br.readLine();
 				}
 
-				if(exitCode != 0){
-// 2013.08.02 yamagishi modified. start
-//					// for ユーザー
-//					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.mabiki." + user.getLanKey(),"終了コード="+exitCode));
-//					// for システム管理者
-//					ErrorLoger.error(user, this,
-//								DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.mabiki"));
+				if (exitCode != 0) {
+					// 2013.08.02 yamagishi modified. start
+					//					// for ユーザー
+					//					MessageSourceUtil.addAttribute(errors, "message",messageSource.getMessage("search.failed.view.mabiki." + user.getLanKey(),"終了コード="+exitCode));
+					//					// for システム管理者
+					//					ErrorLoger.error(user, this,
+					//								DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.mabiki"));
 					if (dlmInfo != null) {
 						// for DLマネージャ
 						dlmInfo.setLabelMessage(dlmInfo.getMessage("search.failed.view.mabiki." + user.getLanKey(), "終了コード=" + exitCode));
@@ -510,27 +515,27 @@ public class PreviewAction extends Action {
 								DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.mabiki"));
 					} else {
 						// for ユーザー
-						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.mabiki." + user.getLanKey(),"終了コード="+exitCode));
+						MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.mabiki." + user.getLanKey(), new Object[] { "終了コード=" + exitCode }, null));
 						// for システム管理者
 						ErrorLoger.error(user, this,
 								DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.mabiki"));
 					}
-// 2013.08.02 yamagishi modified. end
+					// 2013.08.02 yamagishi modified. end
 					// ビュー専用のログ
 					String errMsg = "VIEWのための間引き処理に失敗。終了コード=" + exitCode;
 					ViewLoger.error(drwgNo, errMsg);
 					// for MUR
 					category.error(errMsg);
 				}
-	        }
+			}
 
-		} catch(Exception e){
-// 2013.08.02 yamagishi modified. start
-//			// for ユーザー
-//			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.mabiki." + user.getLanKey(),e.getMessage()));
-//			// for システム管理者
-//			ErrorLoger.error(user, this,
-//						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.mabiki"));
+		} catch (Exception e) {
+			// 2013.08.02 yamagishi modified. start
+			//			// for ユーザー
+			//			MessageSourceUtil.addAttribute(errors, "message",messageSource.getMessage("search.failed.view.mabiki." + user.getLanKey(),e.getMessage()));
+			//			// for システム管理者
+			//			ErrorLoger.error(user, this,
+			//						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.mabiki"));
 			if (dlmInfo != null) {
 				// for DLマネージャ
 				dlmInfo.setLabelMessage(dlmInfo.getMessage("search.failed.view.mabiki." + user.getLanKey(), e.getMessage()));
@@ -539,25 +544,33 @@ public class PreviewAction extends Action {
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.mabiki"));
 			} else {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.mabiki." + user.getLanKey(),e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.mabiki." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.mabiki"));
 			}
-// 2013.08.02 yamagishi modified. end
+			// 2013.08.02 yamagishi modified. end
 			// ビュー専用のログ
 			String errMsg = "VIEWのための間引き処理に失敗\n" + ErrorUtility.error2String(e);
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(errMsg);
 		} finally {
-			if (br != null) try { br.close(); } catch (IOException e) {}
-			if (process != null) process.destroy();
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+				}
+			}
+			if (process != null) {
+				process.destroy();
+			}
 		}
 
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "間引き処理の終了");
 	}
+
 	/**
 	 * バナー処理を行なう。例外が発生した場合、errorsにaddする。
 	 * @param inFile バナー対象のファイル(絶対パス)
@@ -572,29 +585,35 @@ public class PreviewAction extends Action {
 	 * @param dlmInfo
 	 */
 	private void doBanner(String inFile, String outFile, String pixW, String pixL, String deep,
-//						String dateFormat, String drwgNo, User user, ActionMessages errors){
-						String dateFormat, String drwgNo, User user, ActionMessages errors, DLManagerInfo dlmInfo){	// 2013.08.02 yamagishi modified.
+			//						String dateFormat, String drwgNo, User user, Model errors){
+			String dateFormat, String drwgNo, User user, Model errors, DLManagerInfo dlmInfo) { // 2013.08.02 yamagishi modified.
 		category.debug("バナー処理の開始");
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "バナー処理の開始");
-		if(! (new File(inFile)).exists()){
+		if (!new File(inFile).exists()) {
 			ViewLoger.error(drwgNo, "バナー処理の対象が存在しません。" + inFile);
 		}
-		try{
-	        synchronized (lock) {
-	        	if (deep == null || deep.length() == 0) deep = "0";
-	        	createTextMergeText (dateFormat, user.getName(), drwgNo, user, errors);
-	        	if (!textMerge (user, errors)) return;
-	        	createStampMergeText (deep, pixW, pixL, user, errors);
-	        	if (!StampMerge (inFile, outFile, user, errors)) return;
-	        }
-		} catch(Exception e){
-// 2013.08.02 yamagishi modified. start
-//			// for ユーザー
-//			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner." + user.getLanKey(),e.getMessage()));
-//			// for システム管理者
-//			ErrorLoger.error(user, this,
-//						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
+		try {
+			synchronized (lock) {
+				if (deep == null || deep.length() == 0) {
+					deep = "0";
+				}
+				createTextMergeText(dateFormat, user.getName(), drwgNo, user, errors);
+				if (!textMerge(user, errors)) {
+					return;
+				}
+				createStampMergeText(deep, pixW, pixL, user, errors);
+				if (!StampMerge(inFile, outFile, user, errors)) {
+					return;
+				}
+			}
+		} catch (Exception e) {
+			// 2013.08.02 yamagishi modified. start
+			//			// for ユーザー
+			//			MessageSourceUtil.addAttribute(errors, "message",messageSource.getMessage("search.failed.view.banner." + user.getLanKey(),e.getMessage()));
+			//			// for システム管理者
+			//			ErrorLoger.error(user, this,
+			//						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			if (dlmInfo != null) {
 				// for DLマネージャ
 				dlmInfo.setLabelMessage(dlmInfo.getMessage("search.failed.view.banner." + user.getLanKey(), e.getMessage()));
@@ -603,12 +622,12 @@ public class PreviewAction extends Action {
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			} else {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner." + user.getLanKey(),e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			}
-// 2013.08.02 yamagishi modified. end
+			// 2013.08.02 yamagishi modified. end
 			// ビュー専用のログ
 			String errMsg = "VIEWのためのバナー処理に失敗\n" + ErrorUtility.error2String(e);
 			ViewLoger.error(drwgNo, errMsg);
@@ -618,23 +637,30 @@ public class PreviewAction extends Action {
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "バナー処理の終了");
 	}
-	private boolean textMerge(User user, ActionMessages errors) throws InterruptedException, IOException {
 
-// 2013.06.14 yamagishi modified. start
-//		String beaHome = System.getenv("BEA_HOME");
-//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
-//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
+	private boolean textMerge(User user, Model errors) throws InterruptedException, IOException {
+
+		// 2013.06.14 yamagishi modified. start
+		//		String beaHome = System.getenv("BEA_HOME");
+		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
+		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-// 2013.06.14 yamagishi modified. end
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+			// 2013.06.14 yamagishi modified. end
+		}
 
 		Process process = null;
 		BufferedReader br = null;
 
 		String textMergePath = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.textMerge.path");
-		StringBuffer sbCmd = new StringBuffer(textMergePath);
+		StringBuilder sbCmd = new StringBuilder(textMergePath);
 		try {
 			process = Runtime.getRuntime().exec(sbCmd.toString());
 			br = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -645,14 +671,14 @@ public class PreviewAction extends Action {
 				//そうしないとプロセスがストールする場合がある。
 				br.readLine();
 			}
-			if(exitCode != 0){
+			if (exitCode != 0) {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner."+user.getLanKey(),sbCmd));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { sbCmd }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 				// ビュー専用のログ
-				String errMsg = "ビューイング用のデータ作成に失敗しました。(テキストマージの失敗 "+sbCmd+")";
+				String errMsg = "ビューイング用のデータ作成に失敗しました。(テキストマージの失敗 " + sbCmd + ")";
 				ViewLoger.error("", errMsg);
 				// for MUR
 				category.error(errMsg);
@@ -661,52 +687,63 @@ public class PreviewAction extends Action {
 			}
 		} catch (InterruptedException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner."+user.getLanKey(),e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			// ビュー専用のログ
-			String errMsg = "ビューイング用のデータ作成に失敗しました。(テキストマージの失敗 "+e.getMessage()+")";
+			String errMsg = "ビューイング用のデータ作成に失敗しました。(テキストマージの失敗 " + e.getMessage() + ")";
 			ViewLoger.error("", errMsg);
 			// for MUR
 			category.error(errMsg);
 			throw e;
 		} catch (IOException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner."+user.getLanKey(),e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			// ビュー専用のログ
-			String errMsg = "ビューイング用のデータ作成に失敗しました。(テキストマージの失敗 "+e.getMessage()+")";
+			String errMsg = "ビューイング用のデータ作成に失敗しました。(テキストマージの失敗 " + e.getMessage() + ")";
 			ViewLoger.error("", errMsg);
 			// for MUR
 			category.error(errMsg);
 			throw e;
 		} finally {
-			if (br != null) br.close();
-			if (process != null) process.destroy();
+			if (br != null) {
+				br.close();
+			}
+			if (process != null) {
+				process.destroy();
+			}
 		}
 
 		return true;
 
 	}
-	private boolean StampMerge(String inFile, String outFile, User user, ActionMessages errors) throws InterruptedException, IOException {
-// 2013.06.14 yamagishi modified. start
-//		String beaHome = System.getenv("BEA_HOME");
-//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
-//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
+
+	private boolean StampMerge(String inFile, String outFile, User user, Model errors) throws InterruptedException, IOException {
+		// 2013.06.14 yamagishi modified. start
+		//		String beaHome = System.getenv("BEA_HOME");
+		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
+		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-// 2013.06.14 yamagishi modified. end
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		}
+		// 2013.06.14 yamagishi modified. end
 		Process process = null;
 		BufferedReader br = null;
 		String errMsg = null;
 
 		String stampMergePath = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.stampMerge.path");
-		StringBuffer sbCmd = new StringBuffer(stampMergePath);
+		StringBuilder sbCmd = new StringBuilder(stampMergePath);
 		sbCmd.append(' ');
 		sbCmd.append(inFile);// バナー枠ＴＩＦＦファイル
 		sbCmd.append(' ');
@@ -722,14 +759,14 @@ public class PreviewAction extends Action {
 				//そうしないとプロセスがストールする場合がある。
 				br.readLine();
 			}
-			if(exitCode != 0){
+			if (exitCode != 0) {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner."+user.getLanKey(),sbCmd));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { sbCmd }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 				// ビュー専用のログ
-				errMsg = "ビューイング用のデータ作成に失敗しました。(スタンプマージの失敗 "+sbCmd+")";
+				errMsg = "ビューイング用のデータ作成に失敗しました。(スタンプマージの失敗 " + sbCmd + ")";
 				ViewLoger.error("", errMsg);
 				// for MUR
 				category.error(errMsg);
@@ -738,24 +775,29 @@ public class PreviewAction extends Action {
 			}
 		} catch (IOException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner."+user.getLanKey(),e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			// ビュー専用のログ
-			errMsg = "ビューイング用のデータ作成に失敗しました。(スタンプマージの失敗 "+e.getMessage()+")";
+			errMsg = "ビューイング用のデータ作成に失敗しました。(スタンプマージの失敗 " + e.getMessage() + ")";
 			ViewLoger.error("", errMsg);
 			// for MUR
 			category.error(errMsg);
 			throw e;
 		} finally {
-			if (br != null) br.close();
-			if (process != null) process.destroy();
+			if (br != null) {
+				br.close();
+			}
+			if (process != null) {
+				process.destroy();
+			}
 		}
 
 		return true;
 
 	}
+
 	/**
 	 * PDF変換処理を行う。例外が発生した場合、errorsにaddする。
 	 * @param inFile PDF変換対象のファイル(絶対パス)
@@ -766,10 +808,11 @@ public class PreviewAction extends Action {
 	 * @param dlmInfo
 	 * @param totalPage Tiffの合計ページ数
 	 */
-	private void tifToPdf(String inFile, String outFile, User user, ActionMessages errors,
-//							String drwgNo, boolean printable){	// 2013.08.02 yamagishi modified.
-							String drwgNo, boolean printable, DLManagerInfo dlmInfo, int totalPage,
-							boolean multiPDF){
+	@SuppressWarnings("deprecation")
+	private void tifToPdf(String inFile, String outFile, User user, Model errors,
+			//							String drwgNo, boolean printable){	// 2013.08.02 yamagishi modified.
+			String drwgNo, boolean printable, DLManagerInfo dlmInfo, int totalPage,
+			boolean multiPDF) {
 		// Win版の場合、pdf_java.dllをパスが通ったところに置くこと。
 		// パスが通っていない場合、
 		// Cannot load the PDFlib shared library/DLL for Java.
@@ -781,7 +824,7 @@ public class PreviewAction extends Action {
 		category.debug("PDF変換処理の開始");
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "PDF変換処理の開始");
-		if(! (new File(inFile)).exists()){
+		if (!new File(inFile).exists()) {
 			ViewLoger.error(drwgNo, "PDF変換処理の対象が存在しません。" + inFile);
 		}
 
@@ -791,7 +834,7 @@ public class PreviewAction extends Action {
 
 		//String searchpath = ".";
 
-		try{
+		try {
 
 			p = new pdflib();
 			/* open new PDF file */
@@ -804,7 +847,7 @@ public class PreviewAction extends Action {
 			if (!printable) {
 				p.set_parameter("permissions", "nomodify noaccessible noassemble noannots noforms nocopy noprint nohiresprint");
 			}
-			p.set_parameter("compatibility","1.4");
+			p.set_parameter("compatibility", "1.4");
 			if (p.open_file(outFile) == -1) {
 				throw new Exception("Error: " + p.get_errmsg());
 			}
@@ -812,7 +855,6 @@ public class PreviewAction extends Action {
 			// このパラメータが何を示すか不明
 			// とりあえず削除しても動作することを確認(2004.Jan.14 F.Hirata/MUR)
 			//p.set_parameter("SearchPath", searchpath);
-
 
 			// この部分は不要 （Modified Oce Japan Corporation 2004/01/09）
 			//  p.set_info("Creator", "image.java");
@@ -831,19 +873,19 @@ public class PreviewAction extends Action {
 				p.begin_page(10, 10);
 				p.fit_image(image, (float) 0.0, (float) 0.0, "adjustpage");
 				p.close_image(image);
-				p.end_page();			/* close page           */
+				p.end_page(); /* close page           */
 			}
 
-			p.close();				/* close PDF document   */
+			p.close(); /* close PDF document   */
 
 		} catch (PDFlibException e) {
-// 2013.08.02 yamagishi modified. start
-//			// for ユーザー
-//			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.pdf." + user.getLanKey(),
-//					"[" + e.get_errnum() + "] " + e.get_apiname() +	": " + e.getMessage()));
-//			// for システム管理者
-//			ErrorLoger.error(user, this,
-//						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
+			// 2013.08.02 yamagishi modified. start
+			//			// for ユーザー
+			//			MessageSourceUtil.addAttribute(errors, "message",messageSource.getMessage("search.failed.view.pdf." + user.getLanKey(),
+			//					"[" + e.get_errnum() + "] " + e.get_apiname() +	": " + e.getMessage()));
+			//			// for システム管理者
+			//			ErrorLoger.error(user, this,
+			//						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			if (dlmInfo != null) {
 				// for DLマネージャ
 				dlmInfo.setLabelMessage(dlmInfo.getMessage("search.failed.view.pdf." + user.getLanKey(),
@@ -853,28 +895,28 @@ public class PreviewAction extends Action {
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			} else {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.pdf." + user.getLanKey(),
-						"[" + e.get_errnum() + "] " + e.get_apiname() +	": " + e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.pdf." + user.getLanKey(),
+						new Object[] { "[" + e.get_errnum() + "] " + e.get_apiname() + ": " + e.getMessage() }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			}
-// 2013.08.02 yamagishi modified. end
+			// 2013.08.02 yamagishi modified. end
 			// ビュー専用のログ
 			String errMsg = "VIEWのためのPDF変換処理に失敗\n" +
-						"[" + e.get_errnum() + "] " + e.get_apiname() + "\n" +
-						ErrorUtility.error2String(e);
+					"[" + e.get_errnum() + "] " + e.get_apiname() + "\n" +
+					ErrorUtility.error2String(e);
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(errMsg);
 
 		} catch (Exception e) {
-// 2013.08.02 yamagishi modified. start
-//			// for ユーザー
-//			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.pdf." + user.getLanKey(), e.getMessage()));
-//			// for システム管理者
-//			ErrorLoger.error(user, this,
-//						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
+			// 2013.08.02 yamagishi modified. start
+			//			// for ユーザー
+			//			MessageSourceUtil.addAttribute(errors, "message",messageSource.getMessage("search.failed.view.pdf." + user.getLanKey(), e.getMessage()));
+			//			// for システム管理者
+			//			ErrorLoger.error(user, this,
+			//						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			if (dlmInfo != null) {
 				// for DLマネージャ
 				dlmInfo.setLabelMessage(dlmInfo.getMessage("search.failed.view.pdf." + user.getLanKey(), e.getMessage()));
@@ -883,12 +925,12 @@ public class PreviewAction extends Action {
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			} else {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.pdf." + user.getLanKey(), e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.pdf." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			}
-// 2013.08.02 yamagishi modified. end
+			// 2013.08.02 yamagishi modified. end
 			// ビュー専用のログ
 			String errMsg = "VIEWのためのPDF変換処理に失敗\n" + ErrorUtility.error2String(e);
 			ViewLoger.error(drwgNo, errMsg);
@@ -897,22 +939,29 @@ public class PreviewAction extends Action {
 
 		} finally {
 			if (p != null) {
-				p.delete();			/* delete the PDFlib object */
+				p.delete(); /* delete the PDFlib object */
 			}
 		}
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "PDF変換処理の終了");
 	}
-	private void createTextMergeText(String dateFormat, String name, String drwgNo, User user, ActionMessages errors) throws FileNotFoundException, IOException, InterruptedException{
-// 2013.06.14 yamagishi modified. start
-//		String beaHome = System.getenv("BEA_HOME");
-//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
-//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
+
+	private void createTextMergeText(String dateFormat, String name, String drwgNo, User user, Model errors) throws FileNotFoundException, IOException, InterruptedException {
+		// 2013.06.14 yamagishi modified. start
+		//		String beaHome = System.getenv("BEA_HOME");
+		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
+		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-// 2013.06.14 yamagishi modified. end
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		}
+		// 2013.06.14 yamagishi modified. end
 		String template = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.textMergeTemplate");
 		String mergeText = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.textMergeTxt");
 
@@ -925,13 +974,13 @@ public class PreviewAction extends Action {
 		} else {
 			drwgNo = DrasapUtil.formatDrwgNo(drwgNo);
 		}
-		String ymd = (new SimpleDateFormat(dateFormat)).format(new Date());// YYYY/MM/DD形式の本日日付
-//		String bannerStr = title + " " + ymd + " " + name + " " + drwgNo;
+		String ymd = new SimpleDateFormat(dateFormat).format(new Date());// YYYY/MM/DD形式の本日日付
+		//		String bannerStr = title + " " + ymd + " " + name + " " + drwgNo;
 		String bannerStr = ymd + " " + name + " " + drwgNo;
 
 		String sMojiHeight = "3.6";
 		String sMojiWidth = "3.6";
-//		double mojiHeight = 3.6; // 2013.07.02 yamagishi commented out.
+		//		double mojiHeight = 3.6; // 2013.07.02 yamagishi commented out.
 		double mojiWidth = 3.6;
 
 		try {
@@ -941,7 +990,8 @@ public class PreviewAction extends Action {
 				if (lineData.indexOf("BANNER_TITLE=") == 0) {
 					bannerStr = lineData.replace("BANNER_TITLE=", "") + " " + bannerStr;
 					continue;
-				} else if (lineData.indexOf("MOJI_WIDTH=") == 0) {
+				}
+				if (lineData.indexOf("MOJI_WIDTH=") == 0) {
 					sMojiWidth = lineData.replace("MOJI_WIDTH=", "");
 					if (DrasapUtil.isDigit(sMojiWidth)) {
 						mojiWidth = Double.parseDouble(sMojiWidth);
@@ -950,12 +1000,12 @@ public class PreviewAction extends Action {
 				} else if (lineData.indexOf("MOJI_HEIGHT=") == 0) {
 					sMojiHeight = lineData.replace("MOJI_HEIGHT=", "");
 					if (DrasapUtil.isDigit(sMojiHeight)) {
-// 2013.07.02 yamagishi modified. start
-//						mojiHeight = Double.parseDouble(sMojiHeight);
+						// 2013.07.02 yamagishi modified. start
+						//						mojiHeight = Double.parseDouble(sMojiHeight);
 						Double.parseDouble(sMojiHeight);
-// 2013.07.02 yamagishi modified. end
+						// 2013.07.02 yamagishi modified. end
 					}
-				} else if (lineData.equals("%%BANNER.TEXT")) {
+				} else if ("%%BANNER.TEXT".equals(lineData)) {
 					outLine = "TEXT=" + bannerStr;
 				} else {
 					outLine = lineData;
@@ -965,7 +1015,7 @@ public class PreviewAction extends Action {
 			setBannerWidth(bannerStr, mojiWidth, user, errors);
 
 		} catch (FileNotFoundException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.notound",e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.file.notound", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			// ビュー専用のログ
@@ -973,10 +1023,15 @@ public class PreviewAction extends Action {
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(errMsg);
-			try {if (reader != null) reader.close();} catch (IOException e1) {}
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException e1) {
+			}
 			throw e;
 		} catch (IOException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.IOExceltion",e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			// ビュー専用のログ
@@ -984,10 +1039,13 @@ public class PreviewAction extends Action {
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(mergeText);
-			try {reader.close();} catch (IOException e1) {}
+			try {
+				reader.close();
+			} catch (IOException e1) {
+			}
 			throw e;
 		} catch (InterruptedException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.IOExceltion",e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			// ビュー専用のログ
@@ -995,7 +1053,10 @@ public class PreviewAction extends Action {
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(mergeText);
-			try {reader.close();} catch (IOException e1) {}
+			try {
+				reader.close();
+			} catch (IOException e1) {
+			}
 			throw e;
 		} finally {
 			reader.close();
@@ -1003,26 +1064,33 @@ public class PreviewAction extends Action {
 			writer.close();
 		}
 	}
-	private boolean setBannerWidth(String bannerStr, double mojiWidth, User user, ActionMessages errors) throws InterruptedException, IOException {
 
-// 2013.06.14 yamagishi modified. start
-//		String beaHome = System.getenv("BEA_HOME");
-//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
-//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
+	private boolean setBannerWidth(String bannerStr, double mojiWidth, User user, Model errors) throws InterruptedException, IOException {
+
+		// 2013.06.14 yamagishi modified. start
+		//		String beaHome = System.getenv("BEA_HOME");
+		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
+		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-// 2013.06.14 yamagishi modified. end
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+			// 2013.06.14 yamagishi modified. end
+		}
 
 		Process process = null;
 		BufferedReader br = null;
 
 		String setBannerWidth = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.setBannerWidth.path");
 		double dBannerWidth = (bannerStr.getBytes().length + 4) * mojiWidth * 100;
-		long bannerWidth = (long)(dBannerWidth / 2);
+		long bannerWidth = (long) (dBannerWidth / 2);
 		setBannerWidth = setBannerWidth + " " + bannerWidth;
-		StringBuffer sbCmd = new StringBuffer(setBannerWidth);
+		StringBuilder sbCmd = new StringBuilder(setBannerWidth);
 		try {
 			process = Runtime.getRuntime().exec(sbCmd.toString());
 			br = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -1033,14 +1101,14 @@ public class PreviewAction extends Action {
 				//そうしないとプロセスがストールする場合がある。
 				br.readLine();
 			}
-			if(exitCode != 0){
+			if (exitCode != 0) {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner."+user.getLanKey(),sbCmd));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { sbCmd }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 				// ビュー専用のログ
-				String errMsg = "ビューイング用のデータ作成に失敗しました。(setBannerWidthの失敗 "+sbCmd+")";
+				String errMsg = "ビューイング用のデータ作成に失敗しました。(setBannerWidthの失敗 " + sbCmd + ")";
 				ViewLoger.error("", errMsg);
 				// for MUR
 				category.error(errMsg);
@@ -1049,46 +1117,57 @@ public class PreviewAction extends Action {
 			}
 		} catch (InterruptedException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner."+user.getLanKey(),e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			// ビュー専用のログ
-			String errMsg = "ビューイング用のデータ作成に失敗しました。(setBannerWidthの失敗 "+e.getMessage()+")";
+			String errMsg = "ビューイング用のデータ作成に失敗しました。(setBannerWidthの失敗 " + e.getMessage() + ")";
 			ViewLoger.error("", errMsg);
 			// for MUR
 			category.error(errMsg);
 			throw e;
 		} catch (IOException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner."+user.getLanKey(),e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			// ビュー専用のログ
-			String errMsg = "ビューイング用のデータ作成に失敗しました。(setBannerWidthの失敗 "+e.getMessage()+")";
+			String errMsg = "ビューイング用のデータ作成に失敗しました。(setBannerWidthの失敗 " + e.getMessage() + ")";
 			ViewLoger.error("", errMsg);
 			// for MUR
 			category.error(errMsg);
 			throw e;
 		} finally {
-			if (br != null) br.close();
-			if (process != null) process.destroy();
+			if (br != null) {
+				br.close();
+			}
+			if (process != null) {
+				process.destroy();
+			}
 		}
 
 		return true;
 
 	}
-	private void createStampMergeText(String deep, String x, String y, User user, ActionMessages errors) throws IOException{
-// 2013.06.14 yamagishi modified. start
-//		String beaHome = System.getenv("BEA_HOME");
-//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
-//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
+
+	private void createStampMergeText(String deep, String x, String y, User user, Model errors) throws IOException {
+		// 2013.06.14 yamagishi modified. start
+		//		String beaHome = System.getenv("BEA_HOME");
+		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
+		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-// 2013.06.14 yamagishi modified. end
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		}
+		// 2013.06.14 yamagishi modified. end
 		String tmpStamp = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.tempStamp.path");
 		String mergeText = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.stampMergeTxt");
 
@@ -1097,10 +1176,10 @@ public class PreviewAction extends Action {
 		try {
 			writer = new BufferedWriter(new FileWriter(mergeText));
 			outLine = tmpStamp + " -ALPHA" + deep;
-			outLine += " -R90 -NM0 -MOR -MORG2 -MREFRD -XM"+ x +" -YM" + y;
+			outLine += " -R90 -NM0 -MOR -MORG2 -MREFRD -XM" + x + " -YM" + y;
 			writer.write(outLine + System.getProperty("line.separator"));
 		} catch (IOException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.IOExceltion",e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			// ビュー専用のログ
@@ -1115,7 +1194,7 @@ public class PreviewAction extends Action {
 		}
 	}
 
-// 2013.07.12 yamagishi add. start
+	// 2013.07.12 yamagishi add. start
 	/**
 	 * バナー処理（該当図）を行なう。例外が発生した場合、errorsにaddする。
 	 * @param correspondingStampStr 該当図用スタンプ文字
@@ -1130,21 +1209,27 @@ public class PreviewAction extends Action {
 	 * @param dlmInfo
 	 */
 	private void doCorrespondingBanner(String inFile, String outFile, String correspondingStampStr, String pixW, String pixL,
-			String deep, String drwgNo, User user, ActionMessages errors, DLManagerInfo dlmInfo) {
+			String deep, String drwgNo, User user, Model errors, DLManagerInfo dlmInfo) {
 
 		category.debug("バナー処理（該当図）の開始");
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "バナー処理（該当図）の開始");
-		if (!(new File(inFile)).exists()) {
+		if (!new File(inFile).exists()) {
 			ViewLoger.error(drwgNo, "バナー処理（該当図）の対象が存在しません。" + inFile);
 		}
 		try {
 			synchronized (lock) {
-				if (deep == null || deep.length() == 0) deep = "0";
+				if (deep == null || deep.length() == 0) {
+					deep = "0";
+				}
 				createCorrespondingTextMergeText(correspondingStampStr, drwgNo, user, errors);
-				if (!textMerge(user, errors)) return;
+				if (!textMerge(user, errors)) {
+					return;
+				}
 				createCorrespondingStampMergeText(deep, pixW, pixL, user, errors);
-				if (!StampMerge(inFile, outFile, user, errors)) return;
+				if (!StampMerge(inFile, outFile, user, errors)) {
+					return;
+				}
 			}
 		} catch (Exception e) {
 			if (dlmInfo != null) {
@@ -1155,7 +1240,7 @@ public class PreviewAction extends Action {
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
 			} else {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner." + user.getLanKey(), e.getMessage()));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
@@ -1171,12 +1256,18 @@ public class PreviewAction extends Action {
 	}
 
 	private void createCorrespondingTextMergeText(String correspondingStampStr,
-			String drwgNo, User user, ActionMessages errors) throws IOException, InterruptedException {
+			String drwgNo, User user, Model errors) throws IOException, InterruptedException {
 
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		}
 		String template = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.textMergeTemplate");
 		String mergeText = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.textMergeTxt");
 
@@ -1197,7 +1288,8 @@ public class PreviewAction extends Action {
 				if (lineData.indexOf("BANNER_TITLE=") == 0) {
 					lineData.replace("BANNER_TITLE=", "");
 					continue;
-				} else if (lineData.indexOf("MOJI_WIDTH=") == 0) {
+				}
+				if (lineData.indexOf("MOJI_WIDTH=") == 0) {
 					sMojiWidth = lineData.replace("MOJI_WIDTH=", "");
 					if (DrasapUtil.isDigit(sMojiWidth)) {
 						mojiWidth = Double.parseDouble(sMojiWidth);
@@ -1208,7 +1300,7 @@ public class PreviewAction extends Action {
 					if (DrasapUtil.isDigit(sMojiHeight)) {
 						Double.parseDouble(sMojiHeight);
 					}
-				} else if (lineData.equals("%%BANNER.TEXT")) {
+				} else if ("%%BANNER.TEXT".equals(lineData)) {
 					outLine = "TEXT=" + bannerStr;
 				} else {
 					outLine = lineData;
@@ -1218,7 +1310,7 @@ public class PreviewAction extends Action {
 			setCorrespondingBannerWidth(bannerStr, mojiWidth, user, errors);
 
 		} catch (FileNotFoundException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.notound", e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.file.notound", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			// ビュー専用のログ
@@ -1226,10 +1318,15 @@ public class PreviewAction extends Action {
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(errMsg);
-			try { if (reader != null) reader.close(); } catch (IOException e1) {}
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException e1) {
+			}
 			throw e;
 		} catch (IOException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.IOExceltion", e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			// ビュー専用のログ
@@ -1237,10 +1334,13 @@ public class PreviewAction extends Action {
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(mergeText);
-			try { reader.close(); } catch (IOException e1) {}
+			try {
+				reader.close();
+			} catch (IOException e1) {
+			}
 			throw e;
 		} catch (InterruptedException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.IOExceltion", e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			// ビュー専用のログ
@@ -1248,7 +1348,10 @@ public class PreviewAction extends Action {
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(mergeText);
-			try { reader.close(); } catch (IOException e1) {}
+			try {
+				reader.close();
+			} catch (IOException e1) {
+			}
 			throw e;
 		} finally {
 			reader.close();
@@ -1257,13 +1360,19 @@ public class PreviewAction extends Action {
 		}
 	}
 
-	private boolean setCorrespondingBannerWidth(String bannerStr, double mojiWidth, User user, ActionMessages errors)
+	private boolean setCorrespondingBannerWidth(String bannerStr, double mojiWidth, User user, Model errors)
 			throws InterruptedException, IOException {
 
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		}
 
 		Process process = null;
 		BufferedReader br = null;
@@ -1272,7 +1381,7 @@ public class PreviewAction extends Action {
 		double dCorrespondingBannerWidth = (bannerStr.getBytes().length + 3) * mojiWidth * 100;
 		long correspondingBannerWidth = (long) (dCorrespondingBannerWidth / 2);
 		setCorrespondingBannerWidth = setCorrespondingBannerWidth + " " + correspondingBannerWidth;
-		StringBuffer sbCmd = new StringBuffer(setCorrespondingBannerWidth);
+		StringBuilder sbCmd = new StringBuilder(setCorrespondingBannerWidth);
 		try {
 			process = Runtime.getRuntime().exec(sbCmd.toString());
 			br = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -1285,7 +1394,7 @@ public class PreviewAction extends Action {
 			}
 			if (exitCode != 0) {
 				// for ユーザー
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner." + user.getLanKey(), sbCmd));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { sbCmd }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
@@ -1299,7 +1408,7 @@ public class PreviewAction extends Action {
 			}
 		} catch (InterruptedException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner." + user.getLanKey(), e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
@@ -1311,7 +1420,7 @@ public class PreviewAction extends Action {
 			throw e;
 		} catch (IOException e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.banner." + user.getLanKey(), e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.banner." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.stamp"));
@@ -1322,19 +1431,29 @@ public class PreviewAction extends Action {
 			category.error(errMsg);
 			throw e;
 		} finally {
-			if (br != null) br.close();
-			if (process != null) process.destroy();
+			if (br != null) {
+				br.close();
+			}
+			if (process != null) {
+				process.destroy();
+			}
 		}
 		return true;
 	}
-// 2013.07.12 yamagishi add. end
+	// 2013.07.12 yamagishi add. end
 
-// 2013.09.06 yamagishi add. start
-	private void createCorrespondingStampMergeText(String deep, String x, String y, User user, ActionMessages errors) throws IOException{
+	// 2013.09.06 yamagishi add. start
+	private void createCorrespondingStampMergeText(String deep, String x, String y, User user, Model errors) throws IOException {
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+		}
 		String tmpStamp = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.tempStamp.path");
 		String mergeText = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.stampMergeTxt");
 
@@ -1346,7 +1465,7 @@ public class PreviewAction extends Action {
 			outLine += " -R90 -NM0 -MOR -MORG2 -MREFRD -XM" + x + " -YM" + y;
 			writer.write(outLine + System.getProperty("line.separator"));
 		} catch (IOException e) {
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.file.IOExceltion",e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.file.IOExceltion", new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.pdf"));
 			// ビュー専用のログ
@@ -1360,9 +1479,9 @@ public class PreviewAction extends Action {
 			writer.close();
 		}
 	}
-// 2013.09.06 yamagishi add. end
+	// 2013.09.06 yamagishi add. end
 
-// 2013.08.02 yamagishi add. start
+	// 2013.08.02 yamagishi add. start
 	/**
 	 * DLマネージャで発生したエラーログを出力する。
 	 * @param user
@@ -1373,7 +1492,7 @@ public class PreviewAction extends Action {
 		ErrorLoger.error(user, dlmInfo,
 				DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"));
 	}
-// 2013.08.02 yamagishi add. end
+	// 2013.08.02 yamagishi add. end
 
 	/**
 	 * マルチPDF化 または PDFのZIP化を行う
@@ -1391,7 +1510,8 @@ public class PreviewAction extends Action {
 			DrasapInfo drasapInfo,
 			User user,
 			HttpServletResponse response,
-			ActionMessages errors,
+			Model errors,
+			HttpServletRequest request,
 			String action) throws Exception {
 
 		ArrayList<PreviewElement> selectedList = new ArrayList<PreviewElement>();
@@ -1401,13 +1521,12 @@ public class PreviewAction extends Action {
 		String pdfFlug = "";
 
 		// テンポラリのフォルダのフルパス
-		ServletContext context = getServlet().getServletContext();
-		String tempDirName = context.getRealPath("temp");
+		String tempDirName = DrasapUtil.getRealTempPath(request);
 
-//		category.debug("searchResultFormから取得成功");
+		//		category.debug("searchResultFormから取得成功");
 
-		for(int i = 0; i < searchResultForm.getSearchResultList().size(); i++){
-			SearchResultElement resultElem = ((SearchResultElement)searchResultForm.getSearchResultList().get(i));
+		for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
+			SearchResultElement resultElem = searchResultForm.getSearchResultList().get(i);
 			if (resultElem.isSelected()) {
 				// 検索結果のチェックボックスに
 				// チェックが入っていれば、リストに保存
@@ -1421,7 +1540,7 @@ public class PreviewAction extends Action {
 		}
 		// PDF文書セキュリティ無しのため、固定で値を設定する
 		pdfFlug = "printablePdf"; // printablePdf固定
-		convertPdf = pdfFlug.toLowerCase();	// "tiff", "printablePdf", "noprintPdf"
+		convertPdf = pdfFlug.toLowerCase(); // "tiff", "printablePdf", "noprintPdf"
 
 		Connection conn = null;
 		String tmpOutFileName = "";
@@ -1436,21 +1555,20 @@ public class PreviewAction extends Action {
 			 * ・スタンプ合成
 			 * ・PDF変換(PDF単独 Zip出力の場合のみ
 			 */
-			for (int i = 0; i < selectedList.size(); i++)
-			{
+			for (int i = 0; i < selectedList.size(); i++) {
 
 				// 選択図面の情報取得
 				String drwgNo = selectedList.get(i).getdrwgNo();// 図番
 				String fileName = selectedList.get(i).getFileName();// ファイル名
-				String pathName = drasapInfo.getViewDBDrive() + File.separator  +
+				String pathName = drasapInfo.getViewDBDrive() + File.separator +
 						selectedList.get(i).getPathName(); // ディレクトリのフルパス
 
 				final String ORIGIN_FILE_NAME = pathName + File.separator + fileName;// 元の原図ファイル・・・絶対消すな
 
 				// 元の原図があるか確認
-				if(! (new File(ORIGIN_FILE_NAME)).exists()){
+				if (!new File(ORIGIN_FILE_NAME).exists()) {
 					// 元の原図が存在しない
-					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.nofile." + user.getLanKey(),ORIGIN_FILE_NAME));
+					MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.nofile." + user.getLanKey(), new Object[] { ORIGIN_FILE_NAME }, null));
 					return;
 				}
 
@@ -1462,14 +1580,14 @@ public class PreviewAction extends Action {
 
 					// 変換後のファイル名に一時的なファイル名を付ける
 					String newOutFileName = tempDirName + File.separator + user.getId()
-							+ "_" + drwgNo + "_" + (new Date().getTime()) + ".tif";
+							+ "_" + drwgNo + "_" + new Date().getTime() + ".tif";
 
 					// バナー処理（該当図）
 					doCorrespondingBanner(tmpJoinFileName, newOutFileName,
 							drasapInfo.getCorrespondingStampStr(),
 							drasapInfo.getCorrespondingStampW(), drasapInfo.getCorrespondingStampL(),
 							drasapInfo.getViewStampDeep(),
-							(drasapInfo.isDispDrwgNoWithView() ? drwgNo : null), // 図番を印字しない場合、nullを渡す
+							drasapInfo.isDispDrwgNoWithView() ? drwgNo : null, // 図番を印字しない場合、nullを渡す
 							user, errors, null); // DLマネージャーから呼び出されないため、nullを渡す
 
 					// 変換前のファイルがオリジナルでなければ、削除する
@@ -1479,12 +1597,11 @@ public class PreviewAction extends Action {
 						}
 					}
 
-					if (!errors.isEmpty()) {
+					if (!Objects.isNull(errors.getAttribute("message"))) {
 						// エラーが発生
 						throw new UserException();
-					} else {
-						tmpJoinFileName = newOutFileName; // バナー処理後のファイル名に変更する
 					}
+					tmpJoinFileName = newOutFileName; // バナー処理後のファイル名に変更する
 				}
 
 				// スタンプ合成
@@ -1493,14 +1610,14 @@ public class PreviewAction extends Action {
 
 					// 変換後のファイル名に一時的なファイル名を付ける
 					String newOutFileName = tempDirName + File.separator + user.getId() + "_"
-												+ drwgNo + "_" + (new Date().getTime()) + ".tif";
+							+ drwgNo + "_" + new Date().getTime() + ".tif";
 
 					// スタンプを押す
 					doBanner(tmpJoinFileName, newOutFileName,
 							drasapInfo.getViewStampW(), drasapInfo.getViewStampL(), drasapInfo.getViewStampDeep(),
 							drasapInfo.getViewStampDateFormat(),
 							// 図番を印字しない場合、nullを渡す
-							(drasapInfo.isDispDrwgNoWithView() ? drwgNo : null),
+							drasapInfo.isDispDrwgNoWithView() ? drwgNo : null,
 							user, errors, null); // DLマネージャーから呼び出されないため、nullを渡す
 
 					// 変換前のファイルがオリジナルでなければ、削除する
@@ -1510,12 +1627,11 @@ public class PreviewAction extends Action {
 						}
 					}
 
-					if (!errors.isEmpty()) {
+					if (!Objects.isNull(errors.getAttribute("message"))) {
 						// エラーが発生
 						throw new UserException();
-					} else {
-						tmpJoinFileName = newOutFileName;// バナー処理後のファイル名に変更する
 					}
+					tmpJoinFileName = newOutFileName;// バナー処理後のファイル名に変更する
 				}
 
 				// マルチPDFは間引きは不要
@@ -1525,10 +1641,10 @@ public class PreviewAction extends Action {
 
 					// 変換後のファイル名に一時的なファイル名を付ける
 					String newOutFileName = tempDirName + File.separator + user.getId() + "_"
-												+ drwgNo + "_" + (new Date().getTime()) + ".pdf";
+							+ drwgNo + "_" + new Date().getTime() + ".pdf";
 					// PDF 変換
 					tifToPdf(tmpJoinFileName, newOutFileName, user, errors, "",
-							convertPdf.equalsIgnoreCase("printablePdf") ? true : false,
+							"printablePdf".equalsIgnoreCase(convertPdf) == true,
 							null, 1, true);
 
 					// 変換前のファイルがオリジナルでなければ、削除する
@@ -1538,12 +1654,11 @@ public class PreviewAction extends Action {
 						}
 					}
 
-					if(!errors.isEmpty()){
+					if (!Objects.isNull(errors.getAttribute("message"))) {
 						// エラーが発生
 						throw new UserException();
-					} else {
-						tmpJoinFileName = newOutFileName;// PDF変換後のファイル名に変更する
 					}
+					tmpJoinFileName = newOutFileName;// PDF変換後のファイル名に変更する
 				}
 
 				// 未変換(オリジナルファイル)の場合はファイルをコピーする
@@ -1553,7 +1668,7 @@ public class PreviewAction extends Action {
 					File targetFile = new File(tmpJoinFileName);
 					// コピー後のファイル
 					File newOutFile = new File(tempDirName + File.separator + user.getId() + "_"
-							+ drwgNo + "_" + (new Date().getTime()) + ".tif");
+							+ drwgNo + "_" + new Date().getTime() + ".tif");
 
 					// ファイルコピー
 					copyFile(targetFile, newOutFile);
@@ -1568,7 +1683,7 @@ public class PreviewAction extends Action {
 					singlePdfFileMap.put(drwgNo, tmpJoinFileName);
 				}
 
-		        // 2020/02/27 行追加
+				// 2020/02/27 行追加
 				// アクセスログをロギングする
 				AccessLoger.loging(user, AccessLoger.FID_DISP_DRWG, drwgNo, user.getSys_id());
 
@@ -1580,7 +1695,7 @@ public class PreviewAction extends Action {
 			 */
 			if (ACT_MULTI_PDF.equals(action)) {
 				// 一時格納フォルダ名
-				String newOutPathDir = tempDirName + File.separator + user.getId() + "_" + (new Date().getTime());
+				String newOutPathDir = tempDirName + File.separator + user.getId() + "_" + new Date().getTime();
 				// Tiff結合後のファイル名(絶対パス)
 				String multiTiffFileName = newOutPathDir + "_join.tif";
 
@@ -1593,7 +1708,7 @@ public class PreviewAction extends Action {
 					targetFile.delete();
 				}
 
-				if (!errors.isEmpty()) {
+				if (!Objects.isNull(errors.getAttribute("message"))) {
 					// エラーが発生
 					throw new UserException();
 				}
@@ -1605,20 +1720,19 @@ public class PreviewAction extends Action {
 						+ ".pdf";
 				// PDF 変換
 				tifToPdf(multiTiffFileName, newOutFileName, user, errors, "",
-						convertPdf.equalsIgnoreCase("printablePdf") ? true : false,
+						"printablePdf".equalsIgnoreCase(convertPdf) == true,
 						null, joinFileNameList.size(), true);
 
 				// マルチTiffファイル削除
-				if(new File(multiTiffFileName).delete()){
+				if (new File(multiTiffFileName).delete()) {
 					category.debug(multiTiffFileName + " を削除した");
 				}
-				if(!errors.isEmpty()){
+				if (!Objects.isNull(errors.getAttribute("message"))) {
 					// エラーが発生
 					throw new UserException();
-				} else{
-					// PDF変換後のファイル名に変更する
-					tmpOutFileName = newOutFileName;
 				}
+				// PDF変換後のファイル名に変更する
+				tmpOutFileName = newOutFileName;
 			}
 			/*
 			 *  PDF単独 Zip出力の場合
@@ -1641,14 +1755,14 @@ public class PreviewAction extends Action {
 				// PDFファイル削除
 				for (String key : singlePdfFileMap.keySet()) {
 					File file = new File(singlePdfFileMap.get(key));
-					if(DrasapUtil.deleteFile(file)) {
+					if (DrasapUtil.deleteFile(file)) {
 						category.debug(file.toString() + " を削除した");
 					} else {
 						category.error(file.toString() + " を削除失敗");
 					}
 				}
 
-				if (!errors.isEmpty()) {
+				if (!Objects.isNull(errors.getAttribute("message"))) {
 					// エラーが発生
 					throw new UserException();
 				}
@@ -1656,13 +1770,12 @@ public class PreviewAction extends Action {
 				// zip化後のファイル名に変更する
 				tmpOutFileName = zipFile;
 			}
-		}
-		catch (UserException e) {
+		} catch (UserException e) {
 			// 呼び出し先でエラーメッセージを追加しているため、returnのみ
 			return;
 		} finally {
 			try {
-				if(conn != null) {
+				if (conn != null) {
 					conn.close();
 				}
 			} catch (Exception e) {
@@ -1671,7 +1784,7 @@ public class PreviewAction extends Action {
 
 		// 変換したファイルをストリームに流す
 		File outFile = new File(tmpOutFileName);
-		// ヘッダにセットするファイル名
+		// ヘッダにセットするファイル名 (リストで1番最初に選択したファイル名を設定)
 		String streamFileName = outFile.getName();
 
 		// ユーザーがこの処理の最中に、別のリクエストを投げた場合（処理が長いので止めた、指定した図番を間違えた)
@@ -1702,8 +1815,12 @@ public class PreviewAction extends Action {
 		} finally {
 			// CLOSE処理
 			try {
-				if (in != null ) in.close();
-				if(out != null) out.close();
+				if (in != null) {
+					in.close();
+				}
+				if (out != null) {
+					out.close();
+				}
 			} catch (Exception e) {
 			}
 
@@ -1724,24 +1841,30 @@ public class PreviewAction extends Action {
 	 * @param errors
 	 * @return outFileName
 	 */
-	private void doTiffJoint(String drwgNo, String inPath, ArrayList<String> FileList, String outFile, User user, ActionMessages errors) {
+	private void doTiffJoint(String drwgNo, String inPath, ArrayList<String> FileList, String outFile, User user, Model errors) {
 		category.debug("ＴＩＦＦ結合処理の開始");
-//		String outFileName = "";
+		//		String outFileName = "";
 
 		// ビュー専用のログ
 		try {
 
 			String apServerHome = System.getenv(BEA_HOME);
-			if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-			if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-			if (apServerHome == null) apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+			if (apServerHome == null) {
+				apServerHome = System.getenv(CATALINA_HOME);
+			}
+			if (apServerHome == null) {
+				apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+			}
+			if (apServerHome == null) {
+				apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
+			}
 
 			// 一時格納フォルダを作成後、結合対象のTiffをコピー
 			File f_inPath = new File(inPath);
 			boolean success = f_inPath.mkdir();
 			if (!success) {
 				// フォルダ作成失敗
-				throw new UserException("フォルダ作成失敗しました[" + inPath +"]");
+				throw new UserException("フォルダ作成失敗しました[" + inPath + "]");
 			}
 			for (int i = 0; i < FileList.size(); i++) {
 				File targetFile = new File(FileList.get(i));
@@ -1759,7 +1882,7 @@ public class PreviewAction extends Action {
 			category.debug("tiff_join_file:" + outFile);
 
 			Process process;
-			StringBuffer sbCmd = new StringBuffer(
+			StringBuilder sbCmd = new StringBuilder(
 					apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.tiffmulti.path"));
 			sbCmd.append(' ');
 			sbCmd.append(inPath);// TIFF図面格納パス
@@ -1774,7 +1897,7 @@ public class PreviewAction extends Action {
 				// プロセスからの標準出力を捨てる
 				BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 				String str = null;
-				StringBuffer errStr = new StringBuffer();
+				StringBuilder errStr = new StringBuilder();
 				while ((str = br.readLine()) != null) {
 					// プロセスからの標準出力を捨てる
 					// そうしないとプロセスがストールする場合がある。
@@ -1784,8 +1907,8 @@ public class PreviewAction extends Action {
 				int exitCode = process.waitFor();
 				if (exitCode == 0) {
 					// for ユーザー
-					errors.add(ActionMessages.GLOBAL_MESSAGE,
-							new ActionMessage("search.failed.view.multiTiff." + user.getLanKey(), "drawNo=" + drwgNo+ ",ExitCode=" + exitCode));
+					MessageSourceUtil.addAttribute(errors, "message",
+							messageSource.getMessage("search.failed.view.multiTiff." + user.getLanKey(), new Object[] { "drawNo=" + drwgNo + ",ExitCode=" + exitCode }, null));
 					// for システム管理者
 					ErrorLoger.error(user, this, "ＴＩＦＦの結合処理に失敗。終了コード=" + exitCode + "," + errStr.toString());
 					// ビュー専用のログ
@@ -1798,12 +1921,12 @@ public class PreviewAction extends Action {
 
 			// フォルダおよびフォルダ配下の全ファイル削除
 			if (!DrasapUtil.deleteFile(f_inPath)) {
-				category.error("フォルダ削除失敗しました[" + inPath +"]");
+				category.error("フォルダ削除失敗しました[" + inPath + "]");
 			}
 
 		} catch (Exception e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.multiTiff." + user.getLanKey(), e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.multiTiff." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, "ＴＩＦＦの結合処理に失敗" + ErrorUtility.error2String(e));
 			// ビュー専用のログ
@@ -1815,7 +1938,7 @@ public class PreviewAction extends Action {
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "ＴＩＦＦの結合処理の終了");
 
-//		return outFileName;
+		//		return outFileName;
 	}
 
 	/**
@@ -1856,7 +1979,7 @@ public class PreviewAction extends Action {
 	private void doPdfToZip(
 			ArrayList<PreviewElement> elem,
 			HashMap<String, String> pdfFileMap,
-			String dir, String outFile, User user, ActionMessages errors) {
+			String dir, String outFile, User user, Model errors) {
 
 		category.debug("PDF Zip圧縮処理の開始");
 		// ビュー専用のログ
@@ -1880,7 +2003,7 @@ public class PreviewAction extends Action {
 			boolean success = f_zipDir.mkdir();
 			if (!success) {
 				// フォルダ作成失敗
-				throw new UserException("Zipフォルダ作成失敗しました[" + f_zipDir.toString() +"]");
+				throw new UserException("Zipフォルダ作成失敗しました[" + f_zipDir.toString() + "]");
 			}
 			for (int i = 0; i < elem.size(); i++) {
 
@@ -1894,7 +2017,7 @@ public class PreviewAction extends Action {
 				String pdfFileName = elem.get(i).getFileName();
 				// 念のため拡張子をチェック
 				int lastIndex = pdfFileName.lastIndexOf('.');
-				if(lastIndex == -1){
+				if (lastIndex == -1) {
 					// ファイル名に'.'がない場合、後ろに'.pdf'をつける
 					pdfFileName += ".pdf";
 				} else {
@@ -1907,7 +2030,7 @@ public class PreviewAction extends Action {
 
 				// ファイルコピー
 				copyFile(targetFile, newFile);
-//				category.debug("targetFile:" + targetFile + " newFile:" + newFile);
+				//				category.debug("targetFile:" + targetFile + " newFile:" + newFile);
 			}
 
 			// zip対象ファイルリスト取得
@@ -1935,12 +2058,12 @@ public class PreviewAction extends Action {
 
 			// フォルダおよびフォルダ配下の全ファイル削除
 			if (!DrasapUtil.deleteFile(f_zipDir)) {
-				category.error("フォルダ削除失敗しました[" + f_zipDir.toString() +"]");
+				category.error("フォルダ削除失敗しました[" + f_zipDir.toString() + "]");
 			}
 
 		} catch (Exception e) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("search.failed.view.pdfzip." + user.getLanKey(), e.getMessage()));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.view.pdfzip." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, "PDFのZip圧縮処理に失敗" + ErrorUtility.error2String(e));
 			// ビュー専用のログ
@@ -1950,8 +2073,12 @@ public class PreviewAction extends Action {
 			category.error(errMsg);
 		} finally {
 			try {
-				if (zos != null) zos.close();
-				if (is != null) is.close();
+				if (zos != null) {
+					zos.close();
+				}
+				if (is != null) {
+					is.close();
+				}
 			} catch (Exception e) {
 			}
 		}
@@ -1963,4 +2090,3 @@ public class PreviewAction extends Action {
 	}
 
 }
-

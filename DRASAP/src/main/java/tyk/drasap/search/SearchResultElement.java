@@ -24,56 +24,58 @@ public class SearchResultElement {
 	String pathName;// パス名。ファイルが格納されているディレクトリ名。
 	boolean selected = false;// 選択チェックボックスに対応
 	HashMap<String, String> linkParmMap = new HashMap<String, String>();// リンクタグで使用するパラメータを格納するMap
-// 2013.06.24 yamagishi add. start
+	// 2013.06.24 yamagishi add. start
 	String aclBalloon;// 品番バルーン表示内容
 	String aclFlag;
-// 2013.06.24 yamagishi add. end
+	// 2013.06.24 yamagishi add. end
 
-	String printerMaxSize = "";	//プリンタの最大印刷サイズ
+	String printerMaxSize = ""; //プリンタの最大印刷サイズ
 
 	// ---------------------------------------------------------- コンストラクタ
 	/**
 	 * コンストラクタ
 	 */
-// 2013.07.11 yamagishi modified. start
-//	public SearchResultElement(String newDrwgNo, String newFileName, String newFileType, String newPathName) {
+	// 2013.07.11 yamagishi modified. start
+	//	public SearchResultElement(String newDrwgNo, String newFileName, String newFileType, String newPathName) {
 	public SearchResultElement(String newDrwgNo, String newFileName, String newFileType, String newPathName, String newAclBalloon) {
-// 2013.07.11 yamagishi modified. end
-		this.drwgNo = newDrwgNo;
-		this.drwgNoFormated = DrasapUtil.formatDrwgNo(this.drwgNo);// フォーマットした図番
-		this.copies = "1";
-		this.fileName = newFileName;
-		this.fileType = newFileType;
-		this.pathName = newPathName;
-// 2013.07.11 yamagishi add. start
-		this.aclBalloon = newAclBalloon != null ? newAclBalloon : "";
-// 2013.07.11 yamagishi add. end
+		// 2013.07.11 yamagishi modified. end
+		drwgNo = newDrwgNo;
+		drwgNoFormated = DrasapUtil.formatDrwgNo(drwgNo);// フォーマットした図番
+		copies = "1";
+		fileName = newFileName;
+		fileType = newFileType;
+		pathName = newPathName;
+		// 2013.07.11 yamagishi add. start
+		aclBalloon = newAclBalloon != null ? newAclBalloon : "";
+		// 2013.07.11 yamagishi add. end
 	}
+
 	// ---------------------------------------------------------- Method
 	/**
 	 * 属性Mapに属性を追加する。valueがnullなら、""に変換して追加する
 	 * @param key
 	 * @param value
 	 */
-	public void addAttr(String key, String value){
-		if(value == null){
+	public void addAttr(String key, String value) {
+		if (value == null) {
 			attrMap.put(key, "");
 		} else {
 			attrMap.put(key, value);
 		}
 	}
+
 	/**
 	 * 属性Mapから属性を取得して返す。このとき、keyがnull(または長さ0)なら、""を返す
 	 * @param key
 	 * @return
 	 */
-	public String getAttr(String key){
-		if(key == null || key.length() == 0){
+	public String getAttr(String key) {
+		if (key == null || key.length() == 0) {
 			return "";
-		} else {
-			return (String)attrMap.get(key);
 		}
+		return attrMap.get(key);
 	}
+
 	// ---------------------------------------------------------- getter,setter
 	/**
 	 * @return
@@ -82,12 +84,12 @@ public class SearchResultElement {
 		return attrMap;
 	}
 
-	public String getPrinterMaxSize(){
-		return this.printerMaxSize;
+	public String getPrinterMaxSize() {
+		return printerMaxSize;
 	}
 
-	public void setPrinterMaxSize( String maxSize ){
-		this.printerMaxSize = maxSize;
+	public void setPrinterMaxSize(String maxSize) {
+		printerMaxSize = maxSize;
 	}
 
 	/**
@@ -188,7 +190,7 @@ public class SearchResultElement {
 		decidePrintSize = string;
 	}
 
-// 2013.06.24 yamagishi add. start
+	// 2013.06.24 yamagishi add. start
 	/**
 	 * aclBalloonを取得します。
 	 * @return aclBalloon
@@ -202,7 +204,7 @@ public class SearchResultElement {
 	 * @param aclBalloon aclBalloon
 	 */
 	public void setAclBalloon(String aclBalloon) {
-		this.aclBalloon = (aclBalloon == null ? "" : aclBalloon);
+		this.aclBalloon = aclBalloon == null ? "" : aclBalloon;
 	}
 
 	/**
@@ -210,7 +212,7 @@ public class SearchResultElement {
 	 * @return aclFlag
 	 */
 	public String getAclFlag() {
-	    return aclFlag;
+		return aclFlag;
 	}
 
 	/**
@@ -218,7 +220,7 @@ public class SearchResultElement {
 	 * @param aclFlag aclFlag
 	 */
 	public void setAclFlag(String aclFlag) {
-	    this.aclFlag = aclFlag;
+		this.aclFlag = aclFlag;
 	}
-// 2013.06.24 yamagishi add. end
+	// 2013.06.24 yamagishi add. end
 }

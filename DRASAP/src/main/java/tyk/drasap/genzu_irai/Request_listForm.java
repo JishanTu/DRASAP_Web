@@ -4,18 +4,12 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * 原図庫作業依頼リストのフォーム
  */
-public class Request_listForm extends ActionForm {
-
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+public class Request_listForm extends BaseForm {
 	/**
 	 *
 	 */
@@ -25,31 +19,34 @@ public class Request_listForm extends ActionForm {
 	ArrayList<String> listErrors = new ArrayList<String>();//エラーリスト
 	ArrayList<String> checkKeyList = new ArrayList<String>();//チェック項目のキー
 	ArrayList<String> checkNameList = new ArrayList<String>();//チェック項目のリスト
-	ArrayList messageKeyList = new ArrayList();//メッセージ項目のキー
+	//ArrayList messageKeyList = new ArrayList();//メッセージ項目のキー
 	ArrayList<String> messageNameList = new ArrayList<String>();//メッセージ項目のリスト
-	ArrayList printList = new ArrayList();//印刷画面用のリスト
+	ArrayList<RequestPriElement> printList = new ArrayList<RequestPriElement>();//印刷画面用のリスト
 
-	public String getAction(){
+	public String getAction() {
 		return action;
 	}
-	public void setAction(String action){
+
+	public void setAction(String action) {
 		this.action = action;
 	}
 
-	public String getTime(){
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(String time){
+	public void setTime(String time) {
 		this.time = time;
 	}
+
 	/**
 	 * Returns the results.
 	 * @return ArrayList
 	 */
-	public ArrayList getIraiList() {
+	public ArrayList<Request_listElement> getIraiList() {
 		return iraiList;
 	}
+
 	/**
 	 * Sets the results.
 	 * @param results The results to set
@@ -58,7 +55,7 @@ public class Request_listForm extends ActionForm {
 		this.iraiList = iraiList;
 	}
 
-	public ArrayList getListErrors() {
+	public ArrayList<String> getListErrors() {
 		return listErrors;
 	}
 
@@ -66,14 +63,15 @@ public class Request_listForm extends ActionForm {
 		this.listErrors = listErrors;
 	}
 
-	public ArrayList getCheckKeyList() {
+	public ArrayList<String> getCheckKeyList() {
 		return checkKeyList;
 	}
 
 	public void setCheckKeyList(ArrayList<String> checkKeyList) {
 		this.checkKeyList = checkKeyList;
 	}
-	public ArrayList getCheckNameList() {
+
+	public ArrayList<String> getCheckNameList() {
 		return checkNameList;
 	}
 
@@ -81,15 +79,15 @@ public class Request_listForm extends ActionForm {
 		this.checkNameList = checkNameList;
 	}
 
-	public ArrayList getMessageKeyList() {
-		return messageKeyList;
-	}
+	//    public ArrayList getMessageKeyList() {
+	//        return messageKeyList;
+	//    }
+	//
+	//    public void setMessageKeyList(ArrayList messageKeyList) {
+	//        this.messageKeyList = messageKeyList;
+	//    }
 
-	public void setMessageKeyList(ArrayList messageKeyList) {
-		this.messageKeyList = messageKeyList;
-	}
-
-	public ArrayList getMessageNameList() {
+	public ArrayList<String> getMessageNameList() {
 		return messageNameList;
 	}
 
@@ -97,13 +95,14 @@ public class Request_listForm extends ActionForm {
 		this.messageNameList = messageNameList;
 	}
 
-	public ArrayList getPrintList() {
+	public ArrayList<RequestPriElement> getPrintList() {
 		return printList;
 	}
 
-	public void setPrintList(ArrayList printList) {
+	public void setPrintList(ArrayList<RequestPriElement> printList) {
 		this.printList = printList;
 	}
+
 	/**
 	 * Returns the item.
 	 * @return EcPartsSearch
@@ -113,13 +112,12 @@ public class Request_listForm extends ActionForm {
 			// セッションタイムアウト時にException発生の回避策
 			return new Request_listElement(
 					null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-		} else {
-			return (Request_listElement)iraiList.get(index);
 		}
+		return iraiList.get(index);
 
 	}
 
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
+	public void reset(HttpServletRequest request) {
 		action = "";
 	}
 

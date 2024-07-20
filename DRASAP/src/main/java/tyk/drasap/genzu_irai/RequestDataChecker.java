@@ -2,8 +2,8 @@ package tyk.drasap.genzu_irai;
 
 import java.util.HashSet;
 
-import org.apache.log4j.Category;
-import org.apache.struts.action.ActionErrors;
+import org.apache.log4j.Logger;
+import org.springframework.ui.Model;
 
 /**
  * 原図庫作業依頼の1行ずつのデータチェックを行うクラス。
@@ -26,7 +26,7 @@ public interface RequestDataChecker {
 	 * @param sizeFlag
 	 * @param suryoFlag
 	 */
-	public void checkLineData(RequestFormLineData lineData, RequestForm requestForm, ActionErrors errors,
-						HashSet usedErrMsgSet, Category category);
+	public void checkLineData(RequestFormLineData lineData, RequestForm requestForm, Model errors,
+			HashSet<String> usedErrMsgSet, Logger category);
 
 }

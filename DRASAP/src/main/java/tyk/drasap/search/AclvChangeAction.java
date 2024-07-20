@@ -11,24 +11,22 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 
-import org.apache.log4j.Category;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.util.MessageResources;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import tyk.drasap.change_acllog.ChangeAclLogger;
 import tyk.drasap.common.AclUpdateNoSequenceDB;
 import tyk.drasap.common.AclvMasterDB;
-import tyk.drasap.common.DataSourceFactory;
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.MessageManager;
 import tyk.drasap.common.User;
 import tyk.drasap.errlog.ErrorLoger;
+import tyk.drasap.springfw.action.BaseAction;
 
 /**
  * アクセスレベル、使用禁止を変更するAction。
@@ -37,108 +35,110 @@ import tyk.drasap.errlog.ErrorLoger;
  * 作成日: 2004/01/20
  * @version 2013/09/14 yamagishi
  */
-@SuppressWarnings("deprecation")
-public class AclvChangeAction extends Action {
-	private static Category category = Category.getInstance(AclvChangeAction.class.getName());
-	private static DataSource ds;
-	static{
-		try{
-			ds = DataSourceFactory.getOracleDataSource();
-		} catch(Exception e){
-			category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-		}
-	}
+@Controller
+public class AclvChangeAction extends BaseAction {
+	// --------------------------------------------------------- Instance Variables
+	// --------------------------------------------------------- Methods
 	/**
 	 * Method execute
-	 * @param ActionMapping mapping
-	 * @param ActionForm form
-	 * @param HttpServletRequest request
-	 * @param HttpServletResponse response
-	 * @return ActionForward
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @param errors
+	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-		HttpServletRequest request,	HttpServletResponse response) throws Exception {
+	@PostMapping("/aclvChange")
+	public Object execute(
+			AclvChangeForm form,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model errors)
+			throws Exception {
 		category.debug("start");
-		AclvChangeForm aclvChangeForm = (AclvChangeForm) form;
+		AclvChangeForm aclvChangeForm = form;
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		// sessionタイムアウトの確認
-		if(user == null){
-			return mapping.findForward("timeout");
+		if (user == null) {
+			return "timeout";
 		}
 		// AclvChangeFormの初期処理
-		aclvChangeForm.errorMessages = new ArrayList();// エラーメッセージのクリア
+		aclvChangeForm.errorMessages = new ArrayList<>();// エラーメッセージのクリア
 		// act属性による処理の切り分け
-		if("CHECK_ON".equals(aclvChangeForm.getAct())){
+		if ("CHECK_ON".equals(aclvChangeForm.getAct())) {
 			// 全てにチェック
-			for(int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++){
+			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeElement(i).setSelected(true);
 			}
 			category.debug("--> input");
-			return  mapping.findForward("input");
+			return "input";
+		}
 
-		} else if("CHECK_OFF".equals(aclvChangeForm.getAct())){
+		if ("CHECK_OFF".equals(aclvChangeForm.getAct())) {
 			// 全てのチェック外す
-			for(int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++){
+			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeElement(i).setSelected(false);
 			}
 			category.debug("--> input");
-			return  mapping.findForward("input");
+			return "input";
+		}
 
-		} else if("NEXT".equals(aclvChangeForm.getAct())){
-// 2013.07.24 yamagishi modified. start
-			MessageResources resources = getResources(request, "application"); // applicatin.properties取得
+		if ("NEXT".equals(aclvChangeForm.getAct())) {
+			// 2013.07.24 yamagishi modified. start
+			//MessageResources resources = getResources(request, "application"); // applicatin.properties取得
 			// 次画面に進む前のチェック
-//			checkForNext(aclvChangeForm);
-			checkForNext(aclvChangeForm, user, resources);
-// 2013.07.24 yamagishi modified. end
-			if(aclvChangeForm.getErrorMessages().size() > 0){
+			//			checkForNext(aclvChangeForm);
+			checkForNext(aclvChangeForm, user);
+			// 2013.07.24 yamagishi modified. end
+			if (aclvChangeForm.getErrorMessages().size() > 0) {
 				// 入力画面に戻る
 				category.debug("--> input");
-				return  mapping.findForward("input");
-			} else {
-				// 確認画面に進む
-				category.debug("--> confirm");
-				return  mapping.findForward("confirm");
+				return "input";
 			}
+			// 確認画面に進む
+			category.debug("--> confirm");
+			return "confirm";
+		}
 
-		} else if("SEARCH".equals(aclvChangeForm.getAct())){
+		if ("SEARCH".equals(aclvChangeForm.getAct())) {
 			// 検索画面に戻る
 			category.debug("--> search");
-			return mapping.findForward("search");
+			return "search";
+		}
 
-		} else if("BACK_INPUT".equals(aclvChangeForm.getAct())){
+		if ("BACK_INPUT".equals(aclvChangeForm.getAct())) {
 			// 入力画面に戻る
 			category.debug("--> input");
-			return  mapping.findForward("input");
+			return "input";
+		}
 
-		} else if("CONFIRMED".equals(aclvChangeForm.getAct())){
-// 2013.07.24 yamagishi modified. start
-			MessageResources resources = getResources(request, "application");
+		if ("CONFIRMED".equals(aclvChangeForm.getAct())) {
+			// 2013.07.24 yamagishi modified. start
+			//MessageResources resources = getResources(request, "application");
 			// 確認OK。更新を行う。
-//			updateAclv(aclvChangeForm, user);
-			updateAclv(aclvChangeForm, user, resources);
-// 2013.07.24 yamagishi modified. end
-			if(aclvChangeForm.getErrorMessages().size() > 0){
+			//			updateAclv(aclvChangeForm, user);
+			updateAclv(aclvChangeForm, user);
+			// 2013.07.24 yamagishi modified. end
+			if (aclvChangeForm.getErrorMessages().size() > 0) {
 				// 更新に失敗
 				category.debug("--> input");
-				return  mapping.findForward("input");
-			} else {
-				// 更新に成功した場合、
-				// 検索画面に戻るが、検索結果のみクリアする。・・・アクセスレベルなど変更したため
-
-				// アクセスログを
-				// '04.Nov.23変更 図番をロギングするため、ここでのロギングは行わない
-				//AccessLoger.loging(user, AccessLoger.FID_CHG_ACL);
-
-				//category.debug("更新した件数は " + cnt);
-				category.debug("--> search2");
-				return  mapping.findForward("search2");
+				return "input";
 			}
+
+			// 更新に成功した場合、
+			// 検索画面に戻るが、検索結果のみクリアする。・・・アクセスレベルなど変更したため
+
+			// アクセスログを
+			// '04.Nov.23変更 図番をロギングするため、ここでのロギングは行わない
+			//AccessLoger.loging(user, AccessLoger.FID_CHG_ACL);
+			//category.debug("更新した件数は " + cnt);
+			category.debug("--> search2");
+			return "search2";
 		}
-		return null;
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
 	/**
 	 * 次画面に進む前のチェック。
 	 * - 選択されているか
@@ -146,29 +146,29 @@ public class AclvChangeAction extends Action {
 	 * @param aclvChangeForm
 	 * @param resources
 	 */
-//	private void checkForNext(AclvChangeForm aclvChangeForm){	// 2013.07.24 yamagishi modified. start
-	private void checkForNext(AclvChangeForm aclvChangeForm, User user, MessageResources resources){
+	//	private void checkForNext(AclvChangeForm aclvChangeForm){	// 2013.07.24 yamagishi modified. start
+	private void checkForNext(AclvChangeForm aclvChangeForm, User user) {
 		HashMap<String, String> aclMap = aclvChangeForm.getAclMap();
-		HashSet<String> drwgNoSet = new HashSet<String>();		// modifield end.
+		HashSet<String> drwgNoSet = new HashSet<String>(); // modifield end.
 		// 1) 選択されているか?
 		//		また変更されたデータがあるか?
 		boolean selected = false;// 選択されていれば true
 		boolean modified = false;// 変更されたデータがあるか? あれば true
-		for(int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++){
+		for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 			AclvChangeElement aclvChangeElement = aclvChangeForm.getAclvChangeElement(i);
-			if(aclvChangeElement.isSelected()){// 選択されている
+			if (aclvChangeElement.isSelected()) {// 選択されている
 				selected = true;
-				if(aclvChangeElement.isModified()){// 変更されている
+				if (aclvChangeElement.isModified()) {// 変更されている
 					modified = true;
 				}
 			}
 			drwgNoSet.add(aclvChangeElement.getDrwgNo()); // 1物2品番用に図番を保存		// 2013.07.24 yamagishi add.
 		}
-		if(!selected){
+		if (!selected) {
 			aclvChangeForm.getErrorMessages().add(MessageManager.getInstance().getMessage("msg.aclv.required.drwg"));
-		} else if(!modified){
+		} else if (!modified) {
 			aclvChangeForm.getErrorMessages().add(MessageManager.getInstance().getMessage("msg.aclv.notmodified.aclv"));
-// 2013.09.14 yamagishi add. start
+			// 2013.09.14 yamagishi add. start
 		} else {
 			Connection conn = null;
 			try {
@@ -199,14 +199,13 @@ public class AclvChangeAction extends Action {
 							|| !drwgNoMap.get("ID1_TWIN_DRWG_NO").equals(drwgNoMap.get("ID2_TWIN_DRWG_NO"))) {
 						twinDrwgNoValid = false;
 
-					// 1物2品番ACLチェック
+						// 1物2品番ACLチェック
 					} else if (drwgNoMap.get("ACL_ID") == null || drwgNoMap.get("TWIN_ACL_ID") == null
 							|| !drwgNoMap.get("ACL_ID").equals(drwgNoMap.get("TWIN_ACL_ID"))) {
 						twinAclValid = false;
 					}
 
-					twinDrwgNo = drwgNoMap.get("ID1_TWIN_DRWG_NO") != null ?
-							drwgNoMap.get("ID1_TWIN_DRWG_NO") : drwgNoMap.get("ID2_TWIN_DRWG_NO");
+					twinDrwgNo = drwgNoMap.get("ID1_TWIN_DRWG_NO") != null ? drwgNoMap.get("ID1_TWIN_DRWG_NO") : drwgNoMap.get("ID2_TWIN_DRWG_NO");
 					if (!drwgNoSet.contains(twinDrwgNo)) {
 						// 1物2品番が既存リストになければ追加
 						SearchResultElement searchResultElement = new SearchResultElement(twinDrwgNo, null, null, null, null);
@@ -228,25 +227,29 @@ public class AclvChangeAction extends Action {
 				aclvChangeForm.getAclvChangeList().addAll(addAclvChangeList);
 
 				if (!twinDrwgNoValid) {
-					aclvChangeForm.getErrorMessages().add(resources.getMessage("system.aclBatchUpdate.upload.nodata.twinDrwgNo"));
+					aclvChangeForm.getErrorMessages().add(messageSource.getMessage("system.aclBatchUpdate.upload.nodata.twinDrwgNo", null, null));
 				} else if (!twinAclValid) {
-					aclvChangeForm.getErrorMessages().add(resources.getMessage("system.aclBatchUpdate.upload.notequal.twin.drwgNo.acl"));
+					aclvChangeForm.getErrorMessages().add(messageSource.getMessage("system.aclBatchUpdate.upload.notequal.twin.drwgNo.acl", null, null));
 				}
 			} catch (Exception e) {
 				// for ユーザー
 				aclvChangeForm.getErrorMessages().add(
-					MessageManager.getInstance().getMessage("msg.irai.unexpected", e.getMessage()));
+						MessageManager.getInstance().getMessage("msg.irai.unexpected", e.getMessage()));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"));
 				// for MUR
 				category.error("予想外の例外が発生\n" + ErrorUtility.error2String(e));
 			} finally {
-				try { conn.close(); } catch (Exception e) {}
+				try {
+					conn.close();
+				} catch (Exception e) {
+				}
 			}
-// 2013.09.14 yamagishi add. end
+			// 2013.09.14 yamagishi add. end
 		}
 	}
+
 	/**
 	 * INDEX_DBに使用禁止とアクセスレベルを更新する。
 	 * 例外が発生した場合、AclvChangeForm.getErrorMessages()に追加する。
@@ -255,51 +258,51 @@ public class AclvChangeAction extends Action {
 	 * @param resources
 	 * @return 更新した件数。
 	 */
-//	private int updateAclv(AclvChangeForm aclvChangeForm){	// 2013.07.24 yamagishi modified.
-	private int updateAclv(AclvChangeForm aclvChangeForm, User user, MessageResources resources) {
+	//	private int updateAclv(AclvChangeForm aclvChangeForm){	// 2013.07.24 yamagishi modified.
+	private int updateAclv(AclvChangeForm aclvChangeForm, User user) {
 		int cnt = 0;
 		Connection conn = null;
 		PreparedStatement pstmt1 = null;// 使用禁止とアクセスレベルを変更
 		PreparedStatement pstmt2 = null;// 使用禁止のみを変更
 		PreparedStatement pstmt3 = null;// アクセスレベルのみを変更
-		try{
+		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);// トランザクション
 			// pstmt1の準備・・・使用禁止とアクセスレベルを変更
 			pstmt1 = conn.prepareStatement("update INDEX_DB set " +
-						" PROHIBIT=?, PROHIBIT_DATE=sysdate, PROHIBIT_EMPNO=?, PROHIBIT_NAME=?," +
-						" ACL_ID=?, ACL_UPDATE=sysdate, ACL_EMPNO=?, ACL_NAME=?" +
-						" where DRWG_NO=?");
+					" PROHIBIT=?, PROHIBIT_DATE=sysdate, PROHIBIT_EMPNO=?, PROHIBIT_NAME=?," +
+					" ACL_ID=?, ACL_UPDATE=sysdate, ACL_EMPNO=?, ACL_NAME=?" +
+					" where DRWG_NO=?");
 			pstmt1.setString(2, user.getId());// 職番
 			pstmt1.setString(3, user.getName());// 名前
 			pstmt1.setString(5, user.getId());// 職番
 			pstmt1.setString(6, user.getName());// 名前
 			// pstmt2の準備・・・使用禁止のみを変更
 			pstmt2 = conn.prepareStatement("update INDEX_DB set " +
-						" PROHIBIT=?, PROHIBIT_DATE=sysdate, PROHIBIT_EMPNO=?, PROHIBIT_NAME=?" +
-						" where DRWG_NO=?");
+					" PROHIBIT=?, PROHIBIT_DATE=sysdate, PROHIBIT_EMPNO=?, PROHIBIT_NAME=?" +
+					" where DRWG_NO=?");
 			pstmt2.setString(2, user.getId());// 職番
 			pstmt2.setString(3, user.getName());// 名前
 			// pstmt3の準備・・・アクセスレベルのみを変更
 			pstmt3 = conn.prepareStatement("update INDEX_DB set " +
-						" ACL_ID=?, ACL_UPDATE=sysdate, ACL_EMPNO=?, ACL_NAME=?" +
-						" where DRWG_NO=?");
+					" ACL_ID=?, ACL_UPDATE=sysdate, ACL_EMPNO=?, ACL_NAME=?" +
+					" where DRWG_NO=?");
 			pstmt3.setString(2, user.getId());// 職番
 			pstmt3.setString(3, user.getName());// 名前
 			// 図番をロギングするために一時格納するためのList
-//			List updatedDrwgNoList = new ArrayList();
+			//			List updatedDrwgNoList = new ArrayList();
 			List<AclvChangeElement> updatedDrwgNoList = new ArrayList<AclvChangeElement>(); // 2013.07.25 yamagishi modified.
 			// INDEX_DBに更新をする
-			for(int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++){
+			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				AclvChangeElement aclvChangeElement = aclvChangeForm.getAclvChangeElement(i);
-				if(aclvChangeElement.isSelected() && aclvChangeElement.isModified()){
+				if (aclvChangeElement.isSelected() && aclvChangeElement.isModified()) {
 					// 選択されて、かつ変更されているときのみ
-					if(! aclvChangeElement.oldProhibit.equals(aclvChangeElement.newProhibit)){
+					if (!aclvChangeElement.oldProhibit.equals(aclvChangeElement.newProhibit)) {
 						// 少なくとも使用禁止が変更されている
-						if(! aclvChangeElement.oldAclId.equals(aclvChangeElement.newAclId)){
+						if (!aclvChangeElement.oldAclId.equals(aclvChangeElement.newAclId)) {
 							// アクセスレベルも変更されている
 							// 更新時チェック実施
-							checkExclusive(aclvChangeElement.getDrwgNo(), aclvChangeElement.getOldAclId(), resources, conn); // 2013.07.24 yamagishi add.
+							checkExclusive(aclvChangeElement.getDrwgNo(), aclvChangeElement.getOldAclId(), conn); // 2013.07.24 yamagishi add.
 							pstmt1.setString(1, aclvChangeElement.getNewProhibit());// 使用禁止
 							pstmt1.setString(4, aclvChangeElement.getNewAclId());// アクセスレベル
 							pstmt1.setString(7, aclvChangeElement.getDrwgNo());// 図番
@@ -313,24 +316,24 @@ public class AclvChangeAction extends Action {
 					} else {
 						// アクセスレベルのみ変更されている
 						// 更新時チェック実施
-						checkExclusive(aclvChangeElement.getDrwgNo(), aclvChangeElement.getOldAclId(), resources, conn); // 2013.07.24 yamagishi add.
+						checkExclusive(aclvChangeElement.getDrwgNo(), aclvChangeElement.getOldAclId(), conn); // 2013.07.24 yamagishi add.
 						pstmt3.setString(1, aclvChangeElement.getNewAclId());// アクセスレベル
 						pstmt3.setString(4, aclvChangeElement.getDrwgNo());// 図番
 						cnt += pstmt3.executeUpdate();
 					}
 					// 更新した図番を一時格納する
-//					updatedDrwgNoList.add(aclvChangeElement.getDrwgNo()); // 2013.07.25 yamagishi modified.
+					//					updatedDrwgNoList.add(aclvChangeElement.getDrwgNo()); // 2013.07.25 yamagishi modified.
 					updatedDrwgNoList.add(aclvChangeElement);
 				}
 			}
 			// commit
 			conn.commit();
 
-// 2013.07.25 yamagishi modified. start
-//			// '04.Nov.23 図番もロギングするように変更
-//			// アクセスログをまとめて行う
-//			AccessLoger.loging(user, AccessLoger.FID_CHG_ACL,
-//					(String[])updatedDrwgNoList.toArray(new String[0]));
+			// 2013.07.25 yamagishi modified. start
+			//			// '04.Nov.23 図番もロギングするように変更
+			//			// アクセスログをまとめて行う
+			//			AccessLoger.loging(user, AccessLoger.FID_CHG_ACL,
+			//					(String[])updatedDrwgNoList.toArray(new String[0]));
 			// 管理NO採番
 			String aclUpdateNo = AclUpdateNoSequenceDB.getAclUpdateNo(
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.upload.aclupdateno.type.changeAcl"), conn);
@@ -344,30 +347,45 @@ public class AclvChangeAction extends Action {
 				postUpdateAcl = aclvChangeElement.getNewAclId();
 				ChangeAclLogger.logging(user, aclUpdateNo, drwgNo, preUpdateAcl, aclMap.get(preUpdateAcl), postUpdateAcl, aclMap.get(postUpdateAcl), null);
 			}
-// 2013.07.25 yamagishi modified. end
+			// 2013.07.25 yamagishi modified. end
 
-		} catch(Exception e){
+		} catch (Exception e) {
 			// rollback
-			try{ conn.rollback(); } catch(Exception e2){}
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
 			// for ユーザー
 			aclvChangeForm.getErrorMessages().add(
-				MessageManager.getInstance().getMessage("msg.aclv.failed.update.aclv", e.getMessage()));
+					MessageManager.getInstance().getMessage("msg.aclv.failed.update.aclv", e.getMessage()));
 			// for システム管理者
 			ErrorLoger.error(user, this,
-						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
+					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			// for MUR
 			category.error("アクセスレベルの更新に失敗\n" + ErrorUtility.error2String(e));
 		} finally {
-			try{ pstmt1.close(); } catch(Exception e) {}
-			try{ pstmt2.close(); } catch(Exception e) {}
-			try{ pstmt3.close(); } catch(Exception e) {}
-			try{ conn.close(); } catch(Exception e) {}
+			try {
+				pstmt1.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt2.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt3.close();
+			} catch (Exception e) {
+			}
+			try {
+				conn.close();
+			} catch (Exception e) {
+			}
 		}
 		//
 		return cnt;
 	}
 
-// 2013.07.24 yamagishi add. start
+	// 2013.07.24 yamagishi add. start
 	/**
 	 * 属性情報テーブルの図番・ACLが更新されていないかチェックする
 	 * @param drwgNo
@@ -375,7 +393,7 @@ public class AclvChangeAction extends Action {
 	 * @param resources
 	 * @param conn
 	 */
-	private void checkExclusive(String drwgNo, String aclId, MessageResources resources, Connection conn)
+	private void checkExclusive(String drwgNo, String aclId, Connection conn)
 			throws Exception {
 
 		PreparedStatement pstmt = null;
@@ -394,14 +412,20 @@ public class AclvChangeAction extends Action {
 				// 図番ACL更新判定
 				if (rs.getLong("COUNT") <= 0) {
 					// 別トランザクションによって図番ACLが更新済みの為、エラー
-					throw new Exception("(" + resources.getMessage("system.aclBatchUpdate.update.excusive.acl") + ")");
+					throw new Exception("(" + messageSource.getMessage("system.aclBatchUpdate.update.excusive.acl", null, null) + ")");
 				}
 			}
 		} finally {
 			// CLOSE処理
-			try { rs.close(); } catch (Exception e) {}
-			try { pstmt.close(); } catch (Exception e) {}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
 		}
 	}
-// 2013.07.24 yamagishi add. end
+	// 2013.07.24 yamagishi add. end
 }

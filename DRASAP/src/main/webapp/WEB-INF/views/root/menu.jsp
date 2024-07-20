@@ -1,12 +1,15 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${empty sessionScope.user}">
+    <script>
+        location.replace('<%=request.getContextPath() %>/timeout');
+    </script>
+</c:if>
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="Pragma" content="no-cache" />
@@ -22,28 +25,28 @@
 			if(functionNo == "1"){
 				// 図面検索
 				targetName = '_drasap_search';
-				targetUrl = '/switch.do?prefix=/search&page=/searchMain.jsp';
+				targetUrl = '/switch.do?page=/search/searchMain.jsp';
 			} else if(functionNo == "2"){
 				// 原図庫作業依頼
 				targetName = '_drasap_request';
-				targetUrl = '/switch.do?prefix=/genzu_irai&page=/req.do';
+				targetUrl = '/req.do';
 			} else if(functionNo == "3"){
 				// 原図庫作業依頼リスト
 				targetName = '_drasap_request_list';
-				targetUrl = '/switch.do?prefix=/genzu_irai&page=/requestt_list.jsp';
+				targetUrl = '/switch.do?page=/genzu_irai/requestt_list.jsp';
 			} else if(functionNo == "4"){
 				// 原図庫作業依頼詳細
 				targetName = '_drasap_request_ref';
-				targetUrl = '/switch.do?prefix=/genzu_irai&page=/requestt_ref.jsp';
+				targetUrl = '/switch.do?page=/genzu_irai/requestt_ref.jsp';
 			<%-- 2013.06.14 yamagishi add. start --%>
 			} else if(functionNo == "5"){
 				// アクセスレベル一括更新
 				targetName = '_drasap_acl_batch_update';
-				targetUrl = '/switch.do?prefix=&page=/system/accessLevelBatchUpdate.jsp';
+				targetUrl = '/switch.do?page=/system/accessLevelBatchUpdate.jsp';
 			} else if(functionNo == "6"){
 				// アクセスレベル更新結果
 				targetName = '_drasap_acl_updated_result';
-				targetUrl = '/switch.do?prefix=&page=/system/accessLevelUpdatedResult.jsp';
+				targetUrl = '/switch.do?page=/system/accessLevelUpdatedResult.jsp';
 			<%-- 2013.06.14 yamagishi add. end --%>
 			}
 			var WO1;
@@ -60,7 +63,7 @@
 	</script>
 </head>
 <body>
-<bean:write name="user" property="name" scope="session" />さん　いらっしゃい<br />
+<c:out value="${sessionScope.user.name}" />さん　いらっしゃい<br />
 <ul>
 	<li><a href="javascript:showFunction('1')">図面検索</a></li>
 	<li><a href="javascript:showFunction('2')">原図庫作業依頼</a>・・・原図庫へ依頼する</li>
@@ -72,4 +75,4 @@
 </ul>
 <input type="button" value="Close" onclick="self.close()" />
 </body>
-</html:html>
+</html>

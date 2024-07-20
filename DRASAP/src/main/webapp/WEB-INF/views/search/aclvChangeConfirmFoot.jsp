@@ -1,18 +1,21 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${empty sessionScope.user}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>Drawing Search and Print System [アクセスレベル変更]</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 	<script type="text/javascript">
 	<!--
 		// 属性actをセットする
@@ -24,8 +27,8 @@
 </head>
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
 <%-- あらかじめターゲットは _top にしておく --%>
-<html:form action="/aclvChange" target="_top">
-<html:hidden property="act" />
+<form action="<%=request.getContextPath() %>/aclvChange" target="_top" method="post">
+<input type="hidden" name="act" value="" />
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
 	<tr>
 		<td>&nbsp;&nbsp;</td>
@@ -33,6 +36,6 @@
 		<td align="right"><input type="submit" value="　戻る　" onclick="setAct('BACK_INPUT')" /></td>
 	</tr>
 </table>
-</html:form>
+</form>
 </body>
-</html:html>
+</html>

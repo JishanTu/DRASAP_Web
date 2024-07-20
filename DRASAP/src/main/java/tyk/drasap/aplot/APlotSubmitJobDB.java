@@ -27,7 +27,6 @@ import java.util.Date;
  * @author hideki_sugiyama
  *
  */
-@SuppressWarnings("serial")
 public class APlotSubmitJobDB extends AbstractAPlotSchemaBase {
 
 	/**
@@ -42,10 +41,10 @@ public class APlotSubmitJobDB extends AbstractAPlotSchemaBase {
 		super(schema);
 
 		// 基本データを設定.
-		this.put("JOB_ID", jobId);
-		this.put("JOB_NAME", jobName);
-		this.put("SUBMITTER_ID", userId);
-		this.put("SUBMITTER_NAME", userName);
+		put("JOB_ID", jobId);
+		put("JOB_NAME", jobName);
+		put("SUBMITTER_ID", userId);
+		put("SUBMITTER_NAME", userName);
 	}
 
 	/**
@@ -53,7 +52,7 @@ public class APlotSubmitJobDB extends AbstractAPlotSchemaBase {
 	 * @return JOBID
 	 */
 	public String getJobID() {
-		return this.get("JOB_ID").toString();
+		return get("JOB_ID").toString();
 	}
 
 	/**
@@ -84,7 +83,6 @@ public class APlotSubmitJobDB extends AbstractAPlotSchemaBase {
 		return sb.toString();
 	}
 
-
 	/**
 	 * JOBIDを採番.
 	 * @param conn データベースコネクター
@@ -109,7 +107,5 @@ public class APlotSubmitJobDB extends AbstractAPlotSchemaBase {
 		// 「ID種別（大分類） + スキーマ番号 + ID種別（中分類） + ID種別（小分類） + 年月（YYMM形式） + '-'（固定） + 連番（00000000形式）」
 		return String.format("%s%d%s%s%s-%07d", APlotOJSequenceXDB.JOB_ID_KIND1, schemaNo, shortId, APlotOJSequenceXDB.JOB_ID_KIND3_JOB, yymm, seqNo);
 	}
-
-
 
 }

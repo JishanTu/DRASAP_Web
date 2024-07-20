@@ -13,17 +13,17 @@ package tyk.drasap.genzu_irai;
  * ウィンドウ > 設定 > Java > コード生成 > コードとコメント
  */
 public class RequestResultElement {
-	
+
 	String drwgNo;
 	String flag;
 	String touroku;
 
-	public RequestResultElement(String newDrwgNo, String newFlag, String newTouroku){
-		this.drwgNo = newDrwgNo;
-		this.flag = newFlag;
-		this.touroku = newTouroku;
+	public RequestResultElement(String newDrwgNo, String newFlag, String newTouroku) {
+		drwgNo = newDrwgNo;
+		flag = newFlag;
+		touroku = newTouroku;
 	}
-	
+
 	/**
 	 * Returns the id.
 	 * @return String
@@ -39,7 +39,7 @@ public class RequestResultElement {
 	public String getFlag() {
 		return flag;
 	}
-	
+
 	/**
 	 * Returns the name.
 	 * @return String

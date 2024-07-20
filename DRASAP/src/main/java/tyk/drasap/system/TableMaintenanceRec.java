@@ -7,10 +7,11 @@ import java.util.ArrayList;
  * テーブルメンテナンス用。
  */
 public class TableMaintenanceRec {
-    String rec_no = "0";// 
+	String rec_no = "0";//
 	ArrayList<TableMaintenanceVal> valList = new ArrayList<TableMaintenanceVal>();// TableMaintenanceVal
 	boolean checkFlg = false;
 	boolean newFlg = false;
+
 	// ------------------------------------------------------- コンストラクタ
 	// ------------------------------------------------------- getter,setter
 	/**
@@ -19,63 +20,70 @@ public class TableMaintenanceRec {
 	public String getRec_no() {
 		return rec_no;
 	}
+
 	/**
 	 * @return
 	 */
 	public void setRec_no(String val) {
-	    rec_no = val;
-		return;
+		rec_no = val;
 	}
+
 	/**
 	 * @return
 	 */
 	public TableMaintenanceVal getValList(int index) {
-		return (TableMaintenanceVal)valList.get(index);
+		return valList.get(index);
 	}
+
 	/**
 	 * @return
 	 */
 	public ArrayList<TableMaintenanceVal> getValList() {
 		return valList;
 	}
+
 	/**
 	 * @param list
 	 */
 	public void setValList(ArrayList<TableMaintenanceVal> list) {
-	    valList = list;
+		valList = list;
 	}
+
 	/**
 	 * @return
 	 */
 	public boolean isCheck() {
-	    return checkFlg;
+		return checkFlg;
 	}
+
 	/**
-	 * @param 
+	 * @param
 	 */
 	public void setCheck(boolean flg) {
-	    this.checkFlg = flg;
+		checkFlg = flg;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getNew() {
-	    if (newFlg) {
-	        return "1";
-	    } else {
-	        return "0";
-	    }
+		if (newFlg) {
+			return "1";
+		}
+		return "0";
 	}
+
 	/**
 	 * @return
 	 */
 	public boolean isNew() {
-	    return newFlg;
+		return newFlg;
 	}
+
 	/**
-	 * @param 
+	 * @param
 	 */
 	public void setNew(boolean flg) {
-	    this.newFlg = flg;
+		newFlg = flg;
 	}
 }

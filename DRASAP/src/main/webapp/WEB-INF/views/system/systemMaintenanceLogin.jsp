@@ -1,8 +1,9 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
-<html:html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+<html>
 <head>
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Cache-Control" content="no-cache" />
@@ -10,7 +11,7 @@
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Cache-Control" content="no-cache" />
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/default.css" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/default.css" />
 <style type="text/css">
 	.loginFrame {
 		background-color:#EEEEEE;
@@ -53,8 +54,8 @@
 </script>
 </head>
 <body bgcolor="#F5F5DC" onload="onInit()">
-<html:form action="/systemMaintenanceLogin">
-<html:hidden property="act" />
+<form action="<%=request.getContextPath() %>/systemMaintenanceLogin" method="post">
+<input type="hidden" name="act" value="" />
 <table width="100%" style="height:100%;">
   <tr bgcolor="#ff2233">
   </tr>
@@ -69,29 +70,29 @@
               </tr>
               <tr>
                 <td align="right" valign="middle" nowrap="nowrap">user ID :</td>
-                <td align="left" valign="middle"><html:text property="id" style="width:180px;"/></td>
+                <td align="left" valign="middle"><input type="text" name="id" style="width:180px;" /></td>
               </tr>
               <tr>
                 <td align="right" valign="middle" nowrap="nowrap">passwd : </td>
-                <td align="left" valign="middle"><html:password property="passwd" style="width:180px;"/></td>
+                <td align="left" valign="middle"><input type="password" name="passwd" style="width:180px;" /></td>
               </tr>
               <tr>
                 <td colspan="2" align="left">
-			<html:submit onclick="doLogin()">ログイン</html:submit>
+			<input type="submit" value="ログイン" onclick="doLogin()" />
 		</td>
               </tr>
             </table>
           </td>
         </tr>
   <tr>
-    <td><html:errors />
+    <td><form:errors path="*" cssClass="error-message" />
     </td>
   </tr>
       </table>
     </td>
   </tr>
 </table>
-</html:form>
+</form>
 </body>
-</html:html>
+</html>
 

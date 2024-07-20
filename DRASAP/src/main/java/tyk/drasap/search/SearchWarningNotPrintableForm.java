@@ -1,6 +1,6 @@
 package tyk.drasap.search;
 
-import org.apache.struts.action.ActionForm;
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * 検索結果から、出力指示をしたときに、Tiff以外を選択していたときに、
@@ -8,12 +8,12 @@ import org.apache.struts.action.ActionForm;
  * @author fumi
  * 作成日: 2004/01/19
  */
-public class SearchWarningNotPrintableForm extends ActionForm {
+public class SearchWarningNotPrintableForm extends BaseForm {
 	/**
-	 * 
+	 *
 	 */
-	private static final long serialVersionUID = 1L;
 	String act;
+
 	// ----------------------------------------------- getter, setter
 	/**
 	 * @return

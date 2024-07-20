@@ -6,9 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import tyk.drasap.search.SearchResultElement;
 
@@ -19,16 +17,17 @@ import tyk.drasap.search.SearchResultElement;
  * @version 2013/09/13 yamagishi
  */
 public class User {
-//	private static Category category = Category.getInstance(User.class.getName());
-// 2013.08.03 yamagishi add. start
-	private static DataSource ds;
-	static{
-		try{
-			ds = DataSourceFactory.getOracleDataSource();
-		} catch (Exception e) {
-		}
-	}
-// 2013.08.03 yamagishi add. end
+	//	private static Category category = Category.getInstance(User.class.getName());
+	// 2013.08.03 yamagishi add. start
+	//    private static DataSource ds;
+	//
+	//    static {
+	//        try {
+	//            ds = DataSourceFactory.getOracleDataSource();
+	//        } catch (Exception e) {
+	//        }
+	//    }
+	// 2013.08.03 yamagishi add. end
 
 	String id = "";// ユーザーID
 	String name = "";// 名前(和)
@@ -51,21 +50,21 @@ public class User {
 	private String viewSelCol4 = "";
 	private String viewSelCol5 = "";
 	private String viewSelCol6 = "";
-// 2013.07.24 yamagishi add. start
+	// 2013.07.24 yamagishi add. start
 	private String aclUpdateFlag = "";
 	private String aclBatchUpdateFlag = "";
 	private String dlManagerFlag = "";
 	// 2013.07.24 yamagishi add. end
-// 2019.09.20 yamamoto add. start
+	// 2019.09.20 yamamoto add. start
 	private Date passwdUpdDate = null;
 	private String reproUserFlag = "";
 	private String dwgRegReqFlag = "";
-// 2019.09.20 yamamoto add. end
-// 2020.02.10 yamamoto add. start
+	// 2019.09.20 yamamoto add. end
+	// 2020.02.10 yamamoto add. start
 	private String multiPdfFlag = "";
-// 2020.02.10 yamamoto add. end
+	// 2020.02.10 yamamoto add. end
 	private String language = "Japanese";
-//	String language = "English";
+	//	String language = "English";
 	boolean admin = false;// 管理者なら true
 	boolean delAdmin = false;// 管理者なら true
 	int position;// 職位
@@ -132,18 +131,19 @@ public class User {
 	boolean twinDrwgNoDisplay;// 1物2品番図番を表示可能ならtrue。
 	// 閲覧フォーマットをアクセスレベル毎に持つ
 	// key=アクセスレベル  value= 1：TIFF、2：PDF
-	HashMap<String, String>  viewPrintDoc = new HashMap<String, String>();
+	HashMap<String, String> viewPrintDoc = new HashMap<String, String>();
 	// アクセス権限をHashMapで持つ
 	// key=アクセスレベル value=アクセスレベル値{1,2,3}
 	HashMap<String, String> aclMap = new HashMap<String, String>();
 	String maxAclValue = "0";// このユーザーが持つ最高のアクセスレベル値・・・検索開始ボタンのロックで使用する
 	private String sys_id = null;
+
 	// ------------------------------------------ コンストラクター
 	/**
 	 * @param newHost ホスト名
 	 */
 	public User(String newHost) {
-		this.host = newHost;
+		host = newHost;
 	}
 
 	// ------------------------------------------ Method
@@ -156,7 +156,7 @@ public class User {
 	 * @param userGroup
 	 * @throws Exception
 	 */
-	public void addUserGroup(UserGroup userGroup) throws Exception{
+	public void addUserGroup(UserGroup userGroup) throws Exception {
 		userGroups.add(userGroup);
 		// ユーザーグループの権限を元に、ユーザーの権限をセットする
 		// 基本は権限を広くとる。
@@ -222,96 +222,102 @@ public class User {
 		pltrStamp = pltrStamp || userGroup.pltrStamp;// 専用プリンタのスタンプ。trueならスタンプする
 		// この利用者グループが使用可能なプリンタを、ユーザーの使用可能なプリンタとしてセットする。
 
-		for(int i = 0; i < userGroup.enablePrinters.size(); i++){
+		for (int i = 0; i < userGroup.enablePrinters.size(); i++) {
 			Printer printer = userGroup.enablePrinters.get(i);// 利用者グループが使用可能なプリンタ
 			// すでに同じプリンタが登録されていないか確認する
 			boolean registered = false;// すでに登録ずみプリンタならtrue
-			for(int j = 0; j < this.enablePrinters.size(); j++){
+			for (int j = 0; j < enablePrinters.size(); j++) {
 				// プリンタIDを比較する
-				if(printer.getId().equals((this.enablePrinters.get(j)).getId())){
+				if (printer.getId().equals(enablePrinters.get(j).getId())) {
 					registered = true;
 					break;
 				}
 			}
-			if(! registered){// 未登録なら、ユーザーの使用可能なプリンタとしてセットする。
-				this.enablePrinters.add(printer);
+			if (!registered) {// 未登録なら、ユーザーの使用可能なプリンタとしてセットする。
+				enablePrinters.add(printer);
 			}
 		}
 		// 利用者グループのアクセスレベルを、このユーザーに移す。
 		// このとき広くなるように移す
 		Iterator<String> keyIterator = userGroup.aclMap.keySet().iterator();// ユーザーグループのアクセスレベルのキー
-		while(keyIterator.hasNext()){
+		while (keyIterator.hasNext()) {
 			String aclId = keyIterator.next();// ユーザーグループのアクセスレベルのキー
 			String grpAclValue = userGroup.aclMap.get(aclId);// このグループの設定値
-			if(this.aclMap.containsKey(aclId)){
+			if (aclMap.containsKey(aclId)) {
 				// すでに同じアクセスレベルが設定されていたら
-				String uesrAclValue = this.aclMap.get(aclId);// ユーザーの設定値
-				if(grpAclValue.compareTo(uesrAclValue) == 0){
+				String uesrAclValue = aclMap.get(aclId);// ユーザーの設定値
+				if (grpAclValue.compareTo(uesrAclValue) == 0) {
 					// グループに設定されている設定値が同じの場合、"TIFF"を優先
-					if (userGroup.viewPrintDoc.equals("1")) {
-						this.viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
+					if ("1".equals(userGroup.viewPrintDoc)) {
+						viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
 					}
 				}
-				if(grpAclValue.compareTo(uesrAclValue) > 0){
+				if (grpAclValue.compareTo(uesrAclValue) > 0) {
 					// グループに設定されている設定値が大きければ、ユーザーにセットし直す
-					this.aclMap.put(aclId, grpAclValue);
-					this.viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
+					aclMap.put(aclId, grpAclValue);
+					viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
 				}
 			} else {
 				// まだこのアクセスレベルが未設定なら
-				this.aclMap.put(aclId, grpAclValue);
-				this.viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
+				aclMap.put(aclId, grpAclValue);
+				viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
 			}
 			// このユーザーが持つ最高のアクセスレベルをセット
-			if(grpAclValue.compareTo(this.maxAclValue) > 0){
-				this.maxAclValue = grpAclValue;
+			if (grpAclValue.compareTo(maxAclValue) > 0) {
+				maxAclValue = grpAclValue;
 			}
 		}
 	}
 
-// 2013.08.03 yamagishi add. start
+	// 2013.08.03 yamagishi add. start
 	/**
 	 * isPrintableのオーバロードメソッド。Connectionがない場合に対応。
 	 * ※connectionの管理はActionで行う為、多用しないこと。
 	 * @see isPrintable(SearchResultElement searchResultElement, Connection conn)
 	 */
-	@Deprecated
-	public boolean isPrintable(SearchResultElement searchResultElement) {
-		Connection conn = null;
-		try {
-			// DBから取得
-			conn = ds.getConnection();
-			return isPrintable(searchResultElement, conn, false);
-		} catch(Exception e) {
-			return false;
-		} finally {
-			if (conn != null) try { conn.close(); } catch (Exception e) {}
-		}
-	}
-// 2013.08.03 yamagishi add. end
-// 2013.06.25 yamagishi modified. start
-//	/**
-//	 * このユーザーが、この図面を印刷可能かを返す。
-//	 * View時にTiffで表示ならtrue。印刷不可のPDFならfalse。'04.May.6変更
-//	 * 1) 印刷権をもつか・・・アクセスレベル値が2以上またはAdmin権限を持つ
-//	 * 2) Tiffであるか
-//	 * @param searchResultElement 指定した図面
-//	 * @return View時にTiffで表示ならtrue。印刷不可のPDFならfalse。
-//	 */
-//	public boolean isPrintable(SearchResultElement searchResultElement){
-//		if(Integer.parseInt(this.aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 2
-//			&& ! isAdmin()){
-//			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
-//			// 2より小さい・・・印刷権がない
-//			// かつ、管理者でない
-//			return false;
-//
-//		} else if(! "1".equals(searchResultElement.getFileType())){
-//			// 図面タイプがTiffでなければ、印刷不可
-//			return false;
-//		}
-//		return true;
-//	}
+
+	//    @Deprecated
+	//    public boolean isPrintable(SearchResultElement searchResultElement) {
+	//        Connection conn = null;
+	//        try {
+	//            // DBから取得
+	//            conn = ds.getConnection();
+	//            return isPrintable(searchResultElement, conn, false);
+	//        } catch (Exception e) {
+	//            return false;
+	//        } finally {
+	//            if (conn != null) {
+	//                try {
+	//                    conn.close();
+	//                } catch (Exception e) {
+	//                }
+	//            }
+	//        }
+	//    }
+	// 2013.08.03 yamagishi add. end
+	// 2013.06.25 yamagishi modified. start
+	//	/**
+	//	 * このユーザーが、この図面を印刷可能かを返す。
+	//	 * View時にTiffで表示ならtrue。印刷不可のPDFならfalse。'04.May.6変更
+	//	 * 1) 印刷権をもつか・・・アクセスレベル値が2以上またはAdmin権限を持つ
+	//	 * 2) Tiffであるか
+	//	 * @param searchResultElement 指定した図面
+	//	 * @return View時にTiffで表示ならtrue。印刷不可のPDFならfalse。
+	//	 */
+	//	public boolean isPrintable(SearchResultElement searchResultElement){
+	//		if(Integer.parseInt(this.aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 2
+	//			&& ! isAdmin()){
+	//			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
+	//			// 2より小さい・・・印刷権がない
+	//			// かつ、管理者でない
+	//			return false;
+	//
+	//		} else if(! "1".equals(searchResultElement.getFileType())){
+	//			// 図面タイプがTiffでなければ、印刷不可
+	//			return false;
+	//		}
+	//		return true;
+	//	}
 	/**
 	 * このユーザーが、この図面を印刷可能かを返す。
 	 * View時にTiffで表示ならtrue。印刷不可のPDFならfalse。'04.May.6変更
@@ -323,8 +329,9 @@ public class User {
 	 */
 	public boolean isPrintable(SearchResultElement searchResultElement, Connection conn) throws Exception {
 		// DBから取得
-		return isPrintable(searchResultElement, conn, false);
+		return this.isPrintable(searchResultElement, conn, false);
 	}
+
 	/**
 	 * このユーザーが、この図面を印刷可能かを返す。
 	 * View時にTiffで表示ならtrue。印刷不可のPDFならfalse。'04.May.6変更
@@ -339,56 +346,53 @@ public class User {
 	public boolean isPrintable(SearchResultElement searchResultElement, Connection conn, boolean refSession) throws Exception {
 		// アクセスレベル取得
 		HashMap<String, String> aclMap = refSession ? this.getAclMap() : this.getAclMap(conn);
-//		if (Integer.parseInt(this.getAclMap(conn).get(searchResultElement.getAttr("ACL_ID"))) < 2
-//				&& !isAdmin()) {
+		//		if (Integer.parseInt(this.getAclMap(conn).get(searchResultElement.getAttr("ACL_ID"))) < 2
+		//				&& !isAdmin()) {
 		if (Integer.parseInt(aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 2
-				&& !isAdmin()) {
+				&& !isAdmin() || !"1".equals(searchResultElement.getFileType())) {
 			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
 			// 2より小さい・・・印刷権がない
 			// かつ、管理者でない
-			return false;
-
-		} else if (!"1".equals(searchResultElement.getFileType())) {
 			// 図面タイプがTiffでなければ、印刷不可
 			return false;
 		}
 		return true;
 	}
-// 2013.06.25 yamagishi modified. end
+	// 2013.06.25 yamagishi modified. end
 
-// 2013.06.25 yamagishi modified. start
-//	/**
-//	 * このユーザーが、指定プリンタで印刷可能かを返す。
-//	 * View時にTiffで表示ならtrue。印刷不可のPDFならfalse。'04.May.6変更
-//	 * 1) 印刷権をもつか・・・アクセスレベル値が1以上またはAdmin権限を持つ
-//	 * 2) Tiffであるか
-//	 * @param searchResultElement 指定した図面
-//	 * @return 指定プリンタで印刷可能なら true
-//	 */
-//	public boolean isPrintableByReq(SearchResultElement searchResultElement){
-/* OCEのための特別なログ出力 **************************
-category.debug("指定された図面は " + searchResultElement.getDrwgNo() + "、ACL_ID=" + searchResultElement.getAttr("ACL_ID"));
-category.debug("このときのユーザーのAclMapは");
-Iterator tempKeyItr = aclMap.keySet().iterator();
-while(tempKeyItr.hasNext()){
-	Object aclId = tempKeyItr.next();
-	category.debug("ACL_ID=" + (String)aclId + ", ACL_VALUE=" + (String)aclMap.get(aclId));
-}
-category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchResultElement.getAttr("ACL_ID")));
-*******************************************************/
-//		if(Integer.parseInt(this.aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 1
-//			&& ! isAdmin()){
-//			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
-//			// 1より小さい・・・検索参照権がない。検索参照権限があれば指定プリンタで印刷可能。'04.May.6変更
-//			// かつ、管理者でない
-//			return false;
-//
-//		} else if(! "1".equals(searchResultElement.getFileType())){
-//			// 図面タイプがTiffでなければ、印刷不可
-//			return false;
-//		}
-//		return true;
-//	}
+	// 2013.06.25 yamagishi modified. start
+	//	/**
+	//	 * このユーザーが、指定プリンタで印刷可能かを返す。
+	//	 * View時にTiffで表示ならtrue。印刷不可のPDFならfalse。'04.May.6変更
+	//	 * 1) 印刷権をもつか・・・アクセスレベル値が1以上またはAdmin権限を持つ
+	//	 * 2) Tiffであるか
+	//	 * @param searchResultElement 指定した図面
+	//	 * @return 指定プリンタで印刷可能なら true
+	//	 */
+	//	public boolean isPrintableByReq(SearchResultElement searchResultElement){
+	/* OCEのための特別なログ出力 **************************
+	category.debug("指定された図面は " + searchResultElement.getDrwgNo() + "、ACL_ID=" + searchResultElement.getAttr("ACL_ID"));
+	category.debug("このときのユーザーのAclMapは");
+	Iterator tempKeyItr = aclMap.keySet().iterator();
+	while(tempKeyItr.hasNext()){
+		Object aclId = tempKeyItr.next();
+		category.debug("ACL_ID=" + (String)aclId + ", ACL_VALUE=" + (String)aclMap.get(aclId));
+	}
+	category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchResultElement.getAttr("ACL_ID")));
+	*******************************************************/
+	//		if(Integer.parseInt(this.aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 1
+	//			&& ! isAdmin()){
+	//			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
+	//			// 1より小さい・・・検索参照権がない。検索参照権限があれば指定プリンタで印刷可能。'04.May.6変更
+	//			// かつ、管理者でない
+	//			return false;
+	//
+	//		} else if(! "1".equals(searchResultElement.getFileType())){
+	//			// 図面タイプがTiffでなければ、印刷不可
+	//			return false;
+	//		}
+	//		return true;
+	//	}
 	/**
 	 * このユーザーが、指定プリンタで印刷可能かを返す。
 	 * View時にTiffで表示ならtrue。印刷不可のPDFならfalse。'04.May.6変更
@@ -400,8 +404,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public boolean isPrintableByReq(SearchResultElement searchResultElement, Connection conn) throws Exception {
 		// DBから取得
-		return isPrintableByReq(searchResultElement, conn, false);
+		return this.isPrintableByReq(searchResultElement, conn, false);
 	}
+
 	/**
 	 * このユーザーが、指定プリンタで印刷可能かを返す。
 	 * View時にTiffで表示ならtrue。印刷不可のPDFならfalse。'04.May.6変更
@@ -413,42 +418,39 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 * 			true: セッションからキャッシュを取得, false: DBから取得
 	 * @return 指定プリンタで印刷可能なら true
 	 */
-	public boolean isPrintableByReq(SearchResultElement searchResultElement, Connection conn, boolean  refSession) throws Exception {
+	public boolean isPrintableByReq(SearchResultElement searchResultElement, Connection conn, boolean refSession) throws Exception {
 		// アクセスレベル取得
 		HashMap<String, String> aclMap = refSession ? this.getAclMap() : this.getAclMap(conn);
-//		if (Integer.parseInt(this.getAclMap(conn).get(searchResultElement.getAttr("ACL_ID"))) < 1
-//				&& !isAdmin()) {
+		//		if (Integer.parseInt(this.getAclMap(conn).get(searchResultElement.getAttr("ACL_ID"))) < 1
+		//				&& !isAdmin()) {
 		if (Integer.parseInt(aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 1
-				&& !isAdmin()) {
+				&& !isAdmin() || !"1".equals(searchResultElement.getFileType())) {
 			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
 			// 1より小さい・・・検索参照権がない。検索参照権限があれば指定プリンタで印刷可能。'04.May.6変更
 			// かつ、管理者でない
-			return false;
-
-		} else if (!"1".equals(searchResultElement.getFileType())) {
 			// 図面タイプがTiffでなければ、印刷不可
 			return false;
 		}
 		return true;
 	}
-// 2013.06.25 yamagishi modified. end
+	// 2013.06.25 yamagishi modified. end
 
-// 2013.06.25 yamagishi modified. start
-//	/**
-//	 * 指定された図番が、このユーザーで変更可能か?
-//	 * @param searchResultElement
-//	 * @return
-//	 */
-//	public boolean isChangableAclv(SearchResultElement searchResultElement){
-//		if(Integer.parseInt(this.aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 3
-//			&& ! isAdmin()){
-//			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
-//			// 3より小さい・・・変更権がない
-//			// かつ、管理者でない
-//			return false;
-//		}
-//		return true;
-//	}
+	// 2013.06.25 yamagishi modified. start
+	//	/**
+	//	 * 指定された図番が、このユーザーで変更可能か?
+	//	 * @param searchResultElement
+	//	 * @return
+	//	 */
+	//	public boolean isChangableAclv(SearchResultElement searchResultElement){
+	//		if(Integer.parseInt(this.aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 3
+	//			&& ! isAdmin()){
+	//			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
+	//			// 3より小さい・・・変更権がない
+	//			// かつ、管理者でない
+	//			return false;
+	//		}
+	//		return true;
+	//	}
 	/**
 	 * 指定された図番が、このユーザーで変更可能か?
 	 * @param searchResultElement
@@ -457,8 +459,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public boolean isChangableAclv(SearchResultElement searchResultElement, Connection conn) throws Exception {
 		// DBから取得
-		return isChangableAclv(searchResultElement, conn);
+		return this.isChangableAclv(searchResultElement, conn);
 	}
+
 	/**
 	 * 指定された図番が、このユーザーで変更可能か?
 	 * @param searchResultElement
@@ -470,8 +473,8 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	public boolean isChangableAclv(SearchResultElement searchResultElement, Connection conn, boolean refSession) throws Exception {
 		// アクセスレベル取得
 		HashMap<String, String> aclMap = refSession ? this.getAclMap() : this.getAclMap(conn);
-//		if (Integer.parseInt(this.getAclMap(conn).get(searchResultElement.getAttr("ACL_ID"))) < 3
-//				&& !isAdmin()) {
+		//		if (Integer.parseInt(this.getAclMap(conn).get(searchResultElement.getAttr("ACL_ID"))) < 3
+		//				&& !isAdmin()) {
 		if (Integer.parseInt(aclMap.get(searchResultElement.getAttr("ACL_ID"))) < 3
 				&& !isAdmin()) {
 			// 図面のアクセスレベルIDから取得できる、このユーザーのアクセルレベル値が
@@ -481,7 +484,7 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 		}
 		return true;
 	}
-// 2013.06.25 yamagishi modified. end
+	// 2013.06.25 yamagishi modified. end
 
 	/**
 	 * このユーザーが、アクセスレベルを変更可能ならture。
@@ -489,21 +492,22 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 * @param drasapInfo
 	 * @return
 	 */
-	public boolean hasChangableAclvAuth(DrasapInfo drasapInfo){
+	public boolean hasChangableAclvAuth(DrasapInfo drasapInfo) {
 		// 条件を変更。'04.May.19変更 by Hirata
-		return (0 < this.position &&
-					this.position <= drasapInfo.getAclvChangablePosition());
+		return 0 < position &&
+				position <= drasapInfo.getAclvChangablePosition();
 		//return (this.admin || this.position >= drasapInfo.getAclvChangablePosition());
 	}
+
 	/**
 	 * このユーザーの使用可能なプリンター一覧から、指定されたプリンターのオブジェクトを返す
 	 * @param printerId
 	 * @return
 	 */
-	public Printer getPrinter(String printerId){
-		for(int i = 0; i < this.getEnablePrinters().size(); i++){
-			Printer printer = (Printer) this.getEnablePrinters().get(i);
-			if(printer.getId().equals(printerId)){
+	public Printer getPrinter(String printerId) {
+		for (int i = 0; i < getEnablePrinters().size(); i++) {
+			Printer printer = getEnablePrinters().get(i);
+			if (printer.getId().equals(printerId)) {
 				return printer;
 			}
 		}
@@ -544,7 +548,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setId(String newId) {
 		id = newId;
-		if(id == null) id = "";
+		if (id == null) {
+			id = "";
+		}
 	}
 
 	/**
@@ -552,7 +558,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setName(String newName) {
 		name = newName;
-		if(name == null) name = "";
+		if (name == null) {
+			name = "";
+		}
 	}
 
 	/**
@@ -560,7 +568,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setNameE(String newNameE) {
 		nameE = newNameE;
-		if(nameE == null) nameE = "";
+		if (nameE == null) {
+			nameE = "";
+		}
 	}
 
 	/**
@@ -575,7 +585,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setDefaultUserGroup(String string) {
 		defaultUserGroup = string;
-		if(defaultUserGroup == null) defaultUserGroup="";
+		if (defaultUserGroup == null) {
+			defaultUserGroup = "";
+		}
 	}
 
 	/**
@@ -590,7 +602,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setDept(String string) {
 		dept = string;
-		if(dept == null) dept="";
+		if (dept == null) {
+			dept = "";
+		}
 	}
 
 	/**
@@ -633,7 +647,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setSearchSelCol1(String string) {
 		searchSelCol1 = string;
-		if(searchSelCol1 == null) searchSelCol1="";
+		if (searchSelCol1 == null) {
+			searchSelCol1 = "";
+		}
 	}
 
 	/**
@@ -641,7 +657,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setSearchSelCol2(String string) {
 		searchSelCol2 = string;
-		if(searchSelCol2 == null) searchSelCol2="";
+		if (searchSelCol2 == null) {
+			searchSelCol2 = "";
+		}
 	}
 
 	/**
@@ -649,7 +667,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setSearchSelCol3(String string) {
 		searchSelCol3 = string;
-		if(searchSelCol3 == null) searchSelCol3="";
+		if (searchSelCol3 == null) {
+			searchSelCol3 = "";
+		}
 	}
 
 	/**
@@ -657,7 +677,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setSearchSelCol4(String string) {
 		searchSelCol4 = string;
-		if(searchSelCol4 == null) searchSelCol4="";
+		if (searchSelCol4 == null) {
+			searchSelCol4 = "";
+		}
 	}
 
 	/**
@@ -665,7 +687,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setSearchSelCol5(String string) {
 		searchSelCol5 = string;
-		if(searchSelCol5 == null) searchSelCol5="";
+		if (searchSelCol5 == null) {
+			searchSelCol5 = "";
+		}
 	}
 
 	/**
@@ -680,29 +704,32 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setDisplayCount(String string) {
 		displayCount = string;
-		if(displayCount == null) displayCount="";
+		if (displayCount == null) {
+			displayCount = "";
+		}
 	}
 
-// 2013.06.25 yamagishi modified. start
+	// 2013.06.25 yamagishi modified. start
 	/**
 	 * DBからの取得をデフォルトとする為、パッケージに変更
 	 * @return
 	 */
-//	public HashMap<String, String> getAclMap() {
+	//	public HashMap<String, String> getAclMap() {
 	HashMap<String, String> getAclMap() {
 		return aclMap;
 	}
-// 2013.06.25 yamagishi modified. end
-// 2013.06.25 yamagishi add. start
+
+	// 2013.06.25 yamagishi modified. end
+	// 2013.06.25 yamagishi add. start
 	/**
 	 * @return aclMap
 	 */
 	public HashMap<String, String> getAclMap(Connection conn) throws Exception {
 		// ユーザーが持つアクセスレベルのセットを取得
-		aclMap = resetUserAcl(UserGrpAclRelationDB.getAclList(this.id, conn));
+		aclMap = resetUserAcl(UserGrpAclRelationDB.getAclList(id, conn));
 		return aclMap;
 	}
-// 2013.06.25 yamagishi add. end
+	// 2013.06.25 yamagishi add. end
 
 	/**
 	 * @return
@@ -1138,7 +1165,7 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 		return viewSelCol6;
 	}
 
-// 2013.09.13 yamagishi add. start
+	// 2013.09.13 yamagishi add. start
 	/**
 	 * aclUpdateFlagを取得します。
 	 * @return aclUpdateFlag
@@ -1162,12 +1189,14 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	public String getDlManagerFlag() {
 		return dlManagerFlag;
 	}
+
 	/**
 	 * DLマネージャが利用可能か true/falseで返す。
 	 */
 	public boolean isDLManagerAvailable() {
-		return ("1".equals(dlManagerFlag) || "2".equals(dlManagerFlag)) ? true : false;
+		return ("1".equals(dlManagerFlag) || "2".equals(dlManagerFlag)) == true;
 	}
+
 	/**
 	 * DLマネージャの保存ボタンが利用可能か返す。
 	 *  1:保存可能、0:保存不可
@@ -1175,8 +1204,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	public String getDLManagerSaveEnabledFlag() {
 		return "2".equals(dlManagerFlag) ? "1" : "0";
 	}
-// 2013.09.13 yamagishi add. end
-// 2019.09.20 yamamoto add. start
+
+	// 2013.09.13 yamagishi add. end
+	// 2019.09.20 yamamoto add. start
 	/**
 	 * passwdUpdDateを取得します。
 	 * @return passwdUpdDate
@@ -1189,14 +1219,14 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 * 原図庫ユーザか true/falseで返す。
 	 */
 	public boolean isReproUser() {
-		return "1".equals(reproUserFlag) ? true : false;
+		return "1".equals(reproUserFlag) == true;
 	}
 
 	/**
 	 * 図面登録依頼可能か true/falseで返す。
 	 */
 	public boolean isdwgRegReqFlag() {
-		return "1".equals(dwgRegReqFlag) ? true : false;
+		return "1".equals(dwgRegReqFlag) == true;
 	}
 
 	/**
@@ -1208,16 +1238,18 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 		if (StringUtils.isEmpty(aclBatchUpdateFlag)) {
 			return false;
 		}
-		return "1".equals(aclBatchUpdateFlag) ? true : false;
+		return "1".equals(aclBatchUpdateFlag) == true;
 	}
 
-// 2019.09.20 yamamoto add. end
+	// 2019.09.20 yamamoto add. end
 	/**
 	 * @param string
 	 */
 	public void setViewSelCol1(String string) {
 		viewSelCol1 = string;
-		if(viewSelCol1 == null) viewSelCol1 = "";
+		if (viewSelCol1 == null) {
+			viewSelCol1 = "";
+		}
 	}
 
 	/**
@@ -1225,7 +1257,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setViewSelCol2(String string) {
 		viewSelCol2 = string;
-		if(viewSelCol2 == null) viewSelCol2 = "";
+		if (viewSelCol2 == null) {
+			viewSelCol2 = "";
+		}
 	}
 
 	/**
@@ -1233,7 +1267,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setViewSelCol3(String string) {
 		viewSelCol3 = string;
-		if(viewSelCol3 == null) viewSelCol3 = "";
+		if (viewSelCol3 == null) {
+			viewSelCol3 = "";
+		}
 	}
 
 	/**
@@ -1241,7 +1277,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setViewSelCol4(String string) {
 		viewSelCol4 = string;
-		if(viewSelCol4 == null) viewSelCol4 = "";
+		if (viewSelCol4 == null) {
+			viewSelCol4 = "";
+		}
 	}
 
 	/**
@@ -1249,7 +1287,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setViewSelCol5(String string) {
 		viewSelCol5 = string;
-		if(viewSelCol5 == null) viewSelCol5 = "";
+		if (viewSelCol5 == null) {
+			viewSelCol5 = "";
+		}
 	}
 
 	/**
@@ -1257,17 +1297,21 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setViewSelCol6(String string) {
 		viewSelCol6 = string;
-		if(viewSelCol6 == null) viewSelCol6 = "";
+		if (viewSelCol6 == null) {
+			viewSelCol6 = "";
+		}
 	}
 
-// 2013.07.24 yamagishi add. start
+	// 2013.07.24 yamagishi add. start
 	/**
 	 * aclUpdateFlagを設定します。
 	 * @param aclUpdateFlag aclUpdateFlag
 	 */
 	public void setAclUpdateFlag(String string) {
 		aclUpdateFlag = string;
-		if (aclUpdateFlag == null) aclUpdateFlag = "";
+		if (aclUpdateFlag == null) {
+			aclUpdateFlag = "";
+		}
 	}
 
 	/**
@@ -1276,7 +1320,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setAclBatchUpdateFlag(String string) {
 		aclBatchUpdateFlag = string;
-		if(aclBatchUpdateFlag == null) aclBatchUpdateFlag = "";
+		if (aclBatchUpdateFlag == null) {
+			aclBatchUpdateFlag = "";
+		}
 	}
 
 	/**
@@ -1285,17 +1331,20 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setDlManagerFlag(String string) {
 		dlManagerFlag = string;
-		if (dlManagerFlag == null) dlManagerFlag = "";
+		if (dlManagerFlag == null) {
+			dlManagerFlag = "";
+		}
 	}
-// 2013.07.24 yamagishi add. end
-// 2019.09.20 yamamoto add. start
+
+	// 2013.07.24 yamagishi add. end
+	// 2019.09.20 yamamoto add. start
 	/**
 	 * passwdUpdDateを設定します。
 	 * @param string
 	 */
 	public void setPasswdUpdDate(Date date) {
 		passwdUpdDate = date;
-//		if (passwdUpdDate == null) passwdUpdDate = "";
+		//		if (passwdUpdDate == null) passwdUpdDate = "";
 	}
 
 	/**
@@ -1304,7 +1353,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setReproUserFlag(String string) {
 		reproUserFlag = string;
-		if (reproUserFlag == null) reproUserFlag = "";
+		if (reproUserFlag == null) {
+			reproUserFlag = "";
+		}
 	}
 
 	/**
@@ -1313,10 +1364,13 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setDwgRegReqFlag(String string) {
 		dwgRegReqFlag = string;
-		if (dwgRegReqFlag == null) dwgRegReqFlag = "";
+		if (dwgRegReqFlag == null) {
+			dwgRegReqFlag = "";
+		}
 	}
-// 2019.09.20 yamamoto add end.
-// 2020.02.10 yamamoto add start.
+
+	// 2019.09.20 yamamoto add end.
+	// 2020.02.10 yamamoto add start.
 	/**
 	 * multiPdfFlagを設定します。
 	 * @param string
@@ -1330,9 +1384,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 * @param string
 	 */
 	public boolean isMultiPdf() {
-		return "1".equals(multiPdfFlag) ? true : false;
+		return "1".equals(multiPdfFlag) == true;
 	}
-// 2020.02.10 yamamoto add end.
+	// 2020.02.10 yamamoto add end.
 
 	/**
 	 * @return
@@ -1354,6 +1408,7 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	public boolean isAdmin() {
 		return admin;
 	}
+
 	/**
 	 * @return
 	 */
@@ -1368,7 +1423,7 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	public void setAdminFlag(String newAdminFlag) {
 		admin = "1".equals(newAdminFlag);
 
-		if (newAdminFlag.equals("2")) {
+		if ("2".equals(newAdminFlag)) {
 			admin = true;
 			delAdmin = true;
 		}
@@ -1388,10 +1443,10 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 * @param i
 	 */
 	public void setPosition(String newPosition) {
-		try{
-			this.position = Integer.parseInt(newPosition.trim());
-		} catch(Exception e){
-			this.position = 0;
+		try {
+			position = Integer.parseInt(newPosition.trim());
+		} catch (Exception e) {
+			position = 0;
 		}
 	}
 
@@ -1407,21 +1462,29 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public void setDeptName(String string) {
 		deptName = string;
-		if(deptName == null) deptName="";
+		if (deptName == null) {
+			deptName = "";
+		}
 	}
 
 	public String getLanguage() {
 		return language;
 	}
+
 	public String getLanKey() {
-		if (language.equals("Japanese"))  return "jp";
-		if (language.equals("English"))  return "en";
+		if ("Japanese".equals(language)) {
+			return "jp";
+		}
+		if ("English".equals(language)) {
+			return "en";
+		}
 		return "jp";
 	}
 
 	public void setLanguage(String language) {
 		this.language = language;
 	}
+
 	public String getSys_id() {
 		return sys_id;
 	}
@@ -1434,24 +1497,24 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 		return twinDrwgNoDisplay;
 	}
 
-// 2013.06.25 yamagishi modified. start
-//	/**
-//	 * @return viewPrintDoc
-//	 */
-//	public String getViewPrintDoc(String aclId) {
-//		String aclValue = this.getAclMap().get(aclId);
-//		if (aclValue == null || aclValue.equals("1")) {
-//			return "noprintPdf";
-//		} else {
-//			if (viewPrintDoc.get(aclId).equals("1")) {
-//				return "tiff";
-//			} else if (viewPrintDoc.get(aclId).equals("2")) {
-//				return "printablePdf";
-//			} else {
-//				return null;
-//			}
-//		}
-//	}
+	// 2013.06.25 yamagishi modified. start
+	//	/**
+	//	 * @return viewPrintDoc
+	//	 */
+	//	public String getViewPrintDoc(String aclId) {
+	//		String aclValue = this.getAclMap().get(aclId);
+	//		if (aclValue == null || aclValue.equals("1")) {
+	//			return "noprintPdf";
+	//		} else {
+	//			if (viewPrintDoc.get(aclId).equals("1")) {
+	//				return "tiff";
+	//			} else if (viewPrintDoc.get(aclId).equals("2")) {
+	//				return "printablePdf";
+	//			} else {
+	//				return null;
+	//			}
+	//		}
+	//	}
 	/**
 	 * @param aclId
 	 * @param conn
@@ -1459,8 +1522,9 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	public String getViewPrintDoc(String aclId, Connection conn) throws Exception {
 		// DBから取得
-		return getViewPrintDoc(aclId, conn, false);
+		return this.getViewPrintDoc(aclId, conn, false);
 	}
+
 	/**
 	 * @param aclId
 	 * @param conn
@@ -1472,19 +1536,19 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 		// アクセスレベル取得
 		HashMap<String, String> aclMap = refSession ? this.getAclMap() : this.getAclMap(conn);
 		String aclValue = aclMap.get(aclId);
-		if (aclValue == null || aclValue.equals("1")) {
+		if (aclValue == null || "1".equals(aclValue)) {
 			return "noprintPdf";
+		}
+		if ("1".equals(viewPrintDoc.get(aclId))) {
+			return "tiff";
+		}
+		if ("2".equals(viewPrintDoc.get(aclId))) {
+			return "printablePdf";
 		} else {
-			if (viewPrintDoc.get(aclId).equals("1")) {
-				return "tiff";
-			} else if (viewPrintDoc.get(aclId).equals("2")) {
-				return "printablePdf";
-			} else {
-				return null;
-			}
+			return null;
 		}
 	}
-// 2013.06.25 yamagishi modified. end
+	// 2013.06.25 yamagishi modified. end
 
 	/**
 	 * @return viewPrintDoc
@@ -1500,7 +1564,7 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 		this.viewPrintDoc = viewPrintDoc;
 	}
 
-// 2013.06.25 yamagishi add. start
+	// 2013.06.25 yamagishi add. start
 	/**
 	 * 利用者グループのアクセスレベルを、このユーザーに移す。
 	 * このとき広くなるように移す（※再取得用、ACLの最新を反映する）
@@ -1509,11 +1573,11 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 	 */
 	private HashMap<String, String> resetUserAcl(ArrayList<UserGrpAclRelation> newAclList) {
 
-		this.viewPrintDoc.clear();	// 設定済み閲覧フォーマットをクリア
-		this.aclMap.clear();		// 設定済みアクセスレベルをクリア
+		viewPrintDoc.clear(); // 設定済み閲覧フォーマットをクリア
+		aclMap.clear(); // 設定済みアクセスレベルをクリア
 
-		String aclId = null;		// ユーザーグループのアクセスレベルのキー
-		String grpAclValue = null;	// このグループのアクセスレベル設定値
+		String aclId = null; // ユーザーグループのアクセスレベルのキー
+		String grpAclValue = null; // このグループのアクセスレベル設定値
 		UserGroup userGroup = null;
 
 		// 利用者グループのアクセスレベルを、このユーザーに移す。
@@ -1521,39 +1585,39 @@ category.debug("この結果求められるAclValueは" + (String)this.aclMap.get(searchRe
 		for (UserGrpAclRelation userGrpAcl : newAclList) {
 			aclId = userGrpAcl.getAclId();
 			grpAclValue = userGrpAcl.getAclValue();
-			for (UserGroup element : this.userGroups) {
+			for (UserGroup element : userGroups) {
 				if (element.cd.equals(userGrpAcl.getUserGrpCode())) {
 					userGroup = element;
 					break;
 				}
 			}
 
-			if (this.aclMap.containsKey(aclId)) {
+			if (aclMap.containsKey(aclId)) {
 				// すでに同じアクセスレベルが設定されていたら
-				String uesrAclValue = this.aclMap.get(aclId);// ユーザーの設定値
+				String uesrAclValue = aclMap.get(aclId);// ユーザーの設定値
 				if (grpAclValue.compareTo(uesrAclValue) == 0) {
 					// グループに設定されている設定値が同じの場合、"TIFF"を優先
-					if (userGroup.viewPrintDoc.equals("1")) {
-						this.viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
+					if ("1".equals(userGroup.viewPrintDoc)) {
+						viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
 					}
 				}
 				if (grpAclValue.compareTo(uesrAclValue) > 0) {
 					// グループに設定されている設定値が大きければ、ユーザーにセットし直す
-					this.aclMap.put(aclId, grpAclValue);
-					this.viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
+					aclMap.put(aclId, grpAclValue);
+					viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
 				}
 			} else {
 				// まだこのアクセスレベルが未設定なら
-				this.aclMap.put(aclId, grpAclValue);
-				this.viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
+				aclMap.put(aclId, grpAclValue);
+				viewPrintDoc.put(aclId, userGroup.viewPrintDoc);
 			}
 			// このユーザーが持つ最高のアクセスレベルをセット
-			if (grpAclValue.compareTo(this.maxAclValue) > 0) {
-				this.maxAclValue = grpAclValue;
+			if (grpAclValue.compareTo(maxAclValue) > 0) {
+				maxAclValue = grpAclValue;
 			}
 		}
-		return this.aclMap;
+		return aclMap;
 	}
-// 2013.06.25 yamagishi add. end
+	// 2013.06.25 yamagishi add. end
 
 }

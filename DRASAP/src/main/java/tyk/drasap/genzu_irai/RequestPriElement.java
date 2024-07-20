@@ -21,27 +21,27 @@ public class RequestPriElement {
 	String irai;//àÀóäé“
 	String busyo;//ïîèêñº
 	String number;//î‘çÜ
-	
+
 	public RequestPriElement(String newJob_id, String newJob_Name, String newGouki, String newGenzu,
-									String newIrai, String newBusyo, String newNumber){
-		this.job_id = newJob_id;
-		this.job_Name = newJob_Name;	
-		this.gouki = newGouki;
-		this.genzu = newGenzu;
-		this.irai = newIrai;
-		this.busyo = newBusyo;
-		this.number = newNumber;									
-	
-	}	
-	
+			String newIrai, String newBusyo, String newNumber) {
+		job_id = newJob_id;
+		job_Name = newJob_Name;
+		gouki = newGouki;
+		genzu = newGenzu;
+		irai = newIrai;
+		busyo = newBusyo;
+		number = newNumber;
+
+	}
+
 	public String getJob_id() {
 		return job_id;
 	}
 
 	public void setJob_id(String job_id) {
 		this.job_id = job_id;
-	}							
-	
+	}
+
 	public String getJob_Name() {
 		return job_Name;
 	}
@@ -49,7 +49,7 @@ public class RequestPriElement {
 	public void setJob_Name(String job_Name) {
 		this.job_Name = job_Name;
 	}
-	
+
 	public String getGouki() {
 		return gouki;
 	}
@@ -57,15 +57,15 @@ public class RequestPriElement {
 	public void setGouki(String gouki) {
 		this.gouki = gouki;
 	}
-	
+
 	public String getGenzu() {
 		return genzu;
 	}
 
 	public void setGenzu(String genzu) {
 		this.genzu = genzu;
-	}	
-	
+	}
+
 	public String getIrai() {
 		return irai;
 	}
@@ -73,7 +73,7 @@ public class RequestPriElement {
 	public void setIrai(String irai) {
 		this.irai = irai;
 	}
-	
+
 	public String getBusyo() {
 		return busyo;
 	}
@@ -81,14 +81,13 @@ public class RequestPriElement {
 	public void setBusyo(String busyo) {
 		this.busyo = busyo;
 	}
-	
+
 	public String getNumber() {
 		return number;
 	}
 
 	public void setNumber(String number) {
 		this.number = number;
-	}	
-	
+	}
 
 }

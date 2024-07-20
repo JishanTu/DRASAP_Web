@@ -1,18 +1,22 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<html:html>
+<c:if test="${empty sessionScope.user}">
+    <script>
+        location.replace('<%=request.getContextPath() %>/timeout');
+    </script>
+</c:if>
+<html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>Drawing Search and Print System [運用支援ツールログイン]</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 	<script type="text/javascript">
 	<!--
 		var browserName = navigator.appName;
@@ -38,8 +42,8 @@
 	</script>
 </head>
 <body onload="onInitFocus()">
-<html:errors />
-<html:form action="/management_Login" >
+<form:errors path="*" cssClass="error-message" />
+<form action="<%=request.getContextPath() %>/management_Login" >
 
 <table align="center" border="0" cellspacing="0" cellpadding="5">
     <caption align="center"><b>運用支援ツールログイン</b></caption>
@@ -51,11 +55,11 @@
     </tr>
     <tr>
     <td align="center" colspan="2"style="background-color:#FFFFFF;">
-	<html:submit style="margin-right:20px;">ログイン</html:submit>
+	<input type="submit" value="ログイン" style="margin-right: 20px;">
 	<input type="button" value="キャンセル" onclick="cancel()" />
     </td>
     </tr>
 </table>
-</html:form>
+</form>
 </body>
-</html:html>
+</html>

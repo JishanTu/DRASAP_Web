@@ -21,71 +21,83 @@ public class Printer {
 	boolean printableA3L;// A3L '04.Oct.19追加
 	String clasify;// 区分
 	// ------------------------------------------------------- コンストラクタ
+
 	/**
 	 * コンストラクタ
 	 */
 	public Printer(String newId, String newName, String newDisplayName, String newDisplayFlag,
-				String newMaxSize,
-				String newPrintableA0,String newPrintableA1,String newPrintableA2,String newPrintableA3,
-				String newPrintableA4,String newPrintableA0L,String newPrintableA1L,String newPrintableA2L,
-				String newPrintableA3L,
-				String newClasify) {
-		this.id = newId;
-		this.name = newName;
-		this.displayName = newDisplayName;
-		if(displayName == null){ displayName=""; }
-		this.display = "1".equals(newDisplayFlag);
-		this.maxSize = newMaxSize;
-		this.printableA0 = "1".equals(newPrintableA0);
-		this.printableA1 = "1".equals(newPrintableA1);
-		this.printableA2 = "1".equals(newPrintableA2);
-		this.printableA3 = "1".equals(newPrintableA3);
-		this.printableA4 = "1".equals(newPrintableA4);
-		this.printableA0L = "1".equals(newPrintableA0L);
-		this.printableA1L = "1".equals(newPrintableA1L);
-		this.printableA2L = "1".equals(newPrintableA2L);
-		this.printableA3L = "1".equals(newPrintableA3L);
-		this.clasify = newClasify;
+			String newMaxSize,
+			String newPrintableA0, String newPrintableA1, String newPrintableA2, String newPrintableA3,
+			String newPrintableA4, String newPrintableA0L, String newPrintableA1L, String newPrintableA2L,
+			String newPrintableA3L,
+			String newClasify) {
+		id = newId;
+		name = newName;
+		displayName = newDisplayName;
+		if (displayName == null) {
+			displayName = "";
+		}
+		display = "1".equals(newDisplayFlag);
+		maxSize = newMaxSize;
+		printableA0 = "1".equals(newPrintableA0);
+		printableA1 = "1".equals(newPrintableA1);
+		printableA2 = "1".equals(newPrintableA2);
+		printableA3 = "1".equals(newPrintableA3);
+		printableA4 = "1".equals(newPrintableA4);
+		printableA0L = "1".equals(newPrintableA0L);
+		printableA1L = "1".equals(newPrintableA1L);
+		printableA2L = "1".equals(newPrintableA2L);
+		printableA3L = "1".equals(newPrintableA3L);
+		clasify = newClasify;
 	}
+
 	/**
 	 * 指定したサイズが印刷可能か?
 	 * @param printSize A0-A4, A0L-A2L
 	 * @return 印刷可能なら true
 	 */
-	public boolean isPrintable(String printSize){
-		if("A0".equals(printSize)){
+	public boolean isPrintable(String printSize) {
+		if ("A0".equals(printSize)) {
 			return printableA0;
-		} else if("A1".equals(printSize)){
-			return printableA1;
-		} else if("A2".equals(printSize)){
-			return printableA2;
-		} else if("A3".equals(printSize)){
-			return printableA3;
-		} else if("A4".equals(printSize)){
-			return printableA4;
-		} else if("A0L".equals(printSize)){
-			return printableA0L;
-		} else if("A1L".equals(printSize)){
-			return printableA1L;
-		} else if("A2L".equals(printSize)){
-			return printableA2L;
-		} else if("A3L".equals(printSize)){
-			return printableA3L;
-		} else{
-			throw new IllegalArgumentException("指定した図面サイズが正しくありません。{" + printSize + "}");
 		}
+		if ("A1".equals(printSize)) {
+			return printableA1;
+		}
+		if ("A2".equals(printSize)) {
+			return printableA2;
+		}
+		if ("A3".equals(printSize)) {
+			return printableA3;
+		}
+		if ("A4".equals(printSize)) {
+			return printableA4;
+		}
+		if ("A0L".equals(printSize)) {
+			return printableA0L;
+		}
+		if ("A1L".equals(printSize)) {
+			return printableA1L;
+		}
+		if ("A2L".equals(printSize)) {
+			return printableA2L;
+		}
+		if ("A3L".equals(printSize)) {
+			return printableA3L;
+		}
+		throw new IllegalArgumentException("指定した図面サイズが正しくありません。{" + printSize + "}");
 	}
+
 	/**
 	 * EUCプリンタなら true。
 	 * 判定はclassifyで行う。
 	 * @return
 	 */
-	public boolean isEucPrinter(){
-		return "EUC".equals(this.clasify);
+	public boolean isEucPrinter() {
+		return "EUC".equals(clasify);
 	}
 
 	// ------------------------------------------------------- Method
-	
+
 	// ------------------------------------------------------- getter,setter
 	/**
 	 * @return

@@ -1,13 +1,15 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="tyk.drasap.search.*,tyk.drasap.common.*" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
-<%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+﻿<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page import="tyk.drasap.search.*,tyk.drasap.common.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
+<c:if test="${empty sessionScope.user}">
+	<script>
+        location.replace('<%=request.getContextPath() %>/timeout');
+    </script>
+</c:if>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -15,33 +17,41 @@
 <meta content="text/html; charset=UTF-8" http-equiv="Content-type" />
 <meta content="no-cache" http-equiv="Pragma" />
 <meta content="no-cache" http-equiv="Cache-Control" />
-<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
 <style type="text/css">
-    .condition {
-    margin-left:30px;
-    margin-right:30px;
-    }
-    .goBackBtn {
-    position:absolute;
-    bottom:30px;
-    right:30px;
-    }
-    .msgBox {
-    text-align:left;
-    width:600px;
-    border:none;
-    }
-    .keyLock {
-    z-index:99;
-    left:0;
-    top:0;
-    position:absolute;
-    background-color:transparent;
-    width:100%;
-    height:100%;
-    padding:0px;
-    margin:0px;
-    }
+@import
+url(
+<%=request.getContextPath()%>/resources/css/default.css
+);
+</style>
+<style type="text/css">
+.condition {
+	margin-left: 30px;
+	margin-right: 30px;
+}
+
+.goBackBtn {
+	position: absolute;
+	bottom: 30px;
+	right: 30px;
+}
+
+.msgBox {
+	text-align: left;
+	width: 600px;
+	border: none;
+}
+
+.keyLock {
+	z-index: 99;
+	left: 0;
+	top: 0;
+	position: absolute;
+	background-color: transparent;
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+}
 </style>
 <script type="text/javascript">
 <!--
@@ -168,107 +178,129 @@
 //-->
 </script>
 </head>
-<body bgcolor="#FFFFFF" onload="onInitFocus()" onunload="closeReq()" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
-<bean:define id="deleteHostReqForm" type="tyk.drasap.search.DeleteHostReqForm" name="deleteHostReqForm" scope="session" />
-<html:form action="/delHostReq">
-<html:hidden property="act" />
-<nested:root name="deleteHostReqForm">
-<!--============ ヘッダ ============-->
+<body bgcolor="#FFFFFF" onload="onInitFocus()" onunload="closeReq()"
+	bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0"
+	marginheight="0" marginwidth="0">
+	<c:set var="deleteHostReqForm"
+		value="${sessionScope.deleteHostReqForm}" />
+	<form action="<%=request.getContextPath() %>/delHostReq" method="post">
+		<input type="hidden" name="act" value="${act}" />
+			<!--============ ヘッダ ============-->
 
 
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-    <tr>
-        <td>
-            <table border="0" bgcolor="#FFFFFF">
-                <tr><td nowrap="nowrap"><span class="normal18">HOST依頼削除</span></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-<br/>
-<table align="center" border="0" cellspacing="0" cellpadding="0" class="normal12">
-    <tr>
-        <td colspan="2">
-            <b>依頼番号を指定してHOST依頼を削除します。</b>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <br/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <fieldset align="center" style="padding:10px;width:200px;">
-            <legend>HOST依頼選択</legend>
-            <table align="center" border="0" cellspacing="0" cellpadding="0" class="normal12">
-                <tr>
-                    <td>
-                        <html:radio property="seachKind" tabindex="1" value="delSeisan" onclick="searchCheck(this.value)"/>HOST生産出図依頼削除&nbsp;&nbsp;<br/>
-                        <html:radio property="seachKind" tabindex="1" value="delPrt" onclick="searchCheck(this.value)"/>HOST帳票出力依頼削除&nbsp;&nbsp;<br/>
-                    </td>
-                </tr>
-            </table>
-            </fieldset>
-        </td>
-    </tr>
-</table>
-<br/>
-<table align="center" border="0" cellspacing="0" cellpadding="0" class="normal12" style="margin-top:10px;background-color:#EEEEEE;">
-    <tr><td align="center">削除依頼番号</td></tr>
-    <tr><td align="center" style="font-size:10pt;"><span id="example">
-    <nested:equal property="seachKind" value="delSeisan" scope="session">
-    (YYYYMMDD[A|C]nnnnn)
-    </nested:equal>
-    <nested:equal property="seachKind" value="delPrt" scope="session">
-    (YYYYMMDD[B|D]nnnnn)
-    </nested:equal>
-    <nested:empty property="seachKind" scope="session">
-    <br/>
-    </nested:empty>
-    </span>
-    </td>
-    </tr>
-    <nested:iterate id="condition" property="condition" indexId="idx_1">
-        <tr><td align="center"><nested:text property="" styleClass="condition" errorStyle="color:red" tabindex="<%=Integer.valueOf(idx_1+2).toString()%>"/></td></tr>
-    </nested:iterate>
-    <tr><td align="center"><br/></td></tr>
-</table>
-<table align="center" border="0" cellspacing="10" cellpadding="0" class="normal12" style="margin-top:10px;">
-    <tr>
-        <td align="center">
-            <input id="clearButton" type="button" value="クリア" onclick="clearVal()" tabindex="12" style="width:100px;margin-right:10px;"/>
-            <input id="deleteButton" type="button" value="削除" onclick="delReq()" tabindex="13" style="width:100px;margin-left:10px;" <%=(deleteHostReqForm.isDeleteOK()?"":"disabled") %>/>
-	</td>
-    </tr>
-    <tr>
-        <td align="left">
-            <!-- message -->
-            <ul style="list-style:none;" id="msgList">
-            <nested:iterate id="msgList" property="msgList" type="MsgInfo" indexId="idx_2">
-                <li align="left" style="<%=msgList.getMsgStyle()%>"><nested:write property="msg" /></li><br/>
-            </nested:iterate>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-	<td align="left" class="normal12blue">
-    		<html:errors />
-	</td>
-    </tr>
-</table>
+			<table border="0" cellspacing="0" cellpadding="0" width="100%">
+				<tr>
+					<td>
+						<table border="0" bgcolor="#FFFFFF">
+							<tr>
+								<td nowrap="nowrap"><span class="normal18">HOST依頼削除</span></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<br />
+			<table align="center" border="0" cellspacing="0" cellpadding="0"
+				class="normal12">
+				<tr>
+					<td colspan="2"><b>依頼番号を指定してHOST依頼を削除します。</b></td>
+				</tr>
+				<tr>
+					<td><br /></td>
+				</tr>
+				<tr>
+					<td>
+						<fieldset align="center" style="padding: 10px; width: 200px;">
+							<legend>HOST依頼選択</legend>
+							<table align="center" border="0" cellspacing="0" cellpadding="0"
+								class="normal12">
+								<tr>
+									<td><input type="radio" name="seachKind" tabindex="1"
+										value="delSeisan" onclick="searchCheck(this.value)" />HOST生産出図依頼削除&nbsp;&nbsp;<br />
+										<input type="radio" name="seachKind" tabindex="1"
+										value="delPrt" onclick="searchCheck(this.value)" />HOST帳票出力依頼削除&nbsp;&nbsp;<br />
+									</td>
+								</tr>
+							</table>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+			<br />
+			<table align="center" border="0" cellspacing="0" cellpadding="0"
+				class="normal12"
+				style="margin-top: 10px; background-color: #EEEEEE;">
+				<tr>
+					<td align="center">削除依頼番号</td>
+				</tr>
+				<tr>
+					<td align="center" style="font-size: 10pt;"><span id="example">
+							<c:choose>
+								<c:when test="${sessionScope.seachKind == 'delSeisan'}">
+        (YYYYMMDD[A|C]nnnnn)
+    </c:when>
+								<c:when test="${sessionScope.seachKind == 'delPrt'}">
+        (YYYYMMDD[B|D]nnnnn)
+    </c:when>
+								<c:otherwise>
+									<br />
+								</c:otherwise>
+							</c:choose>
 
-</nested:root>
-<table class="keyLock" id="keyLock" style="visibility:hidden">
-<tr valign="middle">
-<td align="center" style="font-size:18pt;color:#0000FF;">
-削除中・・・・
-</td>
-</tr>
-</table>
-</html:form>
-<span class="goBackBtn" ><input type="button" onclick="backPage()" value="　戻る　" id="backButton" tabindex="14" style="width:100px;"/></span>
+					</span></td>
+				</tr>
+				<c:forEach var="condition" items="${condition}" varStatus="loop">
+					<tr>
+						<td align="center"><input type="text" class="condition"
+							style="color: red" tabindex="${loop.index + 2}" /></td>
+					</tr>
+				</c:forEach>
+				<tr>
+					<td align="center"><br /></td>
+				</tr>
+			</table>
+			<table align="center" border="0" cellspacing="10" cellpadding="0"
+				class="normal12" style="margin-top: 10px;">
+				<tr>
+					<td align="center"><input id="clearButton" type="button"
+						value="クリア" onclick="clearVal()" tabindex="12"
+						style="width: 100px; margin-right: 10px;" /> <input
+						id="deleteButton" type="button" value="削除" onclick="delReq()"
+						tabindex="13" style="width: 100px; margin-left: 10px;"
+						${deleteHostReqForm.deleteOK ? "" : "disabled"} /></td>
+				</tr>
+				<tr>
+					<td align="left">
+						<!-- message -->
+						<ul style="list-style: none;" id="msgList">
+							<c:forEach var="msgInfo" items="${msgList}" varStatus="loop">
+								<li align="left" style="${msgInfo.getMsgStyle}"><c:out
+										value="${msgInfo.msg}" /></li>
+								<br />
+							</c:forEach>
+
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td align="left" class="normal12blue"><c:forEach var="error"
+							items="${errors}">
+							<c:out value="${error}" />
+							<br />
+						</c:forEach></td>
+				</tr>
+			</table>
+
+		<table class="keyLock" id="keyLock" style="visibility: hidden">
+			<tr valign="middle">
+				<td align="center" style="font-size: 18pt; color: #0000FF;">
+					削除中・・・・</td>
+			</tr>
+		</table>
+	</form>
+	<span class="goBackBtn"><input type="button"
+		onclick="backPage()" value="　戻る　" id="backButton" tabindex="14"
+		style="width: 100px;" /></span>
 </body>
 </html>
 

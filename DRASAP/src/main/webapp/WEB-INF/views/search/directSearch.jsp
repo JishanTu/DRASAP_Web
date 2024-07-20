@@ -8,11 +8,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-<!--  	action="http://oj-svr02:8081/DRASAP/directSearch.do?en_string=xxxx&sys_id=0002"> -->
 <form name="DirectPreviewForm" 
 	method="post"
 	target="_blank"
-	action="http://localhost:8081/DRASAP/directLoginForPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229&sys_id=0002">
+	action="<%=request.getContextPath() %>/directLoginForPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229&sys_id=0002">
 	<input type="hidden" name="DRWG_NO" value="T0199M0009E"/>
 	<input type="hidden" name="DRWG_NO" value="T0199M0001C"/>
 	<input type="hidden" name="DRWG_NO" value="T900A30019A"/>

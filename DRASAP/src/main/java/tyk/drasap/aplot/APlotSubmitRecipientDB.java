@@ -22,7 +22,6 @@ package tyk.drasap.aplot;
  * @author hideki_sugiyama
  *
  */
-@SuppressWarnings("serial")
 public class APlotSubmitRecipientDB extends AbstractAPlotSchemaBase {
 
 	/**
@@ -32,7 +31,6 @@ public class APlotSubmitRecipientDB extends AbstractAPlotSchemaBase {
 	public APlotSubmitRecipientDB(String schema) {
 		super(schema);
 	}
-
 
 	/**
 	 * 本データ挿入SQLを返す.
@@ -64,14 +62,14 @@ public class APlotSubmitRecipientDB extends AbstractAPlotSchemaBase {
 		};
 		StringBuilder insertAttrs = new StringBuilder("");
 		StringBuilder insertValues = new StringBuilder("");
-		for ( String[] attrName : ATTRS ) {
-			if ( insertAttrs.length() > 0 ) {
+		for (String[] attrName : ATTRS) {
+			if (insertAttrs.length() > 0) {
 				// 次の属性以降はカンマ.
 				insertAttrs.append(",");
 				insertValues.append(",");
 			}
 
-			if ( this.containsKey(attrName[0]) && this.get(attrName[0]) != null ) {
+			if (containsKey(attrName[0]) && get(attrName[0]) != null) {
 				// 属性.
 				insertAttrs.append(attrName[0]);
 				// 値.
@@ -83,7 +81,7 @@ public class APlotSubmitRecipientDB extends AbstractAPlotSchemaBase {
 				insertValues.append("NULL");
 			}
 		}
-		return String.format("INSERT INTO %s.SUBMIT_RECIPIENT ( %s ) VALUES ( %s )", this.getSchemaName(), insertAttrs.toString(), insertValues.toString());
+		return String.format("INSERT INTO %s.SUBMIT_RECIPIENT ( %s ) VALUES ( %s )", getSchemaName(), insertAttrs.toString(), insertValues.toString());
 	}
 
 	/**
@@ -93,7 +91,7 @@ public class APlotSubmitRecipientDB extends AbstractAPlotSchemaBase {
 	 */
 	public String forUpdateSql(String jobId) {
 		return String.format(
-				"SELECT * FROM %s.SUBMIT_RECIPIENT WHERE JOB_ID = '%s' for update", this.getSchemaName(), jobId);
+				"SELECT * FROM %s.SUBMIT_RECIPIENT WHERE JOB_ID = '%s' for update", getSchemaName(), jobId);
 	}
 
 	/**
@@ -104,9 +102,7 @@ public class APlotSubmitRecipientDB extends AbstractAPlotSchemaBase {
 	 */
 	public String updateStatusSql(String jobId, String recipientId, String status) {
 		return String.format(
-				"UPDATE %s.SUBMIT_RECIPIENT SET OUTPUT_STATUS = '%s' WHERE JOB_ID = '%s' AND RECIPIENT_ID = '%s'", this.getSchemaName(), status, jobId, recipientId);
+				"UPDATE %s.SUBMIT_RECIPIENT SET OUTPUT_STATUS = '%s' WHERE JOB_ID = '%s' AND RECIPIENT_ID = '%s'", getSchemaName(), status, jobId, recipientId);
 	}
-
-
 
 }

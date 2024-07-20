@@ -1,21 +1,31 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
+﻿<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <%-- ログイン情報の確認 --%>
-<logic:notPresent name="user" scope="session">
-	<logic:redirect forward="timeout" />
-</logic:notPresent>
-<bean:define id="syutuList" name="requestForm" property="list" type="java.util.ArrayList"/>
-<html:html>
+<c:if test="${empty sessionScope.user}">
+	<script>
+		location.replace('<%=request.getContextPath() %>/timeout');
+	</script>
+</c:if>
+
+<c:set var="syutuList" value="${requestForm.list}" />
+
+<html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Cache-Control" content="no-cache" />
-	<title>Drawing Search and Print System [図面登録依頼]</title>
-	<style type="text/css">@import url( <%=request.getContextPath() %>/default.css );</style>
-	<script type="text/javascript">
-	<!--
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<title>Drawing Search and Print System [図面登録依頼]</title>
+<style type="text/css">
+@import
+url(
+<%=request.getContextPath()%>/resources/css/default.css
+);
+</style>
+<script type="text/javascript">
 		browserName = navigator.appName;
 		var WO1;
 		var w = screen.availWidth;
@@ -25,10 +35,8 @@
 		window.resizeTo(w, h);
 		window.moveTo(xPos,yPos);//画面の位置指定
 		if (browserName != "Netscape") focus();
-	//-->
 	</script>
-	<script type="text/javascript">
-	<!--
+<script type="text/javascript">
 		// 依頼する
 		function doIrai(){
 			document.forms[0].action.value="button_irai";//依頼ボタンのアクション
@@ -219,52 +227,95 @@
 			var w = screen.availWidth - 100;
 			var h = screen.availHeight - 100;
 
-			WO1=window.open("<%=request.getContextPath() %>/genzu_irai/requestHelp.jsp", targetName,
-						//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
-						'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
+			WO1=window.open("<%=request.getContextPath() %>/switch.do?page=/genzu_irai/requestHelp.jsp", targetName,
+					//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
+					'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
 			WO1.window.moveTo(50,50);//画面の位置指定
 			WO1.focus();
 		}
-	//-->
 	</script>
 </head>
-<!-- エラーの表示 -->
-<html:errors />
-<body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0" onload="actionOnSelectIrai()">
-<html:form action="/req" >
-<html:hidden property="action" />
+<!-- エラーの表示 TODO-->
+<c:if test="${message != null}">
+	<hr color="sandybrown">
+	<font color="red" size="4">
+		<ul>
+			<c:forEach var="msg" items="${message}">
+				<li>${msg}</li>
+			</c:forEach>
+		</ul>
+	</font>
+	<hr color="sandybrown">
+</c:if>
+<body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0"
+	rightmargin="0" marginheight="0" marginwidth="0"
+	onload="actionOnSelectIrai()">
+	<form action="<%=request.getContextPath()%>/req" method="post">
+		<input type="hidden" name="action" />
+		<input type="hidden" name="gouki1" />
+		<input type="hidden" name="gouki2" />
+		<input type="hidden" name="gouki3" />
+		<input type="hidden" name="gouki4" />
+		<input type="hidden" name="gouki5" />
+		<input type="hidden" name="busuu1" />
+		<input type="hidden" name="busuu2" />
+		<input type="hidden" name="busuu3" />
+		<input type="hidden" name="busuu4" />
+		<input type="hidden" name="busuu5" />
+		<input type="hidden" name="genzu1" />
+		<input type="hidden" name="genzu2" />
+		<input type="hidden" name="genzu3" />
+		<input type="hidden" name="genzu4" />
+		<input type="hidden" name="genzu5" />
+		<input type="hidden" name="syukusyou1" />
+		<input type="hidden" name="syukusyou2" />
+		<input type="hidden" name="syukusyou3" />
+		<input type="hidden" name="syukusyou4" />
+		<input type="hidden" name="syukusyou5" />
+		<input type="hidden" name="size1" />
+		<input type="hidden" name="size2" />
+		<input type="hidden" name="size3" />
+		<input type="hidden" name="size4" />
+		<input type="hidden" name="size5" />
 
-<!--======================= ヘッダ =======================-->
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-	<tr>
-		<td>
-			<table border="0">
-				<tr><td nowrap="nowrap" bgcolor="#EEEEEE"><span class="normal18">図面登録依頼</span></td>
-					<!--======================= 職番などの表示 =======================-->
-					<td><table border="1">
-								<tr>
-									<td><span class="normal12">職番：<bean:write name="user" property="id" /></span></td>
-									<td><span class="normal12">氏名：<bean:write name="user" property="name" /></span></td>
-									<td><span class="normal12">部署名(店名)：<bean:write name="user" property="deptName" /></span></td>
-								</tr>
-							</table></td>
-				</tr>
-			</table></td>
-		<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:help()"><span class="normal10blue">HELP</span></a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	</tr>
-</table>
-<!--======================= 依頼内容の入力エリア =======================-->
-<table border="0" align="center">
-<%-- // 2019.10.23 yamamoto modified. start
+		<!--======================= ヘッダ =======================-->
+		<table border="0" cellspacing="0" cellpadding="0" width="100%">
+			<tr>
+				<td>
+					<table border="0">
+						<tr>
+							<td nowrap="nowrap" bgcolor="#EEEEEE"><span class="normal18">図面登録依頼</span></td>
+							<!--======================= 職番などの表示 =======================-->
+							<td><table border="1">
+									<tr>
+										<td><span class="normal12">職番：<c:out
+													value="${user.id}" /></span></td>
+										<td><span class="normal12">氏名：<c:out
+													value="${user.name}" /></span></td>
+										<td><span class="normal12">部署名(店名)：<c:out
+													value="${user.deptName}" /></span></td>
+									</tr>
+								</table></td>
+						</tr>
+					</table>
+				</td>
+				<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;<a
+					href="javascript:help()"><span class="normal10blue">HELP</span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+			</tr>
+		</table>
+		<!--======================= 依頼内容の入力エリア =======================-->
+		<table border="0" align="center">
+			<%-- // 2019.10.23 yamamoto modified. start
 	<!--======================= 依頼内容、出力先 =======================-->
 	<tr bgcolor="#DDFFFF">
 		<td><table border="0" align="left">
 			<tr>
 				<td><span class="normal10">依頼内容</span></td>
 					<td>
-						<html:select name="requestForm" property="irai" onchange="actionOnSelectIrai()" >
-							<html:options labelName="requestForm" labelProperty="iraiList" name="requestForm" property="iraiList" />
-			     		</html:select>
+						<form:select name="requestForm" property="irai" onchange="actionOnSelectIrai()" >
+							<form:options labelName="requestForm" labelProperty="iraiList" name="requestForm" property="iraiList" />
+			     		</form:select>
 			     	</td>
 				<td width="200" align="right"><span class="normal10">出力先</span></td>
 				<td>
@@ -277,203 +328,222 @@
 		</td>
 	</tr>
 // 2019.10.23 yamamoto modified. end --%>
-	<html:hidden name="requestForm" property="irai" value="図面登録依頼" />
-	<!--======================= 依頼の詳細 =======================-->
-	<tr>
-		<td><table border="0">
 			<tr>
-				<td align="center"><span class="normal10">No</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
+				<td><input type="hidden" name="irai" value="図面登録依頼" /></td>
+			</tr>
+			<!--======================= 依頼の詳細 =======================-->
+			<tr>
+				<td><table border="0">
+						<tr>
+							<td align="center"><span class="normal10">No</span></td>
+							<%-- // 2019.10.23 yamamoto modified. start
 				<td align="center"><span class="normal10">号口・号機</span></td>
 				<td align="center"><span class="normal10">原図内容</span></td>
 --%>
-				<td colspan="3" align="center"><span class="normal10">図番</span></td>
-<%--
+							<td colspan="3" align="center"><span class="normal10">図番</span></td>
+							<%--
 				<td align="center"><span class="normal10">部数</span></td>
 				<td align="center"><span class="normal10">縮小</span></td>
 				<td align="center"><span class="normal10">サイズ</span></td>
 // 2019.10.23 yamamoto modified. end --%>
-			</tr>
-<!--	No1の行  -->
-			<tr><html:hidden name="requestForm" property="hiddenNo1"/>
-				<td><span class="normal10">1</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
+						</tr>
+						<!--	No1の行  -->
+						<tr>
+
+							<td><input type="hidden" name="hiddenNo1" /> <span
+								class="normal10">1</span></td>
+							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki1" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
-					<html:select name="requestForm" property="genzu1" >
-						<html:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
-			     	</html:select>
+					<form:select name="requestForm" property="genzu1" >
+						<form:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
+			     	</form:select>
 			    </td>
 --%>
-				<td><html:text name="requestForm" property="kaisiNo1" maxlength="20" style="ime-mode:disabled"
-						styleClass="normal12"/></td>
-				<td><span class="normal10">～</span></td>
-				<td><html:text name="requestForm" property="syuuryouNo1" maxlength="20" style="ime-mode:disabled"
-						styleClass="normal12"/></td>
-<%--
+							<td><input type="text" name="kaisiNo1" maxlength="20"
+								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo1}" /></td>
+							<td><span class="normal10">～</span></td>
+							<td><input type="text" name="syuuryouNo1" maxlength="20"
+								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo1}" /></td>
+
+							<%--
 				<td><html:text name="requestForm" property="busuu1" size="2"
 					styleClass="normal12" maxlength="2" style="ime-mode:disabled;text-align:right;"/></td>
 				<td>
-					<html:select name="requestForm" property="syukusyou1" >
-						<html:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
-			     	</html:select>
+					<form:select name="requestForm" property="syukusyou1" >
+						<form:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
+			     	</form:select>
 			     </td>
 
 				<td>
-					<html:select name="requestForm" property="size1" >
-						<html:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
-			     	</html:select>
+					<form:select name="requestForm" property="size1" >
+						<form:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
+			     	</form:select>
 			     </td>
 // 2019.10.23 yamamoto modified. end --%>
-			</tr>
-<!--	No2の行  -->
-			<tr><html:hidden name="requestForm" property="hiddenNo2"/>
-				<td><span class="normal10">2</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
+						</tr>
+						<!--	No2の行  -->
+						<tr>
+							<td><input type="hidden" name="hiddenNo2" /> <span
+								class="normal10">2</span></td>
+							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki2" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
-					<html:select name="requestForm" property="genzu2" >
-						<html:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
-			     	</html:select>
+					<form:select name="requestForm" property="genzu2" >
+						<form:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
+			     	</form:select>
 			     </td>
 --%>
-				<td><html:text name="requestForm" property="kaisiNo2" maxlength="20" style="ime-mode:disabled"
-						styleClass="normal12"/></td>
-				<td><span class="normal10">～</span></td>
-				<td><html:text name="requestForm" property="syuuryouNo2" maxlength="20" style="ime-mode:disabled"
-						styleClass="normal12"/></td>
-<%--
+							<td><input type="text" name="kaisiNo2" maxlength="20"
+								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo2}"/></td>
+							<td><span class="normal10">～</span></td>
+							<td><input type="text" name="syuuryouNo2" maxlength="20"
+								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo2}"/></td>
+
+							<%--
 				<td><html:text name="requestForm" property="busuu2" size="2"
 					styleClass="normal12" maxlength="2" style="ime-mode:disabled;text-align:right;"/></td>
 				<td>
-					<html:select name="requestForm" property="syukusyou2" >
-						<html:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
-			     	</html:select>
+					<form:select name="requestForm" property="syukusyou2" >
+						<form:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
+			     	</form:select>
 			     </td>
 				<td>
-					<html:select name="requestForm" property="size2" >
-						<html:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
-			     	</html:select>
+					<form:select name="requestForm" property="size2" >
+						<form:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
+			     	</form:select>
 			    </td>
 // 2019.10.23 yamamoto modified. end --%>
-			</tr>
-<!--	No3の行  -->
-			<tr><html:hidden name="requestForm" property="hiddenNo3"/>
-				<td><span class="normal10">3</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
+						</tr>
+						<!--	No3の行  -->
+						<tr>
+							<td><input type="hidden" name="hiddenNo3" /> <span
+								class="normal10">3</span></td>
+							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki3" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
-					<html:select name="requestForm" property="genzu3" >
-						<html:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
-			     	</html:select>
+					<form:select name="requestForm" property="genzu3" >
+						<form:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
+			     	</form:select>
 			    </td>
 --%>
-				<td><html:text name="requestForm" property="kaisiNo3" maxlength="20" style="ime-mode:disabled" styleClass="normal12"/></td>
-				<td><span class="normal10">～</span></td>
-				<td><html:text name="requestForm" property="syuuryouNo3" maxlength="20" style="ime-mode:disabled" styleClass="normal12"/></td>
-<%--
+							<td><input type="text" name="kaisiNo3" maxlength="20"
+								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo3}"/></td>
+							<td><span class="normal10">～</span></td>
+							<td><input type="text" name="syuuryouNo3" maxlength="20"
+								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo3}"/></td>
+
+							<%--
 				<td><html:text name="requestForm" property="busuu3" size="2"
 					styleClass="normal12" maxlength="2" style="ime-mode:disabled;text-align:right;"/></td>
 				<td>
-					<html:select name="requestForm" property="syukusyou3" >
-						<html:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
-			     	</html:select>
+					<form:select name="requestForm" property="syukusyou3" >
+						<form:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
+			     	</form:select>
 			    </td>
 				<td>
-					<html:select name="requestForm" property="size3" >
-						<html:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
-			     	</html:select>
+					<form:select name="requestForm" property="size3" >
+						<form:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
+			     	</form:select>
 			     </td>
 // 2019.10.23 yamamoto modified. end --%>
-			</tr>
-<!--	No4の行  -->
-			<tr><html:hidden name="requestForm" property="hiddenNo4"/>
-				<td><span class="normal10">4</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
+						</tr>
+						<!--	No4の行  -->
+						<tr>
+							<td><input type="hidden" name="hiddenNo4" /> <span
+								class="normal10">4</span></td>
+							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki4" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
-					<html:select name="requestForm" property="genzu4" >
-						<html:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
-			     	</html:select>
+					<form:select name="requestForm" property="genzu4" >
+						<form:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
+			     	</form:select>
 			     </td>
 --%>
-				<td><html:text name="requestForm" property="kaisiNo4" maxlength="20" style="ime-mode:disabled" styleClass="normal12"/></td>
-				<td><span class="normal10">～</span></td>
-				<td><html:text name="requestForm" property="syuuryouNo4" maxlength="20" style="ime-mode:disabled" styleClass="normal12"/></td>
-<%--
+							<td><input type="text" name="kaisiNo4" maxlength="20"
+								style="ime-mode: disabled" class="normal12"  value="${sessionScope.requestForm.kaisiNo4}"/></td>
+							<td><span class="normal10">～</span></td>
+							<td><input type="text" name="syuuryouNo4" maxlength="20"
+								style="ime-mode: disabled" class="normal12"  value="${sessionScope.requestForm.syuuryouNo4}"/></td>
+
+							<%--
 				<td><html:text name="requestForm" property="busuu4" size="2"
 					styleClass="normal12" maxlength="2" style="ime-mode:disabled;text-align:right;"/></td>
 				<td>
-					<html:select name="requestForm" property="syukusyou4" >
-						<html:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
-			     	</html:select>
+					<form:select name="requestForm" property="syukusyou4" >
+						<form:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
+			     	</form:select>
 			    </td>
 				<td>
-					<html:select name="requestForm" property="size4" >
-						<html:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
-			     	</html:select>
+					<form:select name="requestForm" property="size4" >
+						<form:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
+			     	</form:select>
 			    </td>
 // 2019.10.23 yamamoto modified. end --%>
-			</tr>
-<!--	No5の行  -->
-			<tr><html:hidden name="requestForm" property="hiddenNo5"/>
-				<td><span class="normal10">5</span></td>
-<%-- // 2019.10.23 yamamoto modified. start
+						</tr>
+						<!--	No5の行  -->
+						<tr>
+							<td><input type="hidden" name="hiddenNo4" /> <span
+								class="normal10">5</span></td>
+							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki5" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
-					<html:select name="requestForm" property="genzu5" >
-						<html:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
-			     	</html:select>
+					<form:select name="requestForm" property="genzu5" >
+						<form:options labelName="requestForm" labelProperty="genzuNameList" name="requestForm" property="genzuNameList" />
+			     	</form:select>
 			    </td>
 --%>
-				<td><html:text name="requestForm" property="kaisiNo5" maxlength="20" style="ime-mode:disabled" styleClass="normal12"/></td>
-				<td><span class="normal10">～</span></td>
-				<td><html:text name="requestForm" property="syuuryouNo5" maxlength="20" style="ime-mode:disabled" styleClass="normal12"/></td>
-<%--
+							<td><input type="text" name="kaisiNo5" maxlength="20"
+								style="ime-mode: disabled" class="normal12"  value="${sessionScope.requestForm.kaisiNo5}"/></td>
+							<td><span class="normal10">～</span></td>
+							<td><input type="text" name="syuuryouNo5" maxlength="20"
+								style="ime-mode: disabled" class="normal12"  value="${sessionScope.requestForm.kaisiNo5}"/></td>
+
+							<%--
 				<td><html:text name="requestForm" property="busuu5" size="2"
 					styleClass="normal12" maxlength="2" style="ime-mode:disabled;text-align:right;"/></td>
 				<td>
-					<html:select name="requestForm" property="syukusyou5" >
-						<html:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
-			     	</html:select>
+					<form:select name="requestForm" property="syukusyou5" >
+						<form:options labelName="requestForm" labelProperty="syukusyouList" name="requestForm" property="syukusyouList" />
+			     	</form:select>
 			     </td>
 				<td>
-					<html:select name="requestForm" property="size5" >
-						<html:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
-			     	</html:select>
+					<form:select name="requestForm" property="size5" >
+						<form:options labelName="requestForm" labelProperty="saizuList" name="requestForm" property="saizuList" />
+			     	</form:select>
 			     </td>
 // 2019.10.23 yamamoto modified. end --%>
+						</tr>
+					</table></td>
 			</tr>
-		</table></td>
-	</tr>
-	<!--======================= 依頼ボタン =======================-->
-	<tr>
-		<td><table border="0" align="center">
+			<!--======================= 依頼ボタン =======================-->
 			<tr>
-				<td><html:submit onclick="doIrai()" style="font-size:12px;">依　頼</html:submit></td>
-			</tr></table>
-		</td>
-		<td><input type="button" value="Close" style="font-size:12px;" onclick="window.close()" /></td>
-	</tr>
-</table>
-<!--======================= 操作説明 =======================-->
-<table align="center" border="0">
-	<tr>
-		<td bgcolor="#EEEEEE" valign="top"><span class="normal12">
-			&lt;&lt;原図庫からのお願い&gt;&gt;<br />
-			・　登録されていない図面は『図面登録依頼』を起票してください。<br />
-			　　『図面登録依頼詳細』で依頼の完了を確認し、DRASAPで閲覧・印刷をしてください。<br />
-			・　なお、大きいサイズで印刷したいなど、印刷ができない場合は原図庫へTEL/FAXにて依頼してください。<br />
-			<br />
-			※番号の範囲指定について<br />
-			　範囲指定するには１１桁の図番の先頭９桁が同じである必要があります。<br />
-			　（ハイフンは含みません）<br />
-			　１２ケタの図番について範囲指定をする事はできません。<br />
-			<br />
-			★この画面に関する詳細は右上にある「HELP」を参照ください。<br />
-			</span></td>
-	</tr>
-</table>
-</html:form>
+				<td>
+					<table border="0" align="center">
+						<tr>
+							<td><input type="submit" value="依　頼" onclick="doIrai()"
+								style="font-size: 12px;" /></td>
+						</tr>
+					</table>
+
+				</td>
+				<td><input type="button" value="Close" style="font-size: 12px;"
+					onclick="window.close()" /></td>
+			</tr>
+		</table>
+		<!--======================= 操作説明 =======================-->
+		<table align="center" border="0">
+			<tr>
+				<td bgcolor="#EEEEEE" valign="top"><span class="normal12">
+						&lt;&lt;原図庫からのお願い&gt;&gt;<br /> ・ 登録されていない図面は『図面登録依頼』を起票してください。<br />
+						『図面登録依頼詳細』で依頼の完了を確認し、DRASAPで閲覧・印刷をしてください。<br /> ・
+						なお、大きいサイズで印刷したいなど、印刷ができない場合は原図庫へTEL/FAXにて依頼してください。<br /> <br />
+						※番号の範囲指定について<br /> 範囲指定するには１１桁の図番の先頭９桁が同じである必要があります。<br />
+						（ハイフンは含みません）<br /> １２ケタの図番について範囲指定をする事はできません。<br /> <br />
+						★この画面に関する詳細は右上にある「HELP」を参照ください。<br />
+				</span></td>
+			</tr>
+		</table>
+	</form>
 </body>
-</html:html>
+</html>

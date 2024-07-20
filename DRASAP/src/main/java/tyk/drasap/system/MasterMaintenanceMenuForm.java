@@ -1,16 +1,14 @@
 package tyk.drasap.system;
 
-
-import org.apache.struts.action.ActionForm;
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * マスターメンテナンスメニュー画面に対応
  */
-public class MasterMaintenanceMenuForm extends ActionForm {
+public class MasterMaintenanceMenuForm extends BaseForm {
 	/**
-	 * 
+	 *
 	 */
-	private static final long serialVersionUID = 2248665929277142616L;
 	String act;// 処理を分けるための属性
 
 	// --------------------------------------------------------- Methods

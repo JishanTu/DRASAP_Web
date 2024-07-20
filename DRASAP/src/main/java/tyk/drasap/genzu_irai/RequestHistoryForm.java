@@ -4,41 +4,39 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * å¥ê}å…çÏã∆àÀóäóöóÇÃÇΩÇﬂÇÃFormÅB
  * @author fumi
  */
-public class RequestHistoryForm extends ActionForm {
+public class RequestHistoryForm extends BaseForm {
 	/**
-	 * 
+	 *
 	 */
-	private static final long serialVersionUID = 1L;
-	private ArrayList historyList;
-	private ArrayList errors;
+	private ArrayList<RequestHistoryElement> historyList;
+	private ArrayList<String> errors;
 
 	/* (îÒ Javadoc)
 	 * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
 	 */
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-		historyList = new ArrayList();
-		errors = new ArrayList ();
+	public void reset(HttpServletRequest request) {
+		historyList = new ArrayList<>();
+		errors = new ArrayList<>();
 	}
-	
+
 	// -------------------------------------------getter,setter
 	/**
 	 * @return
 	 */
-	public ArrayList getErrors() {
+	public ArrayList<String> getErrors() {
 		return errors;
 	}
 
 	/**
 	 * @return
 	 */
-	public ArrayList getHistoryList() {
+	public ArrayList<RequestHistoryElement> getHistoryList() {
 		return historyList;
 	}
 

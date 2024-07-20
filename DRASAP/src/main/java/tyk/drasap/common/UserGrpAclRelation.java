@@ -1,6 +1,5 @@
 package tyk.drasap.common;
 
-
 /**
  * 利用者グループとアクセスレベルの間の関連を表すクラス。
  * 利用者グループ・アクセスレベル関連テーブル(USER_GRP_ACL_RELATION)に対応。
@@ -10,8 +9,8 @@ package tyk.drasap.common;
 public class UserGrpAclRelation {
 
 	String userGrpCode = "";// 利用者グループコード
-	String aclId = "";		// アクセスレベル
-	String aclValue = "";	// アクセスレベル値
+	String aclId = ""; // アクセスレベル
+	String aclValue = ""; // アクセスレベル値
 
 	// ------------------------------------------ コンストラクター
 	/**
@@ -26,14 +25,15 @@ public class UserGrpAclRelation {
 	 * @return userGrpCode
 	 */
 	public String getUserGrpCode() {
-	    return userGrpCode;
+		return userGrpCode;
 	}
+
 	/**
 	 * userGrpCodeを設定します。
 	 * @param userGrpCode userGrpCode
 	 */
 	public void setUserGrpCode(String userGrpCode) {
-	    this.userGrpCode = userGrpCode;
+		this.userGrpCode = userGrpCode;
 	}
 
 	/**
@@ -41,14 +41,15 @@ public class UserGrpAclRelation {
 	 * @return aclId
 	 */
 	public String getAclId() {
-	    return aclId;
+		return aclId;
 	}
+
 	/**
 	 * aclIdを設定します。
 	 * @param aclId aclId
 	 */
 	public void setAclId(String aclId) {
-	    this.aclId = aclId;
+		this.aclId = aclId;
 	}
 
 	/**
@@ -56,13 +57,14 @@ public class UserGrpAclRelation {
 	 * @return aclValue
 	 */
 	public String getAclValue() {
-	    return aclValue;
+		return aclValue;
 	}
+
 	/**
 	 * aclValueを設定します。
 	 * @param aclValue aclValue
 	 */
 	public void setAclValue(String aclValue) {
-	    this.aclValue = aclValue;
+		this.aclValue = aclValue;
 	}
 }

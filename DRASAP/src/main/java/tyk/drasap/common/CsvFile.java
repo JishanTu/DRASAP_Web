@@ -6,43 +6,56 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//public class CsvFile {
 public class CsvFile {
 	public String errorString;
-//	private File f = null;
+	//	private File f = null;
 	private BufferedReader reader = null;
+
 	public CsvFile() {
 		super();
-		// TODO 自動生成されたコンストラクター・スタブ
 	}
+
 	public boolean open(String fName) throws FileNotFoundException {
-//		f = new File(fName);
-//		if(!f.exists()){
-//			return false;
-//		}
+		//		f = new File(fName);
+		//		if(!f.exists()){
+		//			return false;
+		//		}
 		try {
-			reader = new BufferedReader(new FileReader(fName));
+			this.reader = new BufferedReader(new FileReader(fName));
 		} catch (FileNotFoundException e) {
-			try {if (reader != null) reader.close();} catch (IOException e1) {}
+			try {
+				if (this.reader != null) {
+					this.reader.close();
+				}
+			} catch (IOException e1) {
+			}
 			throw e;
 		}
 		return true;
 	}
+
 	public String getLine() throws IOException {
 		String lineData = null;
 
 		try {
-			if ((lineData = reader.readLine()) == null) {
+			lineData = this.reader.readLine();
+			if (lineData == null) {
 				return null;
 			}
 		} catch (IOException e) {
-			try {reader.close();} catch (IOException e1) {}
+			try {
+				this.reader.close();
+			} catch (IOException e1) {
+			}
 			throw e;
 		}
 		return lineData;
 	}
+
 	public ArrayList<String> getDataItem(String lineData) {
-		if (lineData == null) return null;
+		if (lineData == null) {
+			return null;
+		}
 
 		ArrayList<String> dataItem = new ArrayList<String>();
 		String arrayElm = "";
@@ -62,7 +75,7 @@ public class CsvFile {
 					break;
 				case ',':
 					arrayElm = arrayElm.trim();
-					arrayElm = this.trim(arrayElm,'"');
+					arrayElm = this.trim(arrayElm, '"');
 					dataItem.add(arrayElm);
 					arrayElm = "";
 					sts = 0;
@@ -85,7 +98,7 @@ public class CsvFile {
 					break;
 				case ',':
 					arrayElm = arrayElm.trim();
-					arrayElm = this.trim(arrayElm,'"');
+					arrayElm = this.trim(arrayElm, '"');
 					dataItem.add(arrayElm);
 					arrayElm = "";
 					sts = 0;
@@ -123,26 +136,33 @@ public class CsvFile {
 
 		}
 		arrayElm = arrayElm.trim();
-		arrayElm = this.trim(arrayElm,'"');
+		arrayElm = this.trim(arrayElm, '"');
 		dataItem.add(arrayElm);
 		return dataItem;
 	}
+
 	public void close() {
-		try {if (reader != null) reader.close();} catch (IOException e1) {}
+		try {
+			if (this.reader != null) {
+				this.reader.close();
+			}
+		} catch (IOException e1) {
+		}
 
 	}
-    public String trim(String str, char ch) {
-    	int len = str.length();
-    	int st = 0;
-    	int off = 0;      /* avoid getfield opcode */
-    	char[] val = str.toCharArray();    /* avoid getfield opcode */
 
-    	while ((st < len) && (val[off + st] <= ch)) {
-    	    st++;
-    	}
-    	while ((st < len) && (val[off + len - 1] <= ch)) {
-    	    len--;
-    	}
-    	return ((st > 0) || (len < str.length())) ? str.substring(st, len) : str;
-        }
+	public String trim(String str, char ch) {
+		int len = str.length();
+		int st = 0;
+		int off = 0; /* avoid getfield opcode */
+		char[] val = str.toCharArray(); /* avoid getfield opcode */
+
+		while (st < len && val[off + st] <= ch) {
+			st++;
+		}
+		while (st < len && val[off + len - 1] <= ch) {
+			len--;
+		}
+		return st > 0 || len < str.length() ? str.substring(st, len) : str;
+	}
 }

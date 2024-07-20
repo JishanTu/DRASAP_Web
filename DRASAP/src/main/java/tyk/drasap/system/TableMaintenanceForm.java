@@ -4,23 +4,18 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import tyk.drasap.common.StringCheck;
 import tyk.drasap.common.UserKeyColDB;
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * ÉÅÉjÉÖÅ[âÊñ Ç…ëŒâû
  */
-public class TableMaintenanceForm extends ActionForm {
+public class TableMaintenanceForm extends BaseForm {
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3305409154536915815L;
-	/**
-	 * 
+	 *
 	 */
 	String act;// èàóùÇï™ÇØÇÈÇΩÇﬂÇÃëÆê´
 	String updateIndex;
@@ -38,24 +33,27 @@ public class TableMaintenanceForm extends ActionForm {
 	long fromRecNo = 0;
 	long toRecNo = recNoPerPage;
 	String selectPage = "0";
-	private FormFile fileUp;
+	private MultipartFile fileUp;
 
 	// --------------------------------------------------------- Methods
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-	    for (int i = 0; i < recList.size(); i++) {
-	        ((TableMaintenanceRec)recList.get(i)).setCheck(false);
-	        ((TableMaintenanceRec)recList.get(i)).setNew(false);
-	    }
+	public void reset(HttpServletRequest request) {
+		for (int i = 0; i < recList.size(); i++) {
+			recList.get(i).setCheck(false);
+			recList.get(i).setNew(false);
+		}
 	}
+
 	// --------------------------------------------------------- getter,setter
 	public TableMaintenanceForm() {
-	    act = "";
+		act = "";
 	}
+
 	public TableMaintenanceForm(ArrayList<TableMaintenanceElement> attr, ArrayList<TableMaintenanceRec> value, ArrayList<String> tableList) {
-	    this.attrList = attr;
-	    this.recList = value;
-	    this.tableList = tableList;
+		attrList = attr;
+		recList = value;
+		this.tableList = tableList;
 	}
+
 	/**
 	 * @return
 	 */
@@ -69,6 +67,7 @@ public class TableMaintenanceForm extends ActionForm {
 	public void setAct(String string) {
 		act = string;
 	}
+
 	/**
 	 * @return
 	 */
@@ -80,8 +79,9 @@ public class TableMaintenanceForm extends ActionForm {
 	 * @param string
 	 */
 	public void setSelectTable(String string) {
-	    selectTable = string;
+		selectTable = string;
 	}
+
 	/**
 	 * @return
 	 */
@@ -93,92 +93,106 @@ public class TableMaintenanceForm extends ActionForm {
 	 * @param string
 	 */
 	public void setWhereStr(String string) {
-	    whereStr = StringCheck.latinToUtf8(string);
+		whereStr = StringCheck.latinToUtf8(string);
 	}
+
 	/**
 	 * @param string
 	 */
 	public void clearWhereStr() {
-	    whereStr = null;
+		whereStr = null;
 	}
+
 	/**
 	 * @return
 	 */
 	public TableMaintenanceElement getAttrList(Integer index) {
-		return (TableMaintenanceElement)attrList.get(index.intValue());
+		return attrList.get(index.intValue());
 	}
+
 	/**
 	 * @return
 	 */
 	public TableMaintenanceElement getAttrList(int index) {
-		return (TableMaintenanceElement)attrList.get(index);
+		return attrList.get(index);
 	}
+
 	/**
 	 * @return
 	 */
 	public ArrayList<TableMaintenanceElement> getAttrList() {
 		return attrList;
 	}
+
 	/**
 	 * @return
 	 */
 	public int getColNo(String colName) {
-	    for (int i = 0; i < attrList.size(); i++) {
-		    TableMaintenanceElement TableMaintenanceElement = (TableMaintenanceElement)attrList.get(i);
-		    if (TableMaintenanceElement.getColumn_name().equals(colName)) {
-		        return i;
-		    }
-	    }
+		for (int i = 0; i < attrList.size(); i++) {
+			TableMaintenanceElement TableMaintenanceElement = attrList.get(i);
+			if (TableMaintenanceElement.getColumn_name().equals(colName)) {
+				return i;
+			}
+		}
 		return -1;
 	}
+
 	/**
 	 * @param list
 	 */
 	public void setAttrList(ArrayList<TableMaintenanceElement> list) {
-	    attrList = list;
+		attrList = list;
 	}
+
 	/**
 	 * @return
 	 */
 	public TableMaintenanceRec getRecList(int index) {
-		return (TableMaintenanceRec)recList.get(index);
+		return recList.get(index);
 	}
+
 	/**
 	 * @return
 	 */
 	public TableMaintenanceRec getRecList(Integer index) {
-		return (TableMaintenanceRec)recList.get(index.intValue());
+		return recList.get(index.intValue());
 	}
+
 	/**
 	 * @return
 	 */
 	public ArrayList<TableMaintenanceRec> getRecList() {
 		return recList;
 	}
+
 	/**
 	 * @param list
 	 */
 	public void setRecList(ArrayList<TableMaintenanceRec> list) {
-	    recList = list;
+		recList = list;
 	}
+
 	/**
 	 * @param list
 	 */
 	public void addRecList(TableMaintenanceRec newObj) {
-	    recList.add(newObj);
+		recList.add(newObj);
 	}
+
 	/**
 	 * @return
 	 */
 	public ArrayList<String> getTableList() {
 		return tableList;
 	}
+
 	/**
 	 * @param list
 	 */
 	public void setTableList(ArrayList<String> list) {
-	    tableList = list;
+		tableList = list;
 	}
+
 	/**
 	 * @return
 	 */
@@ -190,26 +204,30 @@ public class TableMaintenanceForm extends ActionForm {
 	 * @param string
 	 */
 	public void setUpdateIndex(String string) {
-	    updateIndex = string;
+		updateIndex = string;
 	}
+
 	/**
 	 * @return
 	 */
 	public ArrayList<String> getErrorMsg() {
 		return errorMsg;
 	}
+
 	/**
 	 * @param string
 	 */
 	public void addErrorMsg(String string) {
-	    errorMsg.add(string);
+		errorMsg.add(string);
 	}
+
 	/**
 	 * @param string
 	 */
 	public void clearErrorMsg() {
-	    errorMsg.clear();
+		errorMsg.clear();
 	}
+
 	/**
 	 * @return
 	 */
@@ -221,8 +239,9 @@ public class TableMaintenanceForm extends ActionForm {
 	 * @param string
 	 */
 	public void setRecCount(long count) {
-	    recCount = count;
+		recCount = count;
 	}
+
 	/**
 	 * @return
 	 */
@@ -234,8 +253,9 @@ public class TableMaintenanceForm extends ActionForm {
 	 * @param string
 	 */
 	public void setRecNoPerPage(long count) {
-	    recNoPerPage = count;
+		recNoPerPage = count;
 	}
+
 	/**
 	 * @return
 	 */
@@ -247,14 +267,16 @@ public class TableMaintenanceForm extends ActionForm {
 	 * @param string
 	 */
 	public void setFromRecNo(long count) {
-	    fromRecNo = count;
+		fromRecNo = count;
 	}
+
 	/**
 	 * @return
 	 */
 	public long getDispFromRecNo() {
 		return fromRecNo + 1;
 	}
+
 	/**
 	 * @return
 	 */
@@ -266,64 +288,72 @@ public class TableMaintenanceForm extends ActionForm {
 	 * @param string
 	 */
 	public void setToRecNo(long count) {
-	    toRecNo = count;
+		toRecNo = count;
 	}
+
 	/**
 	 * @return
 	 */
 	public long getDispToRecNo() {
-		return Math.min(toRecNo,recCount);
+		return Math.min(toRecNo, recCount);
 	}
+
 	/**
 	 * @return
 	 */
 	public ArrayList<String> getPageList() {
 		return pageList;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getPageList(int idx) {
-		return (String)pageList.get(idx);
+		return pageList.get(idx);
 	}
 
 	/**
 	 * @param string
 	 */
 	public void addPageList(String string) {
-	    pageList.add(string);
+		pageList.add(string);
 	}
+
 	/**
 	 * @param string
 	 */
 	public void setPageList(ArrayList<String> list) {
-	    pageList = list;
+		pageList = list;
 	}
+
 	/**
 	 * @return
 	 */
 	public ArrayList<String> getPageNameList() {
 		return pageNameList;
 	}
+
 	/**
 	 * @return
 	 */
 	public String getPageNameList(int idx) {
-		return (String)pageNameList.get(idx);
+		return pageNameList.get(idx);
 	}
 
 	/**
 	 * @param string
 	 */
 	public void addPageNameList(String string) {
-	    pageNameList.add(string);
+		pageNameList.add(string);
 	}
+
 	/**
 	 * @param string
 	 */
 	public void setPageNameList(ArrayList<String> list) {
-	    pageNameList = list;
+		pageNameList = list;
 	}
+
 	/**
 	 * @return
 	 */
@@ -335,12 +365,14 @@ public class TableMaintenanceForm extends ActionForm {
 	 * @param string
 	 */
 	public void setSelectPage(String val) {
-	    selectPage = val;
+		selectPage = val;
 	}
-	public FormFile getFileUp() { 
-	    return fileUp;
+
+	public MultipartFile getFileUp() {
+		return fileUp;
 	}
-	public void setFileUp(FormFile fileUp) {
-	    this.fileUp = fileUp;
+
+	public void setFileUp(MultipartFile fileUp) {
+		this.fileUp = fileUp;
 	}
 }

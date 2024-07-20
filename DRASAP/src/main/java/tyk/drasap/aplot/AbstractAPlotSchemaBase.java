@@ -24,12 +24,10 @@ import java.util.HashMap;
  * @author hideki_sugiyama
  * @
  */
-@SuppressWarnings("serial")
-public abstract class  AbstractAPlotSchemaBase extends HashMap<String, Object> {
+public abstract class AbstractAPlotSchemaBase extends HashMap<String, Object> {
 
 	/** スキーマ名の接頭辞. */
 	public static final String SCHEMA_PREFIX = "oj";
-
 
 	/** スキーマ名. */
 	private String schemaName = null;
@@ -41,7 +39,6 @@ public abstract class  AbstractAPlotSchemaBase extends HashMap<String, Object> {
 	public AbstractAPlotSchemaBase(String schema) {
 		this.schemaName = schema;
 	}
-
 
 	/**
 	 * スキーマ名取得.
@@ -59,15 +56,14 @@ public abstract class  AbstractAPlotSchemaBase extends HashMap<String, Object> {
 	 */
 	protected String quart(String val, String type) {
 		String retVal = val;
-		if ( "char".equalsIgnoreCase(type) ||
+		if ("char".equalsIgnoreCase(type) ||
 				"varchar".equalsIgnoreCase(type) ||
-				"timestamp".equalsIgnoreCase(type) ) {
+				"timestamp".equalsIgnoreCase(type)) {
 			// 括る
 			retVal = "'" + val + "'";
 		}
 		return retVal;
 	}
-
 
 	/**
 	 * スキーマ名からスキーマ番号に変換する.
@@ -78,7 +74,7 @@ public abstract class  AbstractAPlotSchemaBase extends HashMap<String, Object> {
 		// スキーマ番号設定.
 		String str = this.schemaName.toLowerCase();
 		String no = str.replace(SCHEMA_PREFIX, "");
-		if ( !"".equals(no) ) {
+		if (!"".equals(no)) {
 			return Integer.parseInt(no);
 		}
 		return 0;
@@ -87,7 +83,7 @@ public abstract class  AbstractAPlotSchemaBase extends HashMap<String, Object> {
 	@Override
 	public Object put(String key, Object value) {
 		// 文字列の場合はトリムする.
-		if ( value instanceof String ) {
+		if (value instanceof String) {
 			super.put(key, value.toString().trim());
 		}
 		// それ以外はそのまま入れる.

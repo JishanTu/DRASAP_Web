@@ -2,7 +2,6 @@ package tyk.drasap.common;
 
 import java.util.Date;
 
-
 /**
  * ACL一括更新画面用のアップロードデータを表すクラス。
  * ACLアップロードデータテーブル(ACL_UPLOAD_TABLE)に対応。
@@ -11,30 +10,30 @@ import java.util.Date;
  */
 public class AclUpload {
 
-	String aclUpdateNo = "";		// 管理NO
-	String userId = "";				// ユーザID
-	String userName = "";			// 氏名
-	String recordNo = "";			// レコード番号
-	String machineJp = "";			// 装置
-	String machineNo = "";			// 装置NO
-	String drwgNo = "";				// 手配図番
-	String machineCode = "";		// 装置コード
-	String detailNo = "";			// 明細番号
-	String pages = "";				// 頁
-	String itemNo = "";				// 品番
-	String itemNoShort = "";		// 品番（空白、ハイフン「-」を除いた半角大文字）
-	String grpCode = "";			// グループ
-	String correspondingFlag = "";	// 該当図区分
-	String correspondingValue = "";	// 該当図区分（表示）値
-	String confidentialFlag = "";	// 機密管理図区分
-	String confidentialValue = "";	// 機密管理図区分（表示）値
-	String preUpdateAcl = "";		// 変更前アクセスレベル
-	String preUpdateAclName = "";	// 変更前アクセスレベル名
-	String postUpdateAcl = "";		// 変更後アクセスレベル
-	String postUpdateAclName = "";	// 変更後アクセスレベル名
-	String itemName = "";			// 品名（規格型式）
-	String message = "";			// メッセージ
-	Date aclUpdate = null;			// 更新日時
+	String aclUpdateNo = ""; // 管理NO
+	String userId = ""; // ユーザID
+	String userName = ""; // 氏名
+	String recordNo = ""; // レコード番号
+	String machineJp = ""; // 装置
+	String machineNo = ""; // 装置NO
+	String drwgNo = ""; // 手配図番
+	String machineCode = ""; // 装置コード
+	String detailNo = ""; // 明細番号
+	String pages = ""; // 頁
+	String itemNo = ""; // 品番
+	String itemNoShort = ""; // 品番（空白、ハイフン「-」を除いた半角大文字）
+	String grpCode = ""; // グループ
+	String correspondingFlag = ""; // 該当図区分
+	String correspondingValue = ""; // 該当図区分（表示）値
+	String confidentialFlag = ""; // 機密管理図区分
+	String confidentialValue = ""; // 機密管理図区分（表示）値
+	String preUpdateAcl = ""; // 変更前アクセスレベル
+	String preUpdateAclName = ""; // 変更前アクセスレベル名
+	String postUpdateAcl = ""; // 変更後アクセスレベル
+	String postUpdateAclName = ""; // 変更後アクセスレベル名
+	String itemName = ""; // 品名（規格型式）
+	String message = ""; // メッセージ
+	Date aclUpdate = null; // 更新日時
 
 	// ------------------------------------------ constructor
 	/**
@@ -51,6 +50,7 @@ public class AclUpload {
 	public String getAclUpdateNo() {
 		return aclUpdateNo;
 	}
+
 	/**
 	 * aclUpdateNoを設定します。
 	 * @param aclUpdateNo aclUpdateNo
@@ -66,6 +66,7 @@ public class AclUpload {
 	public String getUserId() {
 		return userId;
 	}
+
 	/**
 	 * userIdを設定します。
 	 * @param userId userId
@@ -81,6 +82,7 @@ public class AclUpload {
 	public String getUserName() {
 		return userName;
 	}
+
 	/**
 	 * userNameを設定します。
 	 * @param userName userName
@@ -96,6 +98,7 @@ public class AclUpload {
 	public String getRecordNo() {
 		return recordNo;
 	}
+
 	/**
 	 * recordNoを設定します。
 	 * @param recordNo recordNo
@@ -111,6 +114,7 @@ public class AclUpload {
 	public String getMachineJp() {
 		return machineJp;
 	}
+
 	/**
 	 * machineJpを設定します。
 	 * @param machineJp machineJp
@@ -126,6 +130,7 @@ public class AclUpload {
 	public String getMachineNo() {
 		return machineNo;
 	}
+
 	/**
 	 * machineNoを設定します。
 	 * @param machineNo machineNo
@@ -141,6 +146,7 @@ public class AclUpload {
 	public String getDrwgNo() {
 		return drwgNo;
 	}
+
 	/**
 	 * drwgNoを設定します。
 	 * @param drwgNo drwgNo
@@ -156,6 +162,7 @@ public class AclUpload {
 	public String getMachineCode() {
 		return machineCode;
 	}
+
 	/**
 	 * machineCodeを設定します。
 	 * @param machineCode machineCode
@@ -171,6 +178,7 @@ public class AclUpload {
 	public String getDetailNo() {
 		return detailNo;
 	}
+
 	/**
 	 * detailNoを設定します。
 	 * @param detailNo detailNo
@@ -186,6 +194,7 @@ public class AclUpload {
 	public String getPages() {
 		return pages;
 	}
+
 	/**
 	 * pagesを設定します。
 	 * @param pages pages
@@ -201,6 +210,7 @@ public class AclUpload {
 	public String getItemNo() {
 		return itemNo;
 	}
+
 	/**
 	 * itemNoを設定します。
 	 * @param itemNo itemNo
@@ -216,6 +226,7 @@ public class AclUpload {
 	public String getCorrespondingFlag() {
 		return correspondingFlag;
 	}
+
 	/**
 	 * correspondingFlagを設定します。
 	 * @param correspondingFlag correspondingFlag
@@ -231,6 +242,7 @@ public class AclUpload {
 	public String getCorrespondingValue() {
 		return correspondingValue;
 	}
+
 	/**
 	 * correspondingValueを設定します。
 	 * @param correspondingValue correspondingValue
@@ -246,6 +258,7 @@ public class AclUpload {
 	public String getConfidentialFlag() {
 		return confidentialFlag;
 	}
+
 	/**
 	 * confidentialFlagを設定します。
 	 * @param confidentialFlag confidentialFlag
@@ -261,6 +274,7 @@ public class AclUpload {
 	public String getConfidentialValue() {
 		return confidentialValue;
 	}
+
 	/**
 	 * confidentialValueを設定します。
 	 * @param confidentialValue confidentialValue
@@ -276,6 +290,7 @@ public class AclUpload {
 	public String getItemNoShort() {
 		return itemNoShort;
 	}
+
 	/**
 	 * itemNoShortを設定します。
 	 * @param itemNoShort itemNoShort
@@ -291,6 +306,7 @@ public class AclUpload {
 	public String getGrpCode() {
 		return grpCode;
 	}
+
 	/**
 	 * grpCodeを設定します。
 	 * @param grpCode grpCode
@@ -306,6 +322,7 @@ public class AclUpload {
 	public String getPreUpdateAcl() {
 		return preUpdateAcl;
 	}
+
 	/**
 	 * preUpdateAclを設定します。
 	 * @param preUpdateAcl preUpdateAcl
@@ -321,6 +338,7 @@ public class AclUpload {
 	public String getPreUpdateAclName() {
 		return preUpdateAclName;
 	}
+
 	/**
 	 * preUpdateAclNameを設定します。
 	 * @param preUpdateAclName preUpdateAclName
@@ -336,6 +354,7 @@ public class AclUpload {
 	public String getPostUpdateAcl() {
 		return postUpdateAcl;
 	}
+
 	/**
 	 * postUpdateAclを設定します。
 	 * @param postUpdateAcl postUpdateAcl
@@ -351,6 +370,7 @@ public class AclUpload {
 	public String getPostUpdateAclName() {
 		return postUpdateAclName;
 	}
+
 	/**
 	 * postUpdateAclNameを設定します。
 	 * @param postUpdateAclName postUpdateAclName
@@ -366,6 +386,7 @@ public class AclUpload {
 	public String getItemName() {
 		return itemName;
 	}
+
 	/**
 	 * itemNameを設定します。
 	 * @param itemName itemName
@@ -381,6 +402,7 @@ public class AclUpload {
 	public String getMessage() {
 		return message;
 	}
+
 	/**
 	 * messageを設定します。
 	 * @param message message
@@ -396,6 +418,7 @@ public class AclUpload {
 	public Date getAclUpdate() {
 		return aclUpdate;
 	}
+
 	/**
 	 * aclUpdateを設定します。
 	 * @param aclUpdate aclUpdate

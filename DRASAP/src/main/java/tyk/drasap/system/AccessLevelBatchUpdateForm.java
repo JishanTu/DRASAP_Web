@@ -5,29 +5,26 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import tyk.drasap.common.AclUpload;
-
+import tyk.drasap.springfw.form.BaseForm;
 
 /**
  * アクセスレベル一括更新画面に対応
  *
  * @author 2013/07/03 yamagishi
  */
-public class AccessLevelBatchUpdateForm extends ActionForm {
+public class AccessLevelBatchUpdateForm extends BaseForm {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -1748348533729998236L;
 	String act; // 処理を分けるための属性
 	ArrayList<String> errorMsg = new ArrayList<String>();
 	String aclUpdateNo = null;
 	String dlFileType = null;
 	HashMap<String, String> linkParmMap = new HashMap<String, String>(); // リンクタグで使用するパラメータを格納するMap
-	FormFile uploadFile = null;
+	MultipartFile uploadFile = null;
 	ArrayList<AclUpload> uploadList = new ArrayList<AclUpload>(); // アップロードデータを格納する。
 	long itemNoCount = 0;
 
@@ -38,7 +35,7 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	}
 
 	// --------------------------------------------------------- Methods
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
+	public void reset(HttpServletRequest request) {
 	}
 
 	// --------------------------------------------------------- getter,setter
@@ -48,6 +45,7 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	public String getAct() {
 		return act;
 	}
+
 	/**
 	 * @param string
 	 */
@@ -61,12 +59,14 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	public ArrayList<String> getErrorMsg() {
 		return errorMsg;
 	}
+
 	/**
 	 * @param string
 	 */
 	public void addErrorMsg(String string) {
 		errorMsg.add(string);
 	}
+
 	/**
 	 * @param string
 	 */
@@ -81,6 +81,7 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	public String getAclUpdateNo() {
 		return aclUpdateNo;
 	}
+
 	/**
 	 * aclUpdateNoを設定します。
 	 * @param aclUpdateNo aclUpdateNo
@@ -96,6 +97,7 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	public String getDlFileType() {
 		return dlFileType;
 	}
+
 	/**
 	 * dlFileTypeを設定します。
 	 * @param dlFileType dlFileType
@@ -108,7 +110,7 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	 * linkParmMapを取得します。
 	 * @return linkParmMap
 	 */
-	public HashMap<String,String> getLinkParmMap() {
+	public HashMap<String, String> getLinkParmMap() {
 		return linkParmMap;
 	}
 
@@ -116,14 +118,15 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	 * uploadFileを取得します。
 	 * @return uploadFile
 	 */
-	public FormFile getUploadFile() {
+	public MultipartFile getUploadFile() {
 		return uploadFile;
 	}
+
 	/**
 	 * uploadFileを設定します。
 	 * @param uploadFile uploadFile
 	 */
-	public void setUploadFile(FormFile uploadFile) {
+	public void setUploadFile(MultipartFile uploadFile) {
 		this.uploadFile = uploadFile;
 	}
 
@@ -134,6 +137,7 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	public ArrayList<AclUpload> getUploadList() {
 		return uploadList;
 	}
+
 	/**
 	 * uploadListを設定します。
 	 * @param uploadList uploadList
@@ -149,6 +153,7 @@ public class AccessLevelBatchUpdateForm extends ActionForm {
 	public long getItemNoCount() {
 		return itemNoCount;
 	}
+
 	/**
 	 * itemNoCountを設定します。
 	 * @param itemNoCount itemNoCount

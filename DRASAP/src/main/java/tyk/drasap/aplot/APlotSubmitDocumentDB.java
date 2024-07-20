@@ -22,8 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.apache.log4j.Category;
-
 import tyk.drasap.common.DrasapUtil;
 
 /**
@@ -32,62 +30,68 @@ import tyk.drasap.common.DrasapUtil;
  * @author hideki_sugiyama
  *
  */
-@SuppressWarnings("serial")
 public class APlotSubmitDocumentDB extends AbstractAPlotSchemaBase {
 
-
 	/** 印刷サイズのスケーリングモード変換用マップテーブル. */
-	static final private HashMap<String, String> zoomModeMap = new HashMap<String, String>() { {
-		put("ORG","サイズ指定");
-		put("A0","サイズ指定");
-		put("A1","サイズ指定");
-		put("A2","サイズ指定");
-		put("A3","サイズ指定");
-		put("A4","サイズ指定");
-		//put("A0","サイズ指定");
-		//put("A0L","サイズ指定");
-		//put("A1L","サイズ指定");
-		//put("A2L","サイズ指定");
-		//put("A3L","サイズ指定");
-		//put("A4L","サイズ指定");
-		put("70.7%","倍率指定");
-		put("50%","倍率指定");
-		put("35.4%","倍率指定");
-		put("25%","倍率指定");
-	}};
+	static final private HashMap<String, String> zoomModeMap = new HashMap<String, String>() {
+		{
+			this.put("ORG", "サイズ指定");
+			this.put("A0", "サイズ指定");
+			this.put("A1", "サイズ指定");
+			this.put("A2", "サイズ指定");
+			this.put("A3", "サイズ指定");
+			this.put("A4", "サイズ指定");
+			//put("A0","サイズ指定");
+			//put("A0L","サイズ指定");
+			//put("A1L","サイズ指定");
+			//put("A2L","サイズ指定");
+			//put("A3L","サイズ指定");
+			//put("A4L","サイズ指定");
+			this.put("70.7%", "倍率指定");
+			this.put("50%", "倍率指定");
+			this.put("35.4%", "倍率指定");
+			this.put("25%", "倍率指定");
+		}
+	};
 
 	/** 印刷サイズの倍率変換用マップテーブル. */
-	static final private HashMap<String, String> fixedZoomMap = new HashMap() { {
-		put("ORG","等倍");
-		put("A0","A0");
-		put("A1","A1");
-		put("A2","A2");
-		put("A3","A3");
-		put("A4","A4");
-		//put("A0","A0");
-		//put("A0L","A0L");
-		//put("A1L","A1L");
-		//put("A2L","A2L");
-		//put("A3L","A3L");
-		//put("A4L","A4L");
-	}};
+	static final private HashMap<String, String> fixedZoomMap = new HashMap<String, String>() {
+		{
+			this.put("ORG", "等倍");
+			this.put("A0", "A0");
+			this.put("A1", "A1");
+			this.put("A2", "A2");
+			this.put("A3", "A3");
+			this.put("A4", "A4");
+			//put("A0","A0");
+			//put("A0L","A0L");
+			//put("A1L","A1L");
+			//put("A2L","A2L");
+			//put("A3L","A3L");
+			//put("A4L","A4L");
+		}
+	};
 
 	/** 印刷サイズのパーセント倍率マップテーブル. */
-	static final private HashMap<String, String> PercentageZoomMap = new HashMap() { {
-		put("70.7%","70.7");
-		put("50%","50");
-		put("35.4%","35.4");
-		put("25%","25");
-	}};
+	static final private HashMap<String, String> PercentageZoomMap = new HashMap<String, String>() {
+		{
+			this.put("70.7%", "70.7");
+			this.put("50%", "50");
+			this.put("35.4%", "35.4");
+			this.put("25%", "25");
+		}
+	};
 
 	//対象図面がA0Lの場合、設定変更必要の画面指定サイズのテーブル
-	static final private HashMap<String,String> targetPaperSizeForA0L = new HashMap(){ {
-		put("A0", "A0");
-		put("A1", "A1");
-		put("A2", "A2");
-		put("A3", "A3");
-		put("A4", "A4");
-	}};
+	static final private HashMap<String, String> targetPaperSizeForA0L = new HashMap<String, String>() {
+		{
+			this.put("A0", "A0");
+			this.put("A1", "A1");
+			this.put("A2", "A2");
+			this.put("A3", "A3");
+			this.put("A4", "A4");
+		}
+	};
 
 	/**
 	 * コンストラクター.
@@ -96,7 +100,6 @@ public class APlotSubmitDocumentDB extends AbstractAPlotSchemaBase {
 	public APlotSubmitDocumentDB(String schema) {
 		super(schema);
 	}
-
 
 	/**
 	 * 印刷サイズからスケーリングモード文字列に変換.
@@ -114,7 +117,6 @@ public class APlotSubmitDocumentDB extends AbstractAPlotSchemaBase {
 		return zoomModeMap.containsKey(printSize) ? zoomModeMap.get(printSize) : "";
 	}
 
-
 	/**
 	 * 印刷サイズから固定倍率文字列に変換.
 	 * @param zoomMode スケーリングモード
@@ -126,17 +128,18 @@ public class APlotSubmitDocumentDB extends AbstractAPlotSchemaBase {
 
 		String fixedMode = "";
 
-		if( zoomMode.equals("サイズ指定")){
+		if ("サイズ指定".equals(zoomMode)) {
 			// マップテーブルに対応する文字列を返す.
 			fixedMode = fixedZoomMap.containsKey(printSize) ? fixedZoomMap.get(printSize) : "";
 
 			//指定されたサイズが、実サイズより大きい場合は、実サイズ（"A0", "A1","A2"など）をセットし、同等か小さい場合は、指定された図面サイズをセット。
-			if( printSize.equals("ORG") == false &&  DrasapUtil.compareDrwgSize(printSize, dwgSize) > 0 ){ //文字列で用紙サイズを比較すると、A0 < A4, A1 < A4
+			if ("ORG".equals(printSize) == false && DrasapUtil.compareDrwgSize(printSize, dwgSize) > 0) { //文字列で用紙サイズを比較すると、A0 < A4, A1 < A4
 				fixedMode = dwgSize;
 			}
 
 			//出力対象の図面がA0Lの場合で、画面で指定したサイズが「A0」、「A1」、「A2」、「A3」、「A4」の場合は、「用紙にフィット」をセットする。
-			if( (dwgSize.equalsIgnoreCase("A0L") || dwgSize.equalsIgnoreCase("A1L") || dwgSize.equalsIgnoreCase("A2L") ) && targetPaperSizeForA0L.containsKey(printSize)){
+			if (("A0L".equalsIgnoreCase(dwgSize) || "A1L".equalsIgnoreCase(dwgSize) || "A2L".equalsIgnoreCase(dwgSize))
+					&& targetPaperSizeForA0L.containsKey(printSize)) {
 				fixedMode = "用紙にフィット";
 			}
 		}
@@ -160,14 +163,15 @@ public class APlotSubmitDocumentDB extends AbstractAPlotSchemaBase {
 	 * @param printSize　画面の指定サイズ
 	 * @return
 	 */
-	public static String toMediaSize( String dwgSize, String printSize, String printerMasSize ){
+	public static String toMediaSize(String dwgSize, String printSize, String printerMasSize) {
 		String mediaSize = "自動";
 
-		if( (dwgSize.equalsIgnoreCase("A0L") || dwgSize.equalsIgnoreCase("A1L") || dwgSize.equalsIgnoreCase("A2L") )  && targetPaperSizeForA0L.containsKey(printSize)){
+		if (("A0L".equalsIgnoreCase(dwgSize) || "A1L".equalsIgnoreCase(dwgSize) || "A2L".equalsIgnoreCase(dwgSize))
+				&& targetPaperSizeForA0L.containsKey(printSize)) {
 			//出力対象の図面がA0Lの場合で、画面で指定したサイズが「A0」、「A1」、「A2」、「A3」、「A4」の場合
 			mediaSize = printSize;
 			//最大印刷可能サイズより大きい場合は、最大印刷可能サイズをセットする
-			if( DrasapUtil.compareDrwgSize(printSize, printerMasSize) > 0 ){
+			if (DrasapUtil.compareDrwgSize(printSize, printerMasSize) > 0) {
 				mediaSize = printerMasSize;
 			}
 		}
@@ -293,14 +297,14 @@ public class APlotSubmitDocumentDB extends AbstractAPlotSchemaBase {
 
 		StringBuilder insertAttrs = new StringBuilder("");
 		StringBuilder insertValues = new StringBuilder("");
-		for ( String[] attrName : ATTRS ) {
-			if ( insertAttrs.length() > 0 ) {
+		for (String[] attrName : ATTRS) {
+			if (insertAttrs.length() > 0) {
 				// 次の属性以降はカンマ.
 				insertAttrs.append(",");
 				insertValues.append(",");
 			}
 
-			if ( this.containsKey(attrName[0]) && this.get(attrName[0]) != null ) {
+			if (containsKey(attrName[0]) && get(attrName[0]) != null) {
 				// 属性.
 				insertAttrs.append(attrName[0]);
 				// 値.
@@ -313,7 +317,7 @@ public class APlotSubmitDocumentDB extends AbstractAPlotSchemaBase {
 			}
 		}
 
-		return String.format("INSERT INTO %s.SUBMIT_DOCUMENT ( %s ) VALUES ( %s )", this.getSchemaName(), insertAttrs.toString(), insertValues.toString());
+		return String.format("INSERT INTO %s.SUBMIT_DOCUMENT ( %s ) VALUES ( %s )", getSchemaName(), insertAttrs.toString(), insertValues.toString());
 	}
 
 	/**
@@ -341,6 +345,5 @@ public class APlotSubmitDocumentDB extends AbstractAPlotSchemaBase {
 		// 「ID種別（大分類） + スキーマ番号 + ID種別（中分類） + ID種別（小分類） + 年月（YYMM形式） + '-'（固定） + 連番（00000000形式）」
 		return String.format("%s%d%s%s%s-%07d", APlotOJSequenceXDB.JOB_ID_KIND1, schemaNo, shortId, APlotOJSequenceXDB.JOB_ID_KIND3_DOC, yymm, seqNo);
 	}
-
 
 }

@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class SearchInfo {
 	static HashMap<String, String> attrMap = new HashMap<String, String>();
-	static{
+	static {
 		attrMap.put("CREATE_DATE", "作成日");
 		attrMap.put("CREATE_USER", "作成者");
 		attrMap.put("MACHINE_JP", "装置名称(和)");
@@ -57,7 +57,7 @@ public class SearchInfo {
 		attrMap.put("CREATE_DIV", "作成部署コード");
 		attrMap.put("MEDIA_ID", "メディアID");
 		attrMap.put("TWIN_DRWG_NO", "1物2品番図番");
-		
+
 	}
 
 	/**

@@ -1,10 +1,7 @@
 package tyk.drasap.system;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
-import static tyk.drasap.common.DrasapUtil.defaultString;
+import static tyk.drasap.common.DrasapPropertiesFactory.*;
+import static tyk.drasap.common.DrasapUtil.*;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -13,35 +10,33 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 
-import org.apache.log4j.Category;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.MessageResources;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import tyk.drasap.common.AclUpload;
 import tyk.drasap.common.AclUploadDB;
-import tyk.drasap.common.DataSourceFactory;
 import tyk.drasap.common.DrasapInfo;
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.User;
 import tyk.drasap.errlog.ErrorLoger;
+import tyk.drasap.springfw.action.BaseAction;
+import tyk.drasap.springfw.utils.MessageSourceUtil;
 
 /**
  * <PRE>
@@ -52,32 +47,28 @@ import tyk.drasap.errlog.ErrorLoger;
  *
  * @author 2013/07/08 yamagishi
  */
-public class AccessLevelDownloadAction extends Action {
-	private static DataSource ds;
-	private static Category category = Category.getInstance(AccessLevelDownloadAction.class.getName());
-	static {
-		try{
-			ds = DataSourceFactory.getOracleDataSource();
-		} catch (Exception e) {
-			if (category.isInfoEnabled()) {
-				category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-			}
-		}
-	}
+@Controller
+public class AccessLevelDownloadAction extends BaseAction {
+	// --------------------------------------------------------- Instance Variables
 	private Row cellStyles = null; // セルのスタイル設定取得用
-
 	// --------------------------------------------------------- Methods
+
 	/**
 	 * Method execute
-	 * @param ActionMapping mapping
-	 * @param ActionForm form
-	 * @param HttpServletRequest request
-	 * @param HttpServletResponse response
-	 * @return ActionForward
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @param errors
+	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@PostMapping("/accessLevelDownload")
+	public Object execute(
+			AccessLevelBatchUpdateForm form,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model errors)
+			throws Exception {
 
 		if (category.isDebugEnabled()) {
 			category.debug("start");
@@ -87,31 +78,32 @@ public class AccessLevelDownloadAction extends Action {
 		User user = (User) session.getAttribute("user");
 		// sessionタイムアウトの確認
 		if (user == null) {
-			return mapping.findForward("timeout");
+			return "timeout";
 		}
 
-		ActionMessages errors = new ActionMessages();
-		MessageResources resources = getResources(request);
+		//ActionMessages errors = new ActionMessages();
+		//MessageResources resources = getResources(request);
 
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
-		AccessLevelBatchUpdateForm accessLevelBatchUpdateForm = (AccessLevelBatchUpdateForm) form;
+		AccessLevelBatchUpdateForm accessLevelBatchUpdateForm = form;
 
 		// リクエストパラメータから取得する
-		String fileType = request.getParameter("dlFileType");				// ファイルタイプ
-		String aclUpdateNo = accessLevelBatchUpdateForm.getAclUpdateNo();	// 管理NO
+		String fileType = request.getParameter("dlFileType"); // ファイルタイプ
+		String aclUpdateNo = accessLevelBatchUpdateForm.getAclUpdateNo(); // 管理NO
 
 		// ダウンロード実行
-		doDownload(response, fileType, aclUpdateNo, drasapInfo, user, errors, resources);
+		doDownload(response, fileType, aclUpdateNo, drasapInfo, user, errors);
 		// エラー確認
-		if (!errors.isEmpty()) {
-			saveErrors(request, errors);
-			return mapping.findForward("error");
+		if (!Objects.isNull(errors.getAttribute("message"))) {
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
+			return "error";
 		}
 
 		if (category.isDebugEnabled()) {
 			category.debug("end");
 		}
-		return null;
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	/**
@@ -125,7 +117,7 @@ public class AccessLevelDownloadAction extends Action {
 	 * @param resources
 	 */
 	private void doDownload(HttpServletResponse response, String fileType, String aclUpdateNo,
-			DrasapInfo drasapInfo, User user, ActionMessages errors, MessageResources resources) {
+			DrasapInfo drasapInfo, User user, Model errors) {
 
 		if (category.isDebugEnabled()) {
 			category.debug("ダウンロード実行処理の開始");
@@ -133,13 +125,13 @@ public class AccessLevelDownloadAction extends Action {
 
 		if ("0".equals(fileType)) {
 			// 雛形ファイルのダウンロード
-			createTemplate(response, user, errors, resources);
+			createTemplate(response, user, errors);
 		} else if ("1".equals(fileType)) {
 			// 表示内容をExcelデータでダウンロード
-			createExcelData(response, aclUpdateNo, user, drasapInfo, errors, resources);
+			createExcelData(response, aclUpdateNo, user, drasapInfo, errors);
 		} else {
 			// ダウンロードするファイルが不明
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.download.failed.fileType"));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.download.failed.fileType", null, null));
 			return;
 		}
 
@@ -156,7 +148,7 @@ public class AccessLevelDownloadAction extends Action {
 	 * @param resources
 	 */
 	private void createTemplate(HttpServletResponse response, User user,
-			ActionMessages errors, MessageResources resources) {
+			Model errors) {
 
 		if (category.isDebugEnabled()) {
 			category.debug("雛形ファイルダウンロード処理の開始");
@@ -165,20 +157,26 @@ public class AccessLevelDownloadAction extends Action {
 		Properties drasapProperties = DrasapPropertiesFactory.getDrasapProperties(this);
 
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
+		}
 		final String ORIGIN_FILE_NAME = apServerHome + drasapProperties.getProperty("tyk.download.template.path"); // テンプレートファイル
 
 		// テンプレートファイルがあるか確認する
-		if (!(new File(ORIGIN_FILE_NAME)).exists()) {
+		if (!new File(ORIGIN_FILE_NAME).exists()) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.download.nofile", ORIGIN_FILE_NAME));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.download.nofile", new Object[] { ORIGIN_FILE_NAME }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.csv"), user.getSys_id());
 			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclBatchUpdate.download.nofile", ORIGIN_FILE_NAME));
+				category.error(messageSource.getMessage("system.aclBatchUpdate.download.nofile", new Object[] { ORIGIN_FILE_NAME }, null));
 			}
 			return;
 		}
@@ -196,8 +194,8 @@ public class AccessLevelDownloadAction extends Action {
 		try {
 			response.setContentType("application/octet-stream");
 			// 文字化け対応
-			response.setHeader("Content-Disposition","attachment;" +
-				" filename=" + new String(streamFileName.getBytes("Windows-31J"),"ISO8859_1"));
+			response.setHeader("Content-Disposition", "attachment;" +
+					" filename=" + new String(streamFileName.getBytes("Windows-31J"), "ISO8859_1"));
 			response.setContentLength((int) f.length());
 
 			in = new BufferedInputStream(new FileInputStream(f));
@@ -208,22 +206,32 @@ public class AccessLevelDownloadAction extends Action {
 			}
 			out.flush();
 
-		} catch(Exception e) {
-			try { response.reset(); } catch (Exception e2) {}
+		} catch (Exception e) {
+			try {
+				response.reset();
+			} catch (Exception e2) {
+			}
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.download.failed.template", ErrorUtility.error2String(e)));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.download.failed.template", new Object[] { ErrorUtility.error2String(e) }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
- 			// for MUR
+			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclBatchUpdate.download.failed.template", ErrorUtility.error2String(e)));
+				category.error(messageSource.getMessage("system.aclBatchUpdate.download.failed.template", new Object[] { ErrorUtility.error2String(e) }, null));
 			}
 
 		} finally {
 			// CLOSE処理
-			try { if (in != null) in.close(); } catch (Exception e) {}
 			try {
-				if (out != null) out.close();
+				if (in != null) {
+					in.close();
+				}
+			} catch (Exception e) {
+			}
+			try {
+				if (out != null) {
+					out.close();
+				}
 				if (category.isDebugEnabled()) {
 					category.debug("out.close()");
 				}
@@ -244,7 +252,7 @@ public class AccessLevelDownloadAction extends Action {
 	 * @param resources
 	 */
 	private void createExcelData(HttpServletResponse response, String aclUpdateNo, User user, DrasapInfo drasapInfo,
-			ActionMessages errors, MessageResources resources) {
+			Model errors) {
 
 		if (category.isDebugEnabled()) {
 			category.debug("Excelファイルダウンロード処理の開始");
@@ -253,20 +261,26 @@ public class AccessLevelDownloadAction extends Action {
 		Properties drasapProperties = DrasapPropertiesFactory.getDrasapProperties(this);
 
 		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(CATALINA_HOME);
-		if (apServerHome == null) apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		if (apServerHome == null) apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
+		if (apServerHome == null) {
+			apServerHome = System.getenv(CATALINA_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
+		}
+		if (apServerHome == null) {
+			apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
+		}
 		final String ORIGIN_FILE_NAME = apServerHome + drasapProperties.getProperty("tyk.download.excel.format.path");// Excelフォーマット
 
 		// テンプレートファイルがあるか確認する
-		if (!(new File(ORIGIN_FILE_NAME)).exists()) {
+		if (!new File(ORIGIN_FILE_NAME).exists()) {
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.download.nofile", ORIGIN_FILE_NAME));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.download.nofile", new Object[] { ORIGIN_FILE_NAME }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.csv"), user.getSys_id());
 			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclBatchUpdate.download.nofile", ORIGIN_FILE_NAME));
+				category.error(messageSource.getMessage("system.aclBatchUpdate.download.nofile", new Object[] { ORIGIN_FILE_NAME }, null));
 			}
 			return;
 		}
@@ -276,11 +290,11 @@ public class AccessLevelDownloadAction extends Action {
 		paths = ORIGIN_FILE_NAME.split("\\.");
 		String extension = paths[paths.length - 1]; // 拡張子
 
-		int headerRowNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.header.row.num"));					// ヘッダ行
-		int firstRowNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.start.row.num"));					// 開始行
-		int firstColumnNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.start.column.num"));				// 開始列
-		int header1ColumnNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.header.item1.column.num"));	// ヘッダ項目1
-		int	header2ColumnNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.header.item2.column.num"));	// ヘッダ項目2
+		int headerRowNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.header.row.num")); // ヘッダ行
+		int firstRowNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.start.row.num")); // 開始行
+		int firstColumnNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.start.column.num")); // 開始列
+		int header1ColumnNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.header.item1.column.num")); // ヘッダ項目1
+		int header2ColumnNum = Integer.parseInt(drasapProperties.getProperty("tyk.download.excel.header.item2.column.num")); // ヘッダ項目2
 
 		Connection conn = null;
 		BufferedInputStream in = null;
@@ -297,16 +311,16 @@ public class AccessLevelDownloadAction extends Action {
 			// レスポンスに書き出し
 			response.setContentType("application/octet-stream;charset=Windows-31J");
 			// 文字化け対応
-			response.setHeader("Content-Disposition","attachment;" +
-					" filename=" + new String(fileName.getBytes("Windows-31J"),"ISO8859_1"));
+			response.setHeader("Content-Disposition", "attachment;" +
+					" filename=" + new String(fileName.getBytes("Windows-31J"), "ISO8859_1"));
 
 			in = new BufferedInputStream(new FileInputStream(ORIGIN_FILE_NAME));
 			out = new BufferedOutputStream(response.getOutputStream());
 
 			// Excelフォーマット取得
-			Workbook book = WorkbookFactory.create(in);	// Book.
-			Sheet sheet = book.getSheet(sheetName);	// Sheet.
-			Row row = null;	// Row.
+			Workbook book = WorkbookFactory.create(in); // Book.
+			Sheet sheet = book.getSheet(sheetName); // Sheet.
+			Row row = null; // Row.
 
 			// アップロードデータの取得
 			conn = ds.getConnection();
@@ -320,14 +334,14 @@ public class AccessLevelDownloadAction extends Action {
 
 				// レコードデータ作成
 				row = getRow(sheet, firstRowNum + i);
-				row.getCell(columnIndex).setCellValue(defaultString(aclUpload.getItemNo()));				// 品番
-				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getItemName()));			// 品名(規格型式)
-				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getGrpCode()));				// グループ
-				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getCorrespondingValue()));	// 該当図
-				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getConfidentialValue()));	// 機密管理図
-				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getPreUpdateAclName()));	// 変更前ACL
-				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getPostUpdateAclName()));	// 変更後ACL
-				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getMessage()));				// メッセージ
+				row.getCell(columnIndex).setCellValue(defaultString(aclUpload.getItemNo())); // 品番
+				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getItemName())); // 品名(規格型式)
+				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getGrpCode())); // グループ
+				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getCorrespondingValue())); // 該当図
+				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getConfidentialValue())); // 機密管理図
+				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getPreUpdateAclName())); // 変更前ACL
+				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getPostUpdateAclName())); // 変更後ACL
+				row.getCell(++columnIndex).setCellValue(defaultString(aclUpload.getMessage())); // メッセージ
 
 				if (i == 0) {
 					if (cellStyles == null) {
@@ -335,8 +349,8 @@ public class AccessLevelDownloadAction extends Action {
 					}
 					// ヘッダデータ作成
 					row = sheet.getRow(headerRowNum);
-					row.getCell(header1ColumnNum).setCellValue(defaultString(aclUpdateNo));	// 管理NO
-					row.getCell(header2ColumnNum).setCellValue(aclUploadList.size());		// 品番数
+					row.getCell(header1ColumnNum).setCellValue(defaultString(aclUpdateNo)); // 管理NO
+					row.getCell(header2ColumnNum).setCellValue(aclUploadList.size()); // 品番数
 					// 印刷範囲設定
 					book.setPrintArea(book.getSheetIndex(sheetName),
 							firstColumnNum, columnIndex, headerRowNum,
@@ -352,27 +366,46 @@ public class AccessLevelDownloadAction extends Action {
 			out.flush();
 
 		} catch (Exception e) {
-			try { response.reset(); } catch (Exception e2) {}
+			try {
+				response.reset();
+			} catch (Exception e2) {
+			}
 			// for ユーザー
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("system.aclBatchUpdate.download.failed.excel", ErrorUtility.error2String(e)));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.download.failed.excel", new Object[] { ErrorUtility.error2String(e) }, null));
 			// for システム管理者.
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
 			// for MUR
 			if (category.isInfoEnabled()) {
-				category.error(resources.getMessage("system.aclBatchUpdate.download.failed.excel", ErrorUtility.error2String(e)));
+				category.error(messageSource.getMessage("system.aclBatchUpdate.download.failed.excel", new Object[] { ErrorUtility.error2String(e) }, null));
 			}
 
 		} finally {
 			// CLOSE処理
-			try { conn.close(); } catch (Exception e) {}
-			try { if (in != null) in.close(); } catch (Exception e) {}
 			try {
-				if (out != null) out.close();
+				conn.close();
+			} catch (Exception e) {
+			}
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (Exception e) {
+			}
+			try {
+				if (out != null) {
+					out.close();
+				}
 				if (category.isDebugEnabled()) {
 					category.debug("out.close()");
 				}
-			} catch (Exception e) {}
-			try { if (bytes != null) bytes.close(); } catch (Exception e) {}
+			} catch (Exception e) {
+			}
+			try {
+				if (bytes != null) {
+					bytes.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 
 		if (category.isDebugEnabled()) {
