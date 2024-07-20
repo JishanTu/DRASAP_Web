@@ -9,7 +9,7 @@ public class Action {
 	private List<Forward> forwards;
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public void setName(String name) {
@@ -17,7 +17,7 @@ public class Action {
 	}
 
 	public String getPath() {
-		return this.path;
+		return path;
 	}
 
 	public void setPath(String path) {
@@ -25,7 +25,7 @@ public class Action {
 	}
 
 	public String getType() {
-		return this.type;
+		return type;
 	}
 
 	public void setType(String type) {
@@ -33,7 +33,7 @@ public class Action {
 	}
 
 	public List<Forward> getForwards() {
-		return this.forwards;
+		return forwards;
 	}
 
 	public void setForwards(List<Forward> forwards) {

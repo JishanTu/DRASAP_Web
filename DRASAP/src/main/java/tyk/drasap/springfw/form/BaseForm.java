@@ -10,5 +10,4 @@ public class BaseForm implements Validatable {
 	public Model validate(HttpServletRequest request, Model errors, MessageSource messageSource) {
 		return null;
 	}
-
 }

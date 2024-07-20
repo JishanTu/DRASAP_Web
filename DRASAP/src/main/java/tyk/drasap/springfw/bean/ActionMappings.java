@@ -9,7 +9,7 @@ public class ActionMappings {
 	private List<Action> actions;
 
 	public List<Action> getActions() {
-		return this.actions;
+		return actions;
 	}
 
 	public void setActions(List<Action> actions) {

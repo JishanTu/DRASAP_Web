@@ -10,7 +10,7 @@ public class GlobalForwards {
 	private List<Forward> forwards;
 
 	public List<Forward> getForwards() {
-		return this.forwards;
+		return forwards;
 	}
 
 	public void setForwards(List<Forward> forwards) {

@@ -6,7 +6,7 @@ public class Forward {
 	//	private String redirect;
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public void setName(String name) {
@@ -14,7 +14,7 @@ public class Forward {
 	}
 
 	public String getPath() {
-		return this.path;
+		return path;
 	}
 
 	public void setPath(String path) {
