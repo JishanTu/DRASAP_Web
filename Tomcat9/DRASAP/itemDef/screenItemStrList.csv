@@ -1,0 +1,33 @@
+日本語,English
+図面検索,Drawing Search
+最新追番のみ表示,Latest Revision Number only
+全ての属性条件を,For all the attribute conditions
+検索開始,Search
+検索結果表示数,Number of displays
+職番,UserID
+名前,Name
+部署名,Division
+検索結果,Search Result
+全てチェック,place check mark
+全て外す,remove checkmark
+再表示,restatement
+出力プロッタ,Printer
+表示属性,Display Attribute
+{0}件中  {1}-{2}件表示,{1}－{2} of {0}
+前の{0}件,The previous {0}
+次の{0}件,The next {0}
+出力,Output
+全属性を,Of all attributes
+ファイル出力,File Output
+アクセスレベル変更,Change Access level
+複数図番,Multiple Dwg No
+パスワード変更,Change Password
+ログアウト,Logout
+図面登録依頼,Drawing registration request
+図面登録依頼詳細,Drawing registration results
+図面登録依頼リスト,Drawing registration list
+アクセスレベル一括更新,Batch access level update
+アクセスレベル更新結果,Access level update result
+マルチPDF出力,Multi PDF output
+PDF単独zip出力,PDF zip output
+図番指定順 （ワイルドカード使用不可）,specify order (Can not use wildcard.)

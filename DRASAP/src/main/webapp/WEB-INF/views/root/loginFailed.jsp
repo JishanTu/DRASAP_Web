@@ -43,7 +43,7 @@
 			<hr/ style="border: none; height: 0.5px; background-color: red;">
 			<c:if test="${message != null}">
 				<c:forEach var="msg" items="${message}">
-					<span style="margin-left: 40px; font-weight: bold; line-height: 1.5;">${msg}</span>
+					<span style="margin-left: 40px; font-weight: bold; line-height: 1.5;">${msg}</span><br/>
 				</c:forEach>
 			</c:if>
 			<hr/ style="border: none; height: 0.5px; background-color: red;">

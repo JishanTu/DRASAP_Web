@@ -99,11 +99,11 @@ url(
     var dialogFlag = false; // 二重起動防止
     function openDLManagerDialog(idx) {
 		var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
-		var DRWG_NO = document.getElementById("DRWG_NO").value;
-		var FILE_NAME = document.getElementById("FILE_NAME").value;
-		var PATH_NAME = document.getElementById("PATH_NAME").value;
-		var DRWG_SIZE = document.getElementById("printSize").value;
-		var PDF = document.getElementById("PDF").value;
+		var DRWG_NO = document.getElementById("DRWG_NO[" + idx + "]").value;
+		var FILE_NAME = document.getElementById("FILE_NAME[" + idx + "]").value;
+		var PATH_NAME = document.getElementById("PATH_NAME[" + idx + "]").value;
+		var DRWG_SIZE = document.getElementById("printSizeSelect" + idx).value;
+		var PDF = document.getElementById("PDF[" + idx + "]").value;
         drwgNoLink.href = drwgNoLink + '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
                                      + '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
                                      + '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
@@ -324,10 +324,10 @@ url(
 								</a>
 
 							</span></td>
-							<input type="hidden" id="DRWG_NO" value="${item.drwgNo}"/>
-							<input type="hidden" id="FILE_NAME" value="${item.fileName}"/>
-							<input type="hidden" id="PATH_NAME" value="${item.pathName}"/>
-							<input type="hidden" id="PDF" value="${item.linkParmMap['PDF']}"/>
+							<input type="hidden" id="DRWG_NO[${status.index}]" value="${item.drwgNo}"/>
+							<input type="hidden" id="FILE_NAME[${status.index}]" value="${item.fileName}"/>
+							<input type="hidden" id="PATH_NAME[${status.index}]" value="${item.pathName}"/>
+							<input type="hidden" id="PDF[${status.index}]" value="${item.linkParmMap['PDF']}"/>
 						</c:when>
 						<c:otherwise>
 							<td nowrap="nowrap"><span class="normal12"
