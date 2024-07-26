@@ -583,14 +583,14 @@ public class SearchConditionAction extends BaseAction {
 			} else if (!"multipreview".equals(searchConditionForm.act)) {
 				// ここから先は、ユーザー管理マスターに検索カラム、表示件数をセットする。
 				String strSql2 = "update USER_MASTER set ";
-				for (int i = 1; i < searchConditionForm.getSearchSelColNum(); i++) {
+				for (int i = 1; i <= searchConditionForm.getSearchSelColNum(); i++) {
 					String val = searchConditionForm.getCondition(i - 1);
 					strSql2 += " SEARCH_SELCOL" + i + "='" + val + "',";
 					// ユーザーObjectにもセットする
 					user.setSearchSelCol(i - 1, val);
 				}
 
-				for (int i = 1; i < searchConditionForm.getViewSelColNum(); i++) {
+				for (int i = 1; i <= searchConditionForm.getViewSelColNum(); i++) {
 					String val = searchConditionForm.getDispAttr(i - 1);
 					strSql2 += " VIEW_SELCOL" + i + "='" + val + "',";
 					// ユーザーObjectにもセットする
@@ -864,7 +864,7 @@ public class SearchConditionAction extends BaseAction {
 
 					/* 以下はTRUNC使用バージョン
 					 * 検索スピードが問題となった
-
+					
 					sbSql.append("TRUNC(");
 					sbSql.append(conditionName);// 検索条件の項目名
 					sbSql.append(")=TO_DATE('");
@@ -897,7 +897,7 @@ public class SearchConditionAction extends BaseAction {
 
 						/* 以下はTRUNC使用バージョン
 						 * 検索スピードが問題となった
-
+						
 						sbSql.append("TRUNC(");
 						sbSql.append(conditionName);// 検索条件の項目名
 						sbSql.append(")>=TO_DATE('");
@@ -924,7 +924,7 @@ public class SearchConditionAction extends BaseAction {
 
 						/* 以下はTRUNC使用バージョン
 						 * 検索スピードが問題となった
-
+						
 						sbSql.append("TRUNC(");
 						sbSql.append(conditionName);// 検索条件の項目名
 						sbSql.append(")<=TO_DATE('");

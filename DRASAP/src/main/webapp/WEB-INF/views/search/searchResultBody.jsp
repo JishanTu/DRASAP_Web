@@ -139,17 +139,17 @@ url(
         var selectElement = document.getElementById(field + 'Select' + index);
         var hiddenInput = document.getElementById(field + 'Hidden' + index);
         hiddenInput.value = selectElement.value;
-        hiddenInput.name = "searchResultList[" + index + "]."+ field;
+        hiddenInput.name = "resultList[" + index + "]."+ field;
     }
     
     function updateCheckbox(checkbox, index) {
         // Dynamically set the name attribute when the checkbox is checked
         if (checkbox.checked) {
-            checkbox.name = "searchResultList[" + index + "].selected";
+            checkbox.name = "resultList[" + index + "].selected";
             checkbox.value = 'true';
         } else {
             // Optional: If unchecked, you might want to remove the name attribute
-            checkbox.name = "searchResultList[" + index + "].selected";
+            checkbox.name = "resultList[" + index + "].selected";
             checkbox.value = 'false';
         }
     }
@@ -158,7 +158,7 @@ url(
         document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
             // Set name attribute based on existing index if needed
             if (checkbox.checked) {
-                checkbox.name = "searchResultList[" + index + "].selected";
+                checkbox.name = "resultList[" + index + "].selected";
             }
         });
     });

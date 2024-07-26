@@ -39,8 +39,8 @@ public class User {
 	ArrayList<UserGroup> userGroups = new ArrayList<UserGroup>();// 所属しているユーザーグループ。内部はUserGroup。
 	ArrayList<Printer> enablePrinters = new ArrayList<Printer>();// 利用可能なプリンター。内部はPrinter。
 	String displayCount = "";// 検索の1ページ当たりの表示件数
-	public static int searchSelColNum = 5;
-	public static int viewSelColNum = 6;
+	public static int searchSelColNum = 10;
+	public static int viewSelColNum = 12;
 	private ArrayList<String> searchSelColList = new ArrayList<>(); // 検索条件カラムリスト
 	private ArrayList<String> viewSelColList = new ArrayList<>(); // 検索結果カラムリスト
 	// 2013.07.24 yamagishi add. start

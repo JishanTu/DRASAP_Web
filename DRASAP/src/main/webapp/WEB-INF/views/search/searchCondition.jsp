@@ -831,7 +831,52 @@ img {
 				<td style="width: 500px;">
 					<table border="0" cellspacing="0" cellpadding="0"
 						style="font-size: 12pt; margin: 0px; padding: 0px;">
-						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()}" var="index">
+						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()/2}" var="index">
+							<tr>
+								<td>
+									<select name="condition${index}">
+										<c:forEach items="${searchConditionForm.conditionKeyList}" var="conditionKey" varStatus="loop">
+											<c:choose>
+												<c:when test="${conditionKey == searchConditionForm.getCondition(index - 1)}">
+													<option value="${conditionKey}" selected>${searchConditionForm.conditionNameList[loop.index]}</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${conditionKey}">${searchConditionForm.conditionNameList[loop.index]}</option>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</select>
+								</td>
+								<td>
+									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" />
+								</td>
+								<td>
+									<input type="button" name="sortWayButton${index}" value="　　　" onclick="changeOrder(this)" style="width: 60px;" />
+									<input type="hidden" name="sortWay${index}" />
+								</td>
+								<td>
+									<select name="sortOrder${index}">
+										<c:forEach items="${searchConditionForm.sortOrderKeyList}"
+											var="sortOrderKey" varStatus="loop">
+											<c:choose>
+												<c:when test="${sortOrderKey == searchConditionForm.getSortOrder(index - 1)}">
+													<option value="${sortOrderKey}" selected>${searchConditionForm.sortOrderNameList[loop.index]}</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${sortOrderKey}">${searchConditionForm.sortOrderNameList[loop.index]}</option>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+				</td>
+				<td style="width: 500px;">
+					<table border="0" cellspacing="0" cellpadding="0"
+						style="font-size: 12pt; margin: 0px; padding: 0px;">
+						<c:forEach begin="${(searchConditionForm.getSearchSelColNum()/2) + 1}" end="${searchConditionForm.getSearchSelColNum()}" var="index">
 							<tr>
 								<td>
 									<select name="condition${index}">
