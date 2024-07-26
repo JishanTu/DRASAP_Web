@@ -87,7 +87,7 @@ public class AclvChangePreAction extends BaseAction {
 			// SearchResultFormから選択された図面を取得する
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				SearchResultElement resultElement = searchResultForm.getSearchResultElement(i);
-				if (resultElement.isSelected()) {// 選択されているもののみ対象
+				if (resultElement.getSelected()) {// 選択されているもののみ対象
 					//					if(user.isChangableAclv(resultElement)){
 					if (user.isChangableAclv(resultElement, conn, i > 0)) {
 						// このユーザーが変更可能な図面なら

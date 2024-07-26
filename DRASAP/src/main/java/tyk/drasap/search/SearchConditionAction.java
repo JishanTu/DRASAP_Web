@@ -152,6 +152,7 @@ public class SearchConditionAction extends BaseAction {
 			}
 			// 警告件数以下の場合
 			category.debug("--> searchResult");
+			session.setAttribute("searchConditionForm", searchConditionForm);
 			return "searchResult";
 
 		}
@@ -234,12 +235,11 @@ public class SearchConditionAction extends BaseAction {
 			request.setAttribute("hit", String.valueOf(hit));
 			category.debug("--> overHit");
 			return "overHit";
-		} else {
-			// 警告件数以下の場合
-			category.debug("--> multipreview");
-			request.setAttribute("task", "continue");
-			return "multipreview";
 		}
+		// 警告件数以下の場合
+		category.debug("--> multipreview");
+		request.setAttribute("task", "continue");
+		return "multipreview";
 	}
 
 	/**
@@ -900,7 +900,7 @@ public class SearchConditionAction extends BaseAction {
 
 					/* 以下はTRUNC使用バージョン
 					 * 検索スピードが問題となった
-					
+
 					sbSql.append("TRUNC(");
 					sbSql.append(conditionName);// 検索条件の項目名
 					sbSql.append(")=TO_DATE('");
@@ -933,7 +933,7 @@ public class SearchConditionAction extends BaseAction {
 
 						/* 以下はTRUNC使用バージョン
 						 * 検索スピードが問題となった
-						
+
 						sbSql.append("TRUNC(");
 						sbSql.append(conditionName);// 検索条件の項目名
 						sbSql.append(")>=TO_DATE('");
@@ -960,7 +960,7 @@ public class SearchConditionAction extends BaseAction {
 
 						/* 以下はTRUNC使用バージョン
 						 * 検索スピードが問題となった
-						
+
 						sbSql.append("TRUNC(");
 						sbSql.append(conditionName);// 検索条件の項目名
 						sbSql.append(")<=TO_DATE('");

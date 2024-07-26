@@ -146,15 +146,86 @@ if (me.isDelAdmin()) { %>
 	<tr>
 		<td>
 			<span class="normal10">${sessionScope.searchResultForm.h_label6 }</span></td>
-		 <c:forEach begin="1" end="6" var="index">
-        <td>
-            <select name="dispAttr${index}">
-                <c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
-                    <option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
-                </c:forEach>
-            </select>
-        </td>
-    </c:forEach>
+				<td><select name="dispAttr1">
+						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+						<c:choose>
+							<c:when test="${dispKey == searchResultForm.dispAttr1}">
+								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
+							</c:otherwise>
+							</c:choose>
+						</c:forEach>
+				     </select>
+				</td>
+
+				<td>
+           <td><select name="dispAttr2">
+						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+						<c:choose>
+							<c:when test="${dispKey == searchResultForm.dispAttr2}">
+								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
+							</c:otherwise>
+							</c:choose>
+						</c:forEach>
+				     </select>
+				</td>
+				<td><select name="dispAttr3">
+						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+						<c:choose>
+							<c:when test="${dispKey == searchResultForm.dispAttr3}">
+								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
+							</c:otherwise>
+							</c:choose>
+						</c:forEach>
+				     </select>
+				</td>
+				<td><select name="dispAttr4">
+						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+						<c:choose>
+							<c:when test="${dispKey == searchResultForm.dispAttr4}">
+								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
+							</c:otherwise>
+							</c:choose>
+						</c:forEach>
+				     </select>
+				</td>
+				<td><select name="dispAttr5">
+						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+						<c:choose>
+							<c:when test="${dispKey == searchResultForm.dispAttr5}">
+								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
+							</c:otherwise>
+							</c:choose>
+						</c:forEach>
+				     </select>
+				</td>
+				<td><select name="dispAttr6">
+						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+						<c:choose>
+							<c:when test="${dispKey == searchResultForm.dispAttr6}">
+								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
+							</c:otherwise>
+							</c:choose>
+						</c:forEach>
+				     </select>
+				</td>
 	</tr>
 </table>
 </form>

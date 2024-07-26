@@ -60,6 +60,7 @@ public class Delete_LoginAction extends BaseAction {
 		if (Objects.isNull(errors.getAttribute("message"))) {
 			// ƒ†[ƒU[î•ñ‚ªŽæ“¾‚Å‚«‚½‚ç session‚ÉŠi”[‚·‚é
 			category.debug("--> success");
+			request.setAttribute("task", "init");
 			return "success";
 
 		}

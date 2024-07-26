@@ -62,6 +62,8 @@ public class RequestHistoryAction extends BaseAction {
 		// 作業依頼履歴を取得し、フォームにセットする。
 		setHistoryData(historyForm, user);
 
+		session.setAttribute("requestHistoryForm", historyForm);
+
 		category.debug("--> success");
 		return "success";
 	}

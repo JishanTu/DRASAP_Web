@@ -61,6 +61,7 @@ public class Management_LoginAction extends BaseAction {
 			// ƒ†[ƒU[î•ñ‚ªŽæ“¾‚Å‚«‚½‚ç session‚ÉŠi”[‚·‚é
 			category.debug("--> success");
 			session.removeAttribute("deleteHostReqForm");
+			request.setAttribute("task", "init");
 			return "success";
 
 		}

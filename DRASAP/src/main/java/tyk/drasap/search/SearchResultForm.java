@@ -25,6 +25,7 @@ public class SearchResultForm extends BaseForm {
 	String dispAttr4;
 	String dispAttr5;
 	String dispAttr6;
+	boolean isVisible;
 	ArrayList<String> dispNameList = new ArrayList<>();// 表示属性プルダウンの名称リスト
 	ArrayList<String> dispKeyList = new ArrayList<>();// 表示属性プルダウンのKeyリスト
 	String outputPrinter;// 出力プロッタ
@@ -418,6 +419,20 @@ public class SearchResultForm extends BaseForm {
 	 */
 	public String getOutCsvAll() {
 		return outCsvAll;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	/**
+	 * @return
+	 */
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	/**

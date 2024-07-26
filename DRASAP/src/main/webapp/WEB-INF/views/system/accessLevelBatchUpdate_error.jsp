@@ -23,7 +23,6 @@ url(
 		if (parent.acl_condition != null) {
 			parent.acl_condition.unLockButtons();
 		}
-		nowProcessing();
 	}
 	function nowProcessing() {
 		var nowProcessing;
@@ -35,6 +34,13 @@ url(
 <body onload="onLoad();">
 	<!-- エラーの表示 -->
 	<form:errors path="*" cssClass="error-message" />
+	<hr/ style="border: none; height: 0.5px; background-color: red;">
+	<c:if test="${errors.message != null}">
+		<c:forEach var="msg" items="${errors.message}">
+			<span style="margin-left: 40px; font-weight: bold; line-height: 1.5;color: #FF0000">${msg}</span>
+		</c:forEach>
+	</c:if>
+	<hr/ style="border: none; height: 0.5px; background-color: red;">
 	<table class="nowsearch" id="nowSearch" style="visibility: hidden">
 		<tr valign="middle">
 			<td align="center" style="font-size: 18pt; color: #0000FF;">

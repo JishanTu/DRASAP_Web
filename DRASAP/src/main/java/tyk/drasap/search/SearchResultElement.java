@@ -30,8 +30,12 @@ public class SearchResultElement {
 	// 2013.06.24 yamagishi add. end
 
 	String printerMaxSize = ""; //プリンタの最大印刷サイズ
-
 	// ---------------------------------------------------------- コンストラクタ
+
+	public SearchResultElement() {
+
+	}
+
 	/**
 	 * コンストラクタ
 	 */
@@ -152,6 +156,10 @@ public class SearchResultElement {
 	 * @return
 	 */
 	public boolean isSelected() {
+		return selected;
+	}
+
+	public boolean getSelected() {
 		return selected;
 	}
 

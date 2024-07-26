@@ -54,7 +54,6 @@ url(
 }
 </style>
 <script type="text/javascript">
-<!--
     browserName = navigator.appName;
     var buttonPress = false;
 
@@ -166,7 +165,7 @@ url(
         return cnt;
     }
     function getConditionElm(idx) {
-	return document.getElementsByName("condition["+idx+"]")[0];
+	return document.getElementsByClassName("condition")[idx];
     }
     function keyLock(){
         var keyLock;
@@ -175,7 +174,6 @@ url(
         keyLock.style.visibility = "visible";
         keyLock.style.height = document.body.parentNode.clientHeight + "px";
     }
-//-->
 </script>
 </head>
 <body bgcolor="#FFFFFF" onload="onInitFocus()" onunload="closeReq()"
@@ -237,11 +235,11 @@ url(
 					<td align="center" style="font-size: 10pt;"><span id="example">
 							<c:choose>
 								<c:when test="${sessionScope.seachKind == 'delSeisan'}">
-        (YYYYMMDD[A|C]nnnnn)
-    </c:when>
+        							(YYYYMMDD[A|C]nnnnn)
+    							</c:when>
 								<c:when test="${sessionScope.seachKind == 'delPrt'}">
-        (YYYYMMDD[B|D]nnnnn)
-    </c:when>
+        							(YYYYMMDD[B|D]nnnnn)
+    							</c:when>
 								<c:otherwise>
 									<br />
 								</c:otherwise>
@@ -249,9 +247,9 @@ url(
 
 					</span></td>
 				</tr>
-				<c:forEach var="condition" items="${condition}" varStatus="loop">
+				<c:forEach var="condition" items="${deleteHostReqForm.condition}" varStatus="loop">
 					<tr>
-						<td align="center"><input type="text" class="condition"
+						<td align="center"><input type="text" class="condition" name="condition"
 							style="color: red" tabindex="${loop.index + 2}" /></td>
 					</tr>
 				</c:forEach>

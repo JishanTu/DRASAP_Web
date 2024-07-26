@@ -39,12 +39,15 @@ url(
 	</script>
 </head>
 <body onload="onInitFocus()">
-<c:forEach var="error" items="${errors}">
-    <c:out value="${error.message}" />
-    <br />
+<c:if test="${message != null}">
+<hr/ style="border: none; height: 0.5px; background-color: red;">
+	<c:forEach var="msg" items="${message}">
+		<li style="margin-left: 30px; line-height: 1.5; color: red; border-lift: 0px'">${msg}</li>
 </c:forEach>
+	<hr/ style="border: none; height: 0.5px; background-color: red;">
+</c:if>
 
-    <form action="<%=request.getContextPath() %>/delete_Login" method="post">
+    <form name="delete_LoginForm" action="<%=request.getContextPath() %>/delete_Login" method="post">
         <table align="center" border="0" cellspacing="0" cellpadding="5">
             <caption align="center"><b>削除ツールログイン</b></caption>
             <tr>
@@ -52,7 +55,7 @@ url(
             </tr>
             <tr style="background-color:#EEEEEE;">
                 <td align="right">passwd : </td>
-                <td><input type="password" name="passwd" value="" style="width:180px;" /></td>
+                <td><input type="password" id="passwd" name="passwd" value="" style="width:180px;" /></td>
             </tr>
             <tr>
                 <td align="center" colspan="2" style="background-color:#FFFFFF;">

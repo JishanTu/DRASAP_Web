@@ -43,9 +43,9 @@
 		<td align="center" bgcolor="#CCCCCC" width="60"><span class="normal12">変更後</span></td>
 	</tr>
 	<!-- 変更対象を表示する部分 -->
-	<c:forEach var="aclvChangeElement" items="${aclvChangeForm.aclvChangeList}" varStatus="loop">
-    <tr>
-        <td><input type="checkbox" name="aclvChangeForm.aclvChangeList[${loop.index}].selected" value="true" /></td>
+	<c:forEach var="aclvChangeElement" items="${sessionScope.aclvChangeForm.aclvChangeList}" varStatus="loop">
+	<tr>
+		<td><input type="checkbox" name="aclvChangeElement[${loop.index}].selected" value="true" /></td>
         <td><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
         <td align="center"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
         <td align="center">
@@ -60,7 +60,7 @@
                 <form:option value="NG">×</form:option>
             </form:select>
         </td>
-    </tr>
+	</tr>
 </c:forEach>
 
 </table>

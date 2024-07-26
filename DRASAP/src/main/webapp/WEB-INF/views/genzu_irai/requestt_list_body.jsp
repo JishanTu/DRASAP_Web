@@ -54,10 +54,12 @@
                     <td nowrap="nowrap" align="center"><span class="normal10">${e.user_name}</span></td>
                     <td nowrap="nowrap" align="left"><span class="normal10">${e.busyo_name}</span></td>
                 </tr>
+                <input type="hidden" name="iraiList[${loop.index}].seq" value="${e.seq}" />
                 <input type="hidden" name="iraiList[${loop.index}].job_id" value="${e.job_id}" />
                 <input type="hidden" name="iraiList[${loop.index}].rowNo" value="${e.rowNo}" />
                 <input type="hidden" name="iraiList[${loop.index}].zikan" value="${e.zikan}" />
                 <input type="hidden" name="iraiList[${loop.index}].zuban" value="${e.zuban}" />
+                <input type="hidden" name="iraiList[${loop.index}].irai" value="${e.irai}" />
                 <input type="hidden" name="iraiList[${loop.index}].gouki" value="${empty e.gouki ? '' : e.gouki}" />
                 <input type="hidden" name="iraiList[${loop.index}].genzu" value="${empty e.genzu ? '' : e.genzu}" />
                 <input type="hidden" name="iraiList[${loop.index}].busuu" value="${empty e.busuu ? '' : e.busuu}" />

@@ -24,7 +24,6 @@ url(
 );
 </style>
 <script type="text/javascript">
-<!--
 	// 属性actをセットして、サブミット
 	function setActSubmit(parm) {
 		parent.aclv_change_body.document.forms[0].act.value = parm;// 隠し属性actにをセット
@@ -48,7 +47,6 @@ url(
 		WO1.window.moveTo(50, 50);//画面の位置指定
 		WO1.focus();
 	}
-//-->
 </script>
 </head>
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0"

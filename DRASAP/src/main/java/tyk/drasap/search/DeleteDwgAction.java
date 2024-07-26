@@ -83,7 +83,7 @@ public class DeleteDwgAction extends BaseAction {
 		//
 		deleteDwgForm.setMsg1("");
 		deleteDwgForm.setMsg2("");
-		if ("init".equals(request.getParameter("task"))) {
+		if ("init".equals(request.getAttribute("task"))) {
 			SearchResultForm searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			deleteDwgForm = new DeleteDwgForm();
 			deleteDwgForm.setAct("init");

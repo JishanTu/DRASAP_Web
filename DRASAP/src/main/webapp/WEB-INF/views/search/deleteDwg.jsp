@@ -124,12 +124,12 @@ url(
 					<td><br /> <br /></td>
 				</tr>
 				<tr>
-					<td><c:if test="${not empty deleteDwgForm.errors}">
-							<c:forEach var="error" items="${deleteDwgForm.errors}">
-								<c:out value="${error}" />
-								<br />
+					<td>
+						<c:if test="${message != null}">
+							<c:forEach var="msg" items="${message}">
+								<span style="margin-left: 30px; line-height: 1.5; color: red; border-lift: 0px'">${msg}</span>
 							</c:forEach>
-						</c:if></td>
+						</c:if>
 				</tr>
 			</tbody>
 		</table>

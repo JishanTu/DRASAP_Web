@@ -56,7 +56,7 @@ public class DeleteHostReqAction extends BaseAction {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping("/deleteHostReq")
+	@PostMapping("/delHostReq")
 	public Object execute(
 			DeleteHostReqForm form,
 			HttpServletRequest request,
@@ -71,6 +71,7 @@ public class DeleteHostReqAction extends BaseAction {
 			return "timeout";
 		}
 		DeleteHostReqForm deleteHostReqForm = form;
+		session.setAttribute("deleteHostReqForm", deleteHostReqForm);
 		//
 		deleteHostReqForm.cleartMsgList();
 
@@ -88,13 +89,16 @@ public class DeleteHostReqAction extends BaseAction {
 			return "failed";
 		}
 
-		if ("init".equals(request.getParameter("task"))) {
+		//if ("init".equals(request.getParameter("task"))) {
+		if ("init".equals(request.getAttribute("task"))) {
 			ArrayList<String> conditions = deleteHostReqForm.getCondition();
 			conditions.clear();
 			for (int i = 0; i < 10; i++) {
 				conditions.add("");
 			}
 			deleteHostReqForm.setDeleteOK(true);
+			deleteHostReqForm.setCondition(conditions);
+			request.removeAttribute("task");
 			return "success";
 		}
 		if ("delete".equals(deleteHostReqForm.getAct())) {
@@ -103,7 +107,7 @@ public class DeleteHostReqAction extends BaseAction {
 			//
 			String serverName[] = new String[2];
 			int connect[] = { 0, 0 };
-			MoveFilePrp[] filePop;
+			MoveFilePrp[] filePop = null;
 			try {
 				filePop = chkServerKind(deleteHostReqForm.getCondition()); // ˆË—Š”Ô†‚©‚çÚ‘±‚·‚éƒT[ƒo‚ð”»’f
 			} catch (FileNotFoundException e1) {

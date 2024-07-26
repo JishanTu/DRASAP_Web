@@ -169,7 +169,6 @@ img {
 	}
 	// 検索する
 	function doSearch(){
-		event.preventDefault();
 		document.forms[0].sortWay1.value=document.forms[0].sortWayButton1.value;// ボタンの値を隠し属性コピー
 		document.forms[0].sortWay2.value=document.forms[0].sortWayButton2.value;
 		document.forms[0].sortWay3.value=document.forms[0].sortWayButton3.value;
@@ -1099,7 +1098,7 @@ img {
 								<%-- 検索開始ボタン --%>
                                 &emsp; <% // ボタンの前に空白を入れる %> 
 								<button type="submit"
-									onclick="return doSearch();"
+									onclick="event.preventDefault(); doSearch();"
 									<%if (!hasAuth) {%> disabled="disabled" <%}%>
 									style="font-size: 12pt; font-weight: bold;">
 									${searchConditionForm.c_label4}</button></td>

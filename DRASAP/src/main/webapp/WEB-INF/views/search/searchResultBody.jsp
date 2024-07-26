@@ -29,7 +29,6 @@ url(
 );
 </style>
 <script type="text/javascript">
-    // <!--
     document.onkeydown = keys;
     function keys() {
         switch (event.keyCode) {
@@ -99,6 +98,18 @@ url(
     <%-- 2013.09.06 yamagishi add. start --%>
     var dialogFlag = false; // 二重起動防止
     function openDLManagerDialog(idx) {
+		var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
+		var DRWG_NO = document.getElementById("DRWG_NO").value;
+		var FILE_NAME = document.getElementById("FILE_NAME").value;
+		var PATH_NAME = document.getElementById("PATH_NAME").value;
+		var DRWG_SIZE = document.getElementById("printSize").value;
+		var PDF = document.getElementById("PDF").value;
+        drwgNoLink.href = drwgNoLink + '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
+                                     + '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+                                     + '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
+                                     + '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
+                                     + '&PDF=' + encodeURIComponent(PDF);
+        
 <%      // DLマネージャが利用可能な場合
         User me = (User) session.getAttribute("user");
         if (me.isDLManagerAvailable()) { %>
@@ -123,7 +134,6 @@ url(
 <%      } %>
     }
     <%-- 2013.09.06 yamagishi add. end --%>
-    //-->
     </script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
@@ -183,7 +193,7 @@ url(
 
 			<c:forEach var="item"
 				items="${sessionScope.searchResultForm.getSearchResultList()}"
-				varStatus="status" begin = "${iterateOffest}" end = "${iterateLength}">
+				varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest-1}">
 				<c:if test="${((status.index - iterateOffest) % 15) == 0}">
 					<tr>
 						<td></td>
@@ -236,11 +246,12 @@ url(
             <td><html:checkbox name="searchResultElement" property="selected" indexed="true" /></td> --%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1}">
-							<td><input type="checkbox" name="${item.selected}"
-								value="true"
+							<td>
+							<input type="checkbox" name="searchResultList[${status.index}].selected" value="true"
 								<c:if test="${item.selected}">
                checked="checked"
-           </c:if> /></td>
+								</c:if>  />
+							</td>
 						</c:when>
 						<c:otherwise>
 							<td />
@@ -256,27 +267,27 @@ url(
                 <td bgcolor="#FF0000"><span class="normal10white">×</span></td>
             <%-- } --%>
             -->
-					<td align="center"><select name="${item.printSize}"
-						id="printSize">
-							<c:choose>
-								<c:when test="${user.language == 'Japanese'}">
-									<option value="ORG">原寸</option>
-								</c:when>
-								<c:otherwise>
-									<option value="ORG">ORIGINAL</option>
-								</c:otherwise>
-							</c:choose>
-							<option value="A0">A0</option>
-							<option value="A1">A1</option>
-							<option value="A2">A2</option>
-							<option value="A3">A3</option>
-							<option value="A4">A4</option>
-							<option value="70.7%">70.7%</option>
-							<option value="50%">50%</option>
-							<option value="35.4%">35.4%</option>
-							<option value="25%">25%</option>
-					</select></td>
-					<td><select name="${item.copies}" id="copies">
+					<td align="center">
+					<p>printSize: ${searchResultList[status.index].printSize}</p>
+					<select name="searchResultList[${status.index}].printSize" id="printSize">
+    <option value="ORG" <c:if test="${searchResultList[status.index].printSize == 'ORG'}">selected</c:if>> 
+        <c:choose>
+            <c:when test="${user.language == 'Japanese'}">原寸</c:when>
+            <c:otherwise>ORIGINAL</c:otherwise>
+        </c:choose>
+    </option>
+    <option value="A0" <c:if test="${searchResultList[status.index].printSize == 'A0'}">selected</c:if>>A0</option>
+    <option value="A1" <c:if test="${searchResultList[status.index].printSize == 'A1'}">selected</c:if>>A1</option>
+    <option value="A2" <c:if test="${searchResultList[status.index].printSize == 'A2'}">selected</c:if>>A2</option>
+    <option value="A3" <c:if test="${searchResultList[status.index].printSize == 'A3'}">selected</c:if>>A3</option>
+    <option value="A4" <c:if test="${searchResultList[status.index].printSize == 'A4'}">selected</c:if>>A4</option>
+    <option value="70.7%" <c:if test="${searchResultList[status.index].printSize == '70.7%'}">selected</c:if>>70.7%</option>
+    <option value="50%" <c:if test="${searchResultList[status.index].printSize == '50%'}">selected</c:if>>50%</option>
+    <option value="35.4%" <c:if test="${searchResultList[status.index].printSize == '35.4%'}">selected</c:if>>35.4%</option>
+    <option value="25%" <c:if test="${searchResultList[status.index].printSize == '25%'}">selected</c:if>>25%</option>
+</select>
+</td>
+					<td><select name="searchResultList[${status.index}].copies" id="copies">
 							<option value="1">1</option>
 							<option value="2">2</option>
 							<option value="3">3</option>
@@ -297,13 +308,17 @@ url(
 					<c:choose>
 						<c:when test="${item.aclFlag == 1 }">
 							<td nowrap="nowrap"><span class="normal12blue"> <a
-									id='<%= "drwgNoLink[" + "${status.index}" + "]" %>'
+									id="drwgNoLink[${status.index}]"
 									href='<c:url value="/preview"/>'
 									title='<c:out value="${item.aclBalloon}"/>'
-									onclick='<%= "return openDLManagerDialog(" + "${status.index}" + ");" %>'>${item.drwgNoFormated}
+									onclick="return openDLManagerDialog(${status.index});">${item.drwgNoFormated}
 								</a>
 
 							</span></td>
+							<input type="hidden" id="DRWG_NO" value="${item.drwgNo}"/>
+							<input type="hidden" id="FILE_NAME" value="${item.fileName}"/>
+							<input type="hidden" id="PATH_NAME" value="${item.pathName}"/>
+							<input type="hidden" id="PDF" value="${item.linkParmMap['PDF']}"/>
 						</c:when>
 						<c:otherwise>
 							<td nowrap="nowrap"><span class="normal12"

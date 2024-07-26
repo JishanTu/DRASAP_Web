@@ -1,6 +1,7 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="tyk.drasap.genzu_irai.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -25,10 +26,14 @@
 			items="${requestHistoryForm.errors}">
 			<li><c:out value="${err}" /></li>
 		</c:forEach>
-
-	<c:if test="${empty requestScope.requestHistoryForm.historyList}">
-    <li>0件です。</li>
-</c:if>
+		
+		<c:set var="historyListSize" value="${fn:length(requestHistoryForm.historyList)}"/>
+		<c:if test="${historyListSize == 0}">
+            <li>0件です。</li>
+        </c:if>
+        <c:if test="${historyListSize > 0}">
+            <li>${historyListSize}件です。</li>
+        </c:if>
 </ul></font>
 <table border="0" align="center">
 	<tr bgcolor="#CCCCCC">

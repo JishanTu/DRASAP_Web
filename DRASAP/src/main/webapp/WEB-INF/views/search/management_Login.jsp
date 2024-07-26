@@ -18,7 +18,6 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 	<script type="text/javascript">
-	<!--
 		var browserName = navigator.appName;
 		function onLoad() {
                     var w = screen.availWidth;
@@ -38,12 +37,21 @@
 		function onInitFocus(){
 			document.management_LoginForm.passwd.focus();
 		}
-	//-->
 	</script>
 </head>
 <body onload="onInitFocus()">
-<form:errors path="*" cssClass="error-message" />
-<form action="<%=request.getContextPath() %>/management_Login" >
+
+  <font color="RED">
+<ul>
+    <c:if test="${message != null}">
+        <c:forEach var="msg" items="${message}">
+            <li>${msg}</li>
+        </c:forEach>
+    </c:if>
+</ul>
+</font>	
+
+<form action="<%=request.getContextPath() %>/management_Login" method = "post">
 
 <table align="center" border="0" cellspacing="0" cellpadding="5">
     <caption align="center"><b>運用支援ツールログイン</b></caption>

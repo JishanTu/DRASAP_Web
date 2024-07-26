@@ -87,6 +87,8 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 			return "timeout";
 		}
 		session.removeAttribute("aclBatchUpdateFlag");
+		session.removeAttribute("accessLevelBatchUpdateErrors");
+		session.setAttribute("errors", errors);
 
 		//ActionMessages errors = new ActionMessages();
 		//MessageResources resources = getResources(request);
@@ -126,7 +128,8 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 			// エラー確認
 			if (!Objects.isNull(errors.getAttribute("message"))) {
 				session.setAttribute("errors", errors);
-				session.setAttribute("accessLevelBatchUpdate.erros", "1");
+				//session.setAttribute("accessLevelBatchUpdate.erros", "1");
+				session.setAttribute("accessLevelBatchUpdateErrors", "1");
 				return "error";
 			}
 			session.setAttribute("aclBatchUpdateFlag", "true");
@@ -140,7 +143,8 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 			// エラー確認
 			if (!Objects.isNull(errors.getAttribute("message"))) {
 				session.setAttribute("errors", errors);
-				session.setAttribute("accessLevelBatchUpdate.erros", "1");
+				//session.setAttribute("accessLevelBatchUpdate.erros", "1");
+				session.setAttribute("accessLevelBatchUpdateErrors", "1");
 				return "error";
 			}
 
@@ -157,6 +161,9 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 		if ("close".equals(accessLevelBatchUpdateForm.getAct())) {
 			doClose(accessLevelBatchUpdateForm, user);
 			session.removeAttribute("accessLevelBatchUpdateForm");
+			//			MessageSourceUtil.addAttribute(errors, "message", null);
+			session.removeAttribute("errors");
+			MessageSourceUtil.addAttribute(errors, "message", null);
 			// Ajaxリクエストの為、フォワードさせない
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
@@ -174,7 +181,8 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 			if (!Objects.isNull(errors.getAttribute("message"))) {
 				session.setAttribute("errors", errors);
 				//saveErrors(session, errors);
-				session.setAttribute("accessLevelBatchUpdate.erros", "1");
+				//session.setAttribute("accessLevelBatchUpdate.erros", "1");
+				session.setAttribute("accessLevelBatchUpdateErrors", "1");
 				return "error";
 			}
 		}
@@ -862,6 +870,10 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 		try {
 			conn = ds.getConnection();
 
+			if(Objects.isNull(accessLevelBatchUpdateForm)) {
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.update.nodata", null, null));
+				return;
+			}
 			// ACLアップロードデータ取得
 			String aclUpdateNo = accessLevelBatchUpdateForm.getAclUpdateNo();
 			ArrayList<AclUpload> aclUploadList = AclUploadDB.getDistinctAclUploadList(aclUpdateNo, conn);

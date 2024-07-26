@@ -18,14 +18,12 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 	<script type="text/javascript">
-	<!--
 		// 属性actをセットして、サブミット
 		function setActSubmit(parm){
 			parent.aclv_change_body.document.forms[0].act.value=parm;// 隠し属性actにをセット
 			parent.aclv_change_body.document.forms[0].target="_top";// ターゲットは画面全体
 			parent.aclv_change_body.document.forms[0].submit();
 		}
-	//-->
 	</script>
 </head>
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
