@@ -1,6 +1,6 @@
 日本語,English
 図面検索,Drawing Search
-最新追版のみ表示,Latest Revision Number only
+最新追番のみ表示,Latest Revision Number only
 全ての属性条件を,For all the attribute conditions
 検索開始,Search
 検索結果表示数,Number of displays
@@ -29,3 +29,5 @@
 アクセスレベル一括更新,Batch access level update
 アクセスレベル更新結果,Access level update result
 マルチPDF出力,Multi PDF output
+PDF単独zip出力,PDF zip output
+図番指定順 （ワイルドカード使用不可）,specify order (Can not use wildcard.)
