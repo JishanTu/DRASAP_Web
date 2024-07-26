@@ -1,0 +1,21 @@
+#
+# This File is Password Definition File.
+#
+# ＜定義例＞
+#  PWD_MIN_LEN="5"
+#  PWD_VAL_ROLE="Aa1K"
+#    A:アルファベット大文字
+#    a:アルファベット小文字
+#    1:0～9
+#    K:記号 「  !  $  %  (  )  +  -  .   /   =   @   [    ]   ^   _  ~   」   （16 文字）
+#
+#  PWD_LMT_DAY="120"
+
+# パスワード最小桁数
+PWD_MIN_LEN=6
+
+# パスワード組合せ制約
+PWD_VAL_ROLE=a1
+
+# パスワード有効期限日数
+PWD_LMT_DAY=120

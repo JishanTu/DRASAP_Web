@@ -1,0 +1,50 @@
+# 
+# This file is text-merge template file.
+# 
+MOJI_FONT_WIN=Y
+
+#
+# 
+#
+MOJI_ORG=2
+
+#
+# RD:右下
+#
+MOJI_REF=RD
+#
+# 文字の幅、高さ（㎜）
+#
+MOJI_WIDTH=2.5
+MOJI_HEIGHT=2.5
+#
+# 文字フォント
+#
+#MOJI_FONT_NAME=OCR A Extended
+MOJI_FONT_NAME=ＭＳ ゴシック
+
+MOJI_THETA=0.0
+#
+#    MOJI_PATH:0:横、270:縦
+#
+#MOJI_PATH=270
+MOJI_PATH=0
+
+#
+# Banner（㎜）
+#
+*GROUP
+ORG_X=3.00
+ORG_Y=8.00
+%%TOP.TEXT
+*END
+*GROUP
+ORG_X=3.00
+ORG_Y=5.50
+%%MIDDLE.TEXT
+*END
+*GROUP
+ORG_X=3.00
+ORG_Y=3.00
+%%BOTTOM.TEXT
+*END
