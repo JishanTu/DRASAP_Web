@@ -106,7 +106,8 @@ public class OutAttrCsvAction extends BaseAction {
 		if (outFile.delete()) {
 			category.debug(outFileName + " ‚ğíœ‚µ‚½");
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		//return new ResponseEntity<>(HttpStatus.OK);
+		return null;
 	}
 
 	/**
