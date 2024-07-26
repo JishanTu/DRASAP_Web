@@ -23,17 +23,17 @@
 <body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
 <font color="red" size="4" ><ul>
 	<c:forEach var="err"
-			items="${requestHistoryForm.errors}">
-			<li><c:out value="${err}" /></li>
-		</c:forEach>
-		
-		<c:set var="historyListSize" value="${fn:length(requestHistoryForm.historyList)}"/>
-		<c:if test="${historyListSize == 0}">
-            <li>0件です。</li>
-        </c:if>
-        <c:if test="${historyListSize > 0}">
-            <li>${historyListSize}件です。</li>
-        </c:if>
+		items="${requestHistoryForm.errors}">
+		<li><c:out value="${err}" /></li>
+	</c:forEach>
+
+	<c:set var="historyListSize" value="${fn:length(requestHistoryForm.historyList)}"/>
+	<c:if test="${historyListSize == 0}">
+        <li>0件です。</li>
+    </c:if>
+    <c:if test="${historyListSize > 0}">
+        <li>${historyListSize}件です。</li>
+    </c:if>
 </ul></font>
 <table border="0" align="center">
 	<tr bgcolor="#CCCCCC">

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+
 import tyk.drasap.common.StringCheck;
+import tyk.drasap.common.User;
 import tyk.drasap.springfw.form.BaseForm;
 
 /**
@@ -17,26 +20,12 @@ public class SearchConditionForm extends BaseForm {
 	String act = "";// Actionクラスで処理を分けるための属性
 	ArrayList<String> conditionNameList;// 検索項目プルダウンの名称リスト
 	ArrayList<String> conditionKeyList;// 検索項目プルダウンのKeyリスト
-	String condition1;// 検索の項目名
-	String condition2;
-	String condition3;
-	String condition4;
-	String condition5;
-	String condition1Value;// 検索の指定値
-	String condition2Value;
-	String condition3Value;
-	String condition4Value;
-	String condition5Value;
-	String sortWay1;// 昇順、降順
-	String sortWay2;
-	String sortWay3;
-	String sortWay4;
-	String sortWay5;
-	String sortOrder1;// ソート優先順
-	String sortOrder2;
-	String sortOrder3;
-	String sortOrder4;
-	String sortOrder5;
+
+	ArrayList<String> conditionList = new ArrayList<>();// 検索の項目名
+	ArrayList<String> conditionValueList = new ArrayList<>();// 検索の指定値
+	ArrayList<String> sortWayList = new ArrayList<>();// 昇順、降順
+	ArrayList<String> sortOrderList = new ArrayList<>();// ソート優先順
+
 	ArrayList<String> sortOrderNameList;// ソート優先順の名称リスト
 	ArrayList<String> sortOrderKeyList;// ソート優先順のKeyリスト
 	boolean onlyNewest = false;// 最新追番のみならtrue
@@ -44,12 +33,7 @@ public class SearchConditionForm extends BaseForm {
 	String multipleDrwgNo;// 複数図番	2013.06.26 yamagishi add.
 	String eachCondition;// 全ての検索条件をORまたはAND
 	String displayCount;// 表示件数
-	private String dispAttr1;// 表示属性1・・・検索結果画面からコピーさせる
-	private String dispAttr2;
-	private String dispAttr3;
-	private String dispAttr4;
-	private String dispAttr5;
-	private String dispAttr6;
+	private ArrayList<String> dispAttrList = new ArrayList<>(); // 表示属性1・・・検索結果画面からコピーさせる
 	// 表示項目英語化対応
 	String language = "Japanese";
 	// Condition 部
@@ -112,34 +96,19 @@ public class SearchConditionForm extends BaseForm {
 	 */
 	public void reset(HttpServletRequest request) {
 		// SELECTの初期化
-		condition1 = "";
-		condition2 = "";
-		condition3 = "";
-		condition4 = "";
-		condition5 = "";
-		sortOrder1 = "";
-		sortOrder2 = "";
-		sortOrder3 = "";
-		sortOrder4 = "";
-		sortOrder5 = "";
+		for (int i = 0; i < getSearchSelColNum(); i++) {
+			conditionList.add(i, "");
+			conditionValueList.add(i, "");
+			sortWayList.add(i, "");
+			sortOrderList.add(i, "");
+		}
 		displayCount = "";
 		// CHECKBOXの初期化
 		onlyNewest = false;
 		orderDrwgNo = false;
 		// RADIOの初期化
 		eachCondition = "AND";
-		//
 		act = "";
-		condition1Value = "";
-		condition2Value = "";
-		condition3Value = "";
-		condition4Value = "";
-		condition5Value = "";
-		sortWay1 = "";
-		sortWay2 = "";
-		sortWay3 = "";
-		sortWay4 = "";
-		sortWay5 = "";
 		multipleDrwgNo = ""; // 2013.06.27 yamagishi add.
 	}
 
@@ -147,146 +116,58 @@ public class SearchConditionForm extends BaseForm {
 	/**
 	 * @return
 	 */
-	public String getCondition1() {
-		return condition1;
+	public String getCondition(int idx) {
+		return conditionList.get(idx);
 	}
 
 	/**
 	 * @return
 	 */
-	public String getCondition1Value() {
-		return condition1Value;
+	public ArrayList<String> getConditionList() {
+		return conditionList;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getCondition2() {
-		return condition2;
+	public String getConditionValue(int idx) {
+		return conditionValueList.get(idx);
 	}
 
 	/**
 	 * @return
 	 */
-	public String getCondition2Value() {
-		return condition2Value;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCondition3() {
-		return condition3;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCondition3Value() {
-		return condition3Value;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCondition4() {
-		return condition4;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCondition4Value() {
-		return condition4Value;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCondition5() {
-		return condition5;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCondition5Value() {
-		return condition5Value;
+	public ArrayList<String> getConditionValueList() {
+		return conditionValueList;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setCondition1(String string) {
-		condition1 = string;
+	public void setCondition(int idx, String string) {
+		conditionList.add(idx, string);
+	}
+
+	/**
+	 * @return
+	 */
+	public void setConditionList(ArrayList<String> list) {
+		conditionList = list;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setCondition1Value(String string) {
+	public void setConditionValue(int idx, String string) {
 		// UTF-8へ変換する
-		condition1Value = StringCheck.latinToUtf8(string);
+		conditionValueList.add(idx, StringCheck.latinToUtf8(string));
 	}
 
 	/**
-	 * @param string
+	 * @return
 	 */
-	public void setCondition2(String string) {
-		condition2 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCondition2Value(String string) {
-		// UTF-8へ変換する
-		condition2Value = StringCheck.latinToUtf8(string);
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCondition3(String string) {
-		condition3 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCondition3Value(String string) {
-		// UTF-8へ変換する
-		condition3Value = StringCheck.latinToUtf8(string);
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCondition4(String string) {
-		condition4 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCondition4Value(String string) {
-		// UTF-8へ変換する
-		condition4Value = StringCheck.latinToUtf8(string);
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCondition5(String string) {
-		condition5 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCondition5Value(String string) {
-		// UTF-8へ変換する
-		condition5Value = StringCheck.latinToUtf8(string);
+	public void setConditionValueList(ArrayList<String> list) {
+		conditionValueList = list;
 	}
 
 	/**
@@ -320,146 +201,59 @@ public class SearchConditionForm extends BaseForm {
 	/**
 	 * @return
 	 */
-	public String getSortWay1() {
-		return sortWay1;
+	public String getSortWay(int idx) {
+		return sortWayList.get(idx);
 	}
 
 	/**
 	 * @return
 	 */
-	public String getSortWay2() {
-		return sortWay2;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSortWay3() {
-		return sortWay3;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSortWay4() {
-		return sortWay4;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSortWay5() {
-		return sortWay5;
+	public ArrayList<String> getSortWayList() {
+		return sortWayList;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setSortWay1(String string) {
+	public void setSortWay(int idx, String string) {
 		// UTF-8へ変換する
-		sortWay1 = StringCheck.latinToUtf8(string);
+		sortWayList.add(idx, StringCheck.latinToUtf8(string));
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setSortWay2(String string) {
+	public void setSortWayList(ArrayList<String> list) {
 		// UTF-8へ変換する
-		sortWay2 = StringCheck.latinToUtf8(string);
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSortWay3(String string) {
-		// UTF-8へ変換する
-		sortWay3 = StringCheck.latinToUtf8(string);
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSortWay4(String string) {
-		// UTF-8へ変換する
-		sortWay4 = StringCheck.latinToUtf8(string);
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSortWay5(String string) {
-		// UTF-8へ変換する
-		sortWay5 = StringCheck.latinToUtf8(string);
+		sortWayList = list;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getSortOrder1() {
-		return sortOrder1;
+	public String getSortOrder(int idx) {
+		return sortOrderList.get(idx);
 	}
 
 	/**
 	 * @return
 	 */
-	public String getSortOrder2() {
-		return sortOrder2;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSortOrder3() {
-		return sortOrder3;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSortOrder4() {
-		return sortOrder4;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSortOrder5() {
-		return sortOrder5;
+	public ArrayList<String> getSortOrderList() {
+		return sortOrderList;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setSortOrder1(String string) {
-		sortOrder1 = string;
+	public void setSortOrder(int idx, String string) {
+		sortOrderList.add(idx, string);
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setSortOrder2(String string) {
-		sortOrder2 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSortOrder3(String string) {
-		sortOrder3 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSortOrder4(String string) {
-		sortOrder4 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSortOrder5(String string) {
-		sortOrder5 = string;
+	public void setSortOrderList(ArrayList<String> list) {
+		sortOrderList = list;
 	}
 
 	/**
@@ -582,85 +376,79 @@ public class SearchConditionForm extends BaseForm {
 	/**
 	 * @return
 	 */
-	public String getDispAttr1() {
-		return dispAttr1;
+	public int getSearchSelColNum() {
+		return User.searchSelColNum;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getDispAttr2() {
-		return dispAttr2;
+	public int getViewSelColNum() {
+		return User.viewSelColNum;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getDispAttr3() {
-		return dispAttr3;
+	public String getDispAttr(int idx) {
+		return dispAttrList.get(idx);
 	}
 
 	/**
 	 * @return
 	 */
-	public String getDispAttr4() {
-		return dispAttr4;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getDispAttr5() {
-		return dispAttr5;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getDispAttr6() {
-		return dispAttr6;
+	public ArrayList<String> getDispAttrList() {
+		return dispAttrList;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setDispAttr1(String string) {
-		dispAttr1 = string;
+	public void setDispAttr(int idx, String string) {
+		dispAttrList.add(idx, string);
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setDispAttr2(String string) {
-		dispAttr2 = string;
+	public void setDispAttrList(ArrayList<String> list) {
+		dispAttrList = list;
 	}
 
-	/**
-	 * @param string
-	 */
-	public void setDispAttr3(String string) {
-		dispAttr3 = string;
-	}
+	public void setSearchCondition(HttpServletRequest request) {
+		dispAttrList.clear();
+		for (int i = 1; i <= getViewSelColNum(); i++) {
+			String paramName = "dispAttr" + i;
+			String dispAttr = request.getParameter(paramName);
+			dispAttr = StringUtils.isEmpty(dispAttr) ? "" : dispAttr;
+			setDispAttr(i - 1, dispAttr);
+		}
 
-	/**
-	 * @param string
-	 */
-	public void setDispAttr4(String string) {
-		dispAttr4 = string;
-	}
+		conditionList.clear();
+		conditionValueList.clear();
+		sortWayList.clear();
+		sortOrderList.clear();
+		for (int j = 1; j <= getSearchSelColNum(); j++) {
+			String paramName = "condition" + j;
+			String value = request.getParameter(paramName);
+			value = StringUtils.isEmpty(value) ? "" : value;
+			setCondition(j - 1, value);
 
-	/**
-	 * @param string
-	 */
-	public void setDispAttr5(String string) {
-		dispAttr5 = string;
-	}
+			paramName = "conditionValue" + j;
+			value = request.getParameter(paramName);
+			value = StringUtils.isEmpty(value) ? "" : value;
+			setConditionValue(j - 1, value);
 
-	/**
-	 * @param string
-	 */
-	public void setDispAttr6(String string) {
-		dispAttr6 = string;
+			paramName = "sortWayButton" + j;
+			value = request.getParameter(paramName);
+			value = StringUtils.isEmpty(value) ? "" : value;
+			setSortWay(j - 1, value);
+
+			paramName = "sortOrder" + j;
+			value = request.getParameter(paramName);
+			value = StringUtils.isEmpty(value) ? "" : value;
+			setSortOrder(j - 1, value);
+		}
 	}
 
 	public String getC_label1() {

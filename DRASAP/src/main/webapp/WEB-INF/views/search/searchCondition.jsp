@@ -10,8 +10,8 @@
 		location.replace('<%=request.getContextPath() %>/timeout');
 	</script>
 </c:if>
-	<c:set var="searchConditionForm"
-			value="${sessionScope.searchConditionForm}" />
+<c:set var="searchConditionForm" value="${sessionScope.searchConditionForm}"/>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/tr/xhtml1/DTD/xhtml1-frameset.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -75,7 +75,7 @@ img {
 <script type="text/javascript">
 	document.onkeydown = keys;
 	function keys(){
-		switch (event.keyCode ){
+		switch (event.keyCode ) {
 			case 116: // F5
 				event.keyCode = 0;
 				return false;
@@ -167,37 +167,41 @@ img {
 		// 図番指定順のチェック
         isOrderDrwgNo();
 	}
+
 	// 検索する
 	function doSearch(){
-		document.forms[0].sortWay1.value=document.forms[0].sortWayButton1.value;// ボタンの値を隠し属性コピー
-		document.forms[0].sortWay2.value=document.forms[0].sortWayButton2.value;
-		document.forms[0].sortWay3.value=document.forms[0].sortWayButton3.value;
-		document.forms[0].sortWay4.value=document.forms[0].sortWayButton4.value;
-		document.forms[0].sortWay5.value=document.forms[0].sortWayButton5.value;
+		var currentForm = document.forms[0];
+		for (var i = 1; i <= ${searchConditionForm.getSearchSelColNum()}; i++) {// ボタンの値を隠し属性コピー
+			var sortWay = 'sortWay' + i;
+			var sortWayButton = 'sortWayButton' + i;
+			currentForm[sortWay].value = currentForm[sortWayButton].value;
+		}
+
 		// 表示属性を検索結果の画面から取得しsetする
 		if(parent.result.result_head != null){// nullチェックを追加
-			document.forms[0].dispAttr1.value=parent.result.result_head.document.forms[0].dispAttr1.value;
-			document.forms[0].dispAttr2.value=parent.result.result_head.document.forms[0].dispAttr2.value;
-			document.forms[0].dispAttr3.value=parent.result.result_head.document.forms[0].dispAttr3.value;
-			document.forms[0].dispAttr4.value=parent.result.result_head.document.forms[0].dispAttr4.value;
-			document.forms[0].dispAttr5.value=parent.result.result_head.document.forms[0].dispAttr5.value;
-			document.forms[0].dispAttr6.value=parent.result.result_head.document.forms[0].dispAttr6.value;
+			var parentForm = parent.result.result_head.document.forms[0];
+			for (var j = 1; j <= ${searchConditionForm.getViewSelColNum()}; j++) {
+				var dispAttr = 'dispAttr' + j;
+				currentForm[dispAttr].value = parentForm[dispAttr].value;
+			}
 		}
+
 		// 図番指定順にチェックありの場合
-        if(document.forms[0].orderDrwgNo.checked) {
-            // ワイルドカードが使用されているか？
-            if(isWildCard(document.forms[0].multipleDrwgNo)) {
-            	alert("<c:out value='${searchConditionForm.listOrderErrMsg}' />");
-                return false;
-            }
-        }
-		document.forms[0].act.value="search";// 隠し属性actに'search'をセット
-		document.forms[0].target="result";// targetは'result'
+		if (currentForm.orderDrwgNo.checked) {
+			// ワイルドカードが使用されているか？
+			if(isWildCard(currentForm.multipleDrwgNo)) {
+				alert("<c:out value='${searchConditionForm.listOrderErrMsg}' />");
+				return false;
+			}
+		}
 
-		document.forms[0].submit();
-	    screenLockbySearch();
+		currentForm.act.value="search";// 隠し属性actに'search'をセット
+		currentForm.target="result";// targetは'result'
 
+		currentForm.submit();
+		screenLockbySearch();
 	}
+
 	// ヘルプを表示する
 	function help(){
 		var targetName = '_help';//別の画面を開く
@@ -228,14 +232,13 @@ img {
 	}
 	// 初期フォーカス位置
 	function onInitFocus(){
-		//document.searchConditionForm.condition1Value.focus();
 		document.forms[0].condition1Value.focus();
 	}
 	function loadResultFrame() {
 		<%if("multipreview".equals(request.getParameter("act"))){  %>
 			parent.result.location.href = "/resultPre.do?task=multipreview";
 		<% } %>
-		}
+	}
 	// 説明文スライド処理
 	var rightVal=-440;
 	var intHide = null;
@@ -249,7 +252,6 @@ img {
 
 			intShow=setInterval("slideToolTip('"+item_name+"', 'left')",10);
 		} else {
-//			alert("tight start");
 			if (intShow != null) clearInterval(intShow);
 			intShow = null;
 
@@ -259,10 +261,9 @@ img {
 			document.getElementById('toolotip').style.visibility = "hidden";
 		}
 	}
-	function slideToolTip(tooltip, flg)
-	{
+	function slideToolTip(tooltip, flg) {
 		if (flg == "right") {
-			if (rightVal>-440) {
+			if (rightVal > -440) {
 				rightVal=rightVal-speed;
 				document.getElementById(tooltip).style.right=rightVal;
 			} else {
@@ -270,7 +271,7 @@ img {
 				intShow = null;
 			}
 		} else if (flg == "left") {
-			if (rightVal<0) {
+			if (rightVal < 0) {
 				rightVal=rightVal+speed;
 				window.status=rightVal;
 				document.getElementById(tooltip).style.right=rightVal;
@@ -280,7 +281,7 @@ img {
 			}
 		}
 	}
-	function createToolTip(){
+	function createToolTip() {
 		var toolotipContents = document.getElementById("toolotipContents").innerHTML;
 		window.frames["toolotip"].document.write(
 			"<html><head>"+
@@ -309,10 +310,10 @@ img {
 	function isIE() {
 		var userAgent = window.navigator.userAgent.toLowerCase();
 		//console.log("userAgent:" + userAgent);
-    	if ( userAgent.indexOf( 'msie' ) !== -1 || userAgent.indexOf( 'trident' ) !== -1 ) {
+		if ( userAgent.indexOf( 'msie' ) !== -1 || userAgent.indexOf( 'trident' ) !== -1 ) {
 			return true;
-    	}
-    	return false;
+		}
+		return false;
 	}
 
 	// 互換性表示か？
@@ -327,13 +328,12 @@ img {
 
 	// 新規ウィンドウ画面を表示する
 	function openNewWindow(){
-
 		var targetName = '_chgPass';//別の画面を開く
 		var WO1;
 		var w = screen.availWidth/2;
 		var h = screen.availHeight/2;
 		var targetUrl = null;
-		
+
 		// その他の場合
 		targetUrl = 'about:blank'
 		WO1=window.open(targetUrl, targetName,
@@ -374,18 +374,18 @@ img {
 
 	// 画面ロックスタイル
 	function screenLockStyle(id) {
-	    // ロック用のdivを生成
+		// ロック用のdivを生成
 		var element = document.createElement('div');
-	    element.id = id;
-	    // ロック用のスタイル
-	    element.style.height = '100%';
-	    element.style.left = '0px';
-	    element.style.position = 'fixed';
-	    element.style.top = '0px';
-	    element.style.width = '100%';
-	    element.style.zIndex = '9999';
-	    element.style.opacity = '0';
-	    element.style.backgroundColor = 'gray';
+		element.id = id;
+		// ロック用のスタイル
+		element.style.height = '100%';
+		element.style.left = '0px';
+		element.style.position = 'fixed';
+		element.style.top = '0px';
+		element.style.width = '100%';
+		element.style.zIndex = '9999';
+		element.style.opacity = '0';
+		element.style.backgroundColor = 'gray';
 
 	    return element;
 	}
@@ -458,7 +458,7 @@ img {
 		var option = 'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width='
 					+ w + ',height=' + h
 
-		if(fn == "2") {
+		if (fn == "2") {
 			// 原図庫作業依頼
 			targetName = '_drasap_request';
 			targetUrl = '/req.do';
@@ -467,7 +467,7 @@ img {
 			orgReq.window.moveTo(0,0);//画面の位置指定
 			orgReq.focus();
 		}
-		else if(fn == "3") {
+		else if (fn == "3") {
 			// 原図庫作業依頼詳細
 			targetName = '_drasap_request_ref';
 			targetUrl = '/switch.do?page=/genzu_irai/requestt_ref.jsp';
@@ -476,7 +476,7 @@ img {
 			orgDetail.window.moveTo(0,0);//画面の位置指定
 			orgDetail.focus();
 		}
-		else if(fn == "4") {
+		else if (fn == "4") {
 			// 原図庫作業依頼リスト
 			targetName = '_drasap_request_list';
 			targetUrl = '/switch.do?page=/genzu_irai/requestt_list.jsp';
@@ -485,7 +485,7 @@ img {
 			orgList.window.moveTo(0,0);//画面の位置指定
 			orgList.focus();
 		}
-		else if(fn == "5") {
+		else if (fn == "5") {
 			// アクセスレベル一括更新
 			targetName = '_drasap_acl_batch_update';
 			targetUrl = '/switch.do?page=/system/accessLevelBatchUpdate.jsp';
@@ -494,7 +494,7 @@ img {
 			accessUpdate.window.moveTo(0,0);//画面の位置指定
 			accessUpdate.focus();
 		}
-		else if(fn == "6") {
+		else if (fn == "6") {
 			// アクセスレベル更新結果
 			targetName = '_drasap_acl_updated_result';
 			targetUrl = '/switch.do?page=/system/accessLevelUpdatedResult.jsp';
@@ -607,8 +607,7 @@ img {
 
 	// ウィンドウを閉じる前に呼び出し
 	window.onbeforeunload = function(e) {
-		<%-- 閉じるボタンでのセッション切断が不要となったため、
-		コメントアウト --%>
+		<%-- 閉じるボタンでのセッション切断が不要となったため、コメントアウト --%>
 		// 子画面を閉じる
 		// closeSubScreen();
 		// ログアウト
@@ -618,103 +617,74 @@ img {
 	// 2019.09.25 yamamoto add end
 	// 2020.03.13 yamamoto add start
     // 図番指定順のON/OFFチェック
-    function isOrderDrwgNo(){
-        var ischecked = document.forms[0].orderDrwgNo.checked;
-        if (ischecked == true) {
-            // チェックが入っていたら無効化
-            disableSearchForm();
-        } else {
-            // チェックが入って無いなら有効化
-            enableSearchForm();
-        }
-    }
+	function isOrderDrwgNo() {
+		var ischecked = document.forms[0].orderDrwgNo.checked;
+		if (ischecked == true) {
+			// チェックが入っていたら無効化
+			disableSearchForm();
+		} else {
+			// チェックが入って無いなら有効化
+			enableSearchForm();
+		}
+	}
 
-    // 検索条件を無効化する
-    function disableSearchForm(){
-        // 検索条件1
-        document.forms[0].condition1.disabled = true;
-        document.forms[0].condition1Value.disabled = true;
-        document.forms[0].sortWayButton1.disabled = true;
-        document.forms[0].sortOrder1.disabled = true;
-        // 検索条件2
-        document.forms[0].condition2.disabled = true;
-        document.forms[0].condition2Value.disabled = true;
-        document.forms[0].sortWayButton2.disabled = true;
-        document.forms[0].sortOrder2.disabled = true;
-        // 検索条件3
-        document.forms[0].condition3.disabled = true;
-        document.forms[0].condition3Value.disabled = true;
-        document.forms[0].sortWayButton3.disabled = true;
-        document.forms[0].sortOrder3.disabled = true;
-        // 検索条件4
-        document.forms[0].condition4.disabled = true;
-        document.forms[0].condition4Value.disabled = true;
-        document.forms[0].sortWayButton4.disabled = true;
-        document.forms[0].sortOrder4.disabled = true;
-        // 検索条件5
-        document.forms[0].condition5.disabled = true;
-        document.forms[0].condition5Value.disabled = true;
-        document.forms[0].sortWayButton5.disabled = true;
-        document.forms[0].sortOrder5.disabled = true;
-        // 最新追番のみ表示
-        document.forms[0].onlyNewest.disabled = true;
-        // 全ての属性条件を
-        document.forms[0].eachCondition[0].disabled = true;
-        document.forms[0].eachCondition[1].disabled = true;
+	// 検索条件を無効化する
+	function disableSearchForm() {
+		var currentForm = document.forms[0];
+		for (var i = 1; i <= ${searchConditionForm.getSearchSelColNum()}; i++) {
+			var condition = 'condition' + i;
+			var conditionValue = 'conditionValue' + i;
+			var sortWayButton = 'sortWayButton' + i;
+			var sortOrder = 'sortOrder' + i;
+			
+			currentForm[condition].disabled = true;
+			currentForm[conditionValue].disabled = true;
+			currentForm[sortWayButton].disabled = true;
+			currentForm[sortOrder].disabled = true;
+		}
+		// 最新追番のみ表示
+		currentForm.onlyNewest.disabled = true;
+		// 全ての属性条件を
+		currentForm.eachCondition[0].disabled = true;
+		currentForm.eachCondition[1].disabled = true;
+	}
 
-    }
+	// 検索条件を有効化する
+	function enableSearchForm(){
+		var currentForm = document.forms[0];
+		for (var i = 1; i <= ${searchConditionForm.getSearchSelColNum()}; i++) {
+			var condition = 'condition' + i;
+			var conditionValue = 'conditionValue' + i;
+			var sortWayButton = 'sortWayButton' + i;
+			var sortOrder = 'sortOrder' + i;
+			
+			currentForm[condition].disabled = false;
+			currentForm[conditionValue].disabled = false;
+			currentForm[sortWayButton].disabled = false;
+			currentForm[sortOrder].disabled = false;
+		}
+		// 最新追番のみ表示
+		currentForm.onlyNewest.disabled = false;
+		// 全ての属性条件を
+		currentForm.eachCondition[0].disabled = false;
+		currentForm.eachCondition[1].disabled = false;
+	}
 
-    // 検索条件を有効化する
-    function enableSearchForm(){
-        // 検索条件1
-        document.forms[0].condition1.disabled = false;
-        document.forms[0].condition1Value.disabled = false;
-        document.forms[0].sortWayButton1.disabled = false;
-        document.forms[0].sortOrder1.disabled = false;
-        // 検索条件2
-        document.forms[0].condition2.disabled = false;
-        document.forms[0].condition2Value.disabled = false;
-        document.forms[0].sortWayButton2.disabled = false;
-        document.forms[0].sortOrder2.disabled = false;
-        // 検索条件3
-        document.forms[0].condition3.disabled = false;
-        document.forms[0].condition3Value.disabled = false;
-        document.forms[0].sortWayButton3.disabled = false;
-        document.forms[0].sortOrder3.disabled = false;
-        // 検索条件4
-        document.forms[0].condition4.disabled = false;
-        document.forms[0].condition4Value.disabled = false;
-        document.forms[0].sortWayButton4.disabled = false;
-        document.forms[0].sortOrder4.disabled = false;
-        // 検索条件5
-        document.forms[0].condition5.disabled = false;
-        document.forms[0].condition5Value.disabled = false;
-        document.forms[0].sortWayButton5.disabled = false;
-        document.forms[0].sortOrder5.disabled = false;
-        // 最新追番のみ表示
-        document.forms[0].onlyNewest.disabled = false;
-        // 全ての属性条件を
-        document.forms[0].eachCondition[0].disabled = false;
-        document.forms[0].eachCondition[1].disabled = false;
-    }
-
-    // ワイルドカード有無確認
-    function isWildCard(obj) {
-        var ret = false; // 結果
-        var str = obj.value; // 入力値
-        for(var i=0; i<str.length; i++) {
-            var tmpValue = str.substr(i,1);
-            if(tmpValue == "*") {
-                // ワイルドカード有り
-                ret = true;
-                break;
-            }
-        }
-
-        return ret;
-    }
+	// ワイルドカード有無確認
+	function isWildCard(obj) {
+		var ret = false; // 結果
+		var str = obj.value; // 入力値
+		for(var i=0; i<str.length; i++) {
+			var tmpValue = str.substr(i,1);
+			if(tmpValue == "*") {
+				// ワイルドカード有り
+				ret = true;
+				break;
+			}
+		}
+		return ret;
+	}
 // 2020.03.13 yamamoto add end
-    //-->
 </script>
 </head>
 <body style="background-color: #CCCCCC; margin: 0; overflow: hidden;"
@@ -725,14 +695,11 @@ img {
 		<input type="hidden" name="act" />
 
 		<%-- 処理を振り分けるための隠し属性 --%>
-		<input type="hidden" name="dispAttr1" />
 		<%-- 検索結果の表示属性。別フレームの値をJavaScriptでコピーする --%>
-		<input type="hidden" name="dispAttr2" /> <input type="hidden"
-			name="dispAttr3" /> <input type="hidden" name="dispAttr4" /> <input
-			type="hidden" name="dispAttr5" /> <input type="hidden"
-			name="dispAttr6" />
+		<c:forEach begin="1" end="${searchConditionForm.getViewSelColNum()}" var="index">
+			<input type="hidden"name="dispAttr${index}" value="${searchConditionForm.dispAttrList[index - 1]}"/>
+		</c:forEach>
 		<!-- 	<html:hidden property="language" /> -->
-
 
 		<!-- ================= 職番などの表示エリア ======================= -->
 		<table border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -748,12 +715,20 @@ img {
 										<td nowrap="nowrap">
 											<table border="1">
 												<tr>
-													<td nowrap="nowrap"><span class="normal10"><c:out
-																value="${searchConditionForm.c_label6}" />：<c:out
-																value="${user.id}" /></span></td>
-													<td nowrap="nowrap"><span class="normal10"><c:out
-																value="${searchConditionForm.c_label7}" />：<c:out
-																value="${user.name}" /></span></td>
+													<td nowrap="nowrap">
+														<span class="normal10">
+															<c:out value="${searchConditionForm.c_label6}" />
+															：
+															<c:out value="${user.id}" />
+														</span>
+													</td>
+													<td nowrap="nowrap">
+														<span class="normal10">
+															<c:out value="${searchConditionForm.c_label7}" />
+															：
+															<c:out value="${user.name}" />
+														</span>
+													</td>
 													<td id="divisionTD">
 														<div id="division" class="normal10"
 															style="height: 14px; overflow: hidden;">
@@ -789,15 +764,14 @@ img {
 							<%-- 2019.09.25 yamamoto add. end --%>
 							<%-- 言語切替 --%>
 							<td><span class="normal12" style="margin-left: 5px;">
-					<!--
-					<b>Language :
-					<a href="javascript:changeLang('Japanese');"	style="text-decoration:underline">Japanese</a> /
-					<a href="javascript:changeLang('English');"	style="text-decoration:underline">English</a></b>
-					 -->
-					 			<select name="language" onchange="changeLang('English');"
-									style="margin-right: 10px;">
-										<option value="Japanese" ${sessionScope.user.language == 'Japanese' ? 'selected' : ''}>Japanese</option>
-										<option value="English" ${sessionScope.user.language == 'English' ? 'selected' : ''}>English</option>
+								<!--
+								<b>Language :
+								<a href="javascript:changeLang('Japanese');"	style="text-decoration:underline">Japanese</a> /
+								<a href="javascript:changeLang('English');"	style="text-decoration:underline">English</a></b>
+								 -->
+					 			<select name="language" onchange="changeLang('English');" style="margin-right: 10px;">
+									<option value="Japanese" ${sessionScope.user.language == 'Japanese' ? 'selected' : ''}>Japanese</option>
+									<option value="English" ${sessionScope.user.language == 'English' ? 'selected' : ''}>English</option>
 								</select>
 							</span></td>
 							<%-- ログアウト --%>
@@ -807,35 +781,35 @@ img {
 								</button>
 							</td>
 							<%-- 検索結果表示数 --%>
-							<td nowrap="nowrap"><span class="normal10"
-								style="padding-right: 5px;"> <c:out
-										value="${sessionScope.searchConditionForm.c_label5}" />
-							</span></td>
-							<td nowrap="nowrap"><span class="normal10"> <select
-									name="displayCount">
+							<td nowrap="nowrap">
+								<span class="normal10" style="padding-right: 5px;">
+									<c:out value="${sessionScope.searchConditionForm.c_label5}" />
+								</span>
+							</td>
+							<td nowrap="nowrap">
+								<span class="normal10">
+									<select name="displayCount">
 										<option value="20">20</option>
 										<option value="50">50</option>
 										<option value="100">100</option>
-								</select> <c:choose>
-										<c:when test="${sessionScope.user.language == 'Japanese'}">
-								件
-							 </c:when>
+									</select>
+									<c:choose>
+										<c:when test="${sessionScope.user.language == 'Japanese'}">件</c:when>
 									</c:choose>
-							</span> <span style="position: relative; bottom: 3px;"></span></td>
+								</span>
+								<span style="position: relative; bottom: 3px;"></span>
+							</td>
 							<%-- Help --%>
-							<td>&nbsp;&nbsp; <c:choose>
+							<td>&nbsp;&nbsp;
+								<c:choose>
 									<c:when test="${sessionScope.user.language == 'Japanese'}">
-										<a
-											href="${pageContext.request.contextPath}/resources/helppdf/searchHelp_jp.pdf"
-											target="_blank"> <span class="normal10blue"
-											style="margin-right: 5px;"><b>HELP</b></span>
+										<a href="${pageContext.request.contextPath}/resources/helppdf/searchHelp_jp.pdf" target="_blank">
+											<span class="normal10blue" style="margin-right: 5px;"><b>HELP</b></span>
 										</a>
 									</c:when>
 									<c:when test="${sessionScope.user.language == 'English'}">
-										<a
-											href="${pageContext.request.contextPath}/resources/helppdf/searchHelp_en.pdf"
-											target="_blank"> <span class="normal10blue"
-											style="margin-right: 5px;"><b>HELP</b></span>
+										<a href="${pageContext.request.contextPath}/resources/helppdf/searchHelp_en.pdf" target="_blank">
+										<span class="normal10blue"style="margin-right: 5px;"><b>HELP</b></span>
 										</a>
 									</c:when>
 									<c:otherwise>
@@ -849,7 +823,6 @@ img {
 			</tr>
 		</table>
 
-
 		<!--============ 検索条件と説明 ============-->
 		<table border="0" cellspacing="0" cellpadding="0" width="100%"
 			class="normal12">
@@ -858,250 +831,122 @@ img {
 				<td style="width: 500px;">
 					<table border="0" cellspacing="0" cellpadding="0"
 						style="font-size: 12pt; margin: 0px; padding: 0px;">
-						<tr>
-							<td><select name="condition1">
-									<c:forEach items="${searchConditionForm.conditionKeyList}"
-										var="conditionKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${conditionKey == searchConditionForm.condition1}">
-												<option value="${conditionKey}" selected>${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${conditionKey}">${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-							<td><input type="text" name="condition1Value"size="40"
-								class="conditionStr" /></td>
-							<td><input type="button" name="sortWayButton1" value="　　　"
-								onclick="changeOrder(this)" style="width: 60px;" /> <input
-								type="hidden" name="sortWay1" /></td>
-							<td><select name="sortOrder1">
-									<c:forEach items="${searchConditionForm.sortOrderKeyList}"
-										var="sortOrderKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${sortOrderKey == searchConditionForm.sortOrder1}">
-												<option value="${sortOrderKey}" selected>${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${sortOrderKey}">${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-						</tr>
-						<tr>
-							<td><select name="condition2">
-									<c:forEach items="${searchConditionForm.conditionKeyList}"
-										var="conditionKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${conditionKey == searchConditionForm.condition2}">
-												<option value="${conditionKey}" selected>${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${conditionKey}">${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-							<td><input type="text" name="condition2Value" size="40"
-								class="conditionStr" /></td>
-							<td><input type="button" name="sortWayButton2" value="　　　"
-								onclick="changeOrder(this)" style="width: 60px;" /> <input
-								type="hidden" name="sortWay2" /></td>
-							<td><select name="sortOrder2">
-									<c:forEach items="${searchConditionForm.sortOrderKeyList}"
-										var="sortOrderKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${sortOrderKey == searchConditionForm.sortOrder2}">
-												<option value="${sortOrderKey}" selected>${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${sortOrderKey}">${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-						</tr>
-						<tr>
-							<td><select name="condition3">
-									<c:forEach items="${searchConditionForm.conditionKeyList}"
-										var="conditionKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${conditionKey == searchConditionForm.condition3}">
-												<option value="${conditionKey}" selected>${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${conditionKey}">${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-							<td><input type="text" name="condition3Value" size="40"
-								class="conditionStr" /></td>
-							<td><input type="button" name="sortWayButton3" value="　　　"
-								onclick="changeOrder(this)" style="width: 60px;" /> <input
-								type="hidden" name="sortWay3" /></td>
-							<td><select name="sortOrder3">
-									<c:forEach items="${searchConditionForm.sortOrderKeyList}"
-										var="sortOrderKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${sortOrderKey == searchConditionForm.sortOrder3}">
-												<option value="${sortOrderKey}" selected>${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${sortOrderKey}">${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-						</tr>
-						<tr>
-							<td><select name="condition4">
-									<c:forEach items="${searchConditionForm.conditionKeyList}"
-										var="conditionKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${conditionKey == searchConditionForm.condition4}">
-												<option value="${conditionKey}" selected>${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${conditionKey}">${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-							<td><input type="text" name="condition4Value" size="40"
-								class="conditionStr" /></td>
-							<td><input type="button" name="sortWayButton4" value="　　　"
-								onclick="changeOrder(this)" style="width: 60px;" /> <input
-								type="hidden" name="sortWay4" /></td>
-							<td><select name="sortOrder4">
-									<c:forEach items="${searchConditionForm.sortOrderKeyList}"
-										var="sortOrderKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${sortOrderKey == searchConditionForm.sortOrder4}">
-												<option value="${sortOrderKey}" selected>${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${sortOrderKey}">${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-						</tr>
-						<tr>
-							<td><select name="condition5">
-									<c:forEach items="${searchConditionForm.conditionKeyList}"
-										var="conditionKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${conditionKey == searchConditionForm.condition5}">
-												<option value="${conditionKey}" selected>${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${conditionKey}">${searchConditionForm.conditionNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-							<td><input type="text" name="condition5Value" size="40"
-								class="conditionStr" /></td>
-							<td><input type="button" name="sortWayButton5" value="　　　"
-								onclick="changeOrder(this)" style="width: 60px;" /> <input
-								type="hidden" name="sortWay5" /></td>
-							<td><select name="sortOrder5">
-									<c:forEach items="${searchConditionForm.sortOrderKeyList}"
-										var="sortOrderKey" varStatus="loop">
-										<c:choose>
-											<c:when test="${sortOrderKey == searchConditionForm.sortOrder5}">
-												<option value="${sortOrderKey}" selected>${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${sortOrderKey}">${searchConditionForm.sortOrderNameList[loop.index]}</option>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-							</select></td>
-						</tr>
-
-
+						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()}" var="index">
+							<tr>
+								<td>
+									<select name="condition${index}">
+										<c:forEach items="${searchConditionForm.conditionKeyList}" var="conditionKey" varStatus="loop">
+											<c:choose>
+												<c:when test="${conditionKey == searchConditionForm.getCondition(index - 1)}">
+													<option value="${conditionKey}" selected>${searchConditionForm.conditionNameList[loop.index]}</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${conditionKey}">${searchConditionForm.conditionNameList[loop.index]}</option>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</select>
+								</td>
+								<td>
+									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" />
+								</td>
+								<td>
+									<input type="button" name="sortWayButton${index}" value="　　　" onclick="changeOrder(this)" style="width: 60px;" />
+									<input type="hidden" name="sortWay${index}" />
+								</td>
+								<td>
+									<select name="sortOrder${index}">
+										<c:forEach items="${searchConditionForm.sortOrderKeyList}"
+											var="sortOrderKey" varStatus="loop">
+											<c:choose>
+												<c:when test="${sortOrderKey == searchConditionForm.getSortOrder(index - 1)}">
+													<option value="${sortOrderKey}" selected>${searchConditionForm.sortOrderNameList[loop.index]}</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${sortOrderKey}">${searchConditionForm.sortOrderNameList[loop.index]}</option>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+						</c:forEach>
 					</table>
 				</td>
 
 				<%-- 2013.06.26 yamagishi add. start --%>
-                <%-- 複数図番 --%>
- 				<c:choose>
-				<c:when test="${sessionScope.user.language == 'Japanese' }">
+				<%-- 複数図番 --%>
+				<c:choose>
+					<c:when test="${sessionScope.user.language == 'Japanese' }">
 						<td style="width: 220px" align="left" class="normal12">
-							<table style="margin-left: 10px;" align="left" border="0"
-								cellspacing="0" cellpadding="0">
+							<table style="margin-left: 10px;" align="left" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td style="width: 40px;"><div
-											style="height: 90px; text-align: right; vertical-align: top; margin-right: 5px;">
-											${searchConditionForm.c_label9}</div></td>
+									<td style="width: 40px;">
+										<div style="height: 90px; text-align: right; vertical-align: top; margin-right: 5px;">
+											${searchConditionForm.c_label9}
+										</div>
+									</td>
 									<td style="width: 160px;">
-									<%-- 2022.04.13 Windows Edge対応. 複数図番テキストエリアのリサイズを禁止. --%>
-									<textarea name="multipleDrwgNo" cols="20" rows="7" class="conditionStr" style="height: 120px; resize:none;"></textarea>
+										<%-- 2022.04.13 Windows Edge対応. 複数図番テキストエリアのリサイズを禁止. --%>
+										<textarea name="multipleDrwgNo" cols="20" rows="7" class="conditionStr" style="height: 120px; resize:none;"></textarea>
 									</td>
 								</tr>
 							</table>
 						</td>
 					</c:when>
-
 				</c:choose>
-				<c:choose> 
-    				<c:when test="${sessionScope.user.language == 'English' }"> 
-
- 						<td style="width: 240px" align="left" class="normal12">
-< 							<table style="margin-left: 10px;" align="left" border="0"cellspacing="0" cellpadding="0">
- 								<tr>
- 									<td style="width: 65px;">
- 									    <div style="height: 90px; text-align: right; vertical-align: top; margin-right: 5px;">
-											${searchConditionForm.c_label9}</div>
+				<c:choose>
+					<c:when test="${sessionScope.user.language == 'English' }">
+						<td style="width: 240px" align="left" class="normal12">
+							<table style="margin-left: 10px;" align="left" border="0"cellspacing="0" cellpadding="0">
+								<tr>
+									<td style="width: 65px;">
+										<div style="height: 90px; text-align: right; vertical-align: top; margin-right: 5px;">
+											${searchConditionForm.c_label9}
+										</div>
 									</td>
- 									<td style="width: 160px;">
- 									<%-- 2022.04.13 Windows Edge対応. 複数図番テキストエリアのリサイズを禁止. --%>
- 									    <textarea name="multipleDrwgNo" cols="20" rows="7" class="conditionStr"style="height: 120px;"></textarea>
- 									</td>
- 								</tr>
- 							</table>
- 						</td> 
-
+									<td style="width: 160px;">
+										<%-- 2022.04.13 Windows Edge対応. 複数図番テキストエリアのリサイズを禁止. --%>
+									    <textarea name="multipleDrwgNo" cols="20" rows="7" class="conditionStr"style="height: 120px;"></textarea>
+									</td>
+								</tr>
+							</table>
+						</td> 
 					</c:when>
-
 				</c:choose>
 				<%-- 2013.06.26 yamagishi add. end --%>
 				<td valign="bottom" nowrap="nowrap" align="left" class="normal12">
 					<table align="left" border="0" cellspacing="0" cellpadding="0" class="searchbutton">
 						<tr>
 							<%-- 2013.06.27 yamagishi modified.
-					<td align="center"><html:checkbox property="onlyNewest" /> <bean:write name="searchConditionForm" --%>
+							<td align="center"><html:checkbox property="onlyNewest" /> <bean:write name="searchConditionForm"--%>
 							<td align="left" nowrap="nowrap">
-							    <%-- 最新追番のみ表示 --%>
-							    <input type="checkbox" name="onlyNewest" value="true" />
+								<%-- 最新追番のみ表示 --%>
+								 <input type="checkbox" name="onlyNewest" value="true" />
 								${searchConditionForm.c_label2}
 								<br />
 								<%-- 図番指定順 --%>
 								<input type="checkbox" name="orderDrwgNo" value="true" onclick="isOrderDrwgNo()"/>
 								${searchConditionForm.c_label17} 
-								<br /> <br />
+								<br />
+								<br />
 								<!-- 全ての属性条件を -->
-								${searchConditionForm.c_label3}<br />
+								${searchConditionForm.c_label3}
+								<br />
 								&emsp; <% // ラジオボタンの前に空白を入れる %>
 								<input type="radio"name="eachCondition" value="OR" ${searchConditionForm.eachCondition == "OR"  ? 'checked ' : ''}/> OR
 								<input type="radio"name="eachCondition" value="AND" ${searchConditionForm.eachCondition == "AND"  ? 'checked ' : ''}/> AND <br /> <br /> 
 								 <%
-                                 // ユーザーに検索権限があるか? なければ検索開始ボタンをロックする
+								 // ユーザーに検索権限があるか? なければ検索開始ボタンをロックする
 								 User user = (User) session.getAttribute("user");
 								 boolean hasAuth = (user.getMaxAclValue().compareTo("1") >= 0);
 								 %>
 								<%-- 検索開始ボタン --%>
-                                &emsp; <% // ボタンの前に空白を入れる %> 
-								<button type="submit"
-									onclick="event.preventDefault(); doSearch();"
-									<%if (!hasAuth) {%> disabled="disabled" <%}%>
-									style="font-size: 12pt; font-weight: bold;">
-									${searchConditionForm.c_label4}</button></td>
+								&emsp; <% // ボタンの前に空白を入れる %> 
+								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold;">
+									${searchConditionForm.c_label4}
+								</button>
+							</td>
 						</tr>
 					</table>
 				</td>
@@ -1111,92 +956,90 @@ img {
 						<tr>
 							<td>
 								<%-- admin_flag '1'、'2'もしくは DWG_REG_REQ_FLAG '1'
-						のユーザのみボタンを表示する--%> <%
- User me = (User) session.getAttribute("user");
- if (me.isAdmin() || me.isdwgRegReqFlag()) {
- %> <%-- 原図庫作業依頼 --%>
-								<button type="button" onclick="openSubScreen('2')"
-									style="height: 25px; width: 100%;">
-									${searchConditionForm.c_label12}</button>
+								のユーザのみボタンを表示する--%>
+<%
+User me = (User) session.getAttribute("user");
+if (me.isAdmin() || me.isdwgRegReqFlag()) {
+%>
+								<%-- 原図庫作業依頼 --%>
+								<button type="button" onclick="openSubScreen('2')" style="height: 25px; width: 100%;">
+									${searchConditionForm.c_label12}
+								</button>
 							</td>
 						</tr>
 						<tr>
 							<td>
 								<%-- 原図庫作業依頼詳細 --%>
-								<button type="button" onclick="openSubScreen('3')"
-									style="height: 25px; width: 100%;">
-
-									${searchConditionForm.c_label13}</button> <%
- }
- %>
+								<button type="button" onclick="openSubScreen('3')" style="height: 25px; width: 100%;">
+									${searchConditionForm.c_label13}
+								</button>
+<%
+}
+%>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<%-- admin_flag '1'、'2'もしくは REPRO_USER_FLAG '1'
-						のユーザのみボタンを表示する--%> <%
- if (me.isAdmin() || me.isReproUser()) {
- %> <%-- 原図庫作業リスト --%>
-								<button type="button" onclick="openSubScreen('4')"
-									style="height: 25px; width: 100%;">
-									${searchConditionForm.c_label14}</button> <%
- }
- %>
+								<%-- admin_flag '1'、'2'もしくは REPRO_USER_FLAG '1' のユーザのみボタンを表示する--%>
+<%
+if (me.isAdmin() || me.isReproUser()) {
+%>
+								<%-- 原図庫作業リスト --%>
+								<button type="button" onclick="openSubScreen('4')" style="height: 25px; width: 100%;">
+									${searchConditionForm.c_label14}
+								</button>
+<%
+}
+%>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<%-- admin_flag '1'、'2'もしくは ACL_BATCH_UPDATE_FLAG '2'
-						のユーザのみボタンを表示する--%> <%
- if (me.isAdmin() || me.isAclBatchUpdateFlag()) {
- %> <%-- アクセスレベル一括更新 --%>
-								<button type="button" onclick="openSubScreen('5')"
-									style="height: 25px; width: 100%;">
-									${searchConditionForm.c_label15}</button>
+								<%-- admin_flag '1'、'2'もしくは ACL_BATCH_UPDATE_FLAG '2'のユーザのみボタンを表示する--%>
+<%
+if (me.isAdmin() || me.isAclBatchUpdateFlag()) {
+%>
+								<%-- アクセスレベル一括更新 --%>
+								<button type="button" onclick="openSubScreen('5')"  style="height: 25px; width: 100%;">
+									${searchConditionForm.c_label15}
+								</button>
 							</td>
 						</tr>
 						<tr>
 							<td>
 								<%-- アクセスレベル更新結果 --%>
-								<button type="button" onclick="openSubScreen('6')"
-									style="height: 25px; width: 100%;">
-									<%-- 这里放置按钮上的文本 --%>
+								<button type="button" onclick="openSubScreen('6')" style="height: 25px; width: 100%;">
 									${searchConditionForm.c_label16}
-								</button> <%
- }
- %>
+								</button>
+<%
+}
+%>
 							</td>
 						</tr>
 					</table>
 				</td>
 				<%-- searchHelpMsg表示 --%>
-				<td nowrap="nowrap" class="slideBar"
-					onmouseover="show_tool_tip('toolotip', true)">《</td>
+				<td nowrap="nowrap" class="slideBar" onmouseover="show_tool_tip('toolotip', true)">《</td>
 			</tr>
 		</table>
 		<%-- searchHelpMsg表示領域定義 --%>
-		<iframe src="" frameborder="0" scrolling="no" id="toolotip"
-			name="toolotip" class="tooltip"></iframe>
+		<iframe src="" frameborder="0" scrolling="no" id="toolotip" name="toolotip" class="tooltip"></iframe>
 		<script>
-    document.getElementById("toolotip").addEventListener("mouseover", function() {
-        show_tool_tip('toolotip', true);
-    });
+			document.getElementById("toolotip").addEventListener("mouseover", function() {
+				show_tool_tip('toolotip', true);
+			});
+			
+			document.getElementById("toolotip").addEventListener("mouseout", function() {
+				show_tool_tip('toolotip', false);
+			});
+		</script>
 
-    document.getElementById("toolotip").addEventListener("mouseout", function() {
-        show_tool_tip('toolotip', false);
-    });
-</script>
 		<div id="toolotipContents" style="visibility: hidden;">
 			<table bgcolor="#CCCCCC" cellspacing="0" cellpadding="0">
 				<tr>
 					<td class="slideBar">《</td>
-					<td bgcolor="#EEEEEE" valign="top"
-						style="padding-left: 10px; z-index: 100; white-space: normal;"
-						width="420">
-						<textarea
-							name="searchConditionForm_searchHelpMsg" rows="6"
-							readonly="readonly"
-							style="background-color: #EEEEEE; border-style: none; width: 100%; height: 120px; overflow: visible; font-size: 10pt;">
+					<td bgcolor="#EEEEEE" valign="top" style="padding-left: 10px; z-index: 100; white-space: normal;" width="420">
+						<textarea 	name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="background-color: #EEEEEE; border-style: none; width: 100%; height: 120px; overflow: visible; font-size: 10pt;">
 							${searchConditionForm.searchHelpMsg}
 						</textarea>
 					</td>

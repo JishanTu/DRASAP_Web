@@ -159,10 +159,6 @@ public class SearchResultElement {
 		return selected;
 	}
 
-	public boolean getSelected() {
-		return selected;
-	}
-
 	/**
 	 * @param b
 	 */

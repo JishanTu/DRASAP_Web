@@ -1,7 +1,7 @@
 package tyk.drasap.search;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
@@ -208,7 +208,7 @@ public class SearchResultAction extends BaseAction {
 				for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
 					SearchResultElement searchResultElement = searchResultForm.getSearchResultList().get(i);
 					SearchResultElement updateElement = searchResultFormNew.getSearchResultList().get(i);
-					updateElement.setSelected(searchResultElement.getSelected());
+					updateElement.setSelected(searchResultElement.isSelected());
 					updateElement.setPrintSize(searchResultElement.getPrintSize());
 					updateElement.setCopies(searchResultElement.getCopies());
 				}
@@ -243,30 +243,23 @@ public class SearchResultAction extends BaseAction {
 	 */
 	private void updateUserInfo(SearchResultForm searchResultForm, User user, Model errors) {
 		Connection conn = null;
-		PreparedStatement pstmt1 = null;
+		Statement stmt = null;
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(true);// 非トランザクション
-			String strSql1 = "update USER_MASTER set " +
-					" VIEW_SELCOL1=?, VIEW_SELCOL2=?, VIEW_SELCOL3=?, VIEW_SELCOL4=?, VIEW_SELCOL5=?, VIEW_SELCOL6=?" +
-					" where USER_ID=?";
-			pstmt1 = conn.prepareStatement(strSql1);
-			pstmt1.setString(1, searchResultForm.getDispAttr1());
-			pstmt1.setString(2, searchResultForm.getDispAttr2());
-			pstmt1.setString(3, searchResultForm.getDispAttr3());
-			pstmt1.setString(4, searchResultForm.getDispAttr4());
-			pstmt1.setString(5, searchResultForm.getDispAttr5());
-			pstmt1.setString(6, searchResultForm.getDispAttr6());
-			pstmt1.setString(7, user.getId());
-			pstmt1.executeUpdate();
-			// ユーザーObjectにもセットする
-			user.setViewSelCol1(searchResultForm.getDispAttr1());
-			user.setViewSelCol2(searchResultForm.getDispAttr2());
-			user.setViewSelCol3(searchResultForm.getDispAttr3());
-			user.setViewSelCol4(searchResultForm.getDispAttr4());
-			user.setViewSelCol5(searchResultForm.getDispAttr5());
-			user.setViewSelCol6(searchResultForm.getDispAttr6());
 
+			String strSql = "update USER_MASTER set ";
+			for (int i = 1; i <= searchResultForm.getViewSelColNum(); i++) {
+				String val = searchResultForm.getDispAttr(i - 1);
+				strSql += " VIEW_SELCOL" + i + "='" + val + "',";
+				// ユーザーObjectにもセットする
+				user.setViewSelCol(i - 1, val);
+			}
+			strSql = DrasapUtil.removeLastComma(strSql);// 最後のカンマを取り除く
+			strSql += " where USER_ID='" + user.getId() + "'";
+
+			stmt = conn.createStatement();
+			stmt.executeUpdate(strSql);
 		} catch (Exception e) {
 			// for ユーザー
 			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.update.user." + user.getLanKey(), new Object[] { e.getMessage() }, null));
@@ -277,7 +270,7 @@ public class SearchResultAction extends BaseAction {
 			category.error("ユーザー情報の更新に失敗\n" + ErrorUtility.error2String(e));
 		} finally {
 			try {
-				pstmt1.close();
+				stmt.close();
 			} catch (Exception e) {
 			}
 			try {

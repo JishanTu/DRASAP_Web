@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,6 +74,9 @@ public class SearchConditionAction extends BaseAction {
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
 
 		String lanKey = user.getLanKey();
+
+		// リクエストから情報を取得
+		searchConditionForm.setSearchCondition(request);
 
 		// 遷移元をsessionに保持
 		session.setAttribute("parentPage", "Search");
@@ -150,9 +153,9 @@ public class SearchConditionAction extends BaseAction {
 				category.debug("--> overHit");
 				return "overHit";
 			}
+			session.setAttribute("searchConditionForm", searchConditionForm);
 			// 警告件数以下の場合
 			category.debug("--> searchResult");
-			session.setAttribute("searchConditionForm", searchConditionForm);
 			return "searchResult";
 
 		}
@@ -268,15 +271,11 @@ public class SearchConditionAction extends BaseAction {
 		searchConditionForm.conditionNameList.addAll(sUtil.createEnabledAttrList(user, false));
 
 		// 前回の検索条件をセットする ////////////////////////////////////////////
-		searchConditionForm.setCondition1(user.getSearchSelCol1());
-		if (searchConditionForm.condition1 == null || "".equals(searchConditionForm.condition1)) {
-			// 検索条件1が未設定の場合、「図番」をセットする
-			searchConditionForm.setCondition1("DRWG_NO");
+		searchConditionForm.setConditionList(user.getSearchSelColList());
+		// 検索条件1が未設定の場合、「図番」をセットする
+		if (StringUtils.isEmpty(searchConditionForm.getCondition(0))) {
+			searchConditionForm.setCondition(0, "DRWG_NO");
 		}
-		searchConditionForm.setCondition2(user.getSearchSelCol2());
-		searchConditionForm.setCondition3(user.getSearchSelCol3());
-		searchConditionForm.setCondition4(user.getSearchSelCol4());
-		searchConditionForm.setCondition5(user.getSearchSelCol5());
 		// 前回の表示件数をセットする
 		searchConditionForm.setDisplayCount(user.getDisplayCount());
 		if (searchConditionForm.displayCount == null || "".equals(searchConditionForm.displayCount)) {
@@ -315,14 +314,16 @@ public class SearchConditionAction extends BaseAction {
 	private boolean checkSearchCondition(SearchConditionForm searchConditionForm, DrasapInfo drasapInfo, User user, Model errors) {
 		// 最初に、1つでも条件が入力されているか確認
 		boolean inputed = false;// 1つでも入力されていたら true
-		if (isInputed(searchConditionForm.condition1, searchConditionForm.condition1Value)
-				|| isInputed(searchConditionForm.condition2, searchConditionForm.condition2Value)
-				|| isInputed(searchConditionForm.condition3, searchConditionForm.condition3Value)
-				|| isInputed(searchConditionForm.condition4, searchConditionForm.condition4Value)
-				|| isInputed(searchConditionForm.condition5, searchConditionForm.condition5Value)) {
-			inputed = true;
-			// 2013.06.27 yamagishi add. start
-		} else if ("AND".equals(searchConditionForm.eachCondition) || searchConditionForm.isOrderDrwgNo()) {
+
+		for (int i = 0; i < searchConditionForm.getSearchSelColNum(); i++) {
+			if (isInputed(searchConditionForm.getCondition(i), searchConditionForm.getConditionValue(i))) {
+				inputed = true;
+				break;
+			}
+		}
+
+		// 2013.06.27 yamagishi add. start
+		if (!inputed && ("AND".equals(searchConditionForm.eachCondition) || searchConditionForm.isOrderDrwgNo())) {
 			String multiNotemp = searchConditionForm.multipleDrwgNo.replace(System.lineSeparator(), "");
 			// 改行コードを除いた入力値で判定
 			if (isInputed("multipleDrwnNo", multiNotemp)) {
@@ -338,20 +339,11 @@ public class SearchConditionAction extends BaseAction {
 		}
 		// 検索条件として指定された値が正しく解釈できるか
 		boolean isRight = true;
-		if (!isRightCondition(searchConditionForm.condition1, searchConditionForm.condition1Value, drasapInfo, user, errors)) {
-			isRight = false;
-		}
-		if (!isRightCondition(searchConditionForm.condition2, searchConditionForm.condition2Value, drasapInfo, user, errors)) {
-			isRight = false;
-		}
-		if (!isRightCondition(searchConditionForm.condition3, searchConditionForm.condition3Value, drasapInfo, user, errors)) {
-			isRight = false;
-		}
-		if (!isRightCondition(searchConditionForm.condition4, searchConditionForm.condition4Value, drasapInfo, user, errors)) {
-			isRight = false;
-		}
-		if (!isRightCondition(searchConditionForm.condition5, searchConditionForm.condition5Value, drasapInfo, user, errors)) {
-			isRight = false;
+		for (int i = 0; i < searchConditionForm.getSearchSelColNum(); i++) {
+			if (!isRightCondition(searchConditionForm.getCondition(i), searchConditionForm.getConditionValue(i), drasapInfo, user, errors)) {
+				isRight = false;
+				break;
+			}
 		}
 		return isRight;
 	}
@@ -541,7 +533,7 @@ public class SearchConditionAction extends BaseAction {
 		Connection conn = null;
 		Statement stmt1 = null;
 		ResultSet rs1 = null;
-		PreparedStatement pstmt2 = null;
+		Statement stmt2 = null;
 		int hit = -1;
 		try {
 			conn = ds.getConnection();
@@ -573,61 +565,45 @@ public class SearchConditionAction extends BaseAction {
 				// ユーザー管理マスターに検索カラム、表示件数をセットする。
 				// 図番指定順のチェックＯＮの場合は検索条件無効なので、
 				// 前回の検索条件を保持したままとする。
-				String strSql2 = "update USER_MASTER set DISPLAY_COUNT=?," +
-						" VIEW_SELCOL1=?, VIEW_SELCOL2=?, VIEW_SELCOL3=?, VIEW_SELCOL4=?, VIEW_SELCOL5=?, VIEW_SELCOL6=?" +
-						" where USER_ID=?";
-				pstmt2 = conn.prepareStatement(strSql2);
-				pstmt2.setString(1, searchConditionForm.getDisplayCount());
-				pstmt2.setString(2, searchConditionForm.getDispAttr1());
-				pstmt2.setString(3, searchConditionForm.getDispAttr2());
-				pstmt2.setString(4, searchConditionForm.getDispAttr3());
-				pstmt2.setString(5, searchConditionForm.getDispAttr4());
-				pstmt2.setString(6, searchConditionForm.getDispAttr5());
-				pstmt2.setString(7, searchConditionForm.getDispAttr6());
-				pstmt2.setString(8, user.getId());
-				pstmt2.executeUpdate();
+				String strSql2 = "update USER_MASTER set ";
+				for (int i = 1; i < searchConditionForm.getViewSelColNum(); i++) {
+					String val = searchConditionForm.getDispAttr(i - 1);
+					strSql2 += " VIEW_SELCOL" + i + "='" + val + "',";
+					// ユーザーObjectにもセットする
+					user.setViewSelCol(i - 1, val);
+				}
+				strSql2 += " DISPLAY_COUNT='" + searchConditionForm.getDisplayCount() + "'";
+				strSql2 += " where USER_ID='" + user.getId() + "'";
+
+				stmt2 = conn.createStatement();
+				stmt2.executeUpdate(strSql2);
+
 				// ユーザーObjectにもセットする
 				user.setDisplayCount(searchConditionForm.getDisplayCount());
-				user.setViewSelCol1(searchConditionForm.getDispAttr1());
-				user.setViewSelCol2(searchConditionForm.getDispAttr2());
-				user.setViewSelCol3(searchConditionForm.getDispAttr3());
-				user.setViewSelCol4(searchConditionForm.getDispAttr4());
-				user.setViewSelCol5(searchConditionForm.getDispAttr5());
-				user.setViewSelCol6(searchConditionForm.getDispAttr6());
 			} else if (!"multipreview".equals(searchConditionForm.act)) {
 				// ここから先は、ユーザー管理マスターに検索カラム、表示件数をセットする。
-				String strSql2 = "update USER_MASTER set DISPLAY_COUNT=?," +
-						" SEARCH_SELCOL1=?, SEARCH_SELCOL2=?, SEARCH_SELCOL3=?, SEARCH_SELCOL4=?, SEARCH_SELCOL5=?," +
-						" VIEW_SELCOL1=?, VIEW_SELCOL2=?, VIEW_SELCOL3=?, VIEW_SELCOL4=?, VIEW_SELCOL5=?, VIEW_SELCOL6=?" +
-						" where USER_ID=?";
-				pstmt2 = conn.prepareStatement(strSql2);
-				pstmt2.setString(1, searchConditionForm.getDisplayCount());
-				pstmt2.setString(2, searchConditionForm.getCondition1());
-				pstmt2.setString(3, searchConditionForm.getCondition2());
-				pstmt2.setString(4, searchConditionForm.getCondition3());
-				pstmt2.setString(5, searchConditionForm.getCondition4());
-				pstmt2.setString(6, searchConditionForm.getCondition5());
-				pstmt2.setString(7, searchConditionForm.getDispAttr1());
-				pstmt2.setString(8, searchConditionForm.getDispAttr2());
-				pstmt2.setString(9, searchConditionForm.getDispAttr3());
-				pstmt2.setString(10, searchConditionForm.getDispAttr4());
-				pstmt2.setString(11, searchConditionForm.getDispAttr5());
-				pstmt2.setString(12, searchConditionForm.getDispAttr6());
-				pstmt2.setString(13, user.getId());
-				pstmt2.executeUpdate();
+				String strSql2 = "update USER_MASTER set ";
+				for (int i = 1; i < searchConditionForm.getSearchSelColNum(); i++) {
+					String val = searchConditionForm.getCondition(i - 1);
+					strSql2 += " SEARCH_SELCOL" + i + "='" + val + "',";
+					// ユーザーObjectにもセットする
+					user.setSearchSelCol(i - 1, val);
+				}
+
+				for (int i = 1; i < searchConditionForm.getViewSelColNum(); i++) {
+					String val = searchConditionForm.getDispAttr(i - 1);
+					strSql2 += " VIEW_SELCOL" + i + "='" + val + "',";
+					// ユーザーObjectにもセットする
+					user.setViewSelCol(i - 1, val);
+				}
+				strSql2 += " DISPLAY_COUNT='" + searchConditionForm.getDisplayCount() + "'";
+				strSql2 += " where USER_ID='" + user.getId() + "'";
+
+				stmt2 = conn.createStatement();
+				stmt2.executeUpdate(strSql2);
+
 				// ユーザーObjectにもセットする
 				user.setDisplayCount(searchConditionForm.getDisplayCount());
-				user.setSearchSelCol1(searchConditionForm.getCondition1());
-				user.setSearchSelCol2(searchConditionForm.getCondition2());
-				user.setSearchSelCol3(searchConditionForm.getCondition3());
-				user.setSearchSelCol4(searchConditionForm.getCondition4());
-				user.setSearchSelCol5(searchConditionForm.getCondition5());
-				user.setViewSelCol1(searchConditionForm.getDispAttr1());
-				user.setViewSelCol2(searchConditionForm.getDispAttr2());
-				user.setViewSelCol3(searchConditionForm.getDispAttr3());
-				user.setViewSelCol4(searchConditionForm.getDispAttr4());
-				user.setViewSelCol5(searchConditionForm.getDispAttr5());
-				user.setViewSelCol6(searchConditionForm.getDispAttr6());
 			}
 			// 2020.03.11 yamamoto modified. end
 		} catch (Exception e) {
@@ -648,7 +624,7 @@ public class SearchConditionAction extends BaseAction {
 			} catch (Exception e) {
 			}
 			try {
-				pstmt2.close();
+				stmt2.close();
 			} catch (Exception e) {
 			}
 			try {
@@ -724,26 +700,14 @@ public class SearchConditionAction extends BaseAction {
 			}
 			// 検索条件による制限を
 			sbSql1.append(" and (");
-			String condition1Sql = createSqlWhereByRow(searchConditionForm.condition1, searchConditionForm.condition1Value);
-			if (condition1Sql != null) {
-				tempSqlList.add(condition1Sql);
+
+			for (int i = 0; i < searchConditionForm.getSearchSelColNum(); i++) {
+				String conditionSql = createSqlWhereByRow(searchConditionForm.getCondition(i), searchConditionForm.getConditionValue(i));
+				if (conditionSql != null) {
+					tempSqlList.add(conditionSql);
+				}
 			}
-			String condition2Sql = createSqlWhereByRow(searchConditionForm.condition2, searchConditionForm.condition2Value);
-			if (condition2Sql != null) {
-				tempSqlList.add(condition2Sql);
-			}
-			String condition3Sql = createSqlWhereByRow(searchConditionForm.condition3, searchConditionForm.condition3Value);
-			if (condition3Sql != null) {
-				tempSqlList.add(condition3Sql);
-			}
-			String condition4Sql = createSqlWhereByRow(searchConditionForm.condition4, searchConditionForm.condition4Value);
-			if (condition4Sql != null) {
-				tempSqlList.add(condition4Sql);
-			}
-			String condition5Sql = createSqlWhereByRow(searchConditionForm.condition5, searchConditionForm.condition5Value);
-			if (condition5Sql != null) {
-				tempSqlList.add(condition5Sql);
-			}
+
 			for (int i = 0; i < tempSqlList.size(); i++) {
 				if (i > 0) {
 					// 検索条件によるそれぞれの制限をOR,ANDするかは
@@ -1017,17 +981,10 @@ public class SearchConditionAction extends BaseAction {
 	private String createSqlOrder(SearchConditionForm searchConditionForm) {
 		SearchOrderSentenceMaker orderSentenceMaker = new SearchOrderSentenceMaker();
 		// 条件1から5までを
-		orderSentenceMaker.addOrderCondition(searchConditionForm.condition1,
-				searchConditionForm.sortWay1, searchConditionForm.sortOrder1);
-		orderSentenceMaker.addOrderCondition(searchConditionForm.condition2,
-				searchConditionForm.sortWay2, searchConditionForm.sortOrder2);
-		orderSentenceMaker.addOrderCondition(searchConditionForm.condition3,
-				searchConditionForm.sortWay3, searchConditionForm.sortOrder3);
-		orderSentenceMaker.addOrderCondition(searchConditionForm.condition4,
-				searchConditionForm.sortWay4, searchConditionForm.sortOrder4);
-		orderSentenceMaker.addOrderCondition(searchConditionForm.condition5,
-				searchConditionForm.sortWay5, searchConditionForm.sortOrder5);
-
+		for (int i = 0; i < searchConditionForm.getSearchSelColNum(); i++) {
+			orderSentenceMaker.addOrderCondition(searchConditionForm.getCondition(i),
+					searchConditionForm.getSortWay(i), searchConditionForm.getSortOrder(i));
+		}
 		return orderSentenceMaker.getSqlOrder();
 	}
 
@@ -1189,19 +1146,18 @@ public class SearchConditionAction extends BaseAction {
 			}
 			conditionValue += drwgNoArray[i];
 		}
-		if ("DRWG_NO".equals(form.condition1)) {
-			form.condition1Value = conditionValue;
-		} else if ("DRWG_NO".equals(form.condition2)) {
-			form.condition2Value = conditionValue;
-		} else if ("DRWG_NO".equals(form.condition3)) {
-			form.condition3Value = conditionValue;
-		} else if ("DRWG_NO".equals(form.condition4)) {
-			form.condition4Value = conditionValue;
-		} else if ("DRWG_NO".equals(form.condition5)) {
-			form.condition5Value = conditionValue;
-		} else {
-			form.condition1 = "DRWG_NO";
-			form.condition1Value = conditionValue;
+
+		boolean setFlag = false;
+		for (int i = 0; i < form.getSearchSelColNum(); i++) {
+			if ("DRWG_NO".equals(form.getCondition(i))) {
+				form.setConditionValue(i, conditionValue);
+				setFlag = true;
+				break;
+			}
+		}
+		if (!setFlag) {
+			form.setCondition(0, "DRWG_NO");
+			form.setConditionValue(0, conditionValue);
 		}
 		return true;
 	}

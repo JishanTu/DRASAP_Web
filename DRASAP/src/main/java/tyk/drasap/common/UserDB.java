@@ -168,94 +168,89 @@ public class UserDB {
 			String passwd_M = rs.getString("PASSWD");
 			// パスワードチェックが不要、またはパスワードが一致したら
 			// 変更 '04/04/13 by Hirata
-			if (!checkPswd || passwd.equals(passwd_M)) {
-				// ユーザー情報をuserにセットする
-				user.setId(id);
-				user.setName(rs.getString("USER_NAME"));
-				user.setNameE(rs.getString("ALPH_NAME"));
-				user.setDept(rs.getString("DEPT_CODE"));
-				user.setDeptName(rs.getString("DEPARTMENT"));
-				user.setSearchSelCol1(rs.getString("SEARCH_SELCOL1"));
-				user.setSearchSelCol2(rs.getString("SEARCH_SELCOL2"));
-				user.setSearchSelCol3(rs.getString("SEARCH_SELCOL3"));
-				user.setSearchSelCol4(rs.getString("SEARCH_SELCOL4"));
-				user.setSearchSelCol5(rs.getString("SEARCH_SELCOL5"));
-				user.setViewSelCol1(rs.getString("VIEW_SELCOL1"));
-				user.setViewSelCol2(rs.getString("VIEW_SELCOL2"));
-				user.setViewSelCol3(rs.getString("VIEW_SELCOL3"));
-				user.setViewSelCol4(rs.getString("VIEW_SELCOL4"));
-				user.setViewSelCol5(rs.getString("VIEW_SELCOL5"));
-				user.setViewSelCol6(rs.getString("VIEW_SELCOL6"));
-				user.setDisplayCount(rs.getString("DISPLAY_COUNT"));
-				user.setAdminFlag(rs.getString("ADMIN_FLAG"));// 管理者フラグ
-				user.setPosition(rs.getString("POSITION"));// 職位
-				// 2013.07.24 yamagishi add. start
-				user.setAclUpdateFlag(rs.getString("ACL_UPDATE_FLAG")); // アクセスレベル変更許可フラグ
-				user.setAclBatchUpdateFlag(rs.getString("ACL_BATCH_UPDATE_FLAG")); // アクセスレベル一括更新ツール許可フラグ
-				user.setDlManagerFlag(rs.getString("DL_MANAGER_FLAG")); // ＤＬマネージャ利用可能フラグ
-				// 2013.07.24 yamagishi add. end
-				// 2019.09.20 yamamoto add. start
-				user.setPasswdUpdDate(rs.getDate("PASSWD_UPD_DATE")); // パスワード設定日
-				user.setReproUserFlag(rs.getString("REPRO_USER_FLAG")); // 原図庫ユーザフラグ
-				user.setDwgRegReqFlag(rs.getString("DWG_REG_REQ_FLAG")); // 図面登録依頼フラグ
-				// 2019.09.20 yamamoto add. end
-				// 2020.02.10 yamamoto add. start
-				user.setMultiPdfFlag(rs.getString("MULTI_PDF_FLAG")); // マルチPDF出力許可フラグ
-				// 2020.02.10 yamamoto add. end
-				String defaultUserGroup = rs.getString("USER_GRP_CODE");// 原価部門の利用者グループ
-				user.setDefaultUserGroup(defaultUserGroup);
-				// 利用可能な全ての利用者グループを取得
-				ArrayList<String> userGroupCodeArray = new ArrayList<String>();
-				if (defaultUserGroup != null) {// 原価部門の利用者グループ
-					userGroupCodeArray.add(defaultUserGroup);
-				}
-				if (rs.getString("USER_GRP_CODE01") != null) {// ユーザーマスタの利用者グループ01
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE01"));
-				}
-				if (rs.getString("USER_GRP_CODE02") != null) {// ユーザーマスタの利用者グループ02
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE02"));
-				}
-				if (rs.getString("USER_GRP_CODE03") != null) {// ユーザーマスタの利用者グループ03
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE03"));
-				}
-				if (rs.getString("USER_GRP_CODE04") != null) {// ユーザーマスタの利用者グループ04
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE04"));
-				}
-				if (rs.getString("USER_GRP_CODE05") != null) {// ユーザーマスタの利用者グループ05
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE05"));
-				}
-				if (rs.getString("USER_GRP_CODE06") != null) {// ユーザーマスタの利用者グループ06
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE06"));
-				}
-				if (rs.getString("USER_GRP_CODE07") != null) {// ユーザーマスタの利用者グループ07
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE07"));
-				}
-				if (rs.getString("USER_GRP_CODE08") != null) {// ユーザーマスタの利用者グループ08
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE08"));
-				}
-				if (rs.getString("USER_GRP_CODE09") != null) {// ユーザーマスタの利用者グループ09
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE09"));
-				}
-				if (rs.getString("USER_GRP_CODE10") != null) {// ユーザーマスタの利用者グループ10
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE10"));
-				}
-				// 2013.09.17 yamagishi add. start
-				while (rs.next()) {
-					// ユーザが複数の原価部門に所属している場合
-					userGroupCodeArray.add(rs.getString("USER_GRP_CODE"));// 原価部門の利用者グループ
-				}
-				// 2013.09.17 yamagishi add. end
-				ArrayList<UserGroup> userGroupes = UserGroupDB.getUserGroupArray(userGroupCodeArray, conn);
-				// 取得した利用者グループを、userにaddしていく
-				for (int i = 0; i < userGroupes.size(); i++) {
-					user.addUserGroup(userGroupes.get(i));
-				}
-
-				return true;
-			} else {
+			if (checkPswd && !passwd.equals(passwd_M)) {
 				// パスワードが一致しない
 				return false;
 			}
+			user.setId(id);
+			user.setName(rs.getString("USER_NAME"));
+			user.setNameE(rs.getString("ALPH_NAME"));
+			user.setDept(rs.getString("DEPT_CODE"));
+			user.setDeptName(rs.getString("DEPARTMENT"));
+			// 検索条件カラムリストを設定
+			for (int i = 1; i <= User.searchSelColNum; i++) {
+				user.setSearchSelCol(i - 1, rs.getString("SEARCH_SELCOL" + i));
+			}
+			// 検索結果カラムリストを設定
+			for (int j = 1; j <= User.viewSelColNum; j++) {
+				user.setViewSelCol(j - 1, rs.getString("VIEW_SELCOL" + j));
+			}
+			user.setDisplayCount(rs.getString("DISPLAY_COUNT"));
+			user.setAdminFlag(rs.getString("ADMIN_FLAG"));// 管理者フラグ
+			user.setPosition(rs.getString("POSITION"));// 職位
+			// 2013.07.24 yamagishi add. start
+			user.setAclUpdateFlag(rs.getString("ACL_UPDATE_FLAG")); // アクセスレベル変更許可フラグ
+			user.setAclBatchUpdateFlag(rs.getString("ACL_BATCH_UPDATE_FLAG")); // アクセスレベル一括更新ツール許可フラグ
+			user.setDlManagerFlag(rs.getString("DL_MANAGER_FLAG")); // ＤＬマネージャ利用可能フラグ
+			// 2013.07.24 yamagishi add. end
+			// 2019.09.20 yamamoto add. start
+			user.setPasswdUpdDate(rs.getDate("PASSWD_UPD_DATE")); // パスワード設定日
+			user.setReproUserFlag(rs.getString("REPRO_USER_FLAG")); // 原図庫ユーザフラグ
+			user.setDwgRegReqFlag(rs.getString("DWG_REG_REQ_FLAG")); // 図面登録依頼フラグ
+			// 2019.09.20 yamamoto add. end
+			// 2020.02.10 yamamoto add. start
+			user.setMultiPdfFlag(rs.getString("MULTI_PDF_FLAG")); // マルチPDF出力許可フラグ
+			// 2020.02.10 yamamoto add. end
+			String defaultUserGroup = rs.getString("USER_GRP_CODE");// 原価部門の利用者グループ
+			user.setDefaultUserGroup(defaultUserGroup);
+			// 利用可能な全ての利用者グループを取得
+			ArrayList<String> userGroupCodeArray = new ArrayList<String>();
+			if (defaultUserGroup != null) {// 原価部門の利用者グループ
+				userGroupCodeArray.add(defaultUserGroup);
+			}
+			if (rs.getString("USER_GRP_CODE01") != null) {// ユーザーマスタの利用者グループ01
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE01"));
+			}
+			if (rs.getString("USER_GRP_CODE02") != null) {// ユーザーマスタの利用者グループ02
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE02"));
+			}
+			if (rs.getString("USER_GRP_CODE03") != null) {// ユーザーマスタの利用者グループ03
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE03"));
+			}
+			if (rs.getString("USER_GRP_CODE04") != null) {// ユーザーマスタの利用者グループ04
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE04"));
+			}
+			if (rs.getString("USER_GRP_CODE05") != null) {// ユーザーマスタの利用者グループ05
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE05"));
+			}
+			if (rs.getString("USER_GRP_CODE06") != null) {// ユーザーマスタの利用者グループ06
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE06"));
+			}
+			if (rs.getString("USER_GRP_CODE07") != null) {// ユーザーマスタの利用者グループ07
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE07"));
+			}
+			if (rs.getString("USER_GRP_CODE08") != null) {// ユーザーマスタの利用者グループ08
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE08"));
+			}
+			if (rs.getString("USER_GRP_CODE09") != null) {// ユーザーマスタの利用者グループ09
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE09"));
+			}
+			if (rs.getString("USER_GRP_CODE10") != null) {// ユーザーマスタの利用者グループ10
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE10"));
+			}
+			// 2013.09.17 yamagishi add. start
+			while (rs.next()) {
+				// ユーザが複数の原価部門に所属している場合
+				userGroupCodeArray.add(rs.getString("USER_GRP_CODE"));// 原価部門の利用者グループ
+			}
+			// 2013.09.17 yamagishi add. end
+			ArrayList<UserGroup> userGroupes = UserGroupDB.getUserGroupArray(userGroupCodeArray, conn);
+			// 取得した利用者グループを、userにaddしていく
+			for (int i = 0; i < userGroupes.size(); i++) {
+				user.addUserGroup(userGroupes.get(i));
+			}
+
+			return true;
 
 		} catch (Exception e) {
 			throw e;
@@ -344,8 +339,7 @@ public class UserDB {
 
 		// idを大文字に
 		id = id.toUpperCase();
-		//
-		Statement pstmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -362,18 +356,15 @@ public class UserDB {
 			//		    Date nowDate = (Date) nowCal.getTime(); // Calendar -> DATE
 
 			// password更新
-			pstmt = conn.createStatement();
+			stmt = conn.createStatement();
 			String sql = "update USER_MASTER" +
 					" set PASSWD='" + passwd.trim() + "'" +
 					"     ,PASSWD_UPD_DATE=TO_DATE('" + sdf.format(nowDate) + "','YYYY/MM/DD')" +
 					" where USER_ID='" + id.trim() + "'";
-			//            pstmt.setString(1, passwd.trim());
 			category.debug("nowdate:" + sdf.format(nowDate));
-			//			pstmt.setString(2, sdf.format(nowDate));
-			//          pstmt.setString(2, id.trim());
 
-			category.debug("SQL:" + pstmt.toString());
-			pstmt.executeUpdate(sql);
+			category.debug("SQL:" + stmt.toString());
+			stmt.executeUpdate(sql);
 
 			// コミット
 			conn.commit();
@@ -395,8 +386,8 @@ public class UserDB {
 			} catch (Exception e) {
 			}
 			try {
-				if (Objects.nonNull(pstmt)) {
-					pstmt.close();
+				if (Objects.nonNull(stmt)) {
+					stmt.close();
 				}
 			} catch (Exception e) {
 			}

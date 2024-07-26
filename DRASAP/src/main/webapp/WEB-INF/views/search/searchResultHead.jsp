@@ -40,16 +40,16 @@
 		// 再表示
 		function doRefresh(){
 			// 表示属性をresult_bodyフレーム隠し属性にセット
-			parent.result_body.document.forms[0].dispAttr1.value=document.forms[0].dispAttr1.value;
-			parent.result_body.document.forms[0].dispAttr2.value=document.forms[0].dispAttr2.value;
-			parent.result_body.document.forms[0].dispAttr3.value=document.forms[0].dispAttr3.value;
-			parent.result_body.document.forms[0].dispAttr4.value=document.forms[0].dispAttr4.value;
-			parent.result_body.document.forms[0].dispAttr5.value=document.forms[0].dispAttr5.value;
-			parent.result_body.document.forms[0].dispAttr6.value=document.forms[0].dispAttr6.value;
-			parent.result_body.document.forms[0].outputPrinter.value=document.forms[0].outputPrinter.value;
-			parent.result_body.document.forms[0].act.value="REFRESH";// 隠し属性actにREFRESHをセット
-			parent.result_body.document.forms[0].target="_parent";// ターゲットは親
-			parent.result_body.document.forms[0].submit();
+			var parentForm = parent.result_body.document.forms[0];
+			var currentForm = document.forms[0];
+			for (var j = 1; j <= ${searchResultForm.getViewSelColNum()}; j++) {
+				var dispAttr = 'dispAttr' + ji;
+                parentForm[dispAttr].value = currentForm[dispAttr].value;
+			}
+			parentForm.outputPrinter.value=currentForm.outputPrinter.value;
+			parentForm.act.value="REFRESH";// 隠し属性actにREFRESHをセット
+			parentForm.target="_parent";// ターゲットは親
+			parentForm.submit();
 		}
 		// 全てチェック
 		function checkOnAll(){
@@ -121,10 +121,10 @@
 					<b>${searchResultForm.h_label1 }</b></span></td></tr>
 			</table></td>
 		<td><span class="normal10">
-			<input type="button" value="${searchResultForm.h_label2 }" onclick="checkOnAll()" />
-			<input type="button" value="${searchResultForm.h_label3 }" onclick="checkOffAll()" />
+			<input type="button" value="${searchResultForm.h_label2}" onclick="checkOnAll()" />
+			<input type="button" value="${searchResultForm.h_label3}" onclick="checkOffAll()" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="button" value="${searchResultForm.h_label4 }" onclick="doRefresh()" />
+			<input type="button" value="${searchResultForm.h_label4}" onclick="doRefresh()" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			${searchResultForm.h_label5 }&nbsp;
 			<select name="outputPrinter">
@@ -133,7 +133,8 @@
 					<option value="${outputPrinterKey}" selected>${searchResultForm.printerNameList[loop.index]}</option>
 				</c:forEach>
 			</select>
-			</span></td>
+			</span>
+		</td>
 	</tr>
 </table>
 <%// admin_flag='2'のユーザのみ
@@ -145,88 +146,24 @@ if (me.isDelAdmin()) { %>
 <table border="1">
 	<tr>
 		<td>
-			<span class="normal10">${sessionScope.searchResultForm.h_label6 }</span></td>
-				<td>
-				<select name="dispAttr1">
-						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+			<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
+		</td>
+		<c:forEach begin="1" end="${searchResultForm.getViewSelColNum()}" var="index">
+			<td>
+				<select name="dispAttr${index}">
+					<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
 						<c:choose>
-							<c:when test="${dispKey == searchResultForm.dispAttr1}">
+							<c:when test="${dispKey == searchResultForm.getDispAttr(index - 1)}">
 								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
 							</c:when>
 							<c:otherwise>
 								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
 							</c:otherwise>
-							</c:choose>
-						</c:forEach>
-				     </select>
-				</td>
-
-				<td>
-           <td><select name="dispAttr2">
-						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
-						<c:choose>
-							<c:when test="${dispKey == searchResultForm.dispAttr2}">
-								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
-							</c:otherwise>
-							</c:choose>
-						</c:forEach>
-				     </select>
-				</td>
-				<td><select name="dispAttr3">
-						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
-						<c:choose>
-							<c:when test="${dispKey == searchResultForm.dispAttr3}">
-								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
-							</c:otherwise>
-							</c:choose>
-						</c:forEach>
-				     </select>
-				</td>
-				<td><select name="dispAttr4">
-						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
-						<c:choose>
-							<c:when test="${dispKey == searchResultForm.dispAttr4}">
-								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
-							</c:otherwise>
-							</c:choose>
-						</c:forEach>
-				     </select>
-				</td>
-				<td><select name="dispAttr5">
-						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
-						<c:choose>
-							<c:when test="${dispKey == searchResultForm.dispAttr5}">
-								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
-							</c:otherwise>
-							</c:choose>
-						</c:forEach>
-				     </select>
-				</td>
-				<td><select name="dispAttr6">
-						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
-						<c:choose>
-							<c:when test="${dispKey == searchResultForm.dispAttr6}">
-								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
-							</c:otherwise>
-							</c:choose>
-						</c:forEach>
-				     </select>
-				</td>
+						</c:choose>
+					</c:forEach>
+				</select>
+			</td>
+		</c:forEach>
 	</tr>
 </table>
 </form>

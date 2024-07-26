@@ -57,7 +57,6 @@ public class SearchInfo {
 		attrMap.put("CREATE_DIV", "作成部署コード");
 		attrMap.put("MEDIA_ID", "メディアID");
 		attrMap.put("TWIN_DRWG_NO", "1物2品番図番");
-
 	}
 
 	/**

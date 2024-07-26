@@ -167,13 +167,10 @@ url(
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
 	<form action="<%=request.getContextPath() %>/result" method="post" >
 		<input type="hidden" name="act" /> 
-		<input type="hidden"name="dispAttr1" value="${sessionScope.searchResultForm.dispAttr1}"/>
+		<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
 		<%-- この隠し属性がないと、次のXX件をクリックすると、表示属性が消えてしまう --%>
-		<input type="hidden" name="dispAttr2" value="${sessionScope.searchResultForm.dispAttr2}"/> 
-		<input type="hidden" name="dispAttr3" value="${sessionScope.searchResultForm.dispAttr3}"/> 
-		<input type="hidden" name="dispAttr4" value="${sessionScope.searchResultForm.dispAttr4}"/> 
-		<input type="hidden" name="dispAttr5" value="${sessionScope.searchResultForm.dispAttr5}"/>
-	    <input type="hidden" name="dispAttr6" value="${sessionScope.searchResultForm.dispAttr6}"/> 
+			<input type="hidden"name="dispAttr${index}" value="${sessionScope.searchResultForm.getDispAttr(index - 1)}"/>
+		</c:forEach>
 	    <input type="hidden" name="outputPrinter" /> 
 	    <input type="hidden" name="outCsvAll" />
 
@@ -207,18 +204,6 @@ url(
 				value="${sessionScope.searchResultForm.dispNumberPerPage}" />
 			<c:set var="iterateOffest"
 				value="${sessionScope.searchResultForm.dispNumberOffest}" />
-			<c:set var="dispAttr1Key"
-				value="${sessionScope.searchResultForm.dispAttr1}" />
-			<c:set var="dispAttr2Key"
-				value="${sessionScope.searchResultForm.dispAttr2}" />
-			<c:set var="dispAttr3Key"
-				value="${sessionScope.searchResultForm.dispAttr3}" />
-			<c:set var="dispAttr4Key"
-				value="${sessionScope.searchResultForm.dispAttr4}" />
-			<c:set var="dispAttr5Key"
-				value="${sessionScope.searchResultForm.dispAttr5}" />
-			<c:set var="dispAttr6Key"
-				value="${sessionScope.searchResultForm.dispAttr6}" />
 
 			<c:forEach var="item"
 				items="${sessionScope.searchResultForm.getSearchResultList()}"
@@ -239,24 +224,11 @@ url(
 						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
 							class="normal10">
 								${sessionScope.searchResultForm.dispDwgNoName}</span></td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispAttr1Name}</span></td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispAttr2Name}</span></td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispAttr3Name}</span></td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispAttr4Name}</span></td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispAttr5Name}</span></td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispAttr6Name}</span></td>
+						<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
+							<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+								<span class="normal10">${sessionScope.searchResultForm.getDispAttrName(index - 1)}</span>
+							</td>
+						</c:forEach>
 					</tr>
 				</c:if>
 
@@ -363,18 +335,11 @@ url(
 						</c:otherwise>
 					</c:choose>
 					<%-- 2013.06.24 yamagishi modified. end --%>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;
-							${item.getAttr(dispAttr1Key)}&nbsp;</span></td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;
-							${item.getAttr(dispAttr2Key)}&nbsp;</span></td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;
-							${item.getAttr(dispAttr3Key)}&nbsp;</span></td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;
-							${item.getAttr(dispAttr4Key)}&nbsp;</span></td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;
-							${item.getAttr(dispAttr5Key)}&nbsp;</span></td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;
-							${item.getAttr(dispAttr6Key)}&nbsp;</span></td>
+					<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
+						<td nowrap="nowrap">
+							<span class="normal12">&nbsp; ${sessionScope.searchResultForm.getDispAttr(index - 1)}&nbsp;</span>
+						</td>
+					</c:forEach>
 				</tr>
 			</c:forEach>
 		</table>

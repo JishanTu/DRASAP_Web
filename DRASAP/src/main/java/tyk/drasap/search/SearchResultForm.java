@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import tyk.drasap.common.DrasapUtil;
+import tyk.drasap.common.User;
 import tyk.drasap.springfw.form.BaseForm;
 
 /**
@@ -19,12 +20,7 @@ public class SearchResultForm extends BaseForm {
 	 *
 	 */
 	String act;// 処理を分けるための属性
-	String dispAttr1;// 表示属性1
-	String dispAttr2;
-	String dispAttr3;
-	String dispAttr4;
-	String dispAttr5;
-	String dispAttr6;
+	ArrayList<String> dispAttrList = new ArrayList<>(); // 表示属性1-6
 	boolean isVisible;
 	ArrayList<String> dispNameList = new ArrayList<>();// 表示属性プルダウンの名称リスト
 	ArrayList<String> dispKeyList = new ArrayList<>();// 表示属性プルダウンのKeyリスト
@@ -89,14 +85,10 @@ public class SearchResultForm extends BaseForm {
 
 	public void reset(HttpServletRequest request) {
 		// SELECTの初期化
-		dispAttr1 = "";// 表示属性1
-		dispAttr2 = "";
-		dispAttr3 = "";
-		dispAttr4 = "";
-		dispAttr5 = "";
-		dispAttr6 = "";
+		for (int i = 0; i < getViewSelColNum(); i++) {
+			dispAttrList.add(i, "");
+		}
 		outputPrinter = "";// 出力先プロッタ
-		//
 		act = "";
 		// 画面に表示されていた範囲について
 		// searchResultListの選択結果をfalseで初期化する
@@ -122,49 +114,15 @@ public class SearchResultForm extends BaseForm {
 	}
 
 	/**
-	 * dispAttr1を元にして、SearchInfoMapから日本語名称に変換する
+	 * dispAttr1-6を元にして、SearchInfoMapから日本語名称に変換する
 	 * @return
 	 */
-	public String getDispAttr1Name() {
-		if (dispAttr1 == null || dispAttr1.length() == 0) {
+	public String getDispAttrName(int idx) {
+		String attr = dispAttrList.get(idx);
+		if (attr == null || attr.length() == 0) {
 			return "";
 		}
-		return sUtil.getSearchAttr(language, dispAttr1, false);
-	}
-
-	public String getDispAttr2Name() {
-		if (dispAttr2 == null || dispAttr2.length() == 0) {
-			return "";
-		}
-		return sUtil.getSearchAttr(language, dispAttr2, false);
-	}
-
-	public String getDispAttr3Name() {
-		if (dispAttr3 == null || dispAttr3.length() == 0) {
-			return "";
-		}
-		return sUtil.getSearchAttr(language, dispAttr3, false);
-	}
-
-	public String getDispAttr4Name() {
-		if (dispAttr4 == null || dispAttr4.length() == 0) {
-			return "";
-		}
-		return sUtil.getSearchAttr(language, dispAttr4, false);
-	}
-
-	public String getDispAttr5Name() {
-		if (dispAttr5 == null || dispAttr5.length() == 0) {
-			return "";
-		}
-		return sUtil.getSearchAttr(language, dispAttr5, false);
-	}
-
-	public String getDispAttr6Name() {
-		if (dispAttr6 == null || dispAttr6.length() == 0) {
-			return "";
-		}
-		return sUtil.getSearchAttr(language, dispAttr6, false);
+		return sUtil.getSearchAttr(language, attr, false);
 	}
 
 	/**
@@ -191,13 +149,10 @@ public class SearchResultForm extends BaseForm {
 				writeCsvColumn(out, dispNameList.get(i));
 			}
 		} else {
-			// 表示項目1
-			writeCsvColumn(out, getDispAttr1Name());
-			writeCsvColumn(out, getDispAttr2Name());
-			writeCsvColumn(out, getDispAttr3Name());
-			writeCsvColumn(out, getDispAttr4Name());
-			writeCsvColumn(out, getDispAttr5Name());
-			writeCsvColumn(out, getDispAttr6Name());
+			// 表示項目1-6
+			for (int i = 0; i < getViewSelColNum(); i++) {
+				writeCsvColumn(out, getDispAttrName(i));
+			}
 		}
 		out.write("\r\n");
 		// 2) 項目の値を
@@ -213,12 +168,9 @@ public class SearchResultForm extends BaseForm {
 				}
 			} else {
 				// 表示属性1-6
-				writeCsvColumn(out, resultElement.getAttr(dispAttr1));
-				writeCsvColumn(out, resultElement.getAttr(dispAttr2));
-				writeCsvColumn(out, resultElement.getAttr(dispAttr3));
-				writeCsvColumn(out, resultElement.getAttr(dispAttr4));
-				writeCsvColumn(out, resultElement.getAttr(dispAttr5));
-				writeCsvColumn(out, resultElement.getAttr(dispAttr6));
+				for (int j = 0; j < getViewSelColNum(); j++) {
+					writeCsvColumn(out, resultElement.getAttr(dispAttrList.get(j)));
+				}
 			}
 			out.write("\r\n");
 		}
@@ -256,85 +208,61 @@ public class SearchResultForm extends BaseForm {
 	/**
 	 * @return
 	 */
-	public String getDispAttr1() {
-		return dispAttr1;
+	public int getViewSelColNum() {
+		return User.viewSelColNum;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getDispAttr2() {
-		return dispAttr2;
+	public String getDispAttr(int idx) {
+		return dispAttrList.get(idx);
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setDispAttr(int idx, String string) {
+		dispAttrList.add(idx, string);
+	}
+
+	/**
+	 *
+	 * @param lang
+	 */
+	public void setDefaulDispAttrs(String lang) {
+		for (int i = 0; i <= getViewSelColNum(); i++) {
+			if (i == 0) {
+				setDispAttr(0, "DRWG_SIZE");
+			} else if (i == 1) {
+				setDispAttr(1, "DRWG_TYPE");
+			} else if (i == 2) {
+				setDispAttr(2, "MACHINE_" + ("Japanese".equals(lang) ? "JP" : "EN"));
+			} else if (i == 3) {
+				setDispAttr(3, "PROCUREMENT");
+			} else if (i == 4) {
+				setDispAttr(4, "SUPPLYER_" + ("Japanese".equals(lang) ? "JP" : "EN"));
+			} else if (i == 5) {
+				setDispAttr(5, "CREATE_DATE");
+			} else {
+				// TODO デフォルト値を田中さんに聞く
+				setDispAttr(i, "ATTACH01");
+			}
+		}
 	}
 
 	/**
 	 * @return
 	 */
-	public String getDispAttr3() {
-		return dispAttr3;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getDispAttr4() {
-		return dispAttr4;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getDispAttr5() {
-		return dispAttr5;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getDispAttr6() {
-		return dispAttr6;
+	public ArrayList<String> getDispAttrList() {
+		return dispAttrList;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setDispAttr1(String string) {
-		dispAttr1 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setDispAttr2(String string) {
-		dispAttr2 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setDispAttr3(String string) {
-		dispAttr3 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setDispAttr4(String string) {
-		dispAttr4 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setDispAttr5(String string) {
-		dispAttr5 = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setDispAttr6(String string) {
-		dispAttr6 = string;
+	public void setDispAttrList(ArrayList<String> list) {
+		dispAttrList = list;
 	}
 
 	/**

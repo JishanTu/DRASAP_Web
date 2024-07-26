@@ -28,8 +28,7 @@ public class DataSourceFactory {
 		//		portNo = iPortNo;
 		//		Map<String, String> envMap = System.getenv();
 		if (ds == null) {
-			Properties appProp = DrasapPropertiesFactory.getDrasapProperties(
-					new DataSourceFactory());
+			Properties appProp = DrasapPropertiesFactory.getDrasapProperties(new DataSourceFactory());
 			if ("tomcat".equals(appProp.getProperty("web.container"))) {
 				// Tomcat�̏ꍇ
 				Context initContext = new InitialContext();
