@@ -134,6 +134,34 @@ url(
 <%      } %>
     }
     <%-- 2013.09.06 yamagishi add. end --%>
+    
+    function updateHiddenInput(index, field) {
+        var selectElement = document.getElementById(field + 'Select' + index);
+        var hiddenInput = document.getElementById(field + 'Hidden' + index);
+        hiddenInput.value = selectElement.value;
+        hiddenInput.name = "searchResultList[" + index + "]."+ field;
+    }
+    
+    function updateCheckbox(checkbox, index) {
+        // Dynamically set the name attribute when the checkbox is checked
+        if (checkbox.checked) {
+            checkbox.name = "searchResultList[" + index + "].selected";
+            checkbox.value = 'true';
+        } else {
+            // Optional: If unchecked, you might want to remove the name attribute
+            checkbox.name = "searchResultList[" + index + "].selected";
+            checkbox.value = 'false';
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
+            // Set name attribute based on existing index if needed
+            if (checkbox.checked) {
+                checkbox.name = "searchResultList[" + index + "].selected";
+            }
+        });
+    });
     </script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
@@ -148,6 +176,7 @@ url(
 	    <input type="hidden" name="dispAttr6" value="${sessionScope.searchResultForm.dispAttr6}"/> 
 	    <input type="hidden" name="outputPrinter" /> 
 	    <input type="hidden" name="outCsvAll" />
+
 		<%-- ファイル出力で全属性か --%>
 
 		<c:set var="resultList"
@@ -246,12 +275,10 @@ url(
             <td><html:checkbox name="searchResultElement" property="selected" indexed="true" /></td> --%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1}">
-							<td>
-							<input type="checkbox" name="searchResultList[${status.index}].selected" value="true"
-								<c:if test="${item.selected}">
-               checked="checked"
-								</c:if>  />
-							</td>
+							<td><input type="checkbox" id="checkbox${status.index}"
+								value="true"
+								<c:if test="${item.selected}">checked="checked"</c:if>
+								onchange="updateCheckbox(this, ${status.index})" /></td>
 						</c:when>
 						<c:otherwise>
 							<td />
@@ -268,36 +295,46 @@ url(
             <%-- } --%>
             -->
 					<td align="center">
-					<p>printSize: ${searchResultList[status.index].printSize}</p>
-					<select name="searchResultList[${status.index}].printSize" id="printSize">
-    <option value="ORG" <c:if test="${searchResultList[status.index].printSize == 'ORG'}">selected</c:if>> 
-        <c:choose>
-            <c:when test="${user.language == 'Japanese'}">原寸</c:when>
-            <c:otherwise>ORIGINAL</c:otherwise>
-        </c:choose>
-    </option>
-    <option value="A0" <c:if test="${searchResultList[status.index].printSize == 'A0'}">selected</c:if>>A0</option>
-    <option value="A1" <c:if test="${searchResultList[status.index].printSize == 'A1'}">selected</c:if>>A1</option>
-    <option value="A2" <c:if test="${searchResultList[status.index].printSize == 'A2'}">selected</c:if>>A2</option>
-    <option value="A3" <c:if test="${searchResultList[status.index].printSize == 'A3'}">selected</c:if>>A3</option>
-    <option value="A4" <c:if test="${searchResultList[status.index].printSize == 'A4'}">selected</c:if>>A4</option>
-    <option value="70.7%" <c:if test="${searchResultList[status.index].printSize == '70.7%'}">selected</c:if>>70.7%</option>
-    <option value="50%" <c:if test="${searchResultList[status.index].printSize == '50%'}">selected</c:if>>50%</option>
-    <option value="35.4%" <c:if test="${searchResultList[status.index].printSize == '35.4%'}">selected</c:if>>35.4%</option>
-    <option value="25%" <c:if test="${searchResultList[status.index].printSize == '25%'}">selected</c:if>>25%</option>
-</select>
-</td>
-					<td><select name="searchResultList[${status.index}].copies" id="copies">
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
+								<input type="hidden" id="printSizeHidden${status.index}" value="${item.printSize}"/> 
+					<select name="printSize"id="printSizeSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'printSize')">
+							<option value="ORG">
+								<c:choose>
+									<c:when test="${user.language == 'Japanese'}">原寸</c:when>
+									<c:otherwise>ORIGINAL</c:otherwise>
+								</c:choose>
+							</option>
+							<option value="A0"
+								<c:if test="${item.printSize == 'A0'}">selected</c:if>>A0</option>
+							<option value="A1"
+								<c:if test="${item.printSize == 'A1'}">selected</c:if>>A1</option>
+							<option value="A2"
+								<c:if test="${item.printSize == 'A2'}">selected</c:if>>A2</option>
+							<option value="A3"
+								<c:if test="${item.printSize == 'A3'}">selected</c:if>>A3</option>
+							<option value="A4"
+								<c:if test="${item.printSize == 'A4'}">selected</c:if>>A4</option>
+							<option value="70.7%"
+								<c:if test="${item.printSize == '70.7%'}">selected</c:if>>70.7%</option>
+							<option value="50%"
+								<c:if test="${item.printSize == '50%'}">selected</c:if>>50%</option>
+							<option value="35.4%"
+								<c:if test="${item.printSize == '35.4%'}">selected</c:if>>35.4%</option>
+							<option value="25%"
+								<c:if test="${item.printSize == '25%'}">selected</c:if>>25%</option>
+					</select></td>
+					<td>
+					<input type="hidden" id="copiesHidden${status.index}" value="${item.copies}"/> 
+					<select name="copies" id="copiesSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'copies')">
+							<option value="1"<c:if test="${item.copies == '1'}">selected</c:if>>1</option>
+							<option value="2"<c:if test="${item.copies == '2'}">selected</c:if>>2</option>
+							<option value="3"<c:if test="${item.copies == '3'}">selected</c:if>>3</option>
+							<option value="4"<c:if test="${item.copies == '4'}">selected</c:if>>4</option>
+							<option value="5"<c:if test="${item.copies == '5'}">selected</c:if>>5</option>
+							<option value="6"<c:if test="${item.copies == '6'}">selected</c:if>>6</option>
+							<option value="7"<c:if test="${item.copies == '7'}">selected</c:if>>7</option>
+							<option value="8"<c:if test="${item.copies == '8'}">selected</c:if>>8</option>
+							<option value="9"<c:if test="${item.copies == '9'}">selected</c:if>>9</option>
+							<option value="10"<c:if test="${item.copies == '10'}">selected</c:if>>10</option>
 					</select></td>
 
 					<%-- 2013.06.24 yamagishi modified. start
