@@ -232,7 +232,7 @@ img {
 	}
 	// 初期フォーカス位置
 	function onInitFocus(){
-		document.forms[0].condition1Value.focus();
+		document.forms[0].conditionValue1.focus();
 	}
 	function loadResultFrame() {
 		<%if("multipreview".equals(request.getParameter("act"))){  %>

@@ -43,7 +43,7 @@
 			var parentForm = parent.result_body.document.forms[0];
 			var currentForm = document.forms[0];
 			for (var j = 1; j <= ${searchResultForm.getViewSelColNum()}; j++) {
-				var dispAttr = 'dispAttr' + ji;
+				var dispAttr = 'dispAttr' + j;
                 parentForm[dispAttr].value = currentForm[dispAttr].value;
 			}
 			parentForm.outputPrinter.value=currentForm.outputPrinter.value;
