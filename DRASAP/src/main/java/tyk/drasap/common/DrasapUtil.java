@@ -6,6 +6,8 @@ import java.util.HashMap;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * ユーティリティをまとめたクラス。
  * このシステムでのみ使用しそうなユーティリティ。
@@ -407,5 +409,18 @@ public class DrasapUtil {
 		} catch (Exception e) {
 		}
 		return tempDirName;
+	}
+
+	/**
+	 * 最後のカンマを取り除く
+	 * @param str
+	 * @return
+	 */
+	public static String removeLastComma(String str) {
+		String val = StringUtils.isEmpty(str) ? "" : str;
+		if (val.charAt(str.length() - 1) == ',') {
+			return val.substring(0, val.length() - 1);
+		}
+		return val;
 	}
 }

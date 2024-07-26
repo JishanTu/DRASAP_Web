@@ -96,12 +96,7 @@ public class SearchResultPreAction extends BaseAction {
 			searchResultForm.searchResultList = search(user, null, request, errors, searchConditionForm);
 			searchResultForm.dispNumberPerPage = searchConditionForm.getDisplayCount();// 1ページ当たりの表示件数
 			searchResultForm.dispNumberOffest = "0";// 検索結果を表示するときのoffset値。最初のページはゼロ。
-			searchResultForm.dispAttr1 = searchConditionForm.getDispAttr1();// 表示属性をコピー
-			searchResultForm.dispAttr2 = searchConditionForm.getDispAttr2();
-			searchResultForm.dispAttr3 = searchConditionForm.getDispAttr3();
-			searchResultForm.dispAttr4 = searchConditionForm.getDispAttr4();
-			searchResultForm.dispAttr5 = searchConditionForm.getDispAttr5();
-			searchResultForm.dispAttr6 = searchConditionForm.getDispAttr6();
+			searchResultForm.setDispAttrList(searchConditionForm.getDispAttrList()); // 表示属性をコピー
 			// アクセスログを
 			AccessLoger.loging(user, AccessLoger.FID_SEARCH, user.getSys_id());
 		} else if ("language".equals(request.getAttribute("task"))) {
@@ -121,7 +116,8 @@ public class SearchResultPreAction extends BaseAction {
 			//			searchResultForm.dispAttr4 = searchConditionForm.getDispAttr4();
 			//			searchResultForm.dispAttr5 = searchConditionForm.getDispAttr5();
 			//			searchResultForm.dispAttr6 = searchConditionForm.getDispAttr6();
-			//			// アクセスログを
+			// アクセスログを
+			AccessLoger.loging(user, AccessLoger.FID_SEARCH, user.getSys_id());
 		} else if ("multipreview".equals(request.getAttribute("task"))) {
 			String sys_id = user.getSys_id();
 			// クッキーから言語設定を取得
@@ -184,35 +180,12 @@ public class SearchResultPreAction extends BaseAction {
 		searchResultForm.dispNameList.addAll(sUtil.createEnabledAttrList(user, false));
 
 		// ユーザーの前回の表示項目をセットする
-		if ((user.getViewSelCol1() == null || user.getViewSelCol1().length() == 0) &&
-				(user.getViewSelCol2() == null || user.getViewSelCol2().length() == 0) &&
-				(user.getViewSelCol3() == null || user.getViewSelCol3().length() == 0) &&
-				(user.getViewSelCol4() == null || user.getViewSelCol4().length() == 0) &&
-				(user.getViewSelCol5() == null || user.getViewSelCol5().length() == 0) &&
-				(user.getViewSelCol6() == null || user.getViewSelCol6().length() == 0)) {
-			searchResultForm.dispAttr1 = "DRWG_SIZE";
-			searchResultForm.dispAttr2 = "DRWG_TYPE";
-			if ("Japanese".equals(user.getLanguage())) {
-				searchResultForm.dispAttr3 = "MACHINE_JP";
-			} else {
-				searchResultForm.dispAttr3 = "MACHINE_EN";
-			}
-			searchResultForm.dispAttr4 = "PROCUREMENT";
-			if ("Japanese".equals(user.getLanguage())) {
-				searchResultForm.dispAttr5 = "SUPPLYER_JP";
-			} else {
-				searchResultForm.dispAttr5 = "SUPPLYER_EN";
-			}
-			searchResultForm.dispAttr6 = "CREATE_DATE";
-
-		} else {
-			searchResultForm.dispAttr1 = user.getViewSelCol1();
-			searchResultForm.dispAttr2 = user.getViewSelCol2();
-			searchResultForm.dispAttr3 = user.getViewSelCol3();
-			searchResultForm.dispAttr4 = user.getViewSelCol4();
-			searchResultForm.dispAttr5 = user.getViewSelCol5();
-			searchResultForm.dispAttr6 = user.getViewSelCol6();
+		searchResultForm.setDispAttrList(user.getViewSelColList());
+		// すべて未設定の場合
+		if (user.isAllEmptyViewSelCol()) {
+			searchResultForm.setDefaulDispAttrs(user.getLanguage());
 		}
+
 		// 出力プロッタをセットする
 		searchResultForm.printerKeyList = new ArrayList<>();
 		searchResultForm.printerNameList = new ArrayList<>();

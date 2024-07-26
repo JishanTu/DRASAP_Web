@@ -39,17 +39,10 @@ public class User {
 	ArrayList<UserGroup> userGroups = new ArrayList<UserGroup>();// 所属しているユーザーグループ。内部はUserGroup。
 	ArrayList<Printer> enablePrinters = new ArrayList<Printer>();// 利用可能なプリンター。内部はPrinter。
 	String displayCount = "";// 検索の1ページ当たりの表示件数
-	private String searchSelCol1 = "";// 検索カラム1
-	private String searchSelCol2 = "";
-	private String searchSelCol3 = "";
-	private String searchSelCol4 = "";
-	private String searchSelCol5 = "";
-	private String viewSelCol1 = "";// 検索結果の表示カラム1
-	private String viewSelCol2 = "";
-	private String viewSelCol3 = "";
-	private String viewSelCol4 = "";
-	private String viewSelCol5 = "";
-	private String viewSelCol6 = "";
+	public static int searchSelColNum = 5;
+	public static int viewSelColNum = 6;
+	private ArrayList<String> searchSelColList = new ArrayList<>(); // 検索条件カラムリスト
+	private ArrayList<String> viewSelColList = new ArrayList<>(); // 検索結果カラムリスト
 	// 2013.07.24 yamagishi add. start
 	private String aclUpdateFlag = "";
 	private String aclBatchUpdateFlag = "";
@@ -610,86 +603,30 @@ public class User {
 	/**
 	 * @return
 	 */
-	public String getSearchSelCol1() {
-		return searchSelCol1;
+	public String getSearchSelCol(int idx) {
+		return searchSelColList.get(idx);
 	}
 
 	/**
 	 * @return
 	 */
-	public String getSearchSelCol2() {
-		return searchSelCol2;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSearchSelCol3() {
-		return searchSelCol3;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSearchSelCol4() {
-		return searchSelCol4;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getSearchSelCol5() {
-		return searchSelCol5;
+	public ArrayList<String> getSearchSelColList() {
+		return searchSelColList;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setSearchSelCol1(String string) {
-		searchSelCol1 = string;
-		if (searchSelCol1 == null) {
-			searchSelCol1 = "";
-		}
+	public void setSearchSelCol(int idx, String string) {
+		String val = StringUtils.isEmpty(string) ? "" : string;
+		searchSelColList.add(idx, val);
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setSearchSelCol2(String string) {
-		searchSelCol2 = string;
-		if (searchSelCol2 == null) {
-			searchSelCol2 = "";
-		}
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSearchSelCol3(String string) {
-		searchSelCol3 = string;
-		if (searchSelCol3 == null) {
-			searchSelCol3 = "";
-		}
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSearchSelCol4(String string) {
-		searchSelCol4 = string;
-		if (searchSelCol4 == null) {
-			searchSelCol4 = "";
-		}
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setSearchSelCol5(String string) {
-		searchSelCol5 = string;
-		if (searchSelCol5 == null) {
-			searchSelCol5 = "";
-		}
+	public void setSearchSelColList(ArrayList<String> list) {
+		searchSelColList = list;
 	}
 
 	/**
@@ -1124,45 +1061,47 @@ public class User {
 	}
 
 	/**
+	 *
 	 * @return
 	 */
-	public String getViewSelCol1() {
-		return viewSelCol1;
+	public boolean isAllEmptyViewSelCol() {
+		boolean ret = true;
+		for (int i = 0; i < viewSelColList.size(); i++) {
+			ret = ret & StringUtils.isEmpty(viewSelColList.get(i));
+			if (!ret) {
+				break;
+			}
+		}
+		return ret;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getViewSelCol2() {
-		return viewSelCol2;
+	public String getViewSelCol(int idx) {
+		return viewSelColList.get(idx);
 	}
 
 	/**
 	 * @return
 	 */
-	public String getViewSelCol3() {
-		return viewSelCol3;
+	public ArrayList<String> getViewSelColList() {
+		return viewSelColList;
 	}
 
 	/**
-	 * @return
+	 * @param string
 	 */
-	public String getViewSelCol4() {
-		return viewSelCol4;
+	public void setViewSelCol(int idx, String string) {
+		String val = StringUtils.isEmpty(string) ? "" : string;
+		viewSelColList.add(idx, val);
 	}
 
 	/**
-	 * @return
+	 * @param string
 	 */
-	public String getViewSelCol5() {
-		return viewSelCol5;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getViewSelCol6() {
-		return viewSelCol6;
+	public void setViewSelColList(ArrayList<String> list) {
+		viewSelColList = list;
 	}
 
 	// 2013.09.13 yamagishi add. start
@@ -1242,65 +1181,6 @@ public class User {
 	}
 
 	// 2019.09.20 yamamoto add. end
-	/**
-	 * @param string
-	 */
-	public void setViewSelCol1(String string) {
-		viewSelCol1 = string;
-		if (viewSelCol1 == null) {
-			viewSelCol1 = "";
-		}
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setViewSelCol2(String string) {
-		viewSelCol2 = string;
-		if (viewSelCol2 == null) {
-			viewSelCol2 = "";
-		}
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setViewSelCol3(String string) {
-		viewSelCol3 = string;
-		if (viewSelCol3 == null) {
-			viewSelCol3 = "";
-		}
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setViewSelCol4(String string) {
-		viewSelCol4 = string;
-		if (viewSelCol4 == null) {
-			viewSelCol4 = "";
-		}
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setViewSelCol5(String string) {
-		viewSelCol5 = string;
-		if (viewSelCol5 == null) {
-			viewSelCol5 = "";
-		}
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setViewSelCol6(String string) {
-		viewSelCol6 = string;
-		if (viewSelCol6 == null) {
-			viewSelCol6 = "";
-		}
-	}
 
 	// 2013.07.24 yamagishi add. start
 	/**
@@ -1544,9 +1424,8 @@ public class User {
 		}
 		if ("2".equals(viewPrintDoc.get(aclId))) {
 			return "printablePdf";
-		} else {
-			return null;
 		}
+		return null;
 	}
 	// 2013.06.25 yamagishi modified. end
 
