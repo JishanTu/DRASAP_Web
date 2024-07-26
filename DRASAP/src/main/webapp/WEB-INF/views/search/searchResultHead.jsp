@@ -146,7 +146,8 @@ if (me.isDelAdmin()) { %>
 	<tr>
 		<td>
 			<span class="normal10">${sessionScope.searchResultForm.h_label6 }</span></td>
-				<td><select name="dispAttr1">
+				<td>
+					<select name="dispAttr1">
 						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
 						<c:choose>
 							<c:when test="${dispKey == searchResultForm.dispAttr1}">
