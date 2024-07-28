@@ -231,7 +231,7 @@ public class SearchResultForm extends BaseForm {
 	 * @param lang
 	 */
 	public void setDefaulDispAttrs(String lang) {
-		for (int i = 0; i <= getViewSelColNum(); i++) {
+		for (int i = 0; i < getViewSelColNum(); i++) {
 			if (i == 0) {
 				setDispAttr(0, "DRWG_SIZE");
 			} else if (i == 1) {

@@ -566,7 +566,7 @@ public class SearchConditionAction extends BaseAction {
 				// 図番指定順のチェックＯＮの場合は検索条件無効なので、
 				// 前回の検索条件を保持したままとする。
 				String strSql2 = "update USER_MASTER set ";
-				for (int i = 1; i < searchConditionForm.getViewSelColNum(); i++) {
+				for (int i = 1; i <= searchConditionForm.getViewSelColNum(); i++) {
 					String val = searchConditionForm.getDispAttr(i - 1);
 					strSql2 += " VIEW_SELCOL" + i + "='" + val + "',";
 					// ユーザーObjectにもセットする
@@ -864,7 +864,7 @@ public class SearchConditionAction extends BaseAction {
 
 					/* 以下はTRUNC使用バージョン
 					 * 検索スピードが問題となった
-					
+
 					sbSql.append("TRUNC(");
 					sbSql.append(conditionName);// 検索条件の項目名
 					sbSql.append(")=TO_DATE('");
@@ -897,7 +897,7 @@ public class SearchConditionAction extends BaseAction {
 
 						/* 以下はTRUNC使用バージョン
 						 * 検索スピードが問題となった
-						
+
 						sbSql.append("TRUNC(");
 						sbSql.append(conditionName);// 検索条件の項目名
 						sbSql.append(")>=TO_DATE('");
@@ -924,7 +924,7 @@ public class SearchConditionAction extends BaseAction {
 
 						/* 以下はTRUNC使用バージョン
 						 * 検索スピードが問題となった
-						
+
 						sbSql.append("TRUNC(");
 						sbSql.append(conditionName);// 検索条件の項目名
 						sbSql.append(")<=TO_DATE('");
