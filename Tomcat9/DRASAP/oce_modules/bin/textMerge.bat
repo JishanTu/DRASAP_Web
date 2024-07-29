@@ -19,27 +19,30 @@ rem    備考：
 rem        合成文字列はtextMerge.txtに定義されます。
 rem        詳細なエラー情報はログファイルに出力されます。
 rem 
-REM -------------------------------------------------------------------------------------------
-rem -------------------------
+rem -------------------------------------------------------------------------------------------
+
+rem -------------------------------------------------------------------
 rem ＤＲＡＳＡＰベースパス
 rem 2013.07.01 yamagishi modified.
-rem -------------------------
-if NOT "%BEA_HOME%"=="" (
-	set BASE_PATH=%BEA_HOME%\DRASAP
-) else (
-	if NOT "%CATALINA_HOME%"=="" (
-		set BASE_PATH=%CATALINA_HOME%\DRASAP
-	) else (
+rem 2019.12.07 Tanaka modified. 
+rem            テスト環境がCATALINA_HOMEの環境を参照しないようにした。
+rem            本番環境用のコンバータを使うと%BANNER_TMP%で指定された
+rem            固定のファイル名と同じなので、間違ったスタンプが合成
+rem            される可能性があるので分離した。
+rem -------------------------------------------------------------------
+rem if NOT "%BEA_HOME%"=="" (
+rem 	set BASE_PATH=%BEA_HOME%\DRASAP
+rem ) else (
+rem 	if NOT "%CATALINA_HOME%"=="" (
+rem 		set BASE_PATH=%CATALINA_HOME%\DRASAP
+rem 	) else (
 		if NOT "%OCE_AP_SERVER_HOME%"=="" (
 			set BASE_PATH=%OCE_AP_SERVER_HOME%\DRASAP
 		) else (
-			set BASE_PATH=E:\Tomcat7\DRASAP
+			set BASE_PATH=D:\Tomcat9\DRASAP
 		)
-	)
-)
-rem echo BEA_HOME=%BEA_HOME% > E:\Tomcat7\DRASAP\oce_modules\bin\basePath.txt
-rem echo OCE_BEA_HOME=%OCE_BEA_HOME% >> E:\Tomcat7\DRASAP\oce_modules\bin\basePath.txt
-rem echo BASE_PATH=%BASE_PATH% >> E:\Tomcat7\DRASAP\oce_modules\bin\basePath.txt
+rem 	)
+rem )
 
 rem -------------------------
 rem TIFF変換モジュール
