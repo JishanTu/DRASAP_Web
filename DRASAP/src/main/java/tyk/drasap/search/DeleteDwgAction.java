@@ -140,6 +140,7 @@ public class DeleteDwgAction extends BaseAction {
 			//
 			// ê}î‘çÌèú
 			//
+			deleteDwgForm = (DeleteDwgForm) session.getAttribute("deleteDwgForm");
 			deleteDwg(deleteDwgForm, user, errors, session);
 
 			session.setAttribute("deleteDwgForm", deleteDwgForm);

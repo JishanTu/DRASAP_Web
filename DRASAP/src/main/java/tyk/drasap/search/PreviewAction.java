@@ -167,6 +167,7 @@ public class PreviewAction extends BaseAction {
 		pathName = drasapInfo.getViewDBDrive() + pathName.replace("/", "\\");
 		String drwgSize = request.getParameter("DRWG_SIZE");// 図番サイズ
 		String pdfFlug = request.getParameter("PDF");// PDFに変換する?
+		String PRINT_SIZE = request.getParameter("PRINT_SIZE");
 
 		// 他システムからの呼び出しに対応するため、パラメータを追加
 		// DRASAP内部からの呼び出しでは、この値は null になる。
@@ -302,6 +303,9 @@ public class PreviewAction extends BaseAction {
 		// 間引きが必要か判定する
 		// 間引きサイズの未設定にも対応する。'04.Jul.19変更 by Hirata。
 		String mabikiDpi = null;// 間引きのdpi
+		if("ORG".equals(drwgSize)) {
+			drwgSize = PRINT_SIZE;
+		}
 		if (drasapInfo.getMabiki100dpiSize() != null &&
 				DrasapUtil.compareDrwgSize(drwgSize, drasapInfo.getMabiki100dpiSize()) >= 0) {
 			// 図面サイズ >= 100dpiのサイズ、なら
