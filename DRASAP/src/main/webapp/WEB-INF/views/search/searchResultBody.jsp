@@ -104,11 +104,13 @@ url(
 		var PATH_NAME = document.getElementById("PATH_NAME[" + idx + "]").value;
 		var DRWG_SIZE = document.getElementById("printSizeSelect" + idx).value;
 		var PDF = document.getElementById("PDF[" + idx + "]").value;
+		var PRINT_SIZE = document.getElementById("PRINT_SIZE[" + idx + "]").value;
         drwgNoLink.href = drwgNoLink + '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
                                      + '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
                                      + '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
                                      + '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
-                                     + '&PDF=' + encodeURIComponent(PDF);
+                                     + '&PDF=' + encodeURIComponent(PDF)
+                                     + '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
         
 <%      // DLマネージャが利用可能な場合
         User me = (User) session.getAttribute("user");
@@ -328,6 +330,7 @@ url(
 							<input type="hidden" id="FILE_NAME[${status.index}]" value="${item.fileName}"/>
 							<input type="hidden" id="PATH_NAME[${status.index}]" value="${item.pathName}"/>
 							<input type="hidden" id="PDF[${status.index}]" value="${item.linkParmMap['PDF']}"/>
+							<input type="hidden" id="PRINT_SIZE[${status.index}]" value="${item.printSize}"/>
 						</c:when>
 						<c:otherwise>
 							<td nowrap="nowrap"><span class="normal12"
