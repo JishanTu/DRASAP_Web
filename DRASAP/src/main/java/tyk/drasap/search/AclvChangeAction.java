@@ -67,6 +67,7 @@ public class AclvChangeAction extends BaseAction {
 		aclvChangeForm.errorMessages = new ArrayList<>();// エラーメッセージのクリア
 		// act属性による処理の切り分け
 		if ("CHECK_ON".equals(aclvChangeForm.getAct())) {
+			aclvChangeForm = (AclvChangeForm)session.getAttribute("aclvChangeForm");
 			// 全てにチェック
 			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeElement(i).setSelected(true);
@@ -76,9 +77,11 @@ public class AclvChangeAction extends BaseAction {
 		}
 
 		if ("CHECK_OFF".equals(aclvChangeForm.getAct())) {
+			aclvChangeForm = (AclvChangeForm)session.getAttribute("aclvChangeForm");
 			// 全てのチェック外す
 			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeElement(i).setSelected(false);
+				session.setAttribute("aclvChangeForm",aclvChangeForm);
 			}
 			category.debug("--> input");
 			return "input";
