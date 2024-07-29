@@ -42,7 +42,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/WORK/DRASAP_Web/DRASAP/src/main/resources/lib/pdflib.jar">
+	<classpathentry kind="lib" path="D:/Tomcat9/DRASAP/pdflib/ver9_64bit/pdflib.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
