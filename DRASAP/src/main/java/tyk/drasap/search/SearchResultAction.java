@@ -195,6 +195,12 @@ public class SearchResultAction extends BaseAction {
 
 		}
 		if ("ACLV_CHG".equals(searchResultForm.getAct())) {
+			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
+			for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
+				if("true".equals(request.getParameter("searchResultList[" + i + "].selected"))) {
+					searchResultForm.getSearchResultElement(i).setSelected(true);
+				}
+			}
 			// アクセスレベルの変更画面へ
 			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			session.setAttribute("searchResultForm", searchResultForm);
