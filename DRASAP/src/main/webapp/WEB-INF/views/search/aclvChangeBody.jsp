@@ -49,16 +49,18 @@
         <td><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
         <td align="center"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
         <td align="center">
-            <form:select path="aclvChangeList[${loop.index}].newAclId" style="font-size:12pt">
-                <form:options items="${aclvChangeForm.aclvNameList}" itemValue="aclvKeyList" itemLabel="aclvNameList"/>
-            </form:select>
+        	<select name="aclvChangeForm.aclvChangeList[${loop.index}].newAclId" style="font-size:12pt">
+        		<c:forEach var="aclvNameElement" items="${sessionScope.aclvChangeForm.aclvNameList}" varStatus="loop">
+        			<option value="${aclvNameElement}" <c:if test="${aclvNameElement == aclvChangeElement.oldAclId}">selected</c:if>>${aclvNameElement}</option>
+        		</c:forEach>
+        	</select>
         </td>
         <td align="center"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
         <td align="center">
-            <form:select path="aclvChangeList[${loop.index}].newProhibit" style="font-size:12pt">
-                <form:option value="OK">○</form:option>
-                <form:option value="NG">×</form:option>
-            </form:select>
+            <select name="aclvChangeElement[${loop.index}].newProhibit" style="font-size:12pt">
+        		<option value="OK">○</option>
+        		<option value="NG">×</option>
+        	</select>
         </td>
 	</tr>
 </c:forEach>
