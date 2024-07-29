@@ -9,6 +9,7 @@
     <name>DRASAP Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <dependencies>
+        <!-- junit Support -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -161,6 +162,7 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+	<!-- build option -->
     <build>
         <plugins>
             <!--  Config maven-war-plugin  -->
