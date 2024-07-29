@@ -1,3 +1,12 @@
+-- 開発環境用
+update ADMIN_SETTING_MASTER 
+set
+    VALUE = 'C:\WORK\Vaults' 
+where
+    SETTING_ID = '001';
+
+
+-- 新規追加
 ALTER TABLE DRASAP.USER_MASTER ADD (
     SEARCH_SELCOL6 VARCHAR2(64),
     SEARCH_SELCOL7 VARCHAR2(64),
