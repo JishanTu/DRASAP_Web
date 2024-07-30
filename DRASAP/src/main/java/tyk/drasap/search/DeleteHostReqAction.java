@@ -422,7 +422,8 @@ public class DeleteHostReqAction extends BaseAction {
 
 			if (connectSts != 0) { // ê⁄ë±Ç≥ÇÍÇƒÇ¢Ç»Ç¢
 				// ê⁄ë±
-				netConnect = Runtime.getRuntime().exec("NET USE " + filePop.serverPath + " /USER:" + filePop.user + " " + filePop.passwd);
+				//				netConnect = Runtime.getRuntime().exec("NET USE " + filePop.serverPath + " /USER:" + filePop.user + " " + filePop.passwd);
+				netConnect = Runtime.getRuntime().exec("NET USE " + filePop.serverPath);
 				br = new BufferedReader(new InputStreamReader(netConnect.getInputStream()));
 				str = null;
 				while ((str = br.readLine()) != null) {

@@ -10,7 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.DrasapInfo;
 import tyk.drasap.common.DrasapPropertiesFactory;
@@ -32,6 +34,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * @version 2013/06/24 yamagishi
  */
 @Controller
+@SessionAttributes("searchResultForm")
 public class SearchResultAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -47,7 +50,7 @@ public class SearchResultAction extends BaseAction {
 	 */
 	@PostMapping("/result")
 	public String execute(
-			SearchResultForm form,
+			@ModelAttribute("searchResultForm") SearchResultForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
@@ -197,7 +200,7 @@ public class SearchResultAction extends BaseAction {
 		if ("ACLV_CHG".equals(searchResultForm.getAct())) {
 			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
-				if("true".equals(request.getParameter("searchResultList[" + i + "].selected"))) {
+				if ("true".equals(request.getParameter("searchResultList[" + i + "].selected"))) {
 					searchResultForm.getSearchResultElement(i).setSelected(true);
 				}
 			}
@@ -209,17 +212,6 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("DELETEDWG".equals(searchResultForm.getAct())) {
 			category.debug("--> DELETEDWG");
-			SearchResultForm searchResultFormNew = (SearchResultForm) session.getAttribute("searchResultForm");
-			if (searchResultForm != null) {
-				for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
-					SearchResultElement searchResultElement = searchResultForm.getSearchResultList().get(i);
-					SearchResultElement updateElement = searchResultFormNew.getSearchResultList().get(i);
-					updateElement.setSelected(searchResultElement.isSelected());
-					updateElement.setPrintSize(searchResultElement.getPrintSize());
-					updateElement.setCopies(searchResultElement.getCopies());
-				}
-			}
-			session.setAttribute("searchResultForm", searchResultFormNew);
 			return "deletedwg";
 			// 2019.10.17 yamamoto add. start
 		}
