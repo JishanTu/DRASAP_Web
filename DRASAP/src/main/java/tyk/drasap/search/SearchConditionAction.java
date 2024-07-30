@@ -282,6 +282,8 @@ public class SearchConditionAction extends BaseAction {
 			// 表示件数が未設定の場合、50件をセットする
 			searchConditionForm.setDisplayCount("50");
 		}
+		// 前回の最新追番のみをセットする
+		searchConditionForm.setOnlyNewest(user.isOnlyNewest());
 		// ソート順序のプルダウンをセットする
 		searchConditionForm.sortOrderKeyList = new ArrayList<>();
 		searchConditionForm.sortOrderKeyList.add("");
@@ -572,6 +574,7 @@ public class SearchConditionAction extends BaseAction {
 					// ユーザーObjectにもセットする
 					user.setViewSelCol(i - 1, val);
 				}
+				strSql2 += " ONLY_NEWEST='" + (searchConditionForm.isOnlyNewest() ? "1" : "0") + "',";
 				strSql2 += " DISPLAY_COUNT='" + searchConditionForm.getDisplayCount() + "'";
 				strSql2 += " where USER_ID='" + user.getId() + "'";
 
@@ -596,6 +599,7 @@ public class SearchConditionAction extends BaseAction {
 					// ユーザーObjectにもセットする
 					user.setViewSelCol(i - 1, val);
 				}
+				strSql2 += " ONLY_NEWEST='" + (searchConditionForm.isOnlyNewest() ? "1" : "0") + "',";
 				strSql2 += " DISPLAY_COUNT='" + searchConditionForm.getDisplayCount() + "'";
 				strSql2 += " where USER_ID='" + user.getId() + "'";
 
