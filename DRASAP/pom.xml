@@ -152,7 +152,7 @@
             <artifactId>pdflib</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>D:/Tomcat9/DRASAP/pdflib/ver9_64bit/pdflib.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/resources/lib/pdflib.jar</systemPath>
         </dependency>
     </dependencies>
 
