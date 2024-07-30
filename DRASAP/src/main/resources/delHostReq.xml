@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>delHostRequest move folder list</comment>
+
+
+<!-- ======================== 刈谷生産サーバ削除対象 ======================= -->
+<!--                                                                    -->
+<!--    server      :   SEISAN Server UNC Name                          -->
+<!--    server.user :   SEISAN Server User                              -->
+<!--    server.pass :   SEISAN Server password                          -->
+<!--    moveFile    :   Copy files (iraiNo.prt,iraiNo.kou,iraiNo.end)   -->
+<!--    moveFolder  :   Copy folders                                    -->
+<!--    destFolder  :   Copying folder                                  -->
+<!--                                                                    -->
+<!-- ================================================================== -->
+<!-- 2013.08.27 yamagishi modified.
+<entry key="tyk.delHostReqPs.honsha.seisan.server">\\L210141</entry>
+<entry key="tyk.delHostReqPs.honsha.seisan.server">\\JTEKT-TEST02</entry>
+<entry key="tyk.delHostReqPs.honsha.seisan.server.pass">admin</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFolder.path.1">\err</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFolder.path.2">\out</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFolder.path.3">\work</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFolder.path.4">\save</entry>
+<entry key="tyk.delHostReqPs.honsha.delPrt.moveFolder.path.1">\err</entry>
+<entry key="tyk.delHostReqPs.honsha.delPrt.moveFolder.path.2">\save</entry>
+-->
+<entry key="tyk.delHostReqPs.honsha.seisan.server">\\L210141</entry>
+<entry key="tyk.delHostReqPs.honsha.seisan.server.user">administrator</entry>
+<entry key="tyk.delHostReqPs.honsha.seisan.server.pass">drasap</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFile.path.1">\INPUT</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFolder.path.1">\err$</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFolder.path.2">\out$</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFolder.path.3">\work$</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.moveFolder.path.4">\save$</entry>
+<entry key="tyk.delHostReqPs.honsha.delSeisan.destFolder.path">\SEISAN\delseisan</entry>
+<entry key="tyk.delHostReqPs.honsha.delPrt.moveFolder.path.1">\err$</entry>
+<entry key="tyk.delHostReqPs.honsha.delPrt.moveFolder.path.2">\save$</entry>
+<entry key="tyk.delHostReqPs.honsha.delPrt.destFolder.path">\SEISAN\delprt</entry>
+
+
+<!-- ======================== 東刈谷生産サーバ削除対象 ======================= -->
+<!--                                                                    -->
+<!--    server      :   SEISAN Server UNC Name                          -->
+<!--    server.user :   SEISAN Server User                              -->
+<!--    server.pass :   SEISAN Server password                          -->
+<!--    moveFile    :   Copy files (iraiNo.prt,iraiNo.kou,iraiNo.end)   -->
+<!--    moveFolder  :   Copy folders                                    -->
+<!--    destFolder  :   Copying folder                                  -->
+<!--                                                                    -->
+<!-- ================================================================== -->
+<!--
+	<entry key="tyk.delHostReqPs.higashi.seisan.server">\\L210145</entry>
+-->
+<entry key="tyk.delHostReqPs.higashi.seisan.server">\\JTEKT-TEST01</entry>
+<entry key="tyk.delHostReqPs.higashi.seisan.server.user">administrator</entry>
+<entry key="tyk.delHostReqPs.higashi.seisan.server.pass">drasap</entry>
+<entry key="tyk.delHostReqPs.higashi.delSeisan.moveFile.path.1">\INPUT</entry>
+<entry key="tyk.delHostReqPs.higashi.delSeisan.moveFolder.path.1">\err</entry>
+<entry key="tyk.delHostReqPs.higashi.delSeisan.moveFolder.path.2">\out</entry>
+<entry key="tyk.delHostReqPs.higashi.delSeisan.moveFolder.path.3">\work</entry>
+<entry key="tyk.delHostReqPs.higashi.delSeisan.moveFolder.path.3">\save</entry>
+<entry key="tyk.delHostReqPs.higashi.delSeisan.destFolder.path">\SEISAN\delseisan</entry>
+<entry key="tyk.delHostReqPs.higashi.delPrt.moveFolder.path.1">\save</entry>
+<entry key="tyk.delHostReqPs.higashi.delPrt.moveFolder.path.2">\err</entry>
+<entry key="tyk.delHostReqPs.higashi.delPrt.destFolder.path">\SEISAN\delprt</entry>
+</properties>
