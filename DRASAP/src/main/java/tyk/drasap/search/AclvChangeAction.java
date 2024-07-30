@@ -72,6 +72,8 @@ public class AclvChangeAction extends BaseAction {
 			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeElement(i).setSelected(true);
 			}
+			aclvChangeForm.setAct("");// act属性をクリア
+			session.setAttribute("aclvChangeForm", aclvChangeForm);
 			category.debug("--> input");
 			return "input";
 		}
@@ -81,8 +83,9 @@ public class AclvChangeAction extends BaseAction {
 			// 全てのチェック外す
 			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeElement(i).setSelected(false);
-				session.setAttribute("aclvChangeForm",aclvChangeForm);
 			}
+			aclvChangeForm.setAct("");// act属性をクリア
+			session.setAttribute("aclvChangeForm", aclvChangeForm);
 			category.debug("--> input");
 			return "input";
 		}
@@ -92,6 +95,13 @@ public class AclvChangeAction extends BaseAction {
 			//MessageResources resources = getResources(request, "application"); // applicatin.properties取得
 			// 次画面に進む前のチェック
 			//			checkForNext(aclvChangeForm);
+			aclvChangeForm = (AclvChangeForm)session.getAttribute("aclvChangeForm");
+			aclvChangeForm.getErrorMessages().clear();
+			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
+				aclvChangeForm.getAclvChangeList().get(i).setSelected(Boolean.parseBoolean(request.getParameter("aclvChangeElement[" + i + "].selected")));
+				aclvChangeForm.getAclvChangeList().get(i).setNewAclId((request.getParameter("aclvChangeElement[" + i + "].newAclId")));
+				aclvChangeForm.getAclvChangeList().get(i).setNewProhibit(request.getParameter("aclvChangeElement[" + i + "].newProhibit"));
+			}
 			checkForNext(aclvChangeForm, user);
 			// 2013.07.24 yamagishi modified. end
 			if (aclvChangeForm.getErrorMessages().size() > 0) {
@@ -121,6 +131,7 @@ public class AclvChangeAction extends BaseAction {
 			//MessageResources resources = getResources(request, "application");
 			// 確認OK。更新を行う。
 			//			updateAclv(aclvChangeForm, user);
+			aclvChangeForm = (AclvChangeForm)session.getAttribute("aclvChangeForm");
 			updateAclv(aclvChangeForm, user);
 			// 2013.07.24 yamagishi modified. end
 			if (aclvChangeForm.getErrorMessages().size() > 0) {
