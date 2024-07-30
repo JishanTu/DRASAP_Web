@@ -10,7 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.DrasapInfo;
 import tyk.drasap.common.DrasapPropertiesFactory;
@@ -32,6 +34,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * @version 2013/06/24 yamagishi
  */
 @Controller
+@SessionAttributes("searchResultForm")
 public class SearchResultAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -47,7 +50,7 @@ public class SearchResultAction extends BaseAction {
 	 */
 	@PostMapping("/result")
 	public String execute(
-			SearchResultForm form,
+			@ModelAttribute("searchResultForm") SearchResultForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
@@ -69,9 +72,7 @@ public class SearchResultAction extends BaseAction {
 		if ("PREV".equals(searchResultForm.getAct())) {
 			// 前へなら
 			// オフセット値を前にずらす
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-			offset = Integer.parseInt(searchResultForm.getDispNumberOffest());// 今のoffset値
-			dispNumberPerPage = Integer.parseInt(searchResultForm.getDispNumberPerPage());// 1ページ当たりの表示件数
+
 			offset = offset - dispNumberPerPage;
 			if (offset < 0) {
 				offset = 0;
@@ -85,10 +86,7 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("NEXT".equals(searchResultForm.getAct())) {
 			// 次へなら
-			// オフセット値と検索結果数を比較して、可能ならオフセット値を変更する
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-			offset = Integer.parseInt(searchResultForm.getDispNumberOffest());// 今のoffset値
-			dispNumberPerPage = Integer.parseInt(searchResultForm.getDispNumberPerPage());// 1ページ当たりの表示件数
+
 			if (searchResultForm.getSearchResultList().size() > offset + dispNumberPerPage) {
 				searchResultForm.setDispNumberOffest(String.valueOf(offset + dispNumberPerPage));
 			}
@@ -102,7 +100,6 @@ public class SearchResultAction extends BaseAction {
 				|| "CHANGELANGUAGE".equals(searchResultForm.getAct())) {
 			// 再表示なら
 			// オフセット値をゼロに
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			searchResultForm.setDispNumberOffest("0");//オフセット値を変更する
 			searchResultForm.setAct("");// act属性をクリア
 			session.setAttribute("searchResultForm", searchResultForm);
@@ -118,7 +115,6 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("CHECK_ON".equals(searchResultForm.getAct())) {
 			// 全てにチェック
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				searchResultForm.getSearchResultList().get(i).setSelected(true);
 			}
@@ -129,7 +125,6 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("CHECK_OFF".equals(searchResultForm.getAct())) {
 			// 全てのチェックを外す
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				searchResultForm.getSearchResultList().get(i).setSelected(false);
 			}
@@ -197,7 +192,7 @@ public class SearchResultAction extends BaseAction {
 		if ("ACLV_CHG".equals(searchResultForm.getAct())) {
 			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
-				if("true".equals(request.getParameter("searchResultList[" + i + "].selected"))) {
+				if ("true".equals(request.getParameter("searchResultList[" + i + "].selected"))) {
 					searchResultForm.getSearchResultElement(i).setSelected(true);
 				}
 			}
