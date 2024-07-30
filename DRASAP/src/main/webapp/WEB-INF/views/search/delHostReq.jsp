@@ -271,21 +271,23 @@ url(
 					<td align="left">
 						<!-- message -->
 						<ul style="list-style: none;" id="msgList">
-							<c:forEach var="msgInfo" items="${msgList}" varStatus="loop">
-								<li align="left" style="${msgInfo.getMsgStyle}"><c:out
-										value="${msgInfo.msg}" /></li>
-								<br />
-							</c:forEach>
+							<c:if test="${message != null}">
+								<hr/ style="border: none; height: 0.5px; background-color: red;">
+								<c:forEach var="msg" items="${message}">
+									<span style="margin-left: 40px; color: red;">${msg}</span><br/>
+								</c:forEach>
+								<hr/ style="border: none; height: 0.5px; background-color: red;">
+							</c:if>
 
 						</ul>
 					</td>
 				</tr>
 				<tr>
-					<td align="left" class="normal12blue"><c:forEach var="error"
+				<%-- 	<td align="left" class="normal12blue"><c:forEach var="error"
 							items="${errors}">
 							<c:out value="${error}" />
 							<br />
-						</c:forEach></td>
+						</c:forEach></td> --%>
 				</tr>
 			</table>
 

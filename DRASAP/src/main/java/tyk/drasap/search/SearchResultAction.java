@@ -204,17 +204,6 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("DELETEDWG".equals(searchResultForm.getAct())) {
 			category.debug("--> DELETEDWG");
-			SearchResultForm searchResultFormNew = (SearchResultForm) session.getAttribute("searchResultForm");
-			if (searchResultForm != null) {
-				for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
-					SearchResultElement searchResultElement = searchResultForm.getSearchResultList().get(i);
-					SearchResultElement updateElement = searchResultFormNew.getSearchResultList().get(i);
-					updateElement.setSelected(searchResultElement.isSelected());
-					updateElement.setPrintSize(searchResultElement.getPrintSize());
-					updateElement.setCopies(searchResultElement.getCopies());
-				}
-			}
-			session.setAttribute("searchResultForm", searchResultFormNew);
 			return "deletedwg";
 			// 2019.10.17 yamamoto add. start
 		}
