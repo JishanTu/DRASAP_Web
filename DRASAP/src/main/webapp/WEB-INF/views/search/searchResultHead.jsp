@@ -109,7 +109,7 @@
 </head>
 <%-- 2013.07.16 yamagishi modified.
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0"> --%>
-<body style="background-color: #CCCCCC; margin: 0;" onload="onLoad()">
+<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;height: 100%;" onload="onLoad()">
 <form action="<%=request.getContextPath() %>/result"  method = "post">
 <!--================ ヘッダ ==================================-->
 <c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>

@@ -8,9 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.DrasapUtil;
@@ -25,7 +23,6 @@ import tyk.drasap.springfw.action.BaseAction;
  * å¥ê}å…çÏã∆àÀóäè⁄ç◊
  */
 @Controller
-@SessionAttributes("request_refForm")
 public class Request_RefAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	private String classId = "";
@@ -42,7 +39,7 @@ public class Request_RefAction extends BaseAction {
 	 */
 	@PostMapping("/req_ref")
 	public String execute(
-			@ModelAttribute("request_refForm") Request_RefForm form,
+			Request_RefForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)

@@ -687,7 +687,7 @@ img {
 // 2020.03.13 yamamoto add end
 </script>
 </head>
-<body style="background-color: #CCCCCC; margin: 0; overflow: hidden;"
+<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;"
 	onload="onLoad()">
 	<form action="<%=request.getContextPath() %>/searchCondition" method="post" >
 <%-- 		<c:set var="searchConditionForm" --%>
@@ -828,9 +828,9 @@ img {
 			class="normal12">
 			<tr>
 				<!--============ 検索条件 ============-->
-				<td style="width: 500px;">
+				<td style="width: 450px;">
 					<table border="0" cellspacing="0" cellpadding="0"
-						style="font-size: 12pt; margin: 0px; padding: 0px;">
+						style="font-size: 12pt; margin: 0px; padding: 5px;">
 						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()/2}" var="index">
 							<tr>
 								<td>
@@ -848,7 +848,7 @@ img {
 									</select>
 								</td>
 								<td>
-									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" />
+									<input type="text" name="conditionValue${index}" size="25" class="conditionStr" />
 								</td>
 								<td>
 									<input type="button" name="sortWayButton${index}" value="　　　" onclick="changeOrder(this)" style="width: 60px;" />
@@ -873,9 +873,9 @@ img {
 						</c:forEach>
 					</table>
 				</td>
-				<td style="width: 500px;">
+				<td style="width: 450px;">
 					<table border="0" cellspacing="0" cellpadding="0"
-						style="font-size: 12pt; margin: 0px; padding: 0px;">
+						style="font-size: 12pt; margin: 0px; padding: 5px;">
 						<c:forEach begin="${(searchConditionForm.getSearchSelColNum()/2) + 1}" end="${searchConditionForm.getSearchSelColNum()}" var="index">
 							<tr>
 								<td>
@@ -893,7 +893,7 @@ img {
 									</select>
 								</td>
 								<td>
-									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" />
+									<input type="text" name="conditionValue${index}" size="25" class="conditionStr" />
 								</td>
 								<td>
 									<input type="button" name="sortWayButton${index}" value="　　　" onclick="changeOrder(this)" style="width: 60px;" />
