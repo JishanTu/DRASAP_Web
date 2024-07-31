@@ -134,6 +134,10 @@
 		for (var i=0;i<buttons.length;i++){
 				buttons[i].disabled = true;
 		}
+		buttons = docObj.getElementsByTagName("textarea");
+		for (var i=0;i<buttons.length;i++){
+				buttons[i].disabled = true;
+		}
 		if (!docObj.body) return;
 			docObj.body.style.cursor = 'wait';
 	}
@@ -149,6 +153,14 @@
 				buttons[i].disabled = false;
 		}
 		var buttons = docObj.getElementsByTagName("a");
+		for (var i=0;i<buttons.length;i++){
+				buttons[i].disabled = false;
+		}
+		buttons = docObj.getElementsByTagName("button");
+		for (var i=0;i<buttons.length;i++){
+				buttons[i].disabled = false;
+		}
+		buttons = docObj.getElementsByTagName("textarea");
 		for (var i=0;i<buttons.length;i++){
 				buttons[i].disabled = false;
 		}
@@ -735,7 +747,7 @@
 													</td>
 													<td id="divisionTD">
 														<div id="division" class="normal10"
-															style="height: 14px; overflow: hidden;">
+															style="height: 14px;font-size: 12px">
 															<c:out value="${searchConditionForm.c_label8}" />
 															：
 															<c:out value="${user.deptName}" />

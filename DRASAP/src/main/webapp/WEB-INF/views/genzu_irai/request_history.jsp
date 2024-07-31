@@ -19,7 +19,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 </head>
 
-	<frameset rows="45,*" framespacing="0" border="0">
+	<frameset rows="65,*" framespacing="0" border="0">
 		<frame name="list_head" src="<%=request.getContextPath() %>/switch.do?page=/genzu_irai/request_history_head.jsp" />
 		<frame name="list_body" src="<%=request.getContextPath() %>/switch.do?page=/genzu_irai/request_history_body.jsp" />
 	</frameset>

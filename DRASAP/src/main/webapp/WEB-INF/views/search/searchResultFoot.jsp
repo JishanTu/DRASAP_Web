@@ -190,7 +190,7 @@
 				// ボタンを表示する
 				User me = (User) session.getAttribute("user");
 				if (me.isDelAdmin()) { %>
-					<input type="button" value="図番削除" onclick="deleteDwg()" style="margin-right:10px;" />
+					<input type="button" value="${searchResultForm.f_label10}" onclick="deleteDwg()" style="margin-right:10px;" />
 			<%      } %>
 			<input type="checkbox" name="outAttrAll" />${searchResultForm.f_label5}
 			<input type="button" value="${searchResultForm.f_label6}" onclick="outAttrCsv()" />

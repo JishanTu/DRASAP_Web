@@ -30,7 +30,7 @@
 		}
 	</script>
 </head>
-<frameset rows="75,*,30" framespacing="0" border="0" onload="onLoad()">
+<frameset rows="105,*,30" framespacing="0" border="0" onload="onLoad()">
 <frame name="aclv_change_head" src="switch.do?page=/search/aclvChangeHead.jsp" />
 <frame name="aclv_change_body" src="switch.do?page=/search/aclvChangeBody.jsp" />
 <frame name="aclv_change_foot" src="switch.do?page=/search/aclvChangeFoot.jsp" />
