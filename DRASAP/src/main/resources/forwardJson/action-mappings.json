@@ -82,7 +82,7 @@
       "path" : "/root/loginFailed.jsp"
     }, {
       "name" : "success",
-      "path" : "/search/searchMain.jsp"
+      "path" : "/search/searchMain.jsp?task=multipreview"
     } ]
   }, {
     "name" : "tyk.drasap.system.SystemMaintenanceLoginForm",
@@ -356,10 +356,10 @@
       "path" : "/resultPre.do?task=search"
     }, {
       "name" : "multipreview",
-      "path" : "/search/searchMain.jsp"
+      "path" : "/search/searchMain.jsp?task=continue"
     }, {
       "name" : "changeLanguage",
-      "path" : "/search/searchMain.jsp"
+      "path" : "/search/searchMain.jsp?task=changeLanguage"
     }, {
       "name" : "input",
       "path" : "/search/searchCondition.jsp"
@@ -479,10 +479,10 @@
       "path" : "/search/aclvChangeConfirm.jsp"
     }, {
       "name" : "search",
-      "path" : "/search/searchMain.jsp"
+      "path" : "/search/searchMain.jsp?task=continue"
     }, {
       "name" : "search2",
-      "path" : "/search/searchMain.jsp"
+      "path" : "/search/searchMain.jsp?task=clear_result"
     } ]
   }, {
     "name" : "tyk.drasap.search.Delete_LoginForm",
