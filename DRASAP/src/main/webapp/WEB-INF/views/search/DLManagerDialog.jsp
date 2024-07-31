@@ -7,7 +7,7 @@
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
 <script>
-		location.replace('<%=request.getContextPath()%>/timeout');
+	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
 

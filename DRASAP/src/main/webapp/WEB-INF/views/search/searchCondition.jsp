@@ -7,7 +7,7 @@
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
 <script>
-		location.replace('<%=request.getContextPath()%>/timeout');
+	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
 
@@ -16,63 +16,62 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<title>Drawing Search and Print System [図面検索]</title>
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/resources/css/<%=session.getAttribute("default_css")%>" />
-<style type="text/css">
-.tooltip {
-	width: 460px;
-	height: 120px;
-	text-align: center;
-	padding: 0px;
-	margin: 0px;
-	position: absolute;
-	cursor: default;
-	top: 35px;
-	right: -440px;
-	/*	    font-size:16pt;*/
-	visibility: visible;
-	z-index: 100;
-}
-
-img {
-	background-color: #CCCCCC;
-	position: relative;
-	left: -10px;
-	border: none;
-	/*		width:20px;*/
-	padding: 0px;
-	margin: 0px;
-}
-
-.slideBar {
-	width: 15px;
-	height: 120px;
-	padding: 0px;
-	margin: 0px;
-	background-color: #CCCCCC;
-	border-width: 2px;
-	border-left-color: #EEEEEE;
-	border-top-color: #EEEEEE;
-	border-right-color: #AAAAAA;
-	border-bottom-color: #AAAAAA;
-	/*		border-color:#CCCCCC;*/
-	/*		border-style:ridge;*/
-	border-style: solid;
-}
-
-.menubutton {
-	margin-right: 30px;
-	vertical-align: top;
-}
-.searchbutton{
-    margin-left : 5px;
-    vertical-align : top;
-}
-</style>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<title>Drawing Search and Print System [図面検索]</title>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
+	<style type="text/css">
+		.tooltip {
+			width: 460px;
+			height: 120px;
+			text-align: center;
+			padding: 0px;
+			margin: 0px;
+			position: absolute;
+			cursor: default;
+			top: 35px;
+			right: -440px;
+			/*	    font-size:16pt;*/
+			visibility: visible;
+			z-index: 100;
+		}
+		
+		img {
+			background-color: #CCCCCC;
+			position: relative;
+			left: -10px;
+			border: none;
+			/*		width:20px;*/
+			padding: 0px;
+			margin: 0px;
+		}
+		
+		.slideBar {
+			width: 15px;
+			height: 120px;
+			padding: 0px;
+			margin: 0px;
+			background-color: #CCCCCC;
+			border-width: 2px;
+			border-left-color: #EEEEEE;
+			border-top-color: #EEEEEE;
+			border-right-color: #AAAAAA;
+			border-bottom-color: #AAAAAA;
+			/*		border-color:#CCCCCC;*/
+			/*		border-style:ridge;*/
+			border-style: solid;
+		}
+		
+		.menubutton {
+			margin-right: 30px;
+			vertical-align: top;
+		}
+		.searchbutton{
+		    margin-left : 5px;
+		    vertical-align : top;
+		}
+	</style>
 <script type="text/javascript">
 	document.onkeydown = keys;
 	function keys(){

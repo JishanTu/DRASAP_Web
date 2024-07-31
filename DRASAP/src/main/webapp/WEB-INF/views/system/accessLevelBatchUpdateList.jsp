@@ -8,46 +8,38 @@
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
 <script>
-		location.replace('<%=request.getContextPath()%>/timeout');
+	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<title>アクセスレベル一括更新</title>
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<style type="text/css">
-@import
-url(
-<%=request.getContextPath()
-%>/resources/css/<%=session.getAttribute(
-"default_css"
-)%>
-);
-</style>
-<script type="text/javascript">
-	document.onkeydown = keys;
-	function keys() {
-		switch (event.keyCode) {
-			case 116: // F5
-				event.keyCode = 0;
-				return false;
-				break;
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<title>アクセスレベル一括更新</title>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
+	<script type="text/javascript">
+		document.onkeydown = keys;
+		function keys() {
+			switch (event.keyCode) {
+				case 116: // F5
+					event.keyCode = 0;
+					return false;
+					break;
+			}
 		}
-	}
-	function onLoad() {
-		if (parent.acl_condition.unLockButtons != null) {
-			parent.acl_condition.unLockButtons();
+		function onLoad() {
+			if (parent.acl_condition.unLockButtons != null) {
+				parent.acl_condition.unLockButtons();
+			}
 		}
-	}
-	function nowProcessing() {
-		var nowProcessing;
-		nowProcessing = document.getElementById("nowProcessing");
-		nowProcessing.style.visibility = "visible";
-	}
+		function nowProcessing() {
+			var nowProcessing;
+			nowProcessing = document.getElementById("nowProcessing");
+			nowProcessing.style.visibility = "visible";
+		}
 	</script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">

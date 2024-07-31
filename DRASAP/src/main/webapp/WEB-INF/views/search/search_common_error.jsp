@@ -6,29 +6,29 @@
 <%@ page isELIgnored="false"%>
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<title>Drawing Search and Print System [エラー]</title>
-<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
-<script type="text/javascript">
-	function backSearchResult(){
-		//alert(parent.location.href);
-		location.href = "<%=request.getContextPath() %>/switch.do?page=/search/searchResult.jsp";
-	}
-	function onLoad() {
-		if (parent.condition != null) {
-			parent.condition.unLockButtons();
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<title>Drawing Search and Print System [エラー]</title>
+	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
+	<script type="text/javascript">
+		function backSearchResult(){
+			//alert(parent.location.href);
+			location.href = "<%=request.getContextPath() %>/switch.do?page=/search/searchResult.jsp";
 		}
-	}
-	function nowSearch(){
-		var nowSearch;
-		nowSearch = document.getElementById("nowSearch");
-		nowSearch.style.visibility = "visible";
-	}
-</script>
+		function onLoad() {
+			if (parent.condition != null) {
+				parent.condition.unLockButtons();
+			}
+		}
+		function nowSearch(){
+			var nowSearch;
+			nowSearch = document.getElementById("nowSearch");
+			nowSearch.style.visibility = "visible";
+		}
+	</script>
 </head>
 <body onload="onLoad();">
 <!-- エラーの表示 -->
