@@ -7,10 +7,12 @@
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
+<script>
 		location.replace('<%=request.getContextPath()%>/timeout');
-	</script>
+</script>
 </c:if>
+
+<!DOCTYPE html>
 <html>
 <head>
 <title>DRASAP [マスターテーブルメンテナンス]</title>

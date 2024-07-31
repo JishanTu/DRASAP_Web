@@ -3,12 +3,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
+<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
 
 <html>

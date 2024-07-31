@@ -4,18 +4,18 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page isELIgnored="false"%>
+
 <%-- ログイン情報の確認 --%>
-<%--<!-- <logic:notPresent name="user" scope="session"> -->--%>
-<%--<!-- 	<logic:redirect forward="timeout" /> -->--%>
-<%--<!-- </logic:notPresent> -->--%>
+<c:if test="${empty sessionScope.user}">
+<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+</script>
+</c:if>
+
 <%--<!-- <logic:notPresent name="parentPage" scope="session"> -->--%>
 <%--<!-- 	<logic:redirect forward="timeout" /> -->--%>
 <%--<!-- </logic:notPresent> -->--%>
-<c:if test="${sessionScope.user == null}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
-</c:if>
+
 <!DOCTYPE html>
 <html>
 <head>

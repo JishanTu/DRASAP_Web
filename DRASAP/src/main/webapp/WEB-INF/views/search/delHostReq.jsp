@@ -6,11 +6,12 @@
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-        location.replace('<%=request.getContextPath() %>/timeout');
-    </script>
+<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Drawing Search and Print System [HOST依頼削除]</title>

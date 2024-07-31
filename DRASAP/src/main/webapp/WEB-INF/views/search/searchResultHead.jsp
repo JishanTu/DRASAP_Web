@@ -1,17 +1,18 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="tyk.drasap.search.*,tyk.drasap.common.*" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
 <%@ page isELIgnored="false"%>
+
 <%-- ログイン情報の確認 --%>
-<c:if test="${sessionScope.user == null}">
-    <script>
-        location.replace('<%=request.getContextPath() %>/timeout');
-    </script>
+<c:if test="${empty sessionScope.user}">
+<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
+
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />

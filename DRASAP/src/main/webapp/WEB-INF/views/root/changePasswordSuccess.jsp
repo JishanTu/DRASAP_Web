@@ -1,15 +1,18 @@
-﻿<!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" %>
 
-<html>
 <%-- ログイン情報の確認 --%>
-<%--<logic:notPresent name="user" scope="session">--%>
-<%--    <logic:redirect forward="timeout" />--%>
-<%--</logic:notPresent>--%>
+<c:if test="${empty sessionScope.user}">
+<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+</script>
+</c:if>
+
 <%--<logic:notPresent name="parentPage" scope="session">--%>
 <%--    <logic:redirect forward="timeout" />--%>
 <%--</logic:notPresent>--%>
 
+<!DOCTYPE html>
+<html>
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -20,7 +23,7 @@
     // 直リンク禁止
     var refinfo=document.referrer;
     if (!refinfo){
-        location.replace('<%=request.getContextPath() %>/root/timeout.jsp');
+        location.replace('<%=request.getContextPath()%>/timeout');
     }
 
     function onLoad() {
@@ -29,7 +32,7 @@
         if (${sessionScope.parentPage == 'Login'}) {
             <%-- 図面検索画面へ遷移 --%>
             <%-- 2022.04.13 Windows Edge対応. ログイン画面からのパスワード変更時の画面遷移不具合対応. --%>
-            location.replace('<%=request.getContextPath() %>/switch.do?page=/root/login.jsp');
+            location.replace('<%=request.getContextPath()%>/login');
         } else {
             <%-- 図面検索画面から呼び出した場合 --%>
             // ウィンドウを閉じる
