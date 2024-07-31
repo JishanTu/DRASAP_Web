@@ -29,7 +29,7 @@
         if (${sessionScope.parentPage == 'Login'}) {
             <%-- 図面検索画面へ遷移 --%>
             <%-- 2022.04.13 Windows Edge対応. ログイン画面からのパスワード変更時の画面遷移不具合対応. --%>
-            location.replace('<%=request.getContextPath() %>/switch.do?page=/root/changePasswordSuccess.jsp');
+            location.replace('<%=request.getContextPath() %>/switch.do?page=/root/login.jsp');
         } else {
             <%-- 図面検索画面から呼び出した場合 --%>
             // ウィンドウを閉じる

@@ -8,7 +8,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.DrasapUtil;
@@ -21,6 +23,7 @@ import tyk.drasap.springfw.action.BaseAction;
  * Œ´}ŒÉì‹ÆˆË—ŠƒŠƒXƒg(Œ´}ŒÉ’S“–Ò)‰æ–Ê‚©‚çAˆóü‚·‚é‰æ–Ê‚É‘Î‰B
  */
 @Controller
+@SessionAttributes("request_resultForm")
 public class RequestPriAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	private String classId = "";
@@ -37,7 +40,7 @@ public class RequestPriAction extends BaseAction {
 	 */
 	@PostMapping("/req_print")
 	public String execute(
-			Request_listForm form,
+			@ModelAttribute("request_resultForm") Request_listForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)

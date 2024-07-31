@@ -72,26 +72,19 @@ public class SearchResultAction extends BaseAction {
 		if ("PREV".equals(searchResultForm.getAct())) {
 			// 前へなら
 			// オフセット値を前にずらす
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-			offset = Integer.parseInt(searchResultForm.getDispNumberOffest());// 今のoffset値
-			dispNumberPerPage = Integer.parseInt(searchResultForm.getDispNumberPerPage());// 1ページ当たりの表示件数
+
 			offset = offset - dispNumberPerPage;
 			if (offset < 0) {
 				offset = 0;
 			}
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-			searchResultForm.setDispNumberOffest(String.valueOf(offset));//オフセット値を変更する
 			searchResultForm.setAct("");// act属性をクリア
+			searchResultForm.setDispNumberOffest(String.valueOf(offset));//オフセット値を変更する
 			session.setAttribute("searchResultForm", searchResultForm);
 			return "result";
 
 		}
 		if ("NEXT".equals(searchResultForm.getAct())) {
 			// 次へなら
-			// オフセット値と検索結果数を比較して、可能ならオフセット値を変更する
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-			offset = Integer.parseInt(searchResultForm.getDispNumberOffest());// 今のoffset値
-			dispNumberPerPage = Integer.parseInt(searchResultForm.getDispNumberPerPage());// 1ページ当たりの表示件数
 			if (searchResultForm.getSearchResultList().size() > offset + dispNumberPerPage) {
 				searchResultForm.setDispNumberOffest(String.valueOf(offset + dispNumberPerPage));
 			}
@@ -105,7 +98,6 @@ public class SearchResultAction extends BaseAction {
 				|| "CHANGELANGUAGE".equals(searchResultForm.getAct())) {
 			// 再表示なら
 			// オフセット値をゼロに
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			searchResultForm.setDispNumberOffest("0");//オフセット値を変更する
 			searchResultForm.setAct("");// act属性をクリア
 			session.setAttribute("searchResultForm", searchResultForm);
@@ -121,7 +113,6 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("CHECK_ON".equals(searchResultForm.getAct())) {
 			// 全てにチェック
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				searchResultForm.getSearchResultList().get(i).setSelected(true);
 			}
@@ -132,7 +123,6 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("CHECK_OFF".equals(searchResultForm.getAct())) {
 			// 全てのチェックを外す
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				searchResultForm.getSearchResultList().get(i).setSelected(false);
 			}
@@ -190,7 +180,6 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("OUT_CSV".equals(searchResultForm.getAct())) {
 			// 全属性かどうかを、request#setAttributeする
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			session.setAttribute("OUT_CSV_ALL", searchResultForm.getOutCsvAll());
 			// 検索結果をファイル出力する
 			category.debug("--> out_csv");
@@ -198,14 +187,12 @@ public class SearchResultAction extends BaseAction {
 
 		}
 		if ("ACLV_CHG".equals(searchResultForm.getAct())) {
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
 				if ("true".equals(request.getParameter("searchResultList[" + i + "].selected"))) {
 					searchResultForm.getSearchResultElement(i).setSelected(true);
 				}
 			}
 			// アクセスレベルの変更画面へ
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			session.setAttribute("searchResultForm", searchResultForm);
 			category.debug("--> aclv_change");
 			return "aclv_change";

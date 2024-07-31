@@ -12,7 +12,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.acslog.AccessLoger;
 import tyk.drasap.common.DrasapPropertiesFactory;
@@ -29,6 +31,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * å¥ê}å…çÏã∆àÀóäÇÃAction
  */
 @Controller
+@SessionAttributes("requestForm")
 public class RequestAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	private String classId = "";
@@ -46,7 +49,7 @@ public class RequestAction extends BaseAction {
 	 */
 	@PostMapping("/req")
 	public String execute(
-			RequestForm form,
+			@ModelAttribute("requestForm") RequestForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)

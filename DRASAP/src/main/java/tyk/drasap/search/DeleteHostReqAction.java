@@ -27,7 +27,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
@@ -44,6 +46,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * çÏê¨ì˙: 2006/05/10
  */
 @Controller
+@SessionAttributes("deleteHostReqForm")
 public class DeleteHostReqAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -58,7 +61,7 @@ public class DeleteHostReqAction extends BaseAction {
 	 */
 	@PostMapping("/delHostReq")
 	public Object execute(
-			DeleteHostReqForm form,
+			@ModelAttribute("deleteHostReqForm") DeleteHostReqForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
