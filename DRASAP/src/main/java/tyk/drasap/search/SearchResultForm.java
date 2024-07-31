@@ -54,6 +54,7 @@ public class SearchResultForm extends BaseForm {
 	// 2019.11.28 yamamoto add. end
 	// 2020.03.10 yamamoto add. start
 	String F_label9 = "PDF単独zip出力";
+	String F_label10 = "図番削除";
 	// 2020.03.10 yamamoto add. end
 	String language = "";
 	private SearchUtil sUtil = new SearchUtil();
@@ -78,6 +79,7 @@ public class SearchResultForm extends BaseForm {
 	// 2020.03.10 yamamoto add. start
 	public final char F_LABEL9_LINE_NO = 31; // PDF単独zip出力
 	// 2020.03.10 yamamoto add. end
+	public final char F_LABEL10_LINE_NO = 31;
 	// ---------------------------------------------------- method
 	/* (非 Javadoc)
 	 * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
@@ -412,6 +414,10 @@ public class SearchResultForm extends BaseForm {
 		return F_label9;
 	}
 
+	public String getF_label10() {
+		return F_label10;
+	}
+
 	public String getH_label1() {
 		return H_label1;
 	}
@@ -470,6 +476,10 @@ public class SearchResultForm extends BaseForm {
 
 	public void setF_label9(String f_label9) {
 		F_label9 = f_label9;
+	}
+
+	public void setF_label10(String f_label10) {
+		F_label10 = f_label10;
 	}
 
 	public void setH_label1(String h_label1) {
