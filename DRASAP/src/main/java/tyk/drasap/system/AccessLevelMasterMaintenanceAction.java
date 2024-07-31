@@ -14,7 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
@@ -31,6 +33,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * çÏê¨ì˙: 2006/07/10
  */
 @Controller
+@SessionAttributes("accessLevelMasterMaintenanceForm")
 public class AccessLevelMasterMaintenanceAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -46,7 +49,7 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 	 */
 	@PostMapping("/accessLevelMasterMaintenance")
 	public String execute(
-			AccessLevelMasterMaintenanceForm form,
+			@ModelAttribute("accessLevelMasterMaintenanceForm") AccessLevelMasterMaintenanceForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
@@ -81,11 +84,10 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 			session.setAttribute("accessLevelMasterMaintenanceForm", accessLevelMasterMaintenanceForm);
 			if (Objects.isNull(errors.getAttribute("message"))) {
 				return "update";
-			} else {
-				//saveErrors(request, errors);
-				request.setAttribute("errors", errors);
-				return "error";
 			}
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
+			return "error";
 		}
 		if ("delete".equals(accessLevelMasterMaintenanceForm.getAct())) {
 			deleteAccessLevelMasterMaintenanceForm(accessLevelMasterMaintenanceForm, user, errors);

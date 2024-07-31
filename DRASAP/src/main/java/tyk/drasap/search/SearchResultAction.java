@@ -77,16 +77,14 @@ public class SearchResultAction extends BaseAction {
 			if (offset < 0) {
 				offset = 0;
 			}
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-			searchResultForm.setDispNumberOffest(String.valueOf(offset));//オフセット値を変更する
 			searchResultForm.setAct("");// act属性をクリア
+			searchResultForm.setDispNumberOffest(String.valueOf(offset));//オフセット値を変更する
 			session.setAttribute("searchResultForm", searchResultForm);
 			return "result";
 
 		}
 		if ("NEXT".equals(searchResultForm.getAct())) {
 			// 次へなら
-
 			if (searchResultForm.getSearchResultList().size() > offset + dispNumberPerPage) {
 				searchResultForm.setDispNumberOffest(String.valueOf(offset + dispNumberPerPage));
 			}
@@ -182,7 +180,6 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("OUT_CSV".equals(searchResultForm.getAct())) {
 			// 全属性かどうかを、request#setAttributeする
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			session.setAttribute("OUT_CSV_ALL", searchResultForm.getOutCsvAll());
 			// 検索結果をファイル出力する
 			category.debug("--> out_csv");
@@ -190,14 +187,12 @@ public class SearchResultAction extends BaseAction {
 
 		}
 		if ("ACLV_CHG".equals(searchResultForm.getAct())) {
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
 				if ("true".equals(request.getParameter("searchResultList[" + i + "].selected"))) {
 					searchResultForm.getSearchResultElement(i).setSelected(true);
 				}
 			}
 			// アクセスレベルの変更画面へ
-			searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
 			session.setAttribute("searchResultForm", searchResultForm);
 			category.debug("--> aclv_change");
 			return "aclv_change";

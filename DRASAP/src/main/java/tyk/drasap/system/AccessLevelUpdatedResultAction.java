@@ -24,7 +24,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
@@ -39,6 +41,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * @author 2013/07/23 yamagishi
  */
 @Controller
+@SessionAttributes("accessLevelUpdatedResultForm")
 public class AccessLevelUpdatedResultAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -53,7 +56,7 @@ public class AccessLevelUpdatedResultAction extends BaseAction {
 	 */
 	@PostMapping("/accessLevelUpdatedResult")
 	public Object execute(
-			AccessLevelUpdatedResultForm form,
+			@ModelAttribute("accessLevelUpdatedResultForm") AccessLevelUpdatedResultForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)

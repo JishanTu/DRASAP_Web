@@ -12,7 +12,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.CsvItemStrList;
 import tyk.drasap.common.DrasapPropertiesFactory;
@@ -28,6 +30,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * @version 2013/06/14 yamagishi
  */
 @Controller
+@SessionAttributes("loginForm")
 public class Management_LoginAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -43,7 +46,7 @@ public class Management_LoginAction extends BaseAction {
 	 */
 	@PostMapping("/management_Login")
 	public String execute(
-			Management_LoginForm form,
+			@ModelAttribute("loginForm") Management_LoginForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)

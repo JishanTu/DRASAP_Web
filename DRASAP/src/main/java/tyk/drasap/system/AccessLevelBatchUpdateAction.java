@@ -55,6 +55,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * @author 2013/07/03 yamagishi
  */
 @Controller
+
 public class AccessLevelBatchUpdateAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	private final String DEFAULT_CHARSET = "Windows-31J";
@@ -870,7 +871,7 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 		try {
 			conn = ds.getConnection();
 
-			if(Objects.isNull(accessLevelBatchUpdateForm)) {
+			if (Objects.isNull(accessLevelBatchUpdateForm)) {
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.update.nodata", null, null));
 				return;
 			}

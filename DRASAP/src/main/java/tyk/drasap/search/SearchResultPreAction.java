@@ -19,7 +19,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.acslog.AccessLoger;
 import tyk.drasap.common.CookieManage;
@@ -39,6 +41,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * @version 2013/09/13 yamagishi
  */
 @Controller
+@SessionAttributes("searchResultForm")
 public class SearchResultPreAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -54,7 +57,7 @@ public class SearchResultPreAction extends BaseAction {
 	 */
 	@PostMapping("/resultPre")
 	public String execute(
-			SearchResultForm form,
+			@ModelAttribute("searchResultForm") SearchResultForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
@@ -68,7 +71,7 @@ public class SearchResultPreAction extends BaseAction {
 			return "timeout";
 		}
 
-		SearchResultForm searchResultForm = null;
+		SearchResultForm searchResultForm = form;
 
 		// requsetパラメータを確認して、処理を振り分ける
 		if ("init".equals(request.getAttribute("task"))) {

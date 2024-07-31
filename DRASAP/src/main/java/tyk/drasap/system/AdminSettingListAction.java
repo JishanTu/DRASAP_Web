@@ -14,7 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.User;
@@ -28,6 +30,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * çÏê¨ì˙: 2006/07/10
  */
 @Controller
+@SessionAttributes("adminSettingListForm")
 public class AdminSettingListAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -43,7 +46,7 @@ public class AdminSettingListAction extends BaseAction {
 	 */
 	@PostMapping("/adminSettingList")
 	public String execute(
-			AdminSettingListForm form,
+			@ModelAttribute("adminSettingListForm") AdminSettingListForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)

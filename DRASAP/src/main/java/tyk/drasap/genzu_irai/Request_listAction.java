@@ -43,7 +43,7 @@ public class Request_listAction extends BaseAction {
 			Request_listForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
-			Model errors) 
+			Model errors)
 			throws Exception {
 
 		Request_listForm request_listForm = form;

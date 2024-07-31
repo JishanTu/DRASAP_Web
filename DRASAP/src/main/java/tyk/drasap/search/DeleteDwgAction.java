@@ -28,7 +28,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.acslog.AccessLoger;
 import tyk.drasap.common.DrasapInfo;
@@ -48,6 +50,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * @version 2013/06/13 yamagishi
  */
 @Controller
+@SessionAttributes("deleteDwgForm")
 public class DeleteDwgAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	private final int DELETE_FILE_SUCCESS = 0;
@@ -67,7 +70,7 @@ public class DeleteDwgAction extends BaseAction {
 	 */
 	@PostMapping("/deleteDwg")
 	public Object execute(
-			DeleteDwgForm form,
+			@ModelAttribute("deleteDwgForm") DeleteDwgForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
@@ -149,18 +152,18 @@ public class DeleteDwgAction extends BaseAction {
 				deleteDwgForm.setMsg1("上記のデータが削除されました。");
 				deleteDwgForm.setMsg2("");
 				return "deleteComplete";
-			} else {
-				deleteDwgForm.setDeleteOK(false);
-				//saveErrors(request, errors);
-				request.setAttribute("errors", errors);
-				return "failed";
 			}
+			deleteDwgForm.setDeleteOK(false);
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
+			return "failed";
 		}
 		if ("preview".equals(deleteDwgForm.getAct())) {
 			//		    PreviewForm previewForm = createPreviewForm(deleteDwgForm, user);
 			//			session.setAttribute("previewForm", previewForm);
 			return "preview";
-		} else if ("logout".equals(deleteDwgForm.getAct())) {
+		}
+		if ("logout".equals(deleteDwgForm.getAct())) {
 			session.removeAttribute("deleteDwgForm");
 			return "logout";
 		} else if ("close".equals(deleteDwgForm.getAct())) {
