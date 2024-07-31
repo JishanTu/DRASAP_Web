@@ -122,7 +122,9 @@ public class AspectController {
 			if (StringUtils.isNotEmpty(result)) {
 				// ‘JˆÚæ‚É.jsp‚ªŠÜ‚Ü‚ê‚½ê‡
 				if (result.contains(".jsp")) {
-					result = result.replace(".jsp", "");
+					setRequestAttribute(request, result);
+					String[] parts = result.split(".jsp");
+					result = parts[0];
 					// ‘JˆÚæ‚É.do‚ªŠÜ‚Ü‚ê‚½ê‡
 				} else if (result.contains(".do")) {
 					// ActionÀs
@@ -205,7 +207,9 @@ public class AspectController {
 			if (StringUtils.isNotEmpty(result)) {
 				// ‘JˆÚæ‚É.jsp‚ªŠÜ‚Ü‚ê‚½ê‡
 				if (result.contains(".jsp")) {
-					result = result.replace(".jsp", "");
+					setRequestAttribute(request, result);
+					String[] resultParts = result.split(".jsp");
+					result = resultParts[0];
 					// ‘JˆÚæ‚É.do‚ªŠÜ‚Ü‚ê‚½ê‡
 				} else if (result.contains(".do")) {
 					result = (String) doAction(result, form, request, response, errors);
