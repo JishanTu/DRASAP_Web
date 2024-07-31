@@ -254,8 +254,9 @@ public class DirectLoginForPreviewAction extends BaseAction {
 
 			int ret = UserDB.checkPasswordExpiry(user, errors, conn);
 			if (ret != 0) {
+				String errMsg = ret == 1 ? "root.failed.passwaord.notset." : "root.failed.passwaord.expired.";
 				// for ユーザー
-				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.passwaord.expired." + user.getLanKey(), null, null));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage(errMsg + user.getLanKey(), null, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
 						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"), user.getSys_id());

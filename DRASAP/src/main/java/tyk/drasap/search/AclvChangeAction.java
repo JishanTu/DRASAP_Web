@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import tyk.drasap.change_acllog.ChangeAclLogger;
 import tyk.drasap.common.AclUpdateNoSequenceDB;
@@ -36,6 +38,7 @@ import tyk.drasap.springfw.action.BaseAction;
  * @version 2013/09/14 yamagishi
  */
 @Controller
+@SessionAttributes("aclvChangeForm")
 public class AclvChangeAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -50,7 +53,7 @@ public class AclvChangeAction extends BaseAction {
 	 */
 	@PostMapping("/aclvChange")
 	public Object execute(
-			AclvChangeForm form,
+			@ModelAttribute("aclvChangeForm")AclvChangeForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
@@ -67,25 +70,19 @@ public class AclvChangeAction extends BaseAction {
 		aclvChangeForm.errorMessages = new ArrayList<>();// エラーメッセージのクリア
 		// act属性による処理の切り分け
 		if ("CHECK_ON".equals(aclvChangeForm.getAct())) {
-			aclvChangeForm = (AclvChangeForm)session.getAttribute("aclvChangeForm");
 			// 全てにチェック
 			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeElement(i).setSelected(true);
 			}
-			aclvChangeForm.setAct("");// act属性をクリア
-			session.setAttribute("aclvChangeForm", aclvChangeForm);
 			category.debug("--> input");
 			return "input";
 		}
 
 		if ("CHECK_OFF".equals(aclvChangeForm.getAct())) {
-			aclvChangeForm = (AclvChangeForm)session.getAttribute("aclvChangeForm");
 			// 全てのチェック外す
 			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeElement(i).setSelected(false);
 			}
-			aclvChangeForm.setAct("");// act属性をクリア
-			session.setAttribute("aclvChangeForm", aclvChangeForm);
 			category.debug("--> input");
 			return "input";
 		}
@@ -95,7 +92,6 @@ public class AclvChangeAction extends BaseAction {
 			//MessageResources resources = getResources(request, "application"); // applicatin.properties取得
 			// 次画面に進む前のチェック
 			//			checkForNext(aclvChangeForm);
-			aclvChangeForm = (AclvChangeForm)session.getAttribute("aclvChangeForm");
 			aclvChangeForm.getErrorMessages().clear();
 			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeList().get(i).setSelected(Boolean.parseBoolean(request.getParameter("aclvChangeElement[" + i + "].selected")));
@@ -131,7 +127,6 @@ public class AclvChangeAction extends BaseAction {
 			//MessageResources resources = getResources(request, "application");
 			// 確認OK。更新を行う。
 			//			updateAclv(aclvChangeForm, user);
-			aclvChangeForm = (AclvChangeForm)session.getAttribute("aclvChangeForm");
 			updateAclv(aclvChangeForm, user);
 			// 2013.07.24 yamagishi modified. end
 			if (aclvChangeForm.getErrorMessages().size() > 0) {

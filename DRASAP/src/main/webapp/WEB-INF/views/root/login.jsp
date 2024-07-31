@@ -27,10 +27,11 @@
 <script type="text/javascript">
 	window.name='login';
 	// 直リンク禁止
-	var refinfo=document.referrer;
-	if (!refinfo){
-		location.replace('<%=request.getContextPath() %>/timeout');
+	var refinfo = document.referrer;
+	if (!refinfo) {
+		location.replace('<%=request.getContextPath()%>/timeout');
 	}
+
 	// メッセージ１読み込み
 	function loadMessage1() {
 		var div = document.getElementById('message1');
@@ -57,7 +58,7 @@
 		// テキストファイルの改行を置き換える
 		// htmlタグが使用されている場合は何もしない
 		result = replaceLineBreaksInTextFiles(result);
-//		console.log("result" + result);
+		//console.log("result" + result);
 		div.innerHTML = result;
 	}
 
@@ -116,7 +117,6 @@
                     login.close();
                  }
             });
-
         }
     </script>
 </head>

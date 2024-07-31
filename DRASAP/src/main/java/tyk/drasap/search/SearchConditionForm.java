@@ -416,6 +416,9 @@ public class SearchConditionForm extends BaseForm {
 	}
 
 	public void setSearchCondition(HttpServletRequest request) {
+		boolean onlyNewest = "true".equals(request.getParameter("onlyNewest"));
+		setOnlyNewest(onlyNewest);
+
 		dispAttrList.clear();
 		for (int i = 1; i <= getViewSelColNum(); i++) {
 			String paramName = "dispAttr" + i;

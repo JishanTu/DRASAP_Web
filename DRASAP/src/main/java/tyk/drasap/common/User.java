@@ -57,6 +57,7 @@ public class User {
 	private String multiPdfFlag = "";
 	// 2020.02.10 yamamoto add. end
 	private String language = "Japanese";
+	private boolean onlyNewest = false;
 	//	String language = "English";
 	boolean admin = false;// ä«óùé“Ç»ÇÁ true
 	boolean delAdmin = false;// ä«óùé“Ç»ÇÁ true
@@ -1307,6 +1308,14 @@ public class User {
 			admin = true;
 			delAdmin = true;
 		}
+	}
+
+	public boolean isOnlyNewest() {
+		return onlyNewest;
+	}
+
+	public void setOnlyNewestFlag(String onlyNewestFlag) {
+		onlyNewest = "1".equals(onlyNewestFlag);
 	}
 
 	/**

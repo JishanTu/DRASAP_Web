@@ -20,15 +20,15 @@
 	<title>Drawing Search and Print System [図面検索]</title>
 	<script type="text/javascript">
 		browserName = navigator.appName;
-		var WO1;
+		//var WO1;
 		var w = screen.availWidth;
 		var h = screen.availHeight;
-		var xPos = (screen.availWidth- w)/2;
+		var xPos = (screen.availWidth - w)/2;
 		var yPos = (screen.availHeight - h)/2;
-		window.resizeTo(w, h);
+		//window.resizeTo(w, h);
 		window.name = "_drasap_search"
 		window.moveTo(xPos,yPos);//画面の位置指定
-//		if (browserName != "Netscape") focus();
+		//if (browserName != "Netscape") focus();
 		document.onkeydown = keys;
 		function keys(){
 			switch (event.keyCode ){
@@ -39,8 +39,7 @@
 			}
 		}
 	</script>
-	   <script type="text/javascript">
-
+	<script type="text/javascript">
         // IEの場合、Broadcastはエラーになるので、Edgeのみ処理
         const agent = window.navigator.userAgent.toLowerCase();
         if(agent.indexOf('chrome') !== -1)
@@ -66,11 +65,8 @@
                     login.close();
                  }
             });
-
         }
-
     </script>
-	
 </head>
 <!-- FRAMESET rows="155,*" -->
 <frameset rows="180,*">
