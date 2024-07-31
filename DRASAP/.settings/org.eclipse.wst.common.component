@@ -12,13 +12,6 @@
                 
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/annotations"/>
                 
-<<<<<<< HEAD
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-test-sources/test-annotations"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
-                
-=======
->>>>>>> 9171a18c106ff049ee3bcfbad9644b520a702fa1
         <property name="context-root" value="DRASAP"/>
                 
         <property name="java-output-path" value="/DRASAP/target/classes"/>
