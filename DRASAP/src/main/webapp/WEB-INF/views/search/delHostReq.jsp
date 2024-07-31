@@ -6,175 +6,171 @@
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-        location.replace('<%=request.getContextPath() %>/timeout');
-    </script>
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Drawing Search and Print System [HOST依頼削除]</title>
-<meta content="text/html; charset=UTF-8" http-equiv="Content-type" />
-<meta content="no-cache" http-equiv="Pragma" />
-<meta content="no-cache" http-equiv="Cache-Control" />
-<style type="text/css">
-@import
-url(
-<%=request.getContextPath()%>/resources/css/default.css
-);
-</style>
-<style type="text/css">
-.condition {
-	margin-left: 30px;
-	margin-right: 30px;
-}
-
-.goBackBtn {
-	position: absolute;
-	bottom: 30px;
-	right: 30px;
-}
-
-.msgBox {
-	text-align: left;
-	width: 600px;
-	border: none;
-}
-
-.keyLock {
-	z-index: 99;
-	left: 0;
-	top: 0;
-	position: absolute;
-	background-color: transparent;
-	width: 100%;
-	height: 100%;
-	padding: 0px;
-	margin: 0px;
-}
-</style>
-<script type="text/javascript">
-    browserName = navigator.appName;
-    var buttonPress = false;
-
-    function onLoad(){
-        onInitFocus();
-    }
-    // 初期フォーカス位置
-    function onInitFocus(){
-//        document.forms[0].seachKind[0].focus();
-    }
-    function backPage(){
-        closeReq();
-        buttonPress = true;
-        self.close();
-    }
-    function clearVal() {
-        var idx = 0;
-		document.forms[0].seachKind[0].checked = false;
-		document.forms[0].seachKind[1].checked = false;
-        while((elm = getConditionElm(idx)) != null) {
-            elm.style.color="#000000";
-            elm.value = "";
-            idx = idx + 1;
-        }
-	var msgList = document.getElementById("msgList");
-        msgList.innerHTML = "";
-    }
-    function delReq() {
-	var delCnt = inputChk();
-        if (delCnt == 0) return;
-
-        if(! confirm("この"+delCnt+"件の依頼を完全に削除します。\n本当によろしいですか?")){
-            return;
-        }
-        buttonPress = true;
-//        document.body.style.cursor="wait";
-        keyLock();
-	var deleteButton = document.getElementById("deleteButton");
-	var clearButton = document.getElementById("clearButton");
-	var msgList = document.getElementById("msgList");
-	deleteButton.disabled=true;
-	clearButton.disabled=true;
-        msgList.innerHTML = "";
-        msgList.innerHTML = "<li align='left' style='color:#0000FF;'>依頼の削除には時間がかかることがあります。しばらくお待ちください。</li><br/>";
-	document.forms[0].act.value='delete';// 隠し属性actをセット
-	document.forms[0].submit();
-    }
-    function closeReq() {
-        if (!buttonPress) {
-            document.forms[0].act.value='close';// 隠し属性actをセット
-	    document.forms[0].submit();
-        }
-    }
-    function searchCheck(value) {
-        var example = document.getElementById("example");
-        if (value == "delSeisan") {
-            example.innerHTML = "(YYYYMMDD[A|C]nnnnn)";
-        } else if (value == "delPrt") {
-            example.innerHTML = "(YYYYMMDD[B|D]nnnnn)";
-        }
-//        seachKind = value;
-    }
-    function inputChk() {
-        var seachKind = null;
-        var cnt = 0;
-        if (document.forms[0].seachKind[0].checked) seachKind = "delSeisan";
-        if (document.forms[0].seachKind[1].checked) seachKind = "delPrt";
-        if (seachKind == null) {
-            alert("HOST依頼を選択してください。");
-            document.forms[0].seachKind[0].focus();
-            return 0;
-        }
-        var elm = null;
-        var idx = 0;
-        while((elm = getConditionElm(idx)) != null) {
-            elm.style.color="#000000";
-            if (elm.value.length > 0) {
-                if (elm.value.length != 14) {
-                    elm.style.color="#FF0000";
-                    elm.focus();
-                    if (seachKind == "delSeisan") {
-                        alert("HOST生産出図依頼番号はYYYYMMDD[A|C]nnnnnで入力してください。")
-                    } else {
-                        alert("HOST帳票出力依頼番号はYYYYMMDD[B|D]nnnnnで入力してください。")
-                    }
-                    return 0;
-                } else {
-                    if (seachKind == "delSeisan" && elm.value.substr(8,1) != "A" && elm.value.substr(8,1) != "C") {
-                        elm.style.color="#FF0000";
-                        elm.focus();
-                        alert("HOST生産出図依頼番号はYYYYMMDD[A|C]nnnnnで入力してください。")
-                        return 0;
-                    } else if (seachKind == "delPrt" && elm.value.substr(8,1) != "B" && elm.value.substr(8,1) != "D") {
-                        elm.style.color="#FF0000";
-                        elm.focus();
-                        alert("HOST帳票出力依頼番号はYYYYMMDD[B|D]nnnnnで入力してください。")
-                        return 0;
-                    }
-                }
-                cnt = cnt + 1;
-            }
-            idx = idx + 1;
-        }
-        if (cnt == 0) {
-            alert("依頼番号をひとつ以上指定してください。")
-            elm = getConditionElm(0).focus();
-            return 0;
-        }
-        return cnt;
-    }
-    function getConditionElm(idx) {
-	return document.getElementsByClassName("condition")[idx];
-    }
-    function keyLock(){
-        var keyLock;
-        keyLock = document.getElementById("keyLock");
-        keyLock.style.cursor="wait";
-        keyLock.style.visibility = "visible";
-        keyLock.style.height = document.body.parentNode.clientHeight + "px";
-    }
-</script>
+	<title>Drawing Search and Print System [HOST依頼削除]</title>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-type" />
+	<meta content="no-cache" http-equiv="Pragma" />
+	<meta content="no-cache" http-equiv="Cache-Control" />
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+		.condition {
+			margin-left: 30px;
+			margin-right: 30px;
+		}
+		
+		.goBackBtn {
+			position: absolute;
+			bottom: 30px;
+			right: 30px;
+		}
+		
+		.msgBox {
+			text-align: left;
+			width: 600px;
+			border: none;
+		}
+		
+		.keyLock {
+			z-index: 99;
+			left: 0;
+			top: 0;
+			position: absolute;
+			background-color: transparent;
+			width: 100%;
+			height: 100%;
+			padding: 0px;
+			margin: 0px;
+		}
+	</style>
+	<script type="text/javascript">
+	    browserName = navigator.appName;
+	    var buttonPress = false;
+	
+	    function onLoad(){
+	        onInitFocus();
+	    }
+	    // 初期フォーカス位置
+	    function onInitFocus(){
+	//        document.forms[0].seachKind[0].focus();
+	    }
+	    function backPage(){
+	        closeReq();
+	        buttonPress = true;
+	        self.close();
+	    }
+	    function clearVal() {
+	        var idx = 0;
+			document.forms[0].seachKind[0].checked = false;
+			document.forms[0].seachKind[1].checked = false;
+	        while((elm = getConditionElm(idx)) != null) {
+	            elm.style.color="#000000";
+	            elm.value = "";
+	            idx = idx + 1;
+	        }
+		var msgList = document.getElementById("msgList");
+	        msgList.innerHTML = "";
+	    }
+	    function delReq() {
+		var delCnt = inputChk();
+	        if (delCnt == 0) return;
+	
+	        if(! confirm("この"+delCnt+"件の依頼を完全に削除します。\n本当によろしいですか?")){
+	            return;
+	        }
+	        buttonPress = true;
+	//        document.body.style.cursor="wait";
+	        keyLock();
+		var deleteButton = document.getElementById("deleteButton");
+		var clearButton = document.getElementById("clearButton");
+		var msgList = document.getElementById("msgList");
+		deleteButton.disabled=true;
+		clearButton.disabled=true;
+	        msgList.innerHTML = "";
+	        msgList.innerHTML = "<li align='left' style='color:#0000FF;'>依頼の削除には時間がかかることがあります。しばらくお待ちください。</li><br/>";
+		document.forms[0].act.value='delete';// 隠し属性actをセット
+		document.forms[0].submit();
+	    }
+	    function closeReq() {
+	        if (!buttonPress) {
+	            document.forms[0].act.value='close';// 隠し属性actをセット
+		    document.forms[0].submit();
+	        }
+	    }
+	    function searchCheck(value) {
+	        var example = document.getElementById("example");
+	        if (value == "delSeisan") {
+	            example.innerHTML = "(YYYYMMDD[A|C]nnnnn)";
+	        } else if (value == "delPrt") {
+	            example.innerHTML = "(YYYYMMDD[B|D]nnnnn)";
+	        }
+	//        seachKind = value;
+	    }
+	    function inputChk() {
+	        var seachKind = null;
+	        var cnt = 0;
+	        if (document.forms[0].seachKind[0].checked) seachKind = "delSeisan";
+	        if (document.forms[0].seachKind[1].checked) seachKind = "delPrt";
+	        if (seachKind == null) {
+	            alert("HOST依頼を選択してください。");
+	            document.forms[0].seachKind[0].focus();
+	            return 0;
+	        }
+	        var elm = null;
+	        var idx = 0;
+	        while((elm = getConditionElm(idx)) != null) {
+	            elm.style.color="#000000";
+	            if (elm.value.length > 0) {
+	                if (elm.value.length != 14) {
+	                    elm.style.color="#FF0000";
+	                    elm.focus();
+	                    if (seachKind == "delSeisan") {
+	                        alert("HOST生産出図依頼番号はYYYYMMDD[A|C]nnnnnで入力してください。")
+	                    } else {
+	                        alert("HOST帳票出力依頼番号はYYYYMMDD[B|D]nnnnnで入力してください。")
+	                    }
+	                    return 0;
+	                } else {
+	                    if (seachKind == "delSeisan" && elm.value.substr(8,1) != "A" && elm.value.substr(8,1) != "C") {
+	                        elm.style.color="#FF0000";
+	                        elm.focus();
+	                        alert("HOST生産出図依頼番号はYYYYMMDD[A|C]nnnnnで入力してください。")
+	                        return 0;
+	                    } else if (seachKind == "delPrt" && elm.value.substr(8,1) != "B" && elm.value.substr(8,1) != "D") {
+	                        elm.style.color="#FF0000";
+	                        elm.focus();
+	                        alert("HOST帳票出力依頼番号はYYYYMMDD[B|D]nnnnnで入力してください。")
+	                        return 0;
+	                    }
+	                }
+	                cnt = cnt + 1;
+	            }
+	            idx = idx + 1;
+	        }
+	        if (cnt == 0) {
+	            alert("依頼番号をひとつ以上指定してください。")
+	            elm = getConditionElm(0).focus();
+	            return 0;
+	        }
+	        return cnt;
+	    }
+	    function getConditionElm(idx) {
+		return document.getElementsByClassName("condition")[idx];
+	    }
+	    function keyLock(){
+	        var keyLock;
+	        keyLock = document.getElementById("keyLock");
+	        keyLock.style.cursor="wait";
+	        keyLock.style.visibility = "visible";
+	        keyLock.style.height = document.body.parentNode.clientHeight + "px";
+	    }
+	</script>
 </head>
 <body bgcolor="#FFFFFF" onload="onInitFocus()" onunload="closeReq()"
 	bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0"

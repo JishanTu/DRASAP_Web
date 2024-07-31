@@ -4,12 +4,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%-- ログイン情報の確認 --%>
-<c:if test="${sessionScope.user == null}">
-    <script>
-        location.replace('<%=request.getContextPath() %>/timeout');
-    </script>
+<c:if test="${empty sessionScope.user}">
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
-<html>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>Drawing Search and Print System [図面検索]</title>
@@ -17,22 +19,20 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<script type="text/javascript">
-	<!--
-	// 隠し属性actにセットする
-	function setAct(param){
-		document.forms[0].act.value=param;// 隠し属性actにセット
-	}
-	function onLoad() {
-		if (parent.condition != null) {
-			parent.condition.unLockButtons();
+		// 隠し属性actにセットする
+		function setAct(param){
+			document.forms[0].act.value=param;// 隠し属性actにセット
 		}
-	}
-	function nowSearch(){
-		var nowSearch;
-		nowSearch = document.getElementById("nowSearch");
-		nowSearch.style.visibility = "visible";
-	}
-	//-->
+		function onLoad() {
+			if (parent.condition != null) {
+				parent.condition.unLockButtons();
+			}
+		}
+		function nowSearch(){
+			var nowSearch;
+			nowSearch = document.getElementById("nowSearch");
+			nowSearch.style.visibility = "visible";
+		}
 	</script>
 </head>
 <body style="background-color: #FFFFFF; margin: 0;" onload="onLoad();">

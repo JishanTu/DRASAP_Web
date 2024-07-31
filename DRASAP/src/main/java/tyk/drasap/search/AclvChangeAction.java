@@ -16,9 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import tyk.drasap.change_acllog.ChangeAclLogger;
 import tyk.drasap.common.AclUpdateNoSequenceDB;
@@ -53,7 +53,7 @@ public class AclvChangeAction extends BaseAction {
 	 */
 	@PostMapping("/aclvChange")
 	public Object execute(
-			@ModelAttribute("aclvChangeForm")AclvChangeForm form,
+			@ModelAttribute("aclvChangeForm") AclvChangeForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
@@ -95,7 +95,7 @@ public class AclvChangeAction extends BaseAction {
 			aclvChangeForm.getErrorMessages().clear();
 			for (int i = 0; i < aclvChangeForm.getAclvChangeList().size(); i++) {
 				aclvChangeForm.getAclvChangeList().get(i).setSelected(Boolean.parseBoolean(request.getParameter("aclvChangeElement[" + i + "].selected")));
-				aclvChangeForm.getAclvChangeList().get(i).setNewAclId((request.getParameter("aclvChangeElement[" + i + "].newAclId")));
+				aclvChangeForm.getAclvChangeList().get(i).setNewAclId(request.getParameter("aclvChangeElement[" + i + "].newAclId"));
 				aclvChangeForm.getAclvChangeList().get(i).setNewProhibit(request.getParameter("aclvChangeElement[" + i + "].newProhibit"));
 			}
 			checkForNext(aclvChangeForm, user);
@@ -112,6 +112,7 @@ public class AclvChangeAction extends BaseAction {
 
 		if ("SEARCH".equals(aclvChangeForm.getAct())) {
 			// 検索画面に戻る
+			request.setAttribute("task", "continue");
 			category.debug("--> search");
 			return "search";
 		}
@@ -142,6 +143,7 @@ public class AclvChangeAction extends BaseAction {
 			// '04.Nov.23変更 図番をロギングするため、ここでのロギングは行わない
 			//AccessLoger.loging(user, AccessLoger.FID_CHG_ACL);
 			//category.debug("更新した件数は " + cnt);
+			request.setAttribute("task", "clear_result");
 			category.debug("--> search2");
 			return "search2";
 		}

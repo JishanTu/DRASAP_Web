@@ -5,73 +5,73 @@
 <%@ page isELIgnored="false"%>
 
 <%-- ログイン情報の確認 --%>
-<c:if test="${sessionScope.user == null}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
+<c:if test="${empty sessionScope.user}">
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
+
 <c:set var="searchConditionForm" value="${sessionScope.searchConditionForm}"/>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/tr/xhtml1/DTD/xhtml1-frameset.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<title>Drawing Search and Print System [図面検索]</title>
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/resources/css/<%=session.getAttribute("default_css")%>" />
-<style type="text/css">
-.tooltip {
-	width: 460px;
-	height: 120px;
-	text-align: center;
-	padding: 0px;
-	margin: 0px;
-	position: absolute;
-	cursor: default;
-	top: 35px;
-	right: -440px;
-	/*	    font-size:16pt;*/
-	visibility: visible;
-	z-index: 100;
-}
-
-img {
-	background-color: #CCCCCC;
-	position: relative;
-	left: -10px;
-	border: none;
-	/*		width:20px;*/
-	padding: 0px;
-	margin: 0px;
-}
-
-.slideBar {
-	width: 15px;
-	height: 120px;
-	padding: 0px;
-	margin: 0px;
-	background-color: #CCCCCC;
-	border-width: 2px;
-	border-left-color: #EEEEEE;
-	border-top-color: #EEEEEE;
-	border-right-color: #AAAAAA;
-	border-bottom-color: #AAAAAA;
-	/*		border-color:#CCCCCC;*/
-	/*		border-style:ridge;*/
-	border-style: solid;
-}
-
-.menubutton {
-	margin-right: 30px;
-	vertical-align: top;
-}
-.searchbutton{
-    margin-left : 5px;
-    vertical-align : top;
-}
-</style>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<title>Drawing Search and Print System [図面検索]</title>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
+	<style type="text/css">
+		.tooltip {
+			width: 460px;
+			height: 120px;
+			text-align: center;
+			padding: 0px;
+			margin: 0px;
+			position: absolute;
+			cursor: default;
+			top: 35px;
+			right: -440px;
+			/*	    font-size:16pt;*/
+			visibility: visible;
+			z-index: 100;
+		}
+		
+		img {
+			background-color: #CCCCCC;
+			position: relative;
+			left: -10px;
+			border: none;
+			/*		width:20px;*/
+			padding: 0px;
+			margin: 0px;
+		}
+		
+		.slideBar {
+			width: 15px;
+			height: 120px;
+			padding: 0px;
+			margin: 0px;
+			background-color: #CCCCCC;
+			border-width: 2px;
+			border-left-color: #EEEEEE;
+			border-top-color: #EEEEEE;
+			border-right-color: #AAAAAA;
+			border-bottom-color: #AAAAAA;
+			/*		border-color:#CCCCCC;*/
+			/*		border-style:ridge;*/
+			border-style: solid;
+		}
+		
+		.menubutton {
+			margin-right: 30px;
+			vertical-align: top;
+		}
+		.searchbutton{
+		    margin-left : 5px;
+		    vertical-align : top;
+		}
+	</style>
 <script type="text/javascript">
 	document.onkeydown = keys;
 	function keys(){
@@ -127,6 +127,10 @@ img {
 				buttons[i].disabled = true;
 		}
 		buttons = docObj.getElementsByTagName("a");
+		for (var i=0;i<buttons.length;i++){
+				buttons[i].disabled = true;
+		}
+		buttons = docObj.getElementsByTagName("button");
 		for (var i=0;i<buttons.length;i++){
 				buttons[i].disabled = true;
 		}
@@ -967,7 +971,7 @@ img {
 							<td align="center"><html:checkbox property="onlyNewest" /> <bean:write name="searchConditionForm"--%>
 							<td align="left" nowrap="nowrap">
 								<%-- 最新追番のみ表示 --%>
-								<input type="checkbox" name="onlyNewest" value="true" ${searchConditionForm.isOnlyNewest() ? 'checked ' : ''}/>
+								<input type="checkbox" name="onlyNewest" value="true" ${searchConditionForm.isOnlyNewest() ? 'checked' : ''}/>
 								${searchConditionForm.c_label2}
 								<br />
 								<%-- 図番指定順 --%>
@@ -981,14 +985,9 @@ img {
 								&emsp; <% // ラジオボタンの前に空白を入れる %>
 								<input type="radio"name="eachCondition" value="OR" ${searchConditionForm.eachCondition == "OR"  ? 'checked ' : ''}/> OR
 								<input type="radio"name="eachCondition" value="AND" ${searchConditionForm.eachCondition == "AND"  ? 'checked ' : ''}/> AND <br /> <br /> 
-								 <%
-								 // ユーザーに検索権限があるか? なければ検索開始ボタンをロックする
-								 User user = (User) session.getAttribute("user");
-								 boolean hasAuth = (user.getMaxAclValue().compareTo("1") >= 0);
-								 %>
 								<%-- 検索開始ボタン --%>
 								&emsp; <% // ボタンの前に空白を入れる %> 
-								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold;">
+								<button type="submit" onclick="event.preventDefault(); doSearch();" style="font-size: 12pt; font-weight: bold;">
 									${searchConditionForm.c_label4}
 								</button>
 							</td>

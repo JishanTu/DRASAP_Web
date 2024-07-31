@@ -2,177 +2,169 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page isELIgnored="false"%>
+
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-		location.replace('<%=request.getContextPath()%>/timeout');
-	</script>
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<style type="text/css">
-@import
-url(
-<%=request.getContextPath()%>/resources/css/default.css
-);
-</style>
-<style type="text/css">
-<!--
-.headFrame {
-	position: relative;
-	margin: 0px;
-	padding: 0px;
-	height: 70px;
-}
-
-.listHeadFrame {
-	position: absolute;
-	width: 100%;
-	margin: 0px;
-	padding: 0px;
-	overflow: hidden;
-	/*	border:10px solid #FF0000;*/
-	bottom: 0px;
-}
-
-.ListHead {
-	table-layout: fixed;
-	position: relative;
-	margin: 0px;
-	padding: 0px;
-	top: 1px;
-}
-
-.List {
-	table-layout: fixed;
-}
-
-.bodyFrame {
-	width: 100%;
-	position: relative;
-	margin: 0px;
-	padding: 0px;
-	overflow: auto;
-	/*	border-width:1px;*/
-}
-
-.footFrame {
-	position: relative;
-	margin: 0px;
-	padding: 0px;
-	height: 50px;
-}
-
-th {
-	font-weight: normal;
-	white-space: nowrap;
-}
-
-tr {
-	height: 25px;
-	padding: 0px;
-}
-
-td {
-	white-space: nowrap;
-	padding: 0px;
-}
--->
-</style>
-<script type="text/javascript">
-<!--
-	var browserName;
-	var frameHead;
-	var listHeadFrame;
-	var ListHead;
-	var List;
-	var frameBody;
-	var frameFoot;
-	function onInit() {
-		browserName = navigator.appName;
-
-		frameHead = document.getElementById("headFrame");
-		listHeadFrame = document.getElementById("listHeadFrame");
-		ListHead = document.getElementById("ListHead");
-		List= document.getElementById("List");
-		frameBody = document.getElementById("bodyFrame");
-		frameFoot = document.getElementById("footFrame");
-
-		syncroScroll();
-
-		frameBody.onscroll=syncroScroll;
-		document.body.onresize=frameResize;
-		frameResize();
-	}
-	if (browserName != "Netscape") focus();
-
-	// 遷移する
-	function backPage(parm){
-		if (parm == "UPDATE"){
-			// リスト更新
-			document.forms[0].target="_parent";
-			document.forms[0].act.value='update';// 隠し属性actをセット
-			document.forms[0].submit();
-			return;
-		} else if (parm == "DELETE"){
-			if(! confirm("利用者グループアクセスレベル関連を削除します。\nよろしいですか?")){
-				//alert(parm);
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+		.headFrame {
+			position: relative;
+			margin: 0px;
+			padding: 0px;
+			height: 70px;
+		}
+		
+		.listHeadFrame {
+			position: absolute;
+			width: 100%;
+			margin: 0px;
+			padding: 0px;
+			overflow: hidden;
+			/*	border:10px solid #FF0000;*/
+			bottom: 0px;
+		}
+		
+		.ListHead {
+			table-layout: fixed;
+			position: relative;
+			margin: 0px;
+			padding: 0px;
+			top: 1px;
+		}
+		
+		.List {
+			table-layout: fixed;
+		}
+		
+		.bodyFrame {
+			width: 100%;
+			position: relative;
+			margin: 0px;
+			padding: 0px;
+			overflow: auto;
+			/*	border-width:1px;*/
+		}
+		
+		.footFrame {
+			position: relative;
+			margin: 0px;
+			padding: 0px;
+			height: 50px;
+		}
+		
+		th {
+			font-weight: normal;
+			white-space: nowrap;
+		}
+		
+		tr {
+			height: 25px;
+			padding: 0px;
+		}
+		
+		td {
+			white-space: nowrap;
+			padding: 0px;
+		}
+	</style>
+	<script type="text/javascript">
+		var browserName;
+		var frameHead;
+		var listHeadFrame;
+		var ListHead;
+		var List;
+		var frameBody;
+		var frameFoot;
+		function onInit() {
+			browserName = navigator.appName;
+	
+			frameHead = document.getElementById("headFrame");
+			listHeadFrame = document.getElementById("listHeadFrame");
+			ListHead = document.getElementById("ListHead");
+			List= document.getElementById("List");
+			frameBody = document.getElementById("bodyFrame");
+			frameFoot = document.getElementById("footFrame");
+	
+			syncroScroll();
+	
+			frameBody.onscroll=syncroScroll;
+			document.body.onresize=frameResize;
+			frameResize();
+		}
+		if (browserName != "Netscape") focus();
+	
+		// 遷移する
+		function backPage(parm){
+			if (parm == "UPDATE"){
+				// リスト更新
+				document.forms[0].target="_parent";
+				document.forms[0].act.value='update';// 隠し属性actをセット
+				document.forms[0].submit();
+				return;
+			} else if (parm == "DELETE"){
+				if(! confirm("利用者グループアクセスレベル関連を削除します。\nよろしいですか?")){
+					//alert(parm);
+					return;
+				}
+				// リスト削除
+				document.forms[0].target="_parent";
+				document.forms[0].act.value='delete';// 隠し属性actをセット
+				document.forms[0].submit();
+				return;
+			} else if (parm == "SEARCH"){
+				// リスト再表示
+				document.forms[0].target="_parent";
+				document.forms[0].act.value='search';// 隠し属性actをセット
+				document.forms[0].submit();
+				return;
+			} else if (parm == "ADDRECORD"){
+				// リスト再表示
+				document.forms[0].target="_parent";
+				document.forms[0].act.value='addrecord';// 隠し属性actをセット
+				document.forms[0].submit();
+				return;
+			} else {
 				return;
 			}
-			// リスト削除
-			document.forms[0].target="_parent";
-			document.forms[0].act.value='delete';// 隠し属性actをセット
-			document.forms[0].submit();
-			return;
-		} else if (parm == "SEARCH"){
-			// リスト再表示
-			document.forms[0].target="_parent";
+		}
+		function changeValue(orderBy){
+			//
+			document.forms[0].target="_self";
 			document.forms[0].act.value='search';// 隠し属性actをセット
 			document.forms[0].submit();
 			return;
-		} else if (parm == "ADDRECORD"){
-			// リスト再表示
-			document.forms[0].target="_parent";
-			document.forms[0].act.value='addrecord';// 隠し属性actをセット
-			document.forms[0].submit();
-			return;
-		} else {
+		}
+		function changeFlg(idx){
+			//
+			document.forms[0].act.value='onchange';// 隠し属性actをセット
+			var chkList=document.getElementsByName('recList['+idx+'].update');
+			chkList[0].checked=true;
 			return;
 		}
-	}
-	function changeValue(orderBy){
-		//
-		document.forms[0].target="_self";
-		document.forms[0].act.value='search';// 隠し属性actをセット
-		document.forms[0].submit();
-		return;
-	}
-	function changeFlg(idx){
-		//
-		document.forms[0].act.value='onchange';// 隠し属性actをセット
-		var chkList=document.getElementsByName('recList['+idx+'].update');
-		chkList[0].checked=true;
-		return;
-	}
-	// リサイズ処理
-	function frameResize() {
-		var new_height = document.body.parentNode.clientHeight - frameHead.offsetHeight - frameFoot.offsetHeight - 16;
-		if (new_height > 0) frameBody.style.height = new_height + "px";
-		ListHead.style.left="-8px";
-	window.status ="frameBody.offsetTop="+ frameBody.offsetTop;
-	}
-	function syncroScroll()
-	{
-		listHeadFrame.scrollLeft = frameBody.scrollLeft;
-
-	}
--->
-</script>
+		// リサイズ処理
+		function frameResize() {
+			var new_height = document.body.parentNode.clientHeight - frameHead.offsetHeight - frameFoot.offsetHeight - 16;
+			if (new_height > 0) frameBody.style.height = new_height + "px";
+			ListHead.style.left="-8px";
+		window.status ="frameBody.offsetTop="+ frameBody.offsetTop;
+		}
+		function syncroScroll()
+		{
+			listHeadFrame.scrollLeft = frameBody.scrollLeft;
+	
+		}
+	</script>
 </head>
 <body bgcolor="#F5F5DC" onload="onInit()" bottommargin="0"
 	leftmargin="0" topmargin="0" rightmargin="0" marginheight="0"

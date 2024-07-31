@@ -6,67 +6,61 @@
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<style type="text/css">
-@import
-url(
-<%=request.getContextPath()%>/resources/css/default.css
-);
-</style>
-<script type="text/javascript">
-<!--
-	browserName = navigator.appName;
-	// 遷移する
-	function backPage(parm){
-		if (parm == "UPDATE"){
-			// リスト更新
-			document.forms[0].act.value='update';// 隠し属性actをセット
-			document.forms[0].submit();
-			return;
-		} else if (parm == "DELETE"){
-			if(! confirm("選択しているアクセスレベルを削除します。\nアクセスレベルを削除すると、関連する権限も削除されます。よろしいですか?")){
-				//alert(parm);
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<script type="text/javascript">
+		browserName = navigator.appName;
+		// 遷移する
+		function backPage(parm){
+			if (parm == "UPDATE"){
+				// リスト更新
+				document.forms[0].act.value='update';// 隠し属性actをセット
+				document.forms[0].submit();
+				return;
+			} else if (parm == "DELETE"){
+				if(! confirm("選択しているアクセスレベルを削除します。\nアクセスレベルを削除すると、関連する権限も削除されます。よろしいですか?")){
+					//alert(parm);
+					return;
+				}
+				// リスト削除
+				document.forms[0].act.value='delete';// 隠し属性actをセット
+				document.forms[0].submit();
+				return;
+			} else if (parm == "SEARCH"){
+				// リスト再表示
+				document.forms[0].act.value='search';// 隠し属性actをセット
+				document.forms[0].submit();
+				return;
+			} else if (parm == "ADDRECORD"){
+				// リスト再表示
+				document.forms[0].act.value='addrecord';// 隠し属性actをセット
+				document.forms[0].submit();
+				return;
+			} else {
 				return;
 			}
-			// リスト削除
-			document.forms[0].act.value='delete';// 隠し属性actをセット
-			document.forms[0].submit();
-			return;
-		} else if (parm == "SEARCH"){
-			// リスト再表示
-			document.forms[0].act.value='search';// 隠し属性actをセット
-			document.forms[0].submit();
-			return;
-		} else if (parm == "ADDRECORD"){
-			// リスト再表示
-			document.forms[0].act.value='addrecord';// 隠し属性actをセット
-			document.forms[0].submit();
-			return;
-		} else {
+		}
+		function changeValue(idx){
+			//
+			document.forms[0].act.value='onchange';// 隠し属性actをセット
+			var chkList=document.getElementsByName('recList['+idx+'].update');
+			chkList[0].checked=true;
 			return;
 		}
-	}
-	function changeValue(idx){
-		//
-		document.forms[0].act.value='onchange';// 隠し属性actをセット
-		var chkList=document.getElementsByName('recList['+idx+'].update');
-		chkList[0].checked=true;
-		return;
-	}
-	// ログアウト処理
-	function doLogout(){
-	}
-//--->
-</script>
+		// ログアウト処理
+		function doLogout(){
+		}
+	</script>
 </head>
 <body bgcolor="#F5F5DC" bottommargin="0" leftmargin="5" topmargin="5"
 	rightmargin="5" marginheight="0" marginwidth="0">

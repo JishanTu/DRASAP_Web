@@ -3,16 +3,16 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false"%>
+
 <%-- ログイン情報の確認 --%>
-<%--<logic:notPresent name="user" scope="session">--%>
-<%--	<logic:redirect forward="timeout" />--%>
-<%--</logic:notPresent>--%>
-<c:if test="${sessionScope.user == null}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
+<c:if test="${empty sessionScope.user}">
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
-<html>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="Pragma" content="no-cache" />
@@ -73,12 +73,12 @@
 <%	// リクエストパラメータを確認し task=continueであれば、
 	// 検索条件や検索結果を元のまま、画面復帰する
 	if("continue".equals(request.getAttribute("task"))){ %>
-	<frame name="condition" src="switch.do?page=/search/searchCondition.jsp" scrolling="yes" />
+	<frame name="condition" src="searchCondition.do?act=search" scrolling="yes" />
 	<frame name="result" src="switch.do?page=/search/searchResult.jsp" scrolling="yes" />
 <% } else if("clear_result".equals(request.getAttribute("task"))){
 	// リクエストパラメータを確認し task=clear_resultであれば、
 	// 検索条件はそのまま、検索結果をクリアして、画面復帰する %>
-	<frame name="condition" src="switch.do?page=/search/searchCondition.jsp" scrolling="yes" />
+	<frame name="condition" src="searchCondition.do?act=search" scrolling="yes" />
 	<frame name="result" src="resultPre.do?task=init" scrolling="yes" />
 <% } else if("changeLanguage".equals(request.getAttribute("task"))){
 	// リクエストパラメータを確認し task=clear_resultであれば、

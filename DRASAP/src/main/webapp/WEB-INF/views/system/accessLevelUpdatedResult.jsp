@@ -3,21 +3,20 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-
 <%-- ログイン情報の確認 --%>
-<c:if test="${sessionScope.user == null}">
-    <script>
-        location.replace('<%=request.getContextPath()%>/timeout');
-    </script>
+<c:if test="${empty sessionScope.user}">
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
+
 <%-- アクセスレベル変更許可フラグがnullの場合、アクセス禁止 --%>
 <c:if test="${empty sessionScope.user.aclBatchUpdateFlag}">
     <c:redirect url="accessLevelUpdatedResult" />
 </c:if>
 
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<title>Drawing Search and Print System [アクセスレベル更新結果]</title>

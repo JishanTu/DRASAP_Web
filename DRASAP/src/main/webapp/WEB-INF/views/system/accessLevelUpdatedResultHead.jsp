@@ -5,12 +5,13 @@
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
 
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>アクセスレベル更新結果</title>
@@ -18,17 +19,15 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 	<script type="text/javascript">
-	<!--
-	document.onkeydown = keys;
-	function keys() {
-		switch (event.keyCode) {
-			case 116: // F5
-				event.keyCode = 0;
-				return false;
-				break;
+		document.onkeydown = keys;
+		function keys() {
+			switch (event.keyCode) {
+				case 116: // F5
+					event.keyCode = 0;
+					return false;
+					break;
+			}
 		}
-	}
-	//-->
 	</script>
 </head>
 <body bgcolor="#CCCCCC" style="margin: 0;">

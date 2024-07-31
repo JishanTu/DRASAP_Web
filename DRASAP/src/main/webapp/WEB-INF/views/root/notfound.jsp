@@ -1,6 +1,7 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
-<html lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Drawing Search and Print System [NotFound]</title>
@@ -8,6 +9,5 @@
 <body>
     <h1>ページが見つかりません。</h1>
     <p>お探しのページは存在しません。URLを確認してください。</p>
-    <a href="<%= request.getContextPath() %>/">ホームに戻る</a>
 </body>
 </html>

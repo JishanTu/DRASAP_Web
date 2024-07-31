@@ -6,26 +6,22 @@
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
 
 <c:set var="syutuList" value="${requestForm.list}" />
 
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<title>Drawing Search and Print System [図面登録依頼]</title>
-<style type="text/css">
-@import
-url(
-<%=request.getContextPath()%>/resources/css/default.css
-);
-</style>
-<script type="text/javascript">
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<title>Drawing Search and Print System [図面登録依頼]</title>
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<script type="text/javascript">
 		browserName = navigator.appName;
 		var WO1;
 		var w = screen.availWidth;
@@ -36,7 +32,7 @@ url(
 		window.moveTo(xPos,yPos);//画面の位置指定
 		if (browserName != "Netscape") focus();
 	</script>
-<script type="text/javascript">
+	<script type="text/javascript">
 		// 依頼する
 		function doIrai(){
 			document.forms[0].action.value="button_irai";//依頼ボタンのアクション

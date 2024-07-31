@@ -6,68 +6,63 @@
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
-</c:if>
-<html>
-<head>
-<meta content="text/html; charset=UTF-8" http-equiv="Content-type" />
-<meta content="no-cache" http-equiv="Pragma" />
-<meta content="no-cache" http-equiv="Cache-Control" />
-<style type="text/css">
-@import
-url(
-<%=request.getContextPath()%>/resources/css/default.css
-);
-</style>
-<style type="text/css">
-.deleteBtn {
-	width: 100%;
-/* 2022.04.13 Windows Edge対応. 削除ボタンが押せない障害を修正.
-    position:absolute;
-*/
-	text-align: center;
-}
-
-.goBackBtn {
-	width: 100%;
-	position: absolute;
-	text-align: right;
-	padding-right: 30px;
-	padding-bottom: 30px;
-}
--->
-</style>
-<script type="text/javascript">
-	browserName = navigator.appName;
-	// 遷移する
-	function submitFunc(parm){
-	    if (parm == "DELETE") {
-		var msg1 = document.getElementById("msg1");
-		var msg2 = document.getElementById("msg2");
-		msg1.innerHTML = "削除しています。しばらくお待ちください。";
-		msg2.innerHTML = "";
-	
-	        document.body.style.cursor="wait";
-	        var deleteButton = document.getElementById("deleteButton");
-	        var backButton = document.getElementById("backButton");
-	        deleteButton.disabled=true;
-	        backButton.disabled=true;
-		document.forms[0].act.value='delete';// 隠し属性actをセット
-		document.forms[0].submit();
-	    }
-	}
-	// ログアウト処理
-	function doLogout(){
-	}
-    function backSearchResult(){
-	parent.condition.document.forms[0].act.value="search";// 隠し属性actに'search'をセット
-	parent.condition.document.forms[0].target="result";// targetは'result'
-	parent.condition.document.forms[0].submit();
-    }
-//-->
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
+</c:if>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-type" />
+	<meta content="no-cache" http-equiv="Pragma" />
+	<meta content="no-cache" http-equiv="Cache-Control" />
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+		.deleteBtn {
+			width: 100%;
+		/* 2022.04.13 Windows Edge対応. 削除ボタンが押せない障害を修正.
+		    position:absolute;
+		*/
+			text-align: center;
+		}
+		
+		.goBackBtn {
+			width: 100%;
+			position: absolute;
+			text-align: right;
+			padding-right: 30px;
+			padding-bottom: 30px;
+		}
+	</style>
+	<script type="text/javascript">
+		browserName = navigator.appName;
+		// 遷移する
+		function submitFunc(parm){
+		    if (parm == "DELETE") {
+			var msg1 = document.getElementById("msg1");
+			var msg2 = document.getElementById("msg2");
+			msg1.innerHTML = "削除しています。しばらくお待ちください。";
+			msg2.innerHTML = "";
+		
+		        document.body.style.cursor="wait";
+		        var deleteButton = document.getElementById("deleteButton");
+		        var backButton = document.getElementById("backButton");
+		        deleteButton.disabled=true;
+		        backButton.disabled=true;
+			document.forms[0].act.value='delete';// 隠し属性actをセット
+			document.forms[0].submit();
+		    }
+		}
+		// ログアウト処理
+		function doLogout(){
+		}
+	    function backSearchResult(){
+			parent.condition.document.forms[0].act.value="search";// 隠し属性actに'search'をセット
+			parent.condition.document.forms[0].target="result";// targetは'result'
+			parent.condition.document.forms[0].submit();
+	    }
+	</script>
 </head>
 <body marginwidth="0" marginheight="0" bgcolor="#ffffff" rightmargin="0"
 	topmargin="0" leftmargin="0" bottommargin="0">
