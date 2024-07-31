@@ -6,12 +6,12 @@
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
 <script>
-		location.replace('<%=request.getContextPath()%>/timeout');
+	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>Drawing Search and Print System [図面検索]</title>
@@ -19,33 +19,34 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<script type="text/javascript">
-	<!--
-	// 隠し属性actにセットする
-	function setAct(param) {
-		if (param == 'continue') {<%-- 2013.09.05 yamagishi.
+		// 隠し属性actにセットする
+		function setAct(param) {
+			if (param == 'continue') {
+				<%-- 2013.09.05 yamagishi.
+				if (parent.condition != null) {
+					parent.condition.lockButtons();
+				} --%>
+				nowSearch();
+			}
+			document.forms[0].act.value=param;// 隠し属性actにセット
+		}
+		function onLoad() {
+			if (parent.condition != null) {
+				parent.condition.unLockButtons();
+			}
+		}
+		function nowSearch() {
+			var nowSearch;
+			nowSearch = document.getElementById("nowSearch");
+			nowSearch.style.visibility = "visible";
+		}
+		<%-- 2013.09.05 yamagishi add. start --%>
+		function lockButtons() {
 			if (parent.condition != null) {
 				parent.condition.lockButtons();
-			} --%>
-			nowSearch();
+			}
 		}
-		document.forms[0].act.value=param;// 隠し属性actにセット
-	}
-	function onLoad() {
-		if (parent.condition != null) {
-			parent.condition.unLockButtons();
-		}
-	}
-	function nowSearch() {
-		var nowSearch;
-		nowSearch = document.getElementById("nowSearch");
-		nowSearch.style.visibility = "visible";
-	}<%-- 2013.09.05 yamagishi add. start --%>
-	function lockButtons() {
-		if (parent.condition != null) {
-			parent.condition.lockButtons();
-		}
-	}<%-- 2013.09.05 yamagishi add. end --%>
-	//-->
+		<%-- 2013.09.05 yamagishi add. end --%>
 	</script>
 </head>
 <body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0" onload="onLoad();">

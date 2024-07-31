@@ -7,22 +7,17 @@
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
 <script>
-		location.replace('<%=request.getContextPath()%>/timeout');
+	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta content="text/html; charset=UTF-8" http-equiv="Content-type" />
-<meta content="no-cache" http-equiv="Pragma" />
-<meta content="no-cache" http-equiv="Cache-Control" />
-<style type="text/css">
-@import
-url(
-<%=request.getContextPath()%>/resources/css/default.css
-);
-</style>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-type" />
+	<meta content="no-cache" http-equiv="Pragma" />
+	<meta content="no-cache" http-equiv="Cache-Control" />
+	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 </head>
 <body marginwidth="0" marginheight="0" bgcolor="#ffffff" rightmargin="0"
 	topmargin="0" leftmargin="0" bottommargin="0">

@@ -9,162 +9,154 @@
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
 <script>
-		location.replace('<%=request.getContextPath()%>/timeout');
+	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<title>Drawing Search and Print System [図面検索]</title>
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<style type="text/css">
-@import
-url(
-<%=request.getContextPath()
-%>/resources/css/<%=session.getAttribute(
-"default_css"
-)%>
-);
-</style>
-<script type="text/javascript">
-    document.onkeydown = keys;
-    function keys() {
-        switch (event.keyCode) {
-            case 116: // F5
-                event.keyCode = 0;
-                return false;
-                break;
-        }
-    }
-    <%-- 2013.09.06 yamagishi add. start --%>
-    var userAgent;
-    var appVersion;<%-- end --%>
-    function onLoad() {
-        if (parent.parent.condition.unLockButtons != null) {
-            parent.parent.condition.unLockButtons();
-        }
-        <%-- 2013.07.16 yamagishi add. start --%>
-        if (navigator.appName == "Netscape" && !(navigator.platform.indexOf("Mac") != -1)) {
-            document.captureEvents(Event.MOUSEDOWN);
-        }
-        // 右クリック禁止
-        document.onmousedown = disableContextMenu;
-        document.oncontextmenu = disableOnContextMenu;
-        <%-- 2013.07.16 yamagishi add. end --%>
-        userAgent = window.navigator.userAgent.toLowerCase();<%-- 2013.09.06 yamagishi add. --%>
-        appVersion = window.navigator.appVersion.toLowerCase();
-    }
-    function nowSearch(){
-        var nowSearch;
-        nowSearch = document.getElementById("nowSearch");
-        nowSearch.style.visibility = "visible";
-    }
-    <%-- 2019.10.28 yamamoto add. start --%>
-    // 画面ロック
-    function screenLock(){
-        var screen;
-        screen = document.getElementById("screenLock");
-        screen.style.visibility = "visible";
-    }
-    // 画面ロック解除
-    function screenUnLock(){
-        var screen;
-        screen = document.getElementById("screenLock");
-        screen.style.visibility = "hidden";
-    }
-    <%-- 2019.10.28 yamamoto add. end --%>
-    <%-- 2013.07.16 yamagishi add. start --%>
-    function disableOnContextMenu() {
-        return false;
-    }
-    function disableContextMenu(ev) {
-        if (ev) {
-            if (ev.button && ev.button == 2) { // W3C DOM2
-                return false;
-            } else if (!ev.button && ev.which == 3) { // N4
-                return false;
-            } else if (navigator.platform.indexOf("Mac") != -1 && navigator.appName == "Netscape") {
-                return false;
-            }
-        } else {
-            if (event && event.button && event.button == 2) { // IE
-                return false;
-            }
-        }
-    }
-    <%-- 2013.07.16 yamagishi add. end --%>
-    <%-- 2013.09.06 yamagishi add. start --%>
-    var dialogFlag = false; // 二重起動防止
-    function openDLManagerDialog(idx) {
-		var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
-		var DRWG_NO = document.getElementById("DRWG_NO[" + idx + "]").value;
-		var FILE_NAME = document.getElementById("FILE_NAME[" + idx + "]").value;
-		var PATH_NAME = document.getElementById("PATH_NAME[" + idx + "]").value;
-		var DRWG_SIZE = document.getElementById("printSizeSelect" + idx).value;
-		var PDF = document.getElementById("PDF[" + idx + "]").value;
-		var PRINT_SIZE = document.getElementById("PRINT_SIZE[" + idx + "]").value;
-        drwgNoLink.href = drwgNoLink + '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
-                                     + '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
-                                     + '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
-                                     + '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
-                                     + '&PDF=' + encodeURIComponent(PDF)
-                                     + '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
-        
-<%      // DLマネージャが利用可能な場合
-        User me = (User) session.getAttribute("user");
-        if (me.isDLManagerAvailable()) { %>
-        if (!dialogFlag) {
-            dialogFlag = true;
-            var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
-            drwgNoLink.href = void(0);
-            var targetUrl = '<%= request.getContextPath() %>/switch.do?page=/search/DLManagerDialog.jsp';
-            targetUrl = targetUrl + '&searchIndex=' + idx;
-            var w = 300;
-            var h = 100;
-            if (userAgent.indexOf('msie') != -1 && appVersion.indexOf("msie 6.") != -1) {
-                // IE6用設定
-                w = 305;
-                h = 130;
-            }
-            window.showModalDialog(targetUrl, null, 'center=yes;status=no;scroll=no;resizable=no;dialogWidth=' + w + 'px;dialogHeight=' + h + 'px;'); // ※IEのみ
-            dialogFlag = false;
-        }
-        // hrefをキャンセル
-        return false;
-<%      } %>
-    }
-    <%-- 2013.09.06 yamagishi add. end --%>
-    
-    function updateHiddenInput(index, field) {
-        var selectElement = document.getElementById(field + 'Select' + index);
-        var hiddenInput = document.getElementById(field + 'Hidden' + index);
-        hiddenInput.value = selectElement.value;
-        hiddenInput.name = "searchResultList[" + index + "]."+ field;
-    }
-    
-    function updateCheckbox(checkbox, index) {
-        // Dynamically set the name attribute when the checkbox is checked
-        if (checkbox.checked) {
-            checkbox.name = "searchResultList[" + index + "].selected";
-            checkbox.value = 'true';
-        } else {
-            // Optional: If unchecked, you might want to remove the name attribute
-            checkbox.name = "searchResultList[" + index + "].selected";
-            checkbox.value = 'false';
-        }
-    }
-    
-    document.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
-            // Set name attribute based on existing index if needed
-            if (checkbox.checked) {
-                checkbox.name = "searchResultList[" + index + "].selected";
-            }
-        });
-    });
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<title>Drawing Search and Print System [図面検索]</title>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
+	<script type="text/javascript">
+	    document.onkeydown = keys;
+	    function keys() {
+	        switch (event.keyCode) {
+	            case 116: // F5
+	                event.keyCode = 0;
+	                return false;
+	                break;
+	        }
+	    }
+	    <%-- 2013.09.06 yamagishi add. start --%>
+	    var userAgent;
+	    var appVersion;<%-- end --%>
+	    function onLoad() {
+	        if (parent.parent.condition.unLockButtons != null) {
+	            parent.parent.condition.unLockButtons();
+	        }
+	        <%-- 2013.07.16 yamagishi add. start --%>
+	        if (navigator.appName == "Netscape" && !(navigator.platform.indexOf("Mac") != -1)) {
+	            document.captureEvents(Event.MOUSEDOWN);
+	        }
+	        // 右クリック禁止
+	        document.onmousedown = disableContextMenu;
+	        document.oncontextmenu = disableOnContextMenu;
+	        <%-- 2013.07.16 yamagishi add. end --%>
+	        userAgent = window.navigator.userAgent.toLowerCase();<%-- 2013.09.06 yamagishi add. --%>
+	        appVersion = window.navigator.appVersion.toLowerCase();
+	    }
+	    function nowSearch(){
+	        var nowSearch;
+	        nowSearch = document.getElementById("nowSearch");
+	        nowSearch.style.visibility = "visible";
+	    }
+	    <%-- 2019.10.28 yamamoto add. start --%>
+	    // 画面ロック
+	    function screenLock(){
+	        var screen;
+	        screen = document.getElementById("screenLock");
+	        screen.style.visibility = "visible";
+	    }
+	    // 画面ロック解除
+	    function screenUnLock(){
+	        var screen;
+	        screen = document.getElementById("screenLock");
+	        screen.style.visibility = "hidden";
+	    }
+	    <%-- 2019.10.28 yamamoto add. end --%>
+	    <%-- 2013.07.16 yamagishi add. start --%>
+	    function disableOnContextMenu() {
+	        return false;
+	    }
+	    function disableContextMenu(ev) {
+	        if (ev) {
+	            if (ev.button && ev.button == 2) { // W3C DOM2
+	                return false;
+	            } else if (!ev.button && ev.which == 3) { // N4
+	                return false;
+	            } else if (navigator.platform.indexOf("Mac") != -1 && navigator.appName == "Netscape") {
+	                return false;
+	            }
+	        } else {
+	            if (event && event.button && event.button == 2) { // IE
+	                return false;
+	            }
+	        }
+	    }
+	    <%-- 2013.07.16 yamagishi add. end --%>
+	    <%-- 2013.09.06 yamagishi add. start --%>
+	    var dialogFlag = false; // 二重起動防止
+	    function openDLManagerDialog(idx) {
+			var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
+			var DRWG_NO = document.getElementById("DRWG_NO[" + idx + "]").value;
+			var FILE_NAME = document.getElementById("FILE_NAME[" + idx + "]").value;
+			var PATH_NAME = document.getElementById("PATH_NAME[" + idx + "]").value;
+			var DRWG_SIZE = document.getElementById("printSizeSelect" + idx).value;
+			var PDF = document.getElementById("PDF[" + idx + "]").value;
+			var PRINT_SIZE = document.getElementById("PRINT_SIZE[" + idx + "]").value;
+	        drwgNoLink.href = drwgNoLink + '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
+	                                     + '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+	                                     + '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
+	                                     + '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
+	                                     + '&PDF=' + encodeURIComponent(PDF)
+	                                     + '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
+	        
+	<%      // DLマネージャが利用可能な場合
+	        User me = (User) session.getAttribute("user");
+	        if (me.isDLManagerAvailable()) { %>
+	        if (!dialogFlag) {
+	            dialogFlag = true;
+	            var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
+	            drwgNoLink.href = void(0);
+	            var targetUrl = '<%= request.getContextPath() %>/switch.do?page=/search/DLManagerDialog.jsp';
+	            targetUrl = targetUrl + '&searchIndex=' + idx;
+	            var w = 300;
+	            var h = 100;
+	            if (userAgent.indexOf('msie') != -1 && appVersion.indexOf("msie 6.") != -1) {
+	                // IE6用設定
+	                w = 305;
+	                h = 130;
+	            }
+	            window.showModalDialog(targetUrl, null, 'center=yes;status=no;scroll=no;resizable=no;dialogWidth=' + w + 'px;dialogHeight=' + h + 'px;'); // ※IEのみ
+	            dialogFlag = false;
+	        }
+	        // hrefをキャンセル
+	        return false;
+	<%      } %>
+	    }
+	    <%-- 2013.09.06 yamagishi add. end --%>
+	    
+	    function updateHiddenInput(index, field) {
+	        var selectElement = document.getElementById(field + 'Select' + index);
+	        var hiddenInput = document.getElementById(field + 'Hidden' + index);
+	        hiddenInput.value = selectElement.value;
+	        hiddenInput.name = "searchResultList[" + index + "]."+ field;
+	    }
+	    
+	    function updateCheckbox(checkbox, index) {
+	        // Dynamically set the name attribute when the checkbox is checked
+	        if (checkbox.checked) {
+	            checkbox.name = "searchResultList[" + index + "].selected";
+	            checkbox.value = 'true';
+	        } else {
+	            // Optional: If unchecked, you might want to remove the name attribute
+	            checkbox.name = "searchResultList[" + index + "].selected";
+	            checkbox.value = 'false';
+	        }
+	    }
+	    
+	    document.addEventListener('DOMContentLoaded', (event) => {
+	        document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
+	            // Set name attribute based on existing index if needed
+	            if (checkbox.checked) {
+	                checkbox.name = "searchResultList[" + index + "].selected";
+	            }
+	        });
+	    });
     </script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">

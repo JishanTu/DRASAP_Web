@@ -8,12 +8,12 @@
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
 <script>
-		location.replace('<%=request.getContextPath()%>/timeout');
+	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>Drawing Search and Print System [図面検索]</title>
@@ -21,12 +21,12 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<style type="text/css">
-	.management {
-	    position: absolute;
-	    top:0px;
-	    right:0px;
-	    margin-right:10px;
-	}
+		.management {
+		    position: absolute;
+		    top:0px;
+		    right:0px;
+		    margin-right:10px;
+		}
 	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
