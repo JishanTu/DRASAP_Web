@@ -967,7 +967,7 @@
 							<td align="center"><html:checkbox property="onlyNewest" /> <bean:write name="searchConditionForm"--%>
 							<td align="left" nowrap="nowrap">
 								<%-- 最新追番のみ表示 --%>
-								<input type="checkbox" name="onlyNewest" value="true" ${searchConditionForm.isOnlyNewest() ? 'checked ' : ''}/>
+								<input type="checkbox" name="onlyNewest" value="true" ${searchConditionForm.isOnlyNewest() ? 'checked' : ''}/>
 								${searchConditionForm.c_label2}
 								<br />
 								<%-- 図番指定順 --%>

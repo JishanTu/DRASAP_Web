@@ -73,12 +73,12 @@
 <%	// リクエストパラメータを確認し task=continueであれば、
 	// 検索条件や検索結果を元のまま、画面復帰する
 	if("continue".equals(request.getAttribute("task"))){ %>
-	<frame name="condition" src="switch.do?page=/search/searchCondition.jsp" scrolling="no" />
+	<frame name="condition" src="searchCondition.do?act=search" scrolling="no" />
 	<frame name="result" src="switch.do?page=/search/searchResult.jsp" scrolling="yes" />
 <% } else if("clear_result".equals(request.getAttribute("task"))){
 	// リクエストパラメータを確認し task=clear_resultであれば、
 	// 検索条件はそのまま、検索結果をクリアして、画面復帰する %>
-	<frame name="condition" src="switch.do?page=/search/searchCondition.jsp" scrolling="no" />
+	<frame name="condition" src="searchCondition.do?act=search" scrolling="no" />
 	<frame name="result" src="resultPre.do?task=init" scrolling="yes" />
 <% } else if("changeLanguage".equals(request.getAttribute("task"))){
 	// リクエストパラメータを確認し task=clear_resultであれば、
