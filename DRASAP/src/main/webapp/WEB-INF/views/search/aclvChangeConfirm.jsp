@@ -5,11 +5,13 @@
 <%@ page isELIgnored="false"%>
 
 <%-- ログイン情報の確認 --%>
-<c:if test="${sessionScope.user == null}">
-	<script>
+<c:if test="${empty sessionScope.user}">
+<script>
 		location.replace('<%=request.getContextPath()%>/timeout');
-	</script>
+</script>
 </c:if>
+
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />

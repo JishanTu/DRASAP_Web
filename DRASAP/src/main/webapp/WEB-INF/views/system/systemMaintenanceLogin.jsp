@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Pragma" content="no-cache" />

@@ -6,13 +6,14 @@
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
+<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
 
 <c:set var="syutuList" value="${requestForm.list}" />
 
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />

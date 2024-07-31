@@ -5,14 +5,15 @@
 <%@ page isELIgnored="false"%>
 
 <%-- ログイン情報の確認 --%>
-<c:if test="${sessionScope.user == null}">
-	<script>
-		location.replace('<%=request.getContextPath() %>/timeout');
-	</script>
+<c:if test="${empty sessionScope.user}">
+<script>
+		location.replace('<%=request.getContextPath()%>/timeout');
+</script>
 </c:if>
+
 <c:set var="searchConditionForm" value="${sessionScope.searchConditionForm}"/>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/tr/xhtml1/DTD/xhtml1-frameset.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
