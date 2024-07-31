@@ -13,7 +13,7 @@
 <c:set var="accessLevelBatchUpdateForm" value="${sessionScope.accessLevelBatchUpdateForm}" />
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 	<title>アクセスレベル一括更新</title>
