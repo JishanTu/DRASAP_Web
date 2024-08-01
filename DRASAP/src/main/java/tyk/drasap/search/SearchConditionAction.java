@@ -1,6 +1,9 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
+import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -562,6 +565,7 @@ public class SearchConditionAction extends BaseAction {
 				hit = rs1.getInt("CNT");
 				category.debug("件数は " + hit);
 			}
+			String onlyNewest = searchConditionForm.isOnlyNewest() ? "1" : "0";
 			// 2020.03.11 yamamoto modified. start
 			if (searchConditionForm.isOrderDrwgNo()) {
 				// ユーザー管理マスターに検索カラム、表示件数をセットする。
@@ -574,7 +578,7 @@ public class SearchConditionAction extends BaseAction {
 					// ユーザーObjectにもセットする
 					user.setViewSelCol(i - 1, val);
 				}
-				strSql2 += " ONLY_NEWEST='" + (searchConditionForm.isOnlyNewest() ? "1" : "0") + "',";
+				strSql2 += " ONLY_NEWEST='" + onlyNewest + "',";
 				strSql2 += " DISPLAY_COUNT='" + searchConditionForm.getDisplayCount() + "'";
 				strSql2 += " where USER_ID='" + user.getId() + "'";
 
@@ -599,7 +603,7 @@ public class SearchConditionAction extends BaseAction {
 					// ユーザーObjectにもセットする
 					user.setViewSelCol(i - 1, val);
 				}
-				strSql2 += " ONLY_NEWEST='" + (searchConditionForm.isOnlyNewest() ? "1" : "0") + "',";
+				strSql2 += " ONLY_NEWEST='" + onlyNewest + "',";
 				strSql2 += " DISPLAY_COUNT='" + searchConditionForm.getDisplayCount() + "'";
 				strSql2 += " where USER_ID='" + user.getId() + "'";
 
@@ -607,6 +611,7 @@ public class SearchConditionAction extends BaseAction {
 				stmt2.executeUpdate(strSql2);
 
 				// ユーザーObjectにもセットする
+				user.setOnlyNewestFlag(onlyNewest);
 				user.setDisplayCount(searchConditionForm.getDisplayCount());
 			}
 			// 2020.03.11 yamamoto modified. end

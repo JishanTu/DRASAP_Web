@@ -106,6 +106,20 @@
 			document.oncontextmenu = disableOnContextMenu;
 		}
 		<%-- 2013.07.16 yamagishi add. end --%>
+		function listviewchange() {
+			document.getElementById('thumbnail_size').style.visibility = 'visible';
+            document.getElementById('select_size').style.visibility = 'visible';
+            document.getElementById('list_view').style.display = 'none';
+            document.getElementById('expand_size').style.visibility = 'visible';
+            document.getElementById('thumbnail_view').style.display = 'blok';
+		}
+		function thumbnailviewchange() {
+			document.getElementById('thumbnail_size').style.visibility = 'hidden';
+            document.getElementById('select_size').style.visibility = 'hidden';
+            document.getElementById('list_view').style.display = 'blok';
+            document.getElementById('expand_size').style.visibility = 'hidden';
+            document.getElementById('thumbnail_view').style.display = 'none';
+		}
 	</script>
 </head>
 <%-- 2013.07.16 yamagishi modified.
@@ -122,6 +136,18 @@
 					<b>${searchResultForm.h_label1 }</b></span></td></tr>
 			</table></td>
 		<td><span class="normal10">
+			<%	String dev = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumb.value");
+			if ("true".equals(dev)) { %>
+			<span class="normal12" id="thumbnail_size" style="visibility: hidden;">サムネイルサイズ</span>
+			<select id="select_size" value="${searchResultForm.h_label2}" style="visibility: hidden;"/>
+				<option value="L">大</option>
+				<option value="M">中</option>
+				<option value="S">小</option>
+			</select>
+			<input type="button" id="list_view" value="${searchResultForm.h_label7}" onclick="listviewchange()"  style="display: blok;"/>
+			<input type="button" id="thumbnail_view" value="${searchResultForm.h_label8}" onclick="thumbnailviewchange()" style="display: none;"/>
+			<span id="expand_size" style="visibility: hidden;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<%	} %>
 			<input type="button" value="${searchResultForm.h_label2}" onclick="checkOnAll()" />
 			<input type="button" value="${searchResultForm.h_label3}" onclick="checkOffAll()" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
