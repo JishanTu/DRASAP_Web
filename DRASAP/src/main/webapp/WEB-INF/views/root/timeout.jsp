@@ -133,8 +133,6 @@
 		top.resizeTo(w, h);
 		top.moveTo(xPos,yPos);//画面の位置指定
 	}
-	//-->
-
 </script>
 </head>
 <body>

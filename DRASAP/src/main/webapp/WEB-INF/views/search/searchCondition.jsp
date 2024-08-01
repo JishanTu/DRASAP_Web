@@ -997,9 +997,14 @@
 								&emsp; <% // ラジオボタンの前に空白を入れる %>
 								<input type="radio"name="eachCondition" value="OR" ${searchConditionForm.eachCondition == "OR"  ? 'checked ' : ''}/> OR
 								<input type="radio"name="eachCondition" value="AND" ${searchConditionForm.eachCondition == "AND"  ? 'checked ' : ''}/> AND <br /> <br /> 
+								 <%
+								 // ユーザーに検索権限があるか? なければ検索開始ボタンをロックする
+								 User user = (User) session.getAttribute("user");
+								 boolean hasAuth = (user.getMaxAclValue().compareTo("1") >= 0);
+								 %>
 								<%-- 検索開始ボタン --%>
 								&emsp; <% // ボタンの前に空白を入れる %> 
-								<button type="submit" onclick="event.preventDefault(); doSearch();" style="font-size: 12pt; font-weight: bold;">
+								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold;">
 									${searchConditionForm.c_label4}
 								</button>
 							</td>
