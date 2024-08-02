@@ -103,8 +103,8 @@ public class SearchResultAction extends BaseAction {
 			searchResultForm.setDispNumberOffest("0");//オフセット値を変更する
 			searchResultForm.setAct("");// act属性をクリア
 			for (int i = 1; i <= searchResultForm.getViewSelColNum(); i++) {
-				String a = request.getParameter("dispAttr" + i);
-				searchResultForm.getDispAttrList().set(i - 1, a);
+				String dispAttr = request.getParameter("dispAttr" + i);
+				searchResultForm.getDispAttrList().set(i - 1, dispAttr);
 			}
 			session.setAttribute("searchResultForm", searchResultForm);
 			// ユーザーマスターに選択した表示項目をセットする
