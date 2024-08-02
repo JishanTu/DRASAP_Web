@@ -303,7 +303,7 @@ public class PreviewAction extends BaseAction {
 		// 間引きが必要か判定する
 		// 間引きサイズの未設定にも対応する。'04.Jul.19変更 by Hirata。
 		String mabikiDpi = null;// 間引きのdpi
-		if("ORG".equals(drwgSize)) {
+		if ("ORG".equals(drwgSize)) {
 			drwgSize = PRINT_SIZE;
 		}
 		if (drasapInfo.getMabiki100dpiSize() != null &&

@@ -138,25 +138,10 @@
 	    }
 	    
 	    function updateCheckbox(checkbox, index) {
-	        // Dynamically set the name attribute when the checkbox is checked
-	        if (checkbox.checked) {
-	            checkbox.name = "searchResultList[" + index + "].selected";
-	            checkbox.value = 'true';
-	        } else {
-	            // Optional: If unchecked, you might want to remove the name attribute
-	            checkbox.name = "searchResultList[" + index + "].selected";
-	            checkbox.value = 'false';
-	        }
+	    	checkbox.name = "searchResultList[" + index + "].selected";
+	        
+	        checkbox.value = checkbox.checked ? 'true' : 'false';
 	    }
-	    
-	    document.addEventListener('DOMContentLoaded', (event) => {
-	        document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
-	            // Set name attribute based on existing index if needed
-	            if (checkbox.checked) {
-	                checkbox.name = "searchResultList[" + index + "].selected";
-	            }
-	        });
-	    });
     </script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
@@ -242,7 +227,8 @@
             <td><html:checkbox name="searchResultElement" property="selected" indexed="true" /></td> --%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1}">
-							<td><input type="checkbox" id="checkbox${status.index}"
+							<td>
+							<input type="checkbox" id="checkbox${status.index}"
 								value="true"
 								<c:if test="${item.selected}">checked="checked"</c:if>
 								onchange="updateCheckbox(this, ${status.index})" /></td>

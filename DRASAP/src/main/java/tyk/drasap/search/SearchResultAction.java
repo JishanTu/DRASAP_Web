@@ -187,13 +187,7 @@ public class SearchResultAction extends BaseAction {
 
 		}
 		if ("ACLV_CHG".equals(searchResultForm.getAct())) {
-			for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
-				if ("true".equals(request.getParameter("searchResultList[" + i + "].selected"))) {
-					searchResultForm.getSearchResultElement(i).setSelected(true);
-				}
-			}
 			// アクセスレベルの変更画面へ
-			session.setAttribute("searchResultForm", searchResultForm);
 			category.debug("--> aclv_change");
 			return "aclv_change";
 		}

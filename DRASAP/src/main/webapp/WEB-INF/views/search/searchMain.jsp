@@ -69,11 +69,11 @@
     </script>
 </head>
 <!-- FRAMESET rows="155,*" -->
-<frameset rows="180,*">
+<frameset rows="200,*">
 <%	// リクエストパラメータを確認し task=continueであれば、
 	// 検索条件や検索結果を元のまま、画面復帰する
 	if("continue".equals(request.getAttribute("task"))){ %>
-	<frame name="condition" src="searchCondition.do?act=search" scrolling="yes" />
+	<frame name="condition" src="searchCondition.do?task=search" scrolling="yes" />
 	<frame name="result" src="switch.do?page=/search/searchResult.jsp" scrolling="yes" />
 <% } else if("clear_result".equals(request.getAttribute("task"))){
 	// リクエストパラメータを確認し task=clear_resultであれば、
@@ -88,7 +88,7 @@
 <% } else if("multipreview".equals(request.getAttribute("task"))){
 	// リクエストパラメータを確認し task=clear_resultであれば、
 	// 検索条件はそのまま、検索結果をクリアして、画面復帰する %>
-	<frame name="condition" src="searchCondition.do?act=multipreview" scrolling="no" />
+	<frame name="condition" src="searchCondition.do?act=multipreview" scrolling="yes" />
 	<frame name="result" />
 <% } else {
 	// それ以外の場合は、検索条件や検索結果を初期化する%>

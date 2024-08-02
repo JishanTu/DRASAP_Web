@@ -274,6 +274,14 @@
 								</c:forEach>
 								<hr/ style="border: none; height: 0.5px; background-color: red;">
 							</c:if>
+							<c:forEach var="msg" items="${deleteHostReqForm.msgList}">
+								<c:if test="${msg != null}">
+									<hr/ style="border: none; height: 0.5px; background-color: red;">
+										<span style="${msg.msgStyle}">${msg.msg}</span><br/>
+									<hr/ style="border: none; height: 0.5px; background-color: red;">
+								</c:if>
+							</c:forEach>
+							
 
 						</ul>
 					</td>

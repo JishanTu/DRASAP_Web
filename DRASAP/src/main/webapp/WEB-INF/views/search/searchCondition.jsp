@@ -37,6 +37,10 @@
 			z-index: 100;
 		}
 		
+		#toolotipContents {
+            display: none;
+        }
+		
 		img {
 			background-color: #CCCCCC;
 			position: relative;
@@ -703,7 +707,7 @@
 // 2020.03.13 yamamoto add end
 </script>
 </head>
-<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;"
+<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;overflow-x: auto;height: 100%;"
 	onload="onLoad()">
 	<form action="<%=request.getContextPath() %>/searchCondition" method="post" >
 <%-- 		<c:set var="searchConditionForm" --%>
