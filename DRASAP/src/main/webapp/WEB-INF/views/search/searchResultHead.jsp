@@ -27,6 +27,9 @@
 		    right:0px;
 		    margin-right:10px;
 		}
+		#list_view, #thumbnail_view {
+			width:120px;
+		}
 	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
@@ -107,18 +110,20 @@
 		}
 		<%-- 2013.07.16 yamagishi add. end --%>
 		function listviewchange() {
-			document.getElementById('thumbnail_size').style.visibility = 'visible';
-            document.getElementById('select_size').style.visibility = 'visible';
-            document.getElementById('list_view').style.display = 'none';
-            document.getElementById('expand_size').style.visibility = 'visible';
-            document.getElementById('thumbnail_view').style.display = 'blok';
+			parent.result_body.document.forms[0].act.value="LIST_VIEW";
+			parent.result_body.document.forms[0].target="_parent";
+			parent.result_body.document.forms[0].submit();
 		}
 		function thumbnailviewchange() {
-			document.getElementById('thumbnail_size').style.visibility = 'hidden';
-            document.getElementById('select_size').style.visibility = 'hidden';
-            document.getElementById('list_view').style.display = 'blok';
-            document.getElementById('expand_size').style.visibility = 'hidden';
-            document.getElementById('thumbnail_view').style.display = 'none';
+			parent.result_body.document.forms[0].act.value="THUMBNAIL_VIEW";
+			parent.result_body.document.forms[0].target="_parent";
+			parent.result_body.document.forms[0].submit();
+		}
+		function selectchange() {
+		    parent.result_body.document.forms[0].thumbnailsize.value = document.forms[0].elements["thumbnailsize"].value;
+			parent.result_body.document.forms[0].act.value="THUMBNAIL_SIZE";
+			parent.result_body.document.forms[0].target="_parent";
+			parent.result_body.document.forms[0].submit();
 		}
 	</script>
 </head>
@@ -138,15 +143,22 @@
 		<td><span class="normal10">
 			<%	String dev = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumb.value");
 			if ("true".equals(dev)) { %>
-			<span class="normal12" id="thumbnail_size" style="visibility: hidden;">サムネイルサイズ</span>
-			<select id="select_size" value="${searchResultForm.h_label2}" style="visibility: hidden;"/>
-				<option value="L">大</option>
-				<option value="M">中</option>
-				<option value="S">小</option>
+			<span class="normal12" style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
+                						  <c:otherwise>visibility: hidden;</c:otherwise></c:choose>">サムネイルサイズ</span>
+			<select name="thumbnailsize" onchange="selectchange()" 
+					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
+								 	 <c:otherwise>visibility: hidden;</c:otherwise></c:choose>">
+				<option value="L" <c:if test="${sessionScope.thumbnailsize == 'L'}">selected</c:if>>大</option>
+				<option value="M" <c:if test="${sessionScope.thumbnailsize == 'M'}">selected</c:if>>中</option>
+				<option value="S" <c:if test="${sessionScope.thumbnailsize == 'S'}">selected</c:if>>小</option>
 			</select>
-			<input type="button" id="list_view" value="${searchResultForm.h_label7}" onclick="listviewchange()"  style="display: blok;"/>
-			<input type="button" id="thumbnail_view" value="${searchResultForm.h_label8}" onclick="thumbnailviewchange()" style="display: none;"/>
-			<span id="expand_size" style="visibility: hidden;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<input type="button" id="list_view" value="${searchResultForm.h_label7}" onclick="listviewchange()" 
+			       style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
+                		  <c:otherwise>display: inline-block;</c:otherwise></c:choose>"/>
+			<input type="button" id="thumbnail_view" value="${searchResultForm.h_label8}" onclick="thumbnailviewchange()" 
+				   style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: inline-block;</c:when>
+                		  <c:otherwise>display: none;</c:otherwise></c:choose>"/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<%	} %>
 			<input type="button" value="${searchResultForm.h_label2}" onclick="checkOnAll()" />
 			<input type="button" value="${searchResultForm.h_label3}" onclick="checkOffAll()" />

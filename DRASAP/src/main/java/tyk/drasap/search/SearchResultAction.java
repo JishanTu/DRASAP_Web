@@ -64,6 +64,8 @@ public class SearchResultAction extends BaseAction {
 			return "timeout";
 		}
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
+		session.removeAttribute("indication");
+		session.setAttribute("thumbnailsize", "L");
 
 		//
 		int offset = Integer.parseInt(searchResultForm.getDispNumberOffest());// 今のoffset値
@@ -100,6 +102,10 @@ public class SearchResultAction extends BaseAction {
 			// オフセット値をゼロに
 			searchResultForm.setDispNumberOffest("0");//オフセット値を変更する
 			searchResultForm.setAct("");// act属性をクリア
+			for (int i = 1; i <= searchResultForm.getViewSelColNum(); i++) {
+				String a = request.getParameter("dispAttr" + i);
+				searchResultForm.getDispAttrList().set(i - 1, a);
+			}
 			session.setAttribute("searchResultForm", searchResultForm);
 			// ユーザーマスターに選択した表示項目をセットする
 			updateUserInfo(searchResultForm, user, errors);
@@ -210,6 +216,19 @@ public class SearchResultAction extends BaseAction {
 			category.debug("--> PDF_ZIP");
 			return "multi_pdf";
 			// 2020.03.10 yamamoto add. end
+		}
+		if ("LIST_VIEW".equals(searchResultForm.getAct())) {
+			session.setAttribute("indication", "thumbnail_view");
+			return "result";
+		}
+		if ("THUMBNAIL_VIEW".equals(searchResultForm.getAct())) {
+			session.setAttribute("indication", "list_view");
+			return "result";
+		}
+		if ("THUMBNAIL_SIZE".equals(searchResultForm.getAct())) {
+			session.setAttribute("thumbnailsize", request.getParameter("thumbnailsize"));
+			session.setAttribute("indication", "thumbnail_view");
+			return "result";
 		}
 		return null;
 	}

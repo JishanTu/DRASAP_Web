@@ -21,6 +21,84 @@
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
+	<style type="text/css">
+		body {
+            margin: 0;
+            overflow-x: hidden;
+    		overflow-y: auto;
+       	}
+        
+ 		.container {
+            display: inline-block;
+		    gap: 10px;
+        }
+
+        .galleryr {
+        	display:flex;
+        	padding: 5px;
+            margin: 5px;
+            text-align: center; 
+		    transition: transform 0.3s ease;
+		    float: left;
+		    flex-direction: column;
+		    border: 2px solid black;
+        }
+        
+        .controls {
+            align-items: center;
+            justify-content: center; 
+            margin-top: 5px;
+        }
+        
+        .thumbnail {
+		    border: 1px solid #ccc;
+		    padding: 5px;
+		    transition: transform 0.3s ease;
+		}
+
+        .thumbnail.small {
+		    width: 100px;
+		    height: 50px;
+		}
+
+		.thumbnail.medium {
+		    width: 250px;
+		    height: 125px;
+		}
+
+		.thumbnail.large {
+		    width: 500px;
+		    height: 250px;
+		}
+
+        .checkbox.small {
+		    transform: scale(0.75);
+		}
+
+		.checkbox.medium {
+		    transform: scale(1);
+		}
+
+		.checkbox.large {
+		    transform: scale(1.5);
+		}
+		
+		.drwgNo.small {
+		    font-size: 12px;
+		}
+
+		.drwgNo.medium {
+		    font-size: 16px;
+		}
+
+		.drwgNo.large {
+		    font-size: 20px;
+		}
+		
+		.thumbnail:hover {
+		    transform: scale(1.1);
+		}
+	</style>
 	<script type="text/javascript">
 	    document.onkeydown = keys;
 	    function keys() {
@@ -142,6 +220,36 @@
 	        
 	        checkbox.value = checkbox.checked ? 'true' : 'false';
 	    }
+
+        function changeSize(thumbnailsize) {
+            const images = document.querySelectorAll('img.thumbnail');
+            images.forEach(img => {
+                img.classList.remove('large', 'medium', 'small');
+                img.classList.add(thumbnailsize);
+            });
+            document.querySelectorAll('.checkbox, .drwgNo').forEach(element => {
+                element.classList.remove('small', 'medium', 'large');
+            });
+
+            document.querySelectorAll('.checkbox').forEach(element => {
+                element.classList.add(thumbnailsize);
+            });
+
+            document.querySelectorAll('.drwgNo').forEach(element => {
+                element.classList.add(thumbnailsize);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            <% String thumbnailsize = (String) session.getAttribute("thumbnailsize"); %>
+            <% if ("L".equals(thumbnailsize)) { %>
+                changeSize('large');
+            <% } else if ("M".equals(thumbnailsize)) { %>
+                changeSize('medium');
+            <% } else if ("S".equals(thumbnailsize)) { %>
+                changeSize('small');
+            <% } %>
+        });
     </script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
@@ -153,6 +261,7 @@
 		</c:forEach>
 	    <input type="hidden" name="outputPrinter" /> 
 	    <input type="hidden" name="outCsvAll" />
+	    <input type="hidden" name="thumbnailsize" /> 
 
 		<%-- ファイル出力で全属性か --%>
 
@@ -176,7 +285,9 @@
 			</c:otherwise>
 		</c:choose>
 
-		<table border="0" cellspacing="1" cellpadding="0">
+		<table border="0" cellspacing="1" cellpadding="0" style="<c:choose><c:when test="${sessionScope.indication == 'list_view'}">display: block;</c:when>
+                						  						 <c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
+                						  						 <c:otherwise>display: block;</c:otherwise></c:choose>">
 			<%-- userを定義する --%>
 			<c:set var="user" value="${sessionScope.user}" />
 			<%-- iterateに必要なoffsetとlengthを定義する --%>
@@ -324,6 +435,23 @@
 					</c:forEach>
 				</tr>
 			</c:forEach>
+		</table>
+		<table border="0" cellspacing="1" cellpadding="0">
+			<div class="container"style="<c:choose><c:when test="${sessionScope.indication == 'list_view'}">display: none;</c:when>
+	                						  		<c:when test="${sessionScope.indication == 'thumbnail_view'}">display: block;</c:when>
+	                						  		<c:otherwise>display: none;</c:otherwise></c:choose>">
+				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest-1}">
+					<div class="galleryr">
+					<img src="<%=request.getContextPath()%>/resources/img/DRASAPBanner.JPG" alt="Thumbnail" class="thumbnail large">
+					<div class="controls">
+					<input type="checkbox" id="checkbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
+						onchange="updateCheckbox(this, ${status.index})" class="checkbox large"/>
+					<a id="drwgNoLink[${status.index}]" href='<c:url value="/preview"/>' title='<c:out value="${item.aclBalloon}"/>' 
+						onclick="return openDLManagerDialog(${status.index});" class="drwgNo large">${item.drwgNoFormated}</a>
+					</div>
+					</div>
+				</c:forEach>
+			</div>
 		</table>
 		<table class="nowsearch" id="nowSearch" style="visibility: hidden">
 			<tr valign="middle">
