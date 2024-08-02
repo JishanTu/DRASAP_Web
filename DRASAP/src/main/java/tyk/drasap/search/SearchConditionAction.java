@@ -586,6 +586,7 @@ public class SearchConditionAction extends BaseAction {
 				stmt2.executeUpdate(strSql2);
 
 				// ユーザーObjectにもセットする
+				user.setOnlyNewestFlag(onlyNewest);
 				user.setDisplayCount(searchConditionForm.getDisplayCount());
 			} else if (!"multipreview".equals(searchConditionForm.act)) {
 				// ここから先は、ユーザー管理マスターに検索カラム、表示件数をセットする。
