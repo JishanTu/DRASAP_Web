@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="windows-31j" ?>
-<%@ page language="java" contentType="text/html; charset=windows-31j"
-    pageEncoding="windows-31j"%>
+<%@ page language="java" contentType="text/html; charset=windows-31j" pageEncoding="windows-31j"%>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">

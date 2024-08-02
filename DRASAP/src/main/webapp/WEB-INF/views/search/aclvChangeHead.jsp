@@ -33,9 +33,8 @@
 			var w = screen.availWidth - 100;
 			var h = screen.availHeight - 100;
 	
-			WO1 = window
-					.open(
-							"/DRASAP/search/aclvHelp.jsp",
+			WO1 = window.open(
+							"switch.do?page=/search/aclvHelp.jsp",
 							targetName,
 							//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
 							'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width='

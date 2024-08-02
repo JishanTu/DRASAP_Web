@@ -31,7 +31,7 @@
 </head>
 
 <frameset rows="65,*,35" framespacing="0" border="0">
-	<frame name="list_head" src="<%=request.getContextPath() %>/req_print.do" scrolling="no" />
+	<frame name="list_head" src="<%=request.getContextPath() %>/req_print.do" />
 	<frame name="list_body" src="<%=request.getContextPath() %>/req_list.do" />
 	<frame name="list_foot" src="<%=request.getContextPath() %>/req_result.do" />
 </frameset>

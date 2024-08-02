@@ -41,6 +41,8 @@ public class SearchResultForm extends BaseForm {
 	String H_label4 = "再表示";
 	String H_label5 = "出力プロッタ";
 	String H_label6 = "表示属性";
+	String H_label7 = "リスト表示";
+	String H_label8 = "サムネイル表示";
 	// Footer 部
 	String F_label1 = "{0}件中  {1}-{2}件表示";
 	String F_label2 = "前の{0}件";
@@ -79,7 +81,9 @@ public class SearchResultForm extends BaseForm {
 	// 2020.03.10 yamamoto add. start
 	public final char F_LABEL9_LINE_NO = 31; // PDF単独zip出力
 	// 2020.03.10 yamamoto add. end
-	public final char F_LABEL10_LINE_NO = 31;
+	public final char F_LABEL10_LINE_NO = 34; // 図番削除
+	public final char H_label7_LINE_NO = 35; // リスト表示
+	public final char H_label8_LINE_NO = 36; // 図番削除
 	// ---------------------------------------------------- method
 	/* (非 Javadoc)
 	 * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
@@ -442,6 +446,14 @@ public class SearchResultForm extends BaseForm {
 		return H_label6;
 	}
 
+	public String getH_label7() {
+		return H_label7;
+	}
+
+	public String getH_label8() {
+		return H_label8;
+	}
+
 	public void setF_label1(String f_label1) {
 		F_label1 = f_label1;
 	}
@@ -504,6 +516,14 @@ public class SearchResultForm extends BaseForm {
 
 	public void setH_label6(String h_label6) {
 		H_label6 = h_label6;
+	}
+
+	public void setH_label7(String h_label7) {
+		H_label7 = h_label7;
+	}
+
+	public void setH_label8(String h_label8) {
+		H_label8 = h_label8;
 	}
 
 	public String getLanguage() {
