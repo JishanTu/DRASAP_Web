@@ -298,7 +298,7 @@
 
 			<c:forEach var="item"
 				items="${sessionScope.searchResultForm.getSearchResultList()}"
-				varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest-1}">
+				varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
 				<c:if test="${((status.index - iterateOffest) % 15) == 0}">
 					<tr>
 						<td></td>
@@ -430,7 +430,7 @@
 					<%-- 2013.06.24 yamagishi modified. end --%>
 					<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
 						<td nowrap="nowrap">
-							<span class="normal12">&nbsp; ${sessionScope.searchResultForm.getDispAttr(index - 1)}&nbsp;</span>
+							<span class="normal12">&nbsp; ${item.getAttr(sessionScope.searchResultForm.getDispAttr(index - 1))}&nbsp;</span>
 						</td>
 					</c:forEach>
 				</tr>
@@ -440,7 +440,7 @@
 			<div class="container"style="<c:choose><c:when test="${sessionScope.indication == 'list_view'}">display: none;</c:when>
 	                						  		<c:when test="${sessionScope.indication == 'thumbnail_view'}">display: block;</c:when>
 	                						  		<c:otherwise>display: none;</c:otherwise></c:choose>">
-				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest-1}">
+				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
 					<div class="galleryr">
 					<img src="<%=request.getContextPath()%>/resources/img/DRASAPBanner.JPG" alt="Thumbnail" class="thumbnail large">
 					<div class="controls">

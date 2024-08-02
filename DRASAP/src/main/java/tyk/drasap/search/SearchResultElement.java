@@ -2,6 +2,8 @@ package tyk.drasap.search;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang3.StringUtils;
+
 import tyk.drasap.common.DrasapUtil;
 
 /**
@@ -61,11 +63,13 @@ public class SearchResultElement {
 	 * @param value
 	 */
 	public void addAttr(String key, String value) {
-		if (value == null) {
-			attrMap.put(key, "");
-		} else {
-			attrMap.put(key, value);
+		if (StringUtils.isEmpty(key)) {
+			return;
 		}
+		if (StringUtils.isEmpty(value)) {
+			value = "";
+		}
+		attrMap.put(key, value);
 	}
 
 	/**
@@ -74,7 +78,7 @@ public class SearchResultElement {
 	 * @return
 	 */
 	public String getAttr(String key) {
-		if (key == null || key.length() == 0) {
+		if (StringUtils.isEmpty(key) || !attrMap.containsKey(key)) {
 			return "";
 		}
 		return attrMap.get(key);
