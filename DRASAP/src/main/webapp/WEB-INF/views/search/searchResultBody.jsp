@@ -441,12 +441,14 @@
 													<c:otherwise>display: none;</c:otherwise></c:choose>">
 				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
 					<div class="galleryr">
-						<img src="<c:choose><c:when test="${empty sessionScope.thumbnailFlag || sessionScope.thumbnailFlag == '0'}">
-							<%=request.getContextPath()%>/resultPre.do?act=thumbnail&thumbnailName=${item.thumbnailName}&pathName=${fn:replace(item.pathName, '\\', '/')}</c:when>
-											<c:when test="${sessionScope.thumbnailFlag == '1'}">
-							<%=request.getContextPath()%>/WEB-INF/views/temp/CONFIDENTIALBanner.JPG</c:when>
-											<c:otherwise>
-							<%=request.getContextPath()%>/resources/img/CONFIDENTIALBanner.JPG</c:otherwise></c:choose>" class="thumbnail large"/>
+						<c:choose>
+							<c:when test="${item.aclFlag == 1 }">
+								<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" class="thumbnail large"/>
+							</c:when>
+							<c:otherwise>
+								<img src="<%=request.getContextPath()%>/resources/img/thumb/NotAccess_thumb.jpg" class="thumbnail large"/>
+							</c:otherwise>
+						</c:choose>
 						<div class="controls">
 							<input type="checkbox" id="checkbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
 								onchange="updateCheckbox(this, ${status.index})" class="checkbox large"/>

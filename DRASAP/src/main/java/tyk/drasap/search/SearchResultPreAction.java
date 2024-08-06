@@ -5,12 +5,14 @@ import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
 import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
 import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileTime;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -20,6 +22,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -108,6 +111,15 @@ public class SearchResultPreAction extends BaseAction {
 			searchResultForm.dispNumberPerPage = searchConditionForm.getDisplayCount();// 1ページ当たりの表示件数
 			searchResultForm.dispNumberOffest = "0";// 検索結果を表示するときのoffset値。最初のページはゼロ。
 			searchResultForm.setDispAttrList(searchConditionForm.getDispAttrList()); // 表示属性をコピー
+
+			//コピー元ファイル
+			DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
+			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
+				String subPath = searchResultForm.searchResultList.get(i).pathName;
+				String thumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
+				String newThumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + subPath, thumbnailName, request);
+				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
+			}
 			// アクセスログを
 			AccessLoger.loging(user, AccessLoger.FID_SEARCH, user.getSys_id());
 		} else if ("language".equals(request.getAttribute("task"))) {
@@ -153,13 +165,7 @@ public class SearchResultPreAction extends BaseAction {
 			AccessLoger.loging(user, AccessLoger.FID_SEARCH, sys_id);
 		}
 		// sessionにフォームを
-		if ("thumbnail".equals(request.getParameter("act"))) {
-			DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
-			String thumbnailName = request.getParameter("thumbnailName");
-			String path = request.getParameter("pathName");
-			String pathName = drasapInfo.getViewDBDrive() + path + "/" + thumbnailName;
-			getThumbnailList(response, pathName, thumbnailName, session);
-		} else if (searchResultForm != null) {
+		if (searchResultForm != null) {
 			// 画面表示文字列取得
 			getScreenItemStrList(searchResultForm, user);
 			session.setAttribute("searchResultForm", searchResultForm);
@@ -486,43 +492,40 @@ public class SearchResultPreAction extends BaseAction {
 		}
 	}
 
-	private void getThumbnailList(HttpServletResponse response, String pathName, String thumbnailName, HttpSession session) throws Exception {
+	/**
+	 *
+	 * @param outThumbPath
+	 * @param thumbnailName
+	 * @param request
+	 * @return
+	 */
+	private String thumbnailCopy(String outThumbPath, String thumbnailName, HttpServletRequest request) {
+		//コピー元ファイル
+		String outPathName = outThumbPath + File.separator + thumbnailName;
 
-		File file = new File(pathName);
-		if (!file.exists() || file.isDirectory()) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found");
-		}
-		session.removeAttribute("thumbnailFlag");
-		BufferedOutputStream out = null;
-		BufferedInputStream in = null;
+		//コピー先ファイル
+		ServletContext context = request.getServletContext();
+		String thumbDir = context.getRealPath("resources/img/thumb");
+		String newOutPathName = thumbDir + File.separator + thumbnailName;
+
+		Path outPath = Paths.get(outPathName);
+		Path newOutPath = Paths.get(newOutPathName);
 		try {
-			response.setContentType("image/jpeg");
-			response.setHeader("Content-Disposition", "attachment;" +
-					" filename=" + new String(thumbnailName.getBytes("Windows-31J"), "ISO8859_1"));
-			//このままだと日本語が化ける
-			//response.setHeader("Content-Disposition","attachment; filename=" + fileName);
-			response.setContentLength((int) file.length());
-
-			out = new BufferedOutputStream(response.getOutputStream());
-			in = new BufferedInputStream(new FileInputStream(file));
-			int c;
-			while ((c = in.read()) != -1) {
-				out.write(c);
+			if (!Files.exists(outPath)) {
+				return "NotFound_thumb.jpg";
 			}
-			out.flush();
-		} catch (Exception e) {
-			session.setAttribute("thumbnailFlag", "1");
-		} finally {
-			// CLOSE処理
-			try {
-				in.close();
-			} catch (Exception e) {
+			FileTime thumbnailLastModifiedTime = Files.getLastModifiedTime(outPath);
+			if (Files.exists(newOutPath)) {
+				FileTime newThumbnailLastModifiedTime = Files.getLastModifiedTime(newOutPath);
+				if (thumbnailLastModifiedTime.compareTo(newThumbnailLastModifiedTime) <= 0) {
+					return thumbnailName;
+				}
 			}
-			try {
-				out.close();
-				category.debug("out.close()");
-			} catch (Exception e) {
-			}
+			Files.copy(outPath, newOutPath, StandardCopyOption.REPLACE_EXISTING);
+			Files.setLastModifiedTime(newOutPath, thumbnailLastModifiedTime);
+		} catch (IOException e) {
+			return "NotFound_thumb.jpg";
 		}
+		return thumbnailName;
 	}
 }
