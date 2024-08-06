@@ -215,9 +215,21 @@
 			hiddenInput.name = "searchResultList[" + index + "]."+ field;
 		}
 
-		function updateCheckbox(checkbox, index) {
-			checkbox.name = "searchResultList[" + index + "].selected";
-			checkbox.value = checkbox.checked ? 'true' : 'false';
+		function isOrderDrwgNo(index) {
+			var ischecked =document.getElementById('checkbox' + index).checked;
+			var checkElement = document.getElementById('checkbox' + index);
+			var hiddenInput = document.getElementById('checkbox' + 'Hidden' + index);
+			if (ischecked == true) {
+				// チェックが入っていたら無効化
+				checkElement.value = true
+				
+			} else {
+				// チェックが入って無いなら有効化
+				checkElement.value = false
+			}
+			hiddenInput.value = checkElement.value;
+			hiddenInput.name = "searchResultList[" + index + "]."+ 'selected';
+			
 		}
 
 		function changeSize(thumbnailSize) {
@@ -338,10 +350,10 @@
 					<c:choose>
 						<c:when test="${item.aclFlag == 1}">
 							<td>
-							<input type="checkbox" id="checkbox${status.index}"
-								value="true"
-								<c:if test="${item.selected}">checked="checked"</c:if>
-								onchange="updateCheckbox(this, ${status.index})" /></td>
+							<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/> 
+							<input type="checkbox"id="checkbox${status.index}"
+								value="true" onclick="isOrderDrwgNo(${status.index})"
+								<c:if test="${item.selected}">checked="checked"</c:if> /></td>
 						</c:when>
 						<c:otherwise>
 							<td />
