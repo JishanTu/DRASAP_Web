@@ -142,7 +142,7 @@
 			</table></td>
 		<td><span class="normal10">
 			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.value");
-			if ("true".equals(tumbValue)) { %>
+			if ("true".equals(thumbValue)) { %>
 			<span class="normal12" style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
 											<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">サムネイルサイズ</span>
 			<select name="thumbnailSize" onchange="selectChange()"

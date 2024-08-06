@@ -492,7 +492,7 @@ public class SearchResultPreAction extends BaseAction {
 		if (!file.exists() || file.isDirectory()) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found");
 		}
-		session.removeAttribute("thumbnailflag");
+		session.removeAttribute("thumbnailFlag");
 		BufferedOutputStream out = null;
 		BufferedInputStream in = null;
 		try {
@@ -511,7 +511,7 @@ public class SearchResultPreAction extends BaseAction {
 			}
 			out.flush();
 		} catch (Exception e) {
-			session.setAttribute("thumbnailflag", "1");
+			session.setAttribute("thumbnailFlag", "1");
 		} finally {
 			// CLOSEèàóù
 			try {
