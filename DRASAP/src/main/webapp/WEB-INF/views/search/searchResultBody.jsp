@@ -23,42 +23,42 @@
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<style type="text/css">
 		body {
-            margin: 0;
-            overflow-x: hidden;
-    		overflow-y: auto;
-       	}
-        
- 		.container {
-            display: inline-block;
-		    gap: 10px;
-        }
-
-        .galleryr {
-        	display:flex;
-        	padding: 5px;
-            margin: 5px;
-            text-align: center; 
-		    transition: transform 0.3s ease;
-		    float: left;
-		    flex-direction: column;
-		    border: 2px solid black;
-        }
-        
-        .controls {
-            align-items: center;
-            justify-content: center; 
-            margin-top: 5px;
-        }
-        
-        .thumbnail {
-		    border: 1px solid #ccc;
-		    padding: 5px;
-		    transition: transform 0.3s ease;
+			margin: 0;
+			overflow-x: hidden;
+			overflow-y: auto;
 		}
 
-        .thumbnail.small {
-		    width: 100px;
-		    height: 50px;
+		.container {
+		display: inline-block;
+			gap: 10px;
+		}
+
+		.galleryr {
+			display:flex;
+			padding: 5px;
+			margin: 5px;
+			text-align: center; 
+			transition: transform 0.3s ease;
+			float: left;
+			flex-direction: column;
+			border: 2px solid black;
+		}
+
+		.controls {
+			align-items: center;
+			justify-content: center; 
+			margin-top: 5px;
+		}
+
+		.thumbnail {
+			border: 1px solid #ccc;
+			padding: 5px;
+			transition: transform 0.3s ease;
+		}
+
+		.thumbnail.small {
+			width: 100px;
+			height: 50px;
 		}
 
 		.thumbnail.medium {
@@ -67,108 +67,108 @@
 		}
 
 		.thumbnail.large {
-		    width: 500px;
-		    height: 250px;
+			width: 500px;
+			height: 250px;
 		}
 
-        .checkbox.small {
-		    transform: scale(0.75);
+		.checkbox.small {
+			transform: scale(0.75);
 		}
 
 		.checkbox.medium {
-		    transform: scale(1);
+			transform: scale(1);
 		}
 
 		.checkbox.large {
-		    transform: scale(1.5);
+			transform: scale(1.5);
 		}
 		
 		.drwgNo.small {
-		    font-size: 12px;
+			font-size: 12px;
 		}
 
 		.drwgNo.medium {
-		    font-size: 16px;
+			font-size: 16px;
 		}
 
 		.drwgNo.large {
-		    font-size: 20px;
+			font-size: 20px;
 		}
 		
 		.thumbnail:hover {
-		    transform: scale(1.1);
+			transform: scale(1.1);
 		}
 	</style>
 	<script type="text/javascript">
-	    document.onkeydown = keys;
-	    function keys() {
-	        switch (event.keyCode) {
-	            case 116: // F5
-	                event.keyCode = 0;
-	                return false;
-	                break;
-	        }
-	    }
-	    <%-- 2013.09.06 yamagishi add. start --%>
-	    var userAgent;
-	    var appVersion;<%-- end --%>
-	    function onLoad() {
-	        if (parent.parent.condition.unLockButtons != null) {
-	            parent.parent.condition.unLockButtons();
-	        }
-	        <%-- 2013.07.16 yamagishi add. start --%>
-	        if (navigator.appName == "Netscape" && !(navigator.platform.indexOf("Mac") != -1)) {
-	            document.captureEvents(Event.MOUSEDOWN);
-	        }
-	        // 右クリック禁止
-	        document.onmousedown = disableContextMenu;
-	        document.oncontextmenu = disableOnContextMenu;
-	        <%-- 2013.07.16 yamagishi add. end --%>
-	        userAgent = window.navigator.userAgent.toLowerCase();<%-- 2013.09.06 yamagishi add. --%>
-	        appVersion = window.navigator.appVersion.toLowerCase();
-	    }
-	    function nowSearch(){
-	        var nowSearch;
-	        nowSearch = document.getElementById("nowSearch");
-	        nowSearch.style.visibility = "visible";
-	    }
-	    <%-- 2019.10.28 yamamoto add. start --%>
-	    // 画面ロック
-	    function screenLock(){
-	        var screen;
-	        screen = document.getElementById("screenLock");
-	        screen.style.visibility = "visible";
-	    }
-	    // 画面ロック解除
-	    function screenUnLock(){
-	        var screen;
-	        screen = document.getElementById("screenLock");
-	        screen.style.visibility = "hidden";
-	    }
-	    <%-- 2019.10.28 yamamoto add. end --%>
-	    <%-- 2013.07.16 yamagishi add. start --%>
-	    function disableOnContextMenu() {
-	        return false;
-	    }
-	    function disableContextMenu(ev) {
-	        if (ev) {
-	            if (ev.button && ev.button == 2) { // W3C DOM2
-	                return false;
-	            } else if (!ev.button && ev.which == 3) { // N4
-	                return false;
-	            } else if (navigator.platform.indexOf("Mac") != -1 && navigator.appName == "Netscape") {
-	                return false;
-	            }
-	        } else {
-	            if (event && event.button && event.button == 2) { // IE
-	                return false;
-	            }
-	        }
-	    }
-	    <%-- 2013.07.16 yamagishi add. end --%>
-	    <%-- 2013.09.06 yamagishi add. start --%>
-	    var dialogFlag = false; // 二重起動防止
-	    function openDLManagerDialog(idx) {
+		document.onkeydown = keys;
+		function keys() {
+			switch (event.keyCode) {
+			case 116: // F5
+				event.keyCode = 0;
+				return false;
+				break;
+			}
+		}
+		<%-- 2013.09.06 yamagishi add. start --%>
+		var userAgent;
+		var appVersion;<%-- end --%>
+		function onLoad() {
+			if (parent.parent.condition.unLockButtons != null) {
+				parent.parent.condition.unLockButtons();
+			}
+			<%-- 2013.07.16 yamagishi add. start --%>
+			if (navigator.appName == "Netscape" && !(navigator.platform.indexOf("Mac") != -1)) {
+				document.captureEvents(Event.MOUSEDOWN);
+			}
+			// 右クリック禁止
+			document.onmousedown = disableContextMenu;
+			document.oncontextmenu = disableOnContextMenu;
+			<%-- 2013.07.16 yamagishi add. end --%>
+			userAgent = window.navigator.userAgent.toLowerCase();<%-- 2013.09.06 yamagishi add. --%>
+			appVersion = window.navigator.appVersion.toLowerCase();
+		}
+		function nowSearch(){
+			var nowSearch;
+			nowSearch = document.getElementById("nowSearch");
+			nowSearch.style.visibility = "visible";
+		}
+		<%-- 2019.10.28 yamamoto add. start --%>
+		// 画面ロック
+		function screenLock(){
+			var screen;
+			screen = document.getElementById("screenLock");
+			screen.style.visibility = "visible";
+		}
+		// 画面ロック解除
+		function screenUnLock(){
+			var screen;
+			screen = document.getElementById("screenLock");
+			screen.style.visibility = "hidden";
+		}
+		<%-- 2019.10.28 yamamoto add. end --%>
+		<%-- 2013.07.16 yamagishi add. start --%>
+		function disableOnContextMenu() {
+			return false;
+		}
+		function disableContextMenu(ev) {
+			if (ev) {
+				if (ev.button && ev.button == 2) { // W3C DOM2
+					return false;
+				} else if (!ev.button && ev.which == 3) { // N4
+					return false;
+				} else if (navigator.platform.indexOf("Mac") != -1 && navigator.appName == "Netscape") {
+					return false;
+				}
+			} else {
+				if (event && event.button && event.button == 2) { // IE
+					return false;
+				}
+			}
+		}
+		<%-- 2013.07.16 yamagishi add. end --%>
+		<%-- 2013.09.06 yamagishi add. start --%>
+		var dialogFlag = false; // 二重起動防止
+		function openDLManagerDialog(idx) {
 			var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
 			var DRWG_NO = document.getElementById("DRWG_NO[" + idx + "]").value;
 			var FILE_NAME = document.getElementById("FILE_NAME[" + idx + "]").value;
@@ -176,81 +176,80 @@
 			var DRWG_SIZE = document.getElementById("printSizeSelect" + idx).value;
 			var PDF = document.getElementById("PDF[" + idx + "]").value;
 			var PRINT_SIZE = document.getElementById("PRINT_SIZE[" + idx + "]").value;
-	        drwgNoLink.href = drwgNoLink + '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
-	                                     + '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
-	                                     + '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
-	                                     + '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
-	                                     + '&PDF=' + encodeURIComponent(PDF)
-	                                     + '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
-	        
-	<%      // DLマネージャが利用可能な場合
-	        User me = (User) session.getAttribute("user");
-	        if (me.isDLManagerAvailable()) { %>
-	        if (!dialogFlag) {
-	            dialogFlag = true;
-	            var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
-	            drwgNoLink.href = void(0);
-	            var targetUrl = '<%= request.getContextPath() %>/switch.do?page=/search/DLManagerDialog.jsp';
-	            targetUrl = targetUrl + '&searchIndex=' + idx;
-	            var w = 300;
-	            var h = 100;
-	            if (userAgent.indexOf('msie') != -1 && appVersion.indexOf("msie 6.") != -1) {
-	                // IE6用設定
-	                w = 305;
-	                h = 130;
-	            }
-	            window.showModalDialog(targetUrl, null, 'center=yes;status=no;scroll=no;resizable=no;dialogWidth=' + w + 'px;dialogHeight=' + h + 'px;'); // ※IEのみ
-	            dialogFlag = false;
-	        }
-	        // hrefをキャンセル
-	        return false;
-	<%      } %>
-	    }
-	    <%-- 2013.09.06 yamagishi add. end --%>
-	    
-	    function updateHiddenInput(index, field) {
-	        var selectElement = document.getElementById(field + 'Select' + index);
-	        var hiddenInput = document.getElementById(field + 'Hidden' + index);
-	        hiddenInput.value = selectElement.value;
-	        hiddenInput.name = "searchResultList[" + index + "]."+ field;
-	    }
-	    
-	    function updateCheckbox(checkbox, index) {
-	    	checkbox.name = "searchResultList[" + index + "].selected";
-	        
-	        checkbox.value = checkbox.checked ? 'true' : 'false';
-	    }
+			drwgNoLink.href = drwgNoLink + '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
+											+ '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+											+ '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
+											+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
+											+ '&PDF=' + encodeURIComponent(PDF)
+											+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
 
-        function changeSize(thumbnailsize) {
-            const images = document.querySelectorAll('img.thumbnail');
-            images.forEach(img => {
-                img.classList.remove('large', 'medium', 'small');
-                img.classList.add(thumbnailsize);
-            });
-            document.querySelectorAll('.checkbox, .drwgNo').forEach(element => {
-                element.classList.remove('small', 'medium', 'large');
-            });
+	<%		// DLマネージャが利用可能な場合
+			User me = (User) session.getAttribute("user");
+			if (me.isDLManagerAvailable()) { %>
+			if (!dialogFlag) {
+				dialogFlag = true;
+				var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
+				drwgNoLink.href = void(0);
+				var targetUrl = '<%= request.getContextPath() %>/switch.do?page=/search/DLManagerDialog.jsp';
+				targetUrl = targetUrl + '&searchIndex=' + idx;
+				var w = 300;
+				var h = 100;
+				if (userAgent.indexOf('msie') != -1 && appVersion.indexOf("msie 6.") != -1) {
+					// IE6用設定
+					w = 305;
+					h = 130;
+				}
+				window.showModalDialog(targetUrl, null, 'center=yes;status=no;scroll=no;resizable=no;dialogWidth=' + w + 'px;dialogHeight=' + h + 'px;'); // ※IEのみ
+				dialogFlag = false;
+			}
+			// hrefをキャンセル
+			return false;
+	<%		} %>
+		}
+		<%-- 2013.09.06 yamagishi add. end --%>
 
-            document.querySelectorAll('.checkbox').forEach(element => {
-                element.classList.add(thumbnailsize);
-            });
+		function updateHiddenInput(index, field) {
+			var selectElement = document.getElementById(field + 'Select' + index);
+			var hiddenInput = document.getElementById(field + 'Hidden' + index);
+			hiddenInput.value = selectElement.value;
+			hiddenInput.name = "searchResultList[" + index + "]."+ field;
+		}
 
-            document.querySelectorAll('.drwgNo').forEach(element => {
-                element.classList.add(thumbnailsize);
-            });
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            <% String thumbnailsize = (String) session.getAttribute("thumbnailsize"); %>
-            <% if ("L".equals(thumbnailsize)) { %>
-                changeSize('large');
-            <% } else if ("M".equals(thumbnailsize)) { %>
-                changeSize('medium');
-            <% } else if ("S".equals(thumbnailsize)) { %>
-                changeSize('small');
-            <% } %>
-        });
-    </script>
+		function updateCheckbox(checkbox, index) {
+			checkbox.name = "searchResultList[" + index + "].selected";
+			checkbox.value = checkbox.checked ? 'true' : 'false';
+		}
+
+		function changeSize(thumbnailSize) {
+			const images = document.querySelectorAll('img.thumbnail');
+			images.forEach(img => {
+				img.classList.remove('large', 'medium', 'small');
+				img.classList.add(thumbnailSize);
+			});
+			document.querySelectorAll('.checkbox, .drwgNo').forEach(element => {
+				element.classList.remove('small', 'medium', 'large');
+			});
+
+			document.querySelectorAll('.checkbox').forEach(element => {
+				element.classList.add(thumbnailSize);
+			});
+
+			document.querySelectorAll('.drwgNo').forEach(element => {
+				element.classList.add(thumbnailSize);
+			});
+		}
+
+		document.addEventListener('DOMContentLoaded', function() {
+			<% String thumbnailSize = (String) session.getAttribute("thumbnailSize"); %>
+			<% if ("L".equals(thumbnailSize)) { %>
+				changeSize('large');
+			<% } else if ("M".equals(thumbnailSize)) { %>
+				changeSize('medium');
+			<% } else if ("S".equals(thumbnailSize)) { %>
+				changeSize('small');
+			<% } %>
+		});
+	</script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
 	<form action="<%=request.getContextPath() %>/result" method="post" >
@@ -259,9 +258,9 @@
 		<%-- この隠し属性がないと、次のXX件をクリックすると、表示属性が消えてしまう --%>
 			<input type="hidden"name="dispAttr${index}" value="${sessionScope.searchResultForm.getDispAttr(index - 1)}"/>
 		</c:forEach>
-	    <input type="hidden" name="outputPrinter" /> 
-	    <input type="hidden" name="outCsvAll" />
-	    <input type="hidden" name="thumbnailsize" /> 
+		<input type="hidden" name="outputPrinter" />
+		<input type="hidden" name="outCsvAll" />
+		<input type="hidden" name="thumbnailSize" />
 
 		<%-- ファイル出力で全属性か --%>
 
@@ -286,8 +285,8 @@
 		</c:choose>
 
 		<table border="0" cellspacing="1" cellpadding="0" style="<c:choose><c:when test="${sessionScope.indication == 'list_view'}">display: block;</c:when>
-                						  						 <c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
-                						  						 <c:otherwise>display: block;</c:otherwise></c:choose>">
+																<c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
+																<c:otherwise>display: block;</c:otherwise></c:choose>">
 			<%-- userを定義する --%>
 			<c:set var="user" value="${sessionScope.user}" />
 			<%-- iterateに必要なoffsetとlengthを定義する --%>
@@ -303,9 +302,9 @@
 					<tr>
 						<td></td>
 						<!--
-                アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
-                <td></td>
-                -->
+				アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
+				<td></td>
+				-->
 						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
 							class="normal10">
 								${sessionScope.searchResultForm.dispOutputSizeName}</span></td>
@@ -335,7 +334,7 @@
 				</c:choose>
 				<tr bgcolor="${bgcolor1}">
 					<%-- 2013.08.21 yamagishi modified. start
-            <td><html:checkbox name="searchResultElement" property="selected" indexed="true" /></td> --%>
+			<td><html:checkbox name="searchResultElement" property="selected" indexed="true" /></td> --%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1}">
 							<td>
@@ -350,14 +349,14 @@
 					</c:choose>
 					<%-- 2013.08.21 yamagishi modified. end --%>
 					<!--
-            アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
-            <%-- // この図面が、このユーザーにとって印刷可能なら
-                if(user.isPrintable(searchResultElement)) { --%>
-                <td></td>
-            <%-- } else { --%>
-                <td bgcolor="#FF0000"><span class="normal10white">×</span></td>
-            <%-- } --%>
-            -->
+			アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
+			<%-- // この図面が、このユーザーにとって印刷可能なら
+				if(user.isPrintable(searchResultElement)) { --%>
+				<td></td>
+			<%-- } else { --%>
+				<td bgcolor="#FF0000"><span class="normal10white">×</span></td>
+			<%-- } --%>
+			-->
 					<td align="center">
 								<input type="hidden" id="printSizeHidden${status.index}" value="${item.printSize}"/> 
 					<select name="printSize"id="printSizeSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'printSize')">
@@ -402,10 +401,10 @@
 					</select></td>
 
 					<%-- 2013.06.24 yamagishi modified. start
-            <td nowrap="nowrap"><span class="normal12blue">
-                <html:link forward="preview" name="searchResultElement" property="linkParmMap">
-                    <bean:write name="searchResultElement" property="drwgNoFormated" />
-                </html:link></span></td> --%>
+			<td nowrap="nowrap"><span class="normal12blue">
+				<html:link forward="preview" name="searchResultElement" property="linkParmMap">
+					<bean:write name="searchResultElement" property="drwgNoFormated" />
+				</html:link></span></td> --%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1 }">
 							<td nowrap="nowrap"><span class="normal12blue"> <a
@@ -438,18 +437,28 @@
 		</table>
 		<table border="0" cellspacing="1" cellpadding="0">
 			<div class="container"style="<c:choose><c:when test="${sessionScope.indication == 'list_view'}">display: none;</c:when>
-	                						  		<c:when test="${sessionScope.indication == 'thumbnail_view'}">display: block;</c:when>
-	                						  		<c:otherwise>display: none;</c:otherwise></c:choose>">
+													<c:when test="${sessionScope.indication == 'thumbnail_view'}">display: block;</c:when>
+													<c:otherwise>display: none;</c:otherwise></c:choose>">
 				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
 					<div class="galleryr">
-					<img src="<%=request.getContextPath()%>/resources/img/DRASAPBanner.JPG" alt="Thumbnail" class="thumbnail large">
-					<div class="controls">
-					<input type="checkbox" id="checkbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
-						onchange="updateCheckbox(this, ${status.index})" class="checkbox large"/>
-					<a id="drwgNoLink[${status.index}]" href='<c:url value="/preview"/>' title='<c:out value="${item.aclBalloon}"/>' 
-						onclick="return openDLManagerDialog(${status.index});" class="drwgNo large">${item.drwgNoFormated}</a>
+						<img src="<c:choose><c:when test="${empty sessionScope.thumbnailFlag || sessionScope.thumbnailFlag == '0'}">
+							<%=request.getContextPath()%>/resultPre.do?act=thumbnail&thumbnailName=${item.thumbnailName}&pathName=${fn:replace(item.pathName, '\\', '/')}</c:when>
+											<c:when test="${sessionScope.thumbnailflag == '1'}">
+							<%=request.getContextPath()%>/resources/img/CONFIDENTIALBanner.JPG</c:when>
+											<c:otherwise>
+							<%=request.getContextPath()%>/resources/img/CONFIDENTIALBanner.JPG</c:otherwise></c:choose>" class="thumbnail large"/>
+						<div class="controls">
+							<input type="checkbox" id="checkbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
+								onchange="updateCheckbox(this, ${status.index})" class="checkbox large"/>
+							<a id="drwgNoLink[${status.index}]" href='<c:url value="/preview"/>' title='<c:out value="${item.aclBalloon}"/>' 
+								onclick="return openDLManagerDialog(${status.index});" class="drwgNo large">${item.drwgNoFormated}</a>
+						</div>
 					</div>
-					</div>
+					<input type="hidden" id="DRWG_NO[${status.index}]" value="${item.drwgNo}"/>
+					<input type="hidden" id="FILE_NAME[${status.index}]" value="${item.fileName}"/>
+					<input type="hidden" id="PATH_NAME[${status.index}]" value="${item.pathName}"/>
+					<input type="hidden" id="PDF[${status.index}]" value="${item.linkParmMap['PDF']}"/>
+					<input type="hidden" id="PRINT_SIZE[${status.index}]" value="${item.printSize}"/>
 				</c:forEach>
 			</div>
 		</table>

@@ -22,10 +22,10 @@
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<style type="text/css">
 		.management {
-		    position: absolute;
-		    top:0px;
-		    right:0px;
-		    margin-right:10px;
+			position: absolute;
+			top:0px;
+			right:0px;
+			margin-right:10px;
 		}
 		#list_view, #thumbnail_view {
 			width:120px;
@@ -48,7 +48,7 @@
 			var currentForm = document.forms[0];
 			for (var j = 1; j <= ${searchResultForm.getViewSelColNum()}; j++) {
 				var dispAttr = 'dispAttr' + j;
-                parentForm[dispAttr].value = currentForm[dispAttr].value;
+				parentForm[dispAttr].value = currentForm[dispAttr].value;
 			}
 			parentForm.outputPrinter.value=currentForm.outputPrinter.value;
 			parentForm.act.value="REFRESH";// 隠し属性actにREFRESHをセット
@@ -109,18 +109,18 @@
 			document.oncontextmenu = disableOnContextMenu;
 		}
 		<%-- 2013.07.16 yamagishi add. end --%>
-		function listviewchange() {
+		function listViewChange() {
 			parent.result_body.document.forms[0].act.value="LIST_VIEW";
 			parent.result_body.document.forms[0].target="_parent";
 			parent.result_body.document.forms[0].submit();
 		}
-		function thumbnailviewchange() {
+		function thumbnailViewChange() {
 			parent.result_body.document.forms[0].act.value="THUMBNAIL_VIEW";
 			parent.result_body.document.forms[0].target="_parent";
 			parent.result_body.document.forms[0].submit();
 		}
-		function selectchange() {
-		    parent.result_body.document.forms[0].thumbnailsize.value = document.forms[0].elements["thumbnailsize"].value;
+		function selectChange() {
+			parent.result_body.document.forms[0].thumbnailsize.value = document.forms[0].elements["thumbnailSize"].value;
 			parent.result_body.document.forms[0].act.value="THUMBNAIL_SIZE";
 			parent.result_body.document.forms[0].target="_parent";
 			parent.result_body.document.forms[0].submit();
@@ -141,23 +141,23 @@
 					<b>${searchResultForm.h_label1 }</b></span></td></tr>
 			</table></td>
 		<td><span class="normal10">
-			<%	String dev = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumb.value");
-			if ("true".equals(dev)) { %>
+			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.value");
+			if ("true".equals(tumbValue)) { %>
 			<span class="normal12" style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
-                						  <c:otherwise>visibility: hidden;</c:otherwise></c:choose>">サムネイルサイズ</span>
-			<select name="thumbnailsize" onchange="selectchange()" 
+											<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">サムネイルサイズ</span>
+			<select name="thumbnailSize" onchange="selectChange()"
 					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
-								 	 <c:otherwise>visibility: hidden;</c:otherwise></c:choose>">
-				<option value="L" <c:if test="${sessionScope.thumbnailsize == 'L'}">selected</c:if>>大</option>
-				<option value="M" <c:if test="${sessionScope.thumbnailsize == 'M'}">selected</c:if>>中</option>
-				<option value="S" <c:if test="${sessionScope.thumbnailsize == 'S'}">selected</c:if>>小</option>
+									<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">
+				<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>大</option>
+				<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>中</option>
+				<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>小</option>
 			</select>
-			<input type="button" id="list_view" value="${searchResultForm.h_label7}" onclick="listviewchange()" 
-			       style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
-                		  <c:otherwise>display: inline-block;</c:otherwise></c:choose>"/>
-			<input type="button" id="thumbnail_view" value="${searchResultForm.h_label8}" onclick="thumbnailviewchange()" 
-				   style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: inline-block;</c:when>
-                		  <c:otherwise>display: none;</c:otherwise></c:choose>"/>
+			<input type="button" id="list_view" value="${searchResultForm.h_label7}" onclick="listViewChange()"
+					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
+							<c:otherwise>display: inline-block;</c:otherwise></c:choose>"/>
+			<input type="button" id="thumbnail_view" value="${searchResultForm.h_label8}" onclick="thumbnailViewChange()"
+					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: inline-block;</c:when>
+							<c:otherwise>display: none;</c:otherwise></c:choose>"/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<%	} %>
 			<input type="button" value="${searchResultForm.h_label2}" onclick="checkOnAll()" />

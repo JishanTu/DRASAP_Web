@@ -65,7 +65,7 @@ public class SearchResultAction extends BaseAction {
 		}
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
 		session.removeAttribute("indication");
-		session.setAttribute("thumbnailsize", "L");
+		session.setAttribute("thumbnailSize", "L");
 
 		//
 		int offset = Integer.parseInt(searchResultForm.getDispNumberOffest());// ç°ÇÃoffsetíl
@@ -226,7 +226,7 @@ public class SearchResultAction extends BaseAction {
 			return "result";
 		}
 		if ("THUMBNAIL_SIZE".equals(searchResultForm.getAct())) {
-			session.setAttribute("thumbnailsize", request.getParameter("thumbnailsize"));
+			session.setAttribute("thumbnailSize", request.getParameter("thumbnailSize"));
 			session.setAttribute("indication", "thumbnail_view");
 			return "result";
 		}

@@ -1,7 +1,14 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
+import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -26,6 +33,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import tyk.drasap.acslog.AccessLoger;
 import tyk.drasap.common.CookieManage;
 import tyk.drasap.common.CsvItemStrList;
+import tyk.drasap.common.DrasapInfo;
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.Printer;
@@ -145,7 +153,13 @@ public class SearchResultPreAction extends BaseAction {
 			AccessLoger.loging(user, AccessLoger.FID_SEARCH, sys_id);
 		}
 		// sessionにフォームを
-		if (searchResultForm != null) {
+		if ("thumbnail".equals(request.getParameter("act"))) {
+			DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
+			String thumbnailName = request.getParameter("thumbnailName");
+			String path = request.getParameter("pathName");
+			String pathName = drasapInfo.getViewDBDrive() + path + "/" + thumbnailName;
+			getThumbnailList(response, pathName, thumbnailName, session);
+		} else if (searchResultForm != null) {
 			// 画面表示文字列取得
 			getScreenItemStrList(searchResultForm, user);
 			session.setAttribute("searchResultForm", searchResultForm);
@@ -469,6 +483,46 @@ public class SearchResultPreAction extends BaseAction {
 			return;
 		} catch (IOException e) {
 			return;
+		}
+	}
+
+	private void getThumbnailList(HttpServletResponse response, String pathName, String thumbnailName, HttpSession session) throws Exception {
+
+		File file = new File(pathName);
+		if (!file.exists() || file.isDirectory()) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found");
+		}
+		session.removeAttribute("thumbnailflag");
+		BufferedOutputStream out = null;
+		BufferedInputStream in = null;
+		try {
+			response.setContentType("image/jpeg");
+			response.setHeader("Content-Disposition", "attachment;" +
+					" filename=" + new String(thumbnailName.getBytes("Windows-31J"), "ISO8859_1"));
+			//このままだと日本語が化ける
+			//response.setHeader("Content-Disposition","attachment; filename=" + fileName);
+			response.setContentLength((int) file.length());
+
+			out = new BufferedOutputStream(response.getOutputStream());
+			in = new BufferedInputStream(new FileInputStream(file));
+			int c;
+			while ((c = in.read()) != -1) {
+				out.write(c);
+			}
+			out.flush();
+		} catch (Exception e) {
+			session.setAttribute("thumbnailflag", "1");
+		} finally {
+			// CLOSE処理
+			try {
+				in.close();
+			} catch (Exception e) {
+			}
+			try {
+				out.close();
+				category.debug("out.close()");
+			} catch (Exception e) {
+			}
 		}
 	}
 }

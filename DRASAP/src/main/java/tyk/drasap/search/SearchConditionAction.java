@@ -874,7 +874,6 @@ public class SearchConditionAction extends BaseAction {
 
 					/* 以下はTRUNC使用バージョン
 					 * 検索スピードが問題となった
-
 					sbSql.append("TRUNC(");
 					sbSql.append(conditionName);// 検索条件の項目名
 					sbSql.append(")=TO_DATE('");
@@ -907,7 +906,6 @@ public class SearchConditionAction extends BaseAction {
 
 						/* 以下はTRUNC使用バージョン
 						 * 検索スピードが問題となった
-
 						sbSql.append("TRUNC(");
 						sbSql.append(conditionName);// 検索条件の項目名
 						sbSql.append(")>=TO_DATE('");
@@ -934,7 +932,6 @@ public class SearchConditionAction extends BaseAction {
 
 						/* 以下はTRUNC使用バージョン
 						 * 検索スピードが問題となった
-
 						sbSql.append("TRUNC(");
 						sbSql.append(conditionName);// 検索条件の項目名
 						sbSql.append(")<=TO_DATE('");
