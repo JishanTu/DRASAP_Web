@@ -215,7 +215,7 @@
 			hiddenInput.name = "searchResultList[" + index + "]."+ field;
 		}
 
-		function isOrderDrwgNo(index) {
+		function isChecked(index) {
 			var ischecked =document.getElementById('checkbox' + index).checked;
 			var checkElement = document.getElementById('checkbox' + index);
 			var hiddenInput = document.getElementById('checkbox' + 'Hidden' + index);
@@ -352,7 +352,7 @@
 							<td>
 							<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/> 
 							<input type="checkbox"id="checkbox${status.index}"
-								value="true" onclick="isOrderDrwgNo(${status.index})"
+								value="true" onclick="isChecked(${status.index})"
 								<c:if test="${item.selected}">checked="checked"</c:if> /></td>
 						</c:when>
 						<c:otherwise>
