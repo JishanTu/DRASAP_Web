@@ -168,21 +168,32 @@
 		<%-- 2013.07.16 yamagishi add. end --%>
 		<%-- 2013.09.06 yamagishi add. start --%>
 		var dialogFlag = false; // 二重起動防止
-		function openDLManagerDialog(idx) {
-			var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
+		function openDLManagerDialog(idx,switchFlag) {
 			var DRWG_NO = document.getElementById("DRWG_NO[" + idx + "]").value;
 			var FILE_NAME = document.getElementById("FILE_NAME[" + idx + "]").value;
 			var PATH_NAME = document.getElementById("PATH_NAME[" + idx + "]").value;
 			var DRWG_SIZE = document.getElementById("printSizeSelect" + idx).value;
 			var PDF = document.getElementById("PDF[" + idx + "]").value;
 			var PRINT_SIZE = document.getElementById("PRINT_SIZE[" + idx + "]").value;
-			drwgNoLink.href = drwgNoLink + '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
-											+ '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
-											+ '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
-											+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
-											+ '&PDF=' + encodeURIComponent(PDF)
-											+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
-
+			if(switchFlag == "drwgNo"){
+				var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
+				drwgNoLink.href = drwgNoLink
+									+ '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
+									+ '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+									+ '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
+									+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
+									+ '&PDF=' + encodeURIComponent(PDF)
+									+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
+			}else if(switchFlag == "thumbnailNo"){
+				var thumbnailNoLink = document.getElementById("thumbnailNoLink[" + idx + "]");
+				thumbnailNoLink.href = thumbnailNoLink
+										+ '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
+										+ '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+										+ '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
+										+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
+										+ '&PDF=' + encodeURIComponent(PDF)
+										+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
+			}
 	<%		// DLマネージャが利用可能な場合
 			User me = (User) session.getAttribute("user");
 			if (me.isDLManagerAvailable()) { %>
@@ -423,7 +434,7 @@
 									id="drwgNoLink[${status.index}]"
 									href='<c:url value="/preview"/>'
 									title='<c:out value="${item.aclBalloon}"/>'
-									onclick="return openDLManagerDialog(${status.index});">${item.drwgNoFormated}
+									onclick="return openDLManagerDialog(${status.index},'drwgNo');">${item.drwgNoFormated}
 								</a>
 
 							</span></td>
@@ -455,7 +466,9 @@
 					<div class="galleryr">
 						<c:choose>
 							<c:when test="${item.aclFlag == 1 }">
-								<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" class="thumbnail large"/>
+								<a href="<%=request.getContextPath()%>/result.do?act=OUT_THUMBNAIL">
+									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" class="thumbnail large"/>
+								</a>
 							</c:when>
 							<c:otherwise>
 								<img src="<%=request.getContextPath()%>/resources/img/thumb/NotAccess_thumb.jpg" class="thumbnail large"/>
@@ -464,8 +477,15 @@
 						<div class="controls">
 							<input type="checkbox" id="checkbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
 								onchange="updateCheckbox(this, ${status.index})" class="checkbox large"/>
-							<a id="drwgNoLink[${status.index}]" href='<c:url value="/preview"/>' title='<c:out value="${item.aclBalloon}"/>' 
-								onclick="return openDLManagerDialog(${status.index});" class="drwgNo large">${item.drwgNoFormated}</a>
+							<c:choose>
+								<c:when test="${item.aclFlag == 1 }">
+									<a id="thumbnailNoLink[${status.index}]" href='<c:url value="/preview"/>' title='<c:out value="${item.aclBalloon}"/>'
+										onclick="return openDLManagerDialog(${status.index},'thumbnailNo');" class="drwgNo large">${item.drwgNoFormated}</a>
+								</c:when>
+								<c:otherwise>
+									${item.drwgNoFormated}
+								</c:otherwise>
+							</c:choose>
 						</div>
 					</div>
 					<input type="hidden" id="DRWG_NO[${status.index}]" value="${item.drwgNo}"/>

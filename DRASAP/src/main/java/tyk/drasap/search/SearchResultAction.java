@@ -65,7 +65,6 @@ public class SearchResultAction extends BaseAction {
 			return "timeout";
 		}
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
-		session.removeAttribute("indication");
 		session.setAttribute("thumbnailSize", user.getThumbnailSize());
 
 		//
@@ -231,6 +230,9 @@ public class SearchResultAction extends BaseAction {
 			session.setAttribute("thumbnailSize", user.getThumbnailSize());
 			session.setAttribute("indication", "thumbnail_view");
 			return "result";
+		}
+		if ("OUT_THUMBNAIL".equals(request.getParameter("act"))) {
+
 		}
 		return null;
 	}
