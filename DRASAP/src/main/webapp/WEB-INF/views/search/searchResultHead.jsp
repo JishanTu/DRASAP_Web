@@ -144,7 +144,7 @@
 			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.value");
 			if ("true".equals(thumbValue)) { %>
 			<span class="normal12" style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
-											<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">サムネイルサイズ</span>
+											<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">${searchResultForm.h_label9}</span>
 			<select name="thumbnailSize" onchange="thumbnailSizeChange()"
 					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
 									<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">
@@ -152,10 +152,10 @@
 				<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>中</option>
 				<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>小</option>
 			</select>
-			<input type="button" id="list_view" value="${searchResultForm.h_label7}" onclick="listViewChange()"
+			<input type="button" id="list_view" value="${searchResultForm.h_label8}" onclick="listViewChange()"
 					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
 							<c:otherwise>display: inline-block;</c:otherwise></c:choose>"/>
-			<input type="button" id="thumbnail_view" value="${searchResultForm.h_label8}" onclick="thumbnailViewChange()"
+			<input type="button" id="thumbnail_view" value="${searchResultForm.h_label7}" onclick="thumbnailViewChange()"
 					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: inline-block;</c:when>
 							<c:otherwise>display: none;</c:otherwise></c:choose>"/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

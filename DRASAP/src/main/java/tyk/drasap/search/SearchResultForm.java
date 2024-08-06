@@ -43,6 +43,7 @@ public class SearchResultForm extends BaseForm {
 	String H_label6 = "表示属性";
 	String H_label7 = "リスト表示";
 	String H_label8 = "サムネイル表示";
+	String H_label9 = "サムネイルサイズ";
 	// Footer 部
 	String F_label1 = "{0}件中  {1}-{2}件表示";
 	String F_label2 = "前の{0}件";
@@ -83,7 +84,8 @@ public class SearchResultForm extends BaseForm {
 	// 2020.03.10 yamamoto add. end
 	public final char F_LABEL10_LINE_NO = 34; // 図番削除
 	public final char H_label7_LINE_NO = 35; // リスト表示
-	public final char H_label8_LINE_NO = 36; // 図番削除
+	public final char H_label8_LINE_NO = 36; // サムネイル表示
+	public final char H_label9_LINE_NO = 37; // サムネイルサイズ
 	// ---------------------------------------------------- method
 	/* (非 Javadoc)
 	 * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
@@ -454,6 +456,10 @@ public class SearchResultForm extends BaseForm {
 		return H_label8;
 	}
 
+	public String getH_label9() {
+		return H_label9;
+	}
+
 	public void setF_label1(String f_label1) {
 		F_label1 = f_label1;
 	}
@@ -524,6 +530,10 @@ public class SearchResultForm extends BaseForm {
 
 	public void setH_label8(String h_label8) {
 		H_label8 = h_label8;
+	}
+
+	public void setH_label9(String h_label9) {
+		H_label9 = h_label9;
 	}
 
 	public String getLanguage() {
