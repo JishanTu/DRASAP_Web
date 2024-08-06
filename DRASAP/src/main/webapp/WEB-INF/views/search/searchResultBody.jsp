@@ -193,6 +193,15 @@
 										+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
 										+ '&PDF=' + encodeURIComponent(PDF)
 										+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
+			}else{
+				var thumbnailPhotoLink = document.getElementById("thumbnailPhotoLink[" + idx + "]");
+				thumbnailPhotoLink.href = thumbnailPhotoLink
+										+ '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
+										+ '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+										+ '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
+										+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
+										+ '&PDF=' + encodeURIComponent(PDF)
+										+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
 			}
 	<%		// DLマネージャが利用可能な場合
 			User me = (User) session.getAttribute("user");
@@ -466,7 +475,8 @@
 					<div class="galleryr">
 						<c:choose>
 							<c:when test="${item.aclFlag == 1 }">
-								<a href="<%=request.getContextPath()%>/result.do?act=OUT_THUMBNAIL">
+								<a id="thumbnailPhotoLink[${status.index}]" href='<c:url value="/preview"/>'
+									onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');" class="drwgNo large">
 									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" class="thumbnail large"/>
 								</a>
 							</c:when>
