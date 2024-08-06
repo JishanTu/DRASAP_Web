@@ -443,8 +443,8 @@
 					<div class="galleryr">
 						<img src="<c:choose><c:when test="${empty sessionScope.thumbnailFlag || sessionScope.thumbnailFlag == '0'}">
 							<%=request.getContextPath()%>/resultPre.do?act=thumbnail&thumbnailName=${item.thumbnailName}&pathName=${fn:replace(item.pathName, '\\', '/')}</c:when>
-											<c:when test="${sessionScope.thumbnailflag == '1'}">
-							<%=request.getContextPath()%>/resources/img/CONFIDENTIALBanner.JPG</c:when>
+											<c:when test="${sessionScope.thumbnailFlag == '1'}">
+							<%=request.getContextPath()%>/WEB-INF/views/temp/CONFIDENTIALBanner.JPG</c:when>
 											<c:otherwise>
 							<%=request.getContextPath()%>/resources/img/CONFIDENTIALBanner.JPG</c:otherwise></c:choose>" class="thumbnail large"/>
 						<div class="controls">
