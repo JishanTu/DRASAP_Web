@@ -20,6 +20,7 @@ import tyk.drasap.common.DrasapUtil;
 import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.Printer;
 import tyk.drasap.common.User;
+import tyk.drasap.common.UserDB;
 import tyk.drasap.errlog.ErrorLoger;
 import tyk.drasap.printlog.PrintLoger;
 import tyk.drasap.springfw.action.BaseAction;
@@ -65,7 +66,7 @@ public class SearchResultAction extends BaseAction {
 		}
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
 		session.removeAttribute("indication");
-		session.setAttribute("thumbnailSize", "L");
+		session.setAttribute("thumbnailSize", user.getThumbnailSize());
 
 		//
 		int offset = Integer.parseInt(searchResultForm.getDispNumberOffest());// 今のoffset値
@@ -226,7 +227,8 @@ public class SearchResultAction extends BaseAction {
 			return "result";
 		}
 		if ("THUMBNAIL_SIZE".equals(searchResultForm.getAct())) {
-			session.setAttribute("thumbnailSize", request.getParameter("thumbnailSize"));
+			thumbnailSizeChange(user, request.getParameter("thumbnailSize"), errors);
+			session.setAttribute("thumbnailSize", user.getThumbnailSize());
 			session.setAttribute("indication", "thumbnail_view");
 			return "result";
 		}
@@ -428,5 +430,39 @@ public class SearchResultAction extends BaseAction {
 			}
 		}
 		return cnt;
+	}
+
+	/**
+	 *
+	 * @param user
+	 * @param thumbnailSize
+	 * @param errors
+	 * @throws Exception
+	 */
+	private void thumbnailSizeChange(User user, String thumbnailSize, Model errors) throws Exception {
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(false); // 自動コミットしない
+			// サムネイルサイズ更新
+			UserDB.updateThumbnailSize(user.getId(), thumbnailSize, conn);
+			user.setThumbnailSize(thumbnailSize);
+		} catch (Exception e) {
+			// for ユーザー
+			MessageSourceUtil.addAttribute(errors, "message",
+					messageSource.getMessage("root.failed.get.userinfo." + user.getLanKey(),
+							new Object[] { e.getMessage() }, null));
+			// for システム管理者
+			ErrorLoger.error(user, this,
+					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
+			// for MUR
+			category.error("ユーザー情報の取得に失敗\n" + ErrorUtility.error2String(e));
+			throw e;
+		} finally {
+			try {
+				conn.close();
+			} catch (Exception e) {
+			}
+		}
 	}
 }

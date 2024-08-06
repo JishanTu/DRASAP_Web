@@ -204,6 +204,7 @@ public class UserDB {
 			// 2020.02.10 yamamoto add. end
 			String defaultUserGroup = rs.getString("USER_GRP_CODE");// 原価部門の利用者グループ
 			user.setDefaultUserGroup(defaultUserGroup);
+			user.setThumbnailSize(rs.getString("THUMBNAIL_SIZE"));
 			// 利用可能な全ての利用者グループを取得
 			ArrayList<String> userGroupCodeArray = new ArrayList<String>();
 			if (defaultUserGroup != null) {// 原価部門の利用者グループ
@@ -359,6 +360,52 @@ public class UserDB {
 			stmt = conn.createStatement();
 			String sql = "update USER_MASTER" +
 					" set PASSWD='" + passwd.trim() + "'" +
+					"     ,PASSWD_UPD_DATE=TO_DATE('" + sdf.format(nowDate) + "','YYYY/MM/DD')" +
+					" where USER_ID='" + id.trim() + "'";
+			category.debug("nowdate:" + sdf.format(nowDate));
+
+			category.debug("SQL:" + stmt.toString());
+			stmt.executeUpdate(sql);
+
+			// コミット
+			conn.commit();
+
+		} catch (Exception e) {
+			// ロールバック
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+			throw e;
+
+		} finally {
+			// CLOSE処理
+			try {
+				if (Objects.nonNull(rs)) {
+					rs.close();
+				}
+			} catch (Exception e) {
+			}
+			try {
+				if (Objects.nonNull(stmt)) {
+					stmt.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public static void updateThumbnailSize(String id, String thumbnailSize, Connection conn) throws Exception {
+		id = id.toUpperCase();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			Date nowDate = new Date();
+			// サムネイルサイズ更新
+			stmt = conn.createStatement();
+			String sql = "update USER_MASTER" +
+					" set THUMBNAIL_SIZE='" + thumbnailSize.trim() + "'" +
 					"     ,PASSWD_UPD_DATE=TO_DATE('" + sdf.format(nowDate) + "','YYYY/MM/DD')" +
 					" where USER_ID='" + id.trim() + "'";
 			category.debug("nowdate:" + sdf.format(nowDate));

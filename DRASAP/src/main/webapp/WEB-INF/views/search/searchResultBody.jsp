@@ -57,18 +57,18 @@
 		}
 
 		.thumbnail.small {
-			width: 100px;
-			height: 50px;
+			width: 140px;
+			height: auto;
 		}
 
 		.thumbnail.medium {
-		    width: 250px;
-		    height: 125px;
+		    width: 210px;
+		    height: auto;
 		}
 
 		.thumbnail.large {
-			width: 500px;
-			height: 250px;
+			width: 420px;
+			height: auto;
 		}
 
 		.checkbox.small {

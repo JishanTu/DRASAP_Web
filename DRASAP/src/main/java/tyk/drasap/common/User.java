@@ -39,6 +39,7 @@ public class User {
 	ArrayList<UserGroup> userGroups = new ArrayList<UserGroup>();// 所属しているユーザーグループ。内部はUserGroup。
 	ArrayList<Printer> enablePrinters = new ArrayList<Printer>();// 利用可能なプリンター。内部はPrinter。
 	String displayCount = "";// 検索の1ページ当たりの表示件数
+	String thumbnailSize = "M";// サムネイルサイズ
 	public static int searchSelColNum = 10;
 	public static int viewSelColNum = 12;
 	private ArrayList<String> searchSelColList = new ArrayList<>(); // 検索条件カラムリスト
@@ -628,6 +629,20 @@ public class User {
 	 */
 	public void setSearchSelColList(ArrayList<String> list) {
 		searchSelColList = list;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getThumbnailSize() {
+		return thumbnailSize;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setThumbnailSize(String thumbnailSize) {
+		this.thumbnailSize = thumbnailSize;
 	}
 
 	/**

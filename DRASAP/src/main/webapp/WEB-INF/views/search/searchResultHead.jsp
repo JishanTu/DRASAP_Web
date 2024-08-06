@@ -119,8 +119,8 @@
 			parent.result_body.document.forms[0].target="_parent";
 			parent.result_body.document.forms[0].submit();
 		}
-		function selectChange() {
-			parent.result_body.document.forms[0].thumbnailsize.value = document.forms[0].elements["thumbnailSize"].value;
+		function thumbnailSizeChange() {
+			parent.result_body.document.forms[0].thumbnailSize.value = document.forms[0].elements["thumbnailSize"].value;
 			parent.result_body.document.forms[0].act.value="THUMBNAIL_SIZE";
 			parent.result_body.document.forms[0].target="_parent";
 			parent.result_body.document.forms[0].submit();
@@ -145,7 +145,7 @@
 			if ("true".equals(thumbValue)) { %>
 			<span class="normal12" style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
 											<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">サムネイルサイズ</span>
-			<select name="thumbnailSize" onchange="selectChange()"
+			<select name="thumbnailSize" onchange="thumbnailSizeChange()"
 					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
 									<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">
 				<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>大</option>
