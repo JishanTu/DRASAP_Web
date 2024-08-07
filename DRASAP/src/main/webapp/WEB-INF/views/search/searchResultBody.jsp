@@ -235,10 +235,16 @@
 			hiddenInput.name = "searchResultList[" + index + "]."+ field;
 		}
 
-		function isChecked(index) {
-			var ischecked =document.getElementById('checkbox' + index).checked;
-			var checkElement = document.getElementById('checkbox' + index);
-			var hiddenInput = document.getElementById('checkbox' + 'Hidden' + index);
+		function isChecked(index,checkboxFlag) {
+			if(checkboxFlag == "drwg"){
+				var ischecked =document.getElementById('checkbox' + index).checked;
+				var checkElement = document.getElementById('checkbox' + index);
+				var hiddenInput = document.getElementById('checkbox' + 'Hidden' + index);
+			}else{
+				var ischecked =document.getElementById('thumbnailcheckbox' + index).checked;
+				var checkElement = document.getElementById('thumbnailcheckbox' + index);
+				var hiddenInput = document.getElementById('thumbnailcheckbox' + 'Hidden' + index);
+			}
 			if (ischecked == true) {
 				// チェックが入っていたら無効化
 				checkElement.value = true
@@ -370,9 +376,9 @@
 					<c:choose>
 						<c:when test="${item.aclFlag == 1}">
 							<td>
-							<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/> 
+							<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/>
 							<input type="checkbox"id="checkbox${status.index}"
-								value="true" onclick="isChecked(${status.index})"
+								value="true" onclick="isChecked(${status.index},'drwg')"
 								<c:if test="${item.selected}">checked="checked"</c:if> /></td>
 						</c:when>
 						<c:otherwise>
@@ -485,14 +491,16 @@
 							</c:otherwise>
 						</c:choose>
 						<div class="controls">
-							<input type="checkbox" id="checkbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
-								onchange="updateCheckbox(this, ${status.index})" class="checkbox large"/>
-							<c:choose>
+						<c:choose>
 								<c:when test="${item.aclFlag == 1 }">
+									<input type="hidden" id="thumbnailcheckboxHidden${status.index}" value="${item.selected}"/>
+									<input type="checkbox" id="thumbnailcheckbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
+										onclick="isChecked(${status.index},'thumbnail')" class="checkbox large"/>
 									<a id="thumbnailNoLink[${status.index}]" href='<c:url value="/preview"/>' title='<c:out value="${item.aclBalloon}"/>'
 										onclick="return openDLManagerDialog(${status.index},'thumbnailNo');" class="drwgNo large">${item.drwgNoFormated}</a>
 								</c:when>
 								<c:otherwise>
+									<span class="normal12">&nbsp;&nbsp;</span>
 									${item.drwgNoFormated}
 								</c:otherwise>
 							</c:choose>
