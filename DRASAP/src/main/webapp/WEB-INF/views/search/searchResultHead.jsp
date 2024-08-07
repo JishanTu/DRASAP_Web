@@ -148,9 +148,18 @@
 			<select name="thumbnailSize" onchange="thumbnailSizeChange()"
 					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
 									<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">
-				<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>大</option>
-				<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>中</option>
-				<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>小</option>
+				<c:choose>
+					<c:when test="${user.language == 'Japanese'}">
+						<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>大</option>
+						<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>中</option>
+						<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>小</option>
+					</c:when>
+					<c:otherwise>
+						<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>large</option>
+						<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>medium</option>
+						<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>small</option>
+					</c:otherwise>
+				</c:choose>
 			</select>
 			<input type="button" id="list_view" value="${searchResultForm.h_label8}" onclick="listViewChange()"
 					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
@@ -180,7 +189,14 @@
 // ボタンを表示する
 User me = (User) session.getAttribute("user");
 if (me.isDelAdmin()) { %>
-	<input type="button" value="運用支援" onclick="management()" class="management" />
+	<c:choose>
+		<c:when test="${user.language == 'Japanese'}">
+			<input type="button" value="運用支援" onclick="management()" class="management" />
+		</c:when>
+		<c:otherwise>
+			<input type="button" value="operation support" onclick="management()" class="management" />
+		</c:otherwise>
+	</c:choose>
 <%} %>
 <table border="1">
 	<tr>
