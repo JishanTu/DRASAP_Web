@@ -470,6 +470,9 @@ public class SearchResultPreAction extends BaseAction {
 			searchResultForm.setH_label4((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL4_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			searchResultForm.setH_label5((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL5_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			searchResultForm.setH_label6((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL6_LINE_NO)) == null ? "" : lineData.get(langIdx));
+			searchResultForm.setH_label7((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL7_LINE_NO)) == null ? "" : lineData.get(langIdx));
+			searchResultForm.setH_label8((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL8_LINE_NO)) == null ? "" : lineData.get(langIdx));
+			searchResultForm.setH_label9((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL9_LINE_NO)) == null ? "" : lineData.get(langIdx));
 
 			searchResultForm.setF_label1((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL1_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			searchResultForm.setF_label2((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL2_LINE_NO)) == null ? "" : lineData.get(langIdx));
@@ -485,6 +488,7 @@ public class SearchResultPreAction extends BaseAction {
 			// 2020.03.10 yamamoto add. start
 			searchResultForm.setF_label9((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL9_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			// 2020.03.10 yamamoto add. end
+			searchResultForm.setF_label10((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL10_LINE_NO)) == null ? "" : lineData.get(langIdx));
 		} catch (FileNotFoundException e) {
 			return;
 		} catch (IOException e) {

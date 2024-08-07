@@ -68,6 +68,9 @@ public class SearchResultForm extends BaseForm {
 	public final char H_LABEL4_LINE_NO = 12;
 	public final char H_LABEL5_LINE_NO = 13;
 	public final char H_LABEL6_LINE_NO = 14;
+	public final char H_LABEL7_LINE_NO = 34; // リスト表示
+	public final char H_LABEL8_LINE_NO = 35; // サムネイル表示
+	public final char H_LABEL9_LINE_NO = 36; // サムネイルサイズ
 	public final char F_LABEL1_LINE_NO = 15;
 	public final char F_LABEL2_LINE_NO = 16;
 	public final char F_LABEL3_LINE_NO = 17;
@@ -82,10 +85,7 @@ public class SearchResultForm extends BaseForm {
 	// 2020.03.10 yamamoto add. start
 	public final char F_LABEL9_LINE_NO = 31; // PDF単独zip出力
 	// 2020.03.10 yamamoto add. end
-	public final char F_LABEL10_LINE_NO = 34; // 図番削除
-	public final char H_label7_LINE_NO = 35; // リスト表示
-	public final char H_label8_LINE_NO = 36; // サムネイル表示
-	public final char H_label9_LINE_NO = 37; // サムネイルサイズ
+	public final char F_LABEL10_LINE_NO = 33; // 図番削除
 	// ---------------------------------------------------- method
 	/* (非 Javadoc)
 	 * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
