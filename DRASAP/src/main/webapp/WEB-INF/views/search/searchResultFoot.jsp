@@ -45,11 +45,16 @@
 					if (links[i].disabled == true) return;
 				}
 			}
-			console.log(parent.result_body.document.forms[0])
-			parent.result_body.document.forms[0].outputPrinter.value=parent.result_head.document.forms[0].outputPrinter.value;
-			parent.result_body.document.forms[0].act.value=parm;// 隠し属性actにをセット
-			parent.result_body.document.forms[0].target="_parent";// ターゲットは親
-			parent.result_body.document.forms[0].submit();
+			if(parm == "THUMBNAIL"){
+				parent.result_body.document.forms[0].act.value=parm;// 隠し属性actにをセット
+				parent.result_body.document.forms[0].target="_top";// ターゲットはtop
+				parent.result_body.document.forms[0].submit();
+			} else{
+				parent.result_body.document.forms[0].outputPrinter.value=parent.result_head.document.forms[0].outputPrinter.value;
+				parent.result_body.document.forms[0].act.value=parm;// 隠し属性actにをセット
+				parent.result_body.document.forms[0].target="_parent";// ターゲットは親
+				parent.result_body.document.forms[0].submit();
+			}
 		}
 		// ファイル出力に対応
 		function outAttrCsv(){
@@ -170,21 +175,30 @@
 		<td>&nbsp;&nbsp;</td>
 		<td valign="top">
 			<span class="normal12">
-			    ${searchResultForm.f_label1}
+				${searchResultForm.f_label1}
 			</span>&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href="javascript:setActSubmit('PREV')">
-			    <span class="normal12blue">&lt;&lt;&nbsp;
-			    ${searchResultForm.f_label2}
-			    </span>
+				<span class="normal12blue">&lt;&lt;&nbsp;
+				${searchResultForm.f_label2}
+				</span>
 			</a>
 			<span class="normal12">｜</span>
 			<a href="javascript:setActSubmit('NEXT')">
-			    <span class="normal12blue">
-			    ${searchResultForm.f_label3}
-			    &gt;&gt;</span>
+				<span class="normal12blue">
+				${searchResultForm.f_label3}
+				&gt;&gt;</span>
 			</a>
 		</td>
-		<td align="left"><input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('PRINT')" /></td>
+		<td align="left">
+		<c:choose>
+			<c:when test="${sessionScope.indication == 'list_view' || empty sessionScope.indication}">
+				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('PRINT')" />
+			</c:when>
+			<c:when test="${sessionScope.indication == 'thumbnail_view'}">
+				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('THUMBNAIL')" />
+			</c:when>
+		</c:choose>
+		</td>
 		<td align="right"><span class="normal10">
 			<%	// admin_flag='2'のユーザのみ
 				// ボタンを表示する
