@@ -1,9 +1,6 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,7 +22,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import tyk.drasap.common.CookieManage;
 import tyk.drasap.common.CsvItemStrList;
@@ -46,6 +45,7 @@ import tyk.drasap.springfw.utils.MessageSourceUtil;
  * @version 2013/06/14 yamagishi
  */
 @Controller
+@SessionAttributes("searchConditionForm")
 public class SearchConditionAction extends BaseAction {
 	// --------------------------------------------------------- Instance Variables
 	// --------------------------------------------------------- Methods
@@ -60,7 +60,7 @@ public class SearchConditionAction extends BaseAction {
 	 */
 	@PostMapping("/searchCondition")
 	public String execute(
-			SearchConditionForm form,
+			@ModelAttribute("searchConditionForm") SearchConditionForm form,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model errors)
