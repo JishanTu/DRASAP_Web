@@ -103,6 +103,7 @@ public class AclvChangeAction extends BaseAction {
 			if (aclvChangeForm.getErrorMessages().size() > 0) {
 				// “ü—Í‰æ–Ê‚É–ß‚é
 				category.debug("--> input");
+				session.setAttribute("searchConditionForm", session.getAttribute("searchConditionForm"));
 				return "input";
 			}
 			// Šm”F‰æ–Ê‚Éi‚Ş
@@ -112,6 +113,8 @@ public class AclvChangeAction extends BaseAction {
 
 		if ("SEARCH".equals(aclvChangeForm.getAct())) {
 			// ŒŸõ‰æ–Ê‚É–ß‚é
+			SearchConditionForm condition = (SearchConditionForm) session.getAttribute("searchConditionForm");
+			session.setAttribute("searchConditionForm", condition);
 			request.setAttribute("task", "continue");
 			category.debug("--> search");
 			return "search";

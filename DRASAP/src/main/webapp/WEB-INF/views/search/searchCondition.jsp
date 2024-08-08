@@ -855,10 +855,10 @@
 			class="normal12">
 			<tr>
 				<!--============ 検索条件 ============-->
-				<td style="width: 450px;">
+				<td style="width: 500px;">
 				<div class="table-container">
 					<table border="0" cellspacing="0" cellpadding="0"
-						style="font-size: 12pt; margin: 0px; padding: 5px;">
+						style="font-size: 12pt; margin: 0px; padding: 0px;">
 						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()}" var="index">
 							<tr>
 								<td>
@@ -876,7 +876,7 @@
 									</select>
 								</td>
 								<td>
-									<input type="text" name="conditionValue${index}" size="25" class="conditionStr" />
+									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[loop.index]}"/>
 								</td>
 								<td>
 									<input type="button" name="sortWayButton${index}" value="　　　" onclick="changeOrder(this)" style="width: 60px;" />

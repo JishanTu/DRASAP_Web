@@ -56,6 +56,8 @@ public class AclvChangePreAction extends BaseAction {
 		AclvChangeForm aclvChangeForm = new AclvChangeForm();
 		setAclvChangeData(aclvChangeForm, searchResultForm, user);
 		session.setAttribute("aclvChangeForm", aclvChangeForm);// session‚ÉŠi”[
+		SearchConditionForm condition = (SearchConditionForm) session.getAttribute("searchConditionForm");
+		session.setAttribute("searchConditionForm", condition);
 		//
 		category.debug("--> success");
 		return "success";
