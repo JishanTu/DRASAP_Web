@@ -417,6 +417,9 @@
     }, {
       "name" : "multi_pdf",
       "path" : "/preview.do"
+    }, {
+      "name" : "search_thumb",
+      "path" : "/search/searchResultThumb.jsp"
     } ]
   }, {
     "name" : "tyk.drasap.springfw.form.BaseForm",

@@ -231,8 +231,8 @@ public class SearchResultAction extends BaseAction {
 			session.setAttribute("indication", "thumbnail_view");
 			return "result";
 		}
-		if ("OUT_THUMBNAIL".equals(request.getParameter("act"))) {
-
+		if ("THUMBNAIL".equals(searchResultForm.getAct())) {
+			return "search_thumb";
 		}
 		return null;
 	}
