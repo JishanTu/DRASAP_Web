@@ -21,7 +21,7 @@
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
-	<style type="text/css">
+	<style type="text/css" id="dynamic-styles">
 		body {
 			margin: 0;
 			overflow-x: hidden;
@@ -56,19 +56,34 @@
 			transition: transform 0.3s ease;
 		}
 
-		.thumbnail.small {
-			width: 140px;
-			height: auto;
+		.thumbnail.small-a0 {
+			width: 200px;
+			height: 141px;
 		}
 
-		.thumbnail.medium {
-		    width: 210px;
-		    height: auto;
+		.thumbnail.medium-a0 {
+			width: 250px;
+			height: 177px;
 		}
 
-		.thumbnail.large {
-			width: 420px;
-			height: auto;
+		.thumbnail.large-a0 {
+			width: 300px;
+			height: 210px;
+		}
+
+		.thumbnail.small-a4 {
+			width: 100px;
+			height: 141px;
+		}
+
+		.thumbnail.medium-a4 {
+			width: 125px;
+			height: 177px;
+		}
+
+		.thumbnail.large-a4 {
+			width: 150px;
+			height: 210px;
 		}
 
 		.checkbox.small {
@@ -259,11 +274,6 @@
 		}
 
 		function changeSize(thumbnailSize) {
-			const images = document.querySelectorAll('img.thumbnail');
-			images.forEach(img => {
-				img.classList.remove('large', 'medium', 'small');
-				img.classList.add(thumbnailSize);
-			});
 			document.querySelectorAll('.checkbox, .drwgNo').forEach(element => {
 				element.classList.remove('small', 'medium', 'large');
 			});
@@ -277,16 +287,56 @@
 			});
 		}
 
-		document.addEventListener('DOMContentLoaded', function() {
+		function thumbnailLoad(imgElement,drwgSize,index) {
 			<% String thumbnailSize = (String) session.getAttribute("thumbnailSize"); %>
+			const thumbnailElement = document.getElementById('thumbnail[' + index + ']');
+			thumbnailElement.classList.remove('large-a0', 'medium-a0', 'small-a0','small-a4', 'medium-a4', 'large-a4');
 			<% if ("L".equals(thumbnailSize)) { %>
 				changeSize('large');
+				if(drwgSize == "A4"){
+					thumbnailElement.classList.add('large-a4');
+				} else if(drwgSize == "A0L"){
+					thumbnailElement.classList.add('large-'+ index);
+					updateStyles(index,"L");
+				} else if(drwgSize == "A0"|| drwgSize == "A1" || drwgSize == "A2" || drwgSize == "A3"){
+					thumbnailElement.classList.add('large-a0');
+				}
 			<% } else if ("M".equals(thumbnailSize)) { %>
 				changeSize('medium');
+				if(drwgSize == "A4"){
+					thumbnailElement.classList.add('medium-a4');
+				} else if(drwgSize == "A0L"){
+					thumbnailElement.classList.add('medium-'+ index);
+					updateStyles(index,"M");
+				} else if(drwgSize == "A0"|| drwgSize == "A1" || drwgSize == "A2" || drwgSize == "A3"){
+					thumbnailElement.classList.add('medium-a0');
+				}
 			<% } else if ("S".equals(thumbnailSize)) { %>
 				changeSize('small');
+				if(drwgSize == "A4"){
+						thumbnailElement.classList.add('small-a4');
+				} else if(drwgSize == "A0L"){
+					thumbnailElement.classList.add('small-'+ index);
+					updateStyles(index,"S");
+				} else if(drwgSize == "A0"|| drwgSize == "A1" || drwgSize == "A2" || drwgSize == "A3"){
+					thumbnailElement.classList.add('small-a0');
+				}
 			<% } %>
-		});
+		}
+
+		function updateStyles(index,thumbnailSize) {
+			let rule;
+			if("L" == thumbnailSize) {
+				rule = '.thumbnail.large-' + index + ' { width: 300px; height: calc(210 * var(--thumbnail-' + index + ') / 297); }';
+				console.log(rule);
+			} else if("M" == thumbnailSize) {
+				rule = '.thumbnail.medium-' + index + ' { width: 250px; height: calc(177 * var(--thumbnail-' + index + ') / 297); }';
+			} else{
+				rule = '.thumbnail.small-' + index + ' { width: 200px; height: calc(141 * var(--thumbnail-' + index + ') / 297); }';
+			}
+			const styleSheet = document.getElementById('dynamic-styles').sheet;
+			styleSheet.insertRule(rule, styleSheet.cssRules.length);
+		}
 	</script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
@@ -483,7 +533,8 @@
 							<c:when test="${item.aclFlag == 1 }">
 								<a id="thumbnailPhotoLink[${status.index}]" href='<c:url value="/preview"/>'
 									onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');" class="drwgNo large">
-									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" class="thumbnail large"/>
+									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]"
+										onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
 								</a>
 							</c:when>
 							<c:otherwise>
