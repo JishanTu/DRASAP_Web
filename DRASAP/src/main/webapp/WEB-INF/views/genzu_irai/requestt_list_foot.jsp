@@ -23,7 +23,6 @@
 		function doTouroku(){
 			parent.list_body.document.forms[0].action.value="button_update";//完了情報登録ボタンのアクション
 			//alert("アクション = " + parent.list_body.document.forms[0].action.value);
-			alert("フォーム = " + parent.list_body.document.forms[0]);
 			parent.list_body.document.forms[0].submit();
 		}
 	</script>
