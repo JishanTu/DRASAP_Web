@@ -595,7 +595,7 @@ public class SearchConditionAction extends BaseAction {
 					String val = searchConditionForm.getCondition(i - 1);
 					strSql2 += " SEARCH_SELCOL" + i + "='" + val + "',";
 					// ユーザーObjectにもセットする
-					user.setSearchSelCol(i - 1, val);
+					//user.setSearchSelCol(i - 1, val);
 				}
 
 				for (int i = 1; i <= searchConditionForm.getViewSelColNum(); i++) {

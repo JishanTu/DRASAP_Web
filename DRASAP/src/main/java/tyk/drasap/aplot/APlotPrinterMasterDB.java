@@ -16,6 +16,7 @@
  */
 package tyk.drasap.aplot;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -111,12 +112,13 @@ public class APlotPrinterMasterDB extends AbstractAPlotSchemaBase {
 	 * @return プリンタマスタクラス.
 	 * @throws SQLException
 	 */
-	private static APlotPrinterMasterDB queryPrinterMaster(Statement stmt, String printerId, String schema) throws SQLException {
+	private static APlotPrinterMasterDB queryPrinterMaster(Connection conn, String printerId, String schema) throws SQLException {
 
 		APlotPrinterMasterDB newData = null;
+		String query = selectPrintMaster(printerId, schema);
 		// 指定スキーマのプリンタマスタを取得.
-		ResultSet rs = stmt.executeQuery(selectPrintMaster(printerId, schema));
-		try {
+		Statement stmt = conn.createStatement();
+		try (ResultSet rs = stmt.executeQuery(query)) {
 			// 取得した情報からスキーマ名を取得.
 			while (rs.next()) {
 				// マスターデータ取得.
@@ -166,10 +168,6 @@ public class APlotPrinterMasterDB extends AbstractAPlotSchemaBase {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			throw ex;
-		} finally {
-			if (rs != null) {
-				rs.close();
-			}
 		}
 		return newData;
 	}
@@ -181,18 +179,18 @@ public class APlotPrinterMasterDB extends AbstractAPlotSchemaBase {
 	 * @return プリンタマスタ（配列）
 	 * @throws SQLException
 	 */
-	public static APlotPrinterMasterDB[] getPrinterMaster(Statement stmt, String[] ids) throws SQLException {
+	public static APlotPrinterMasterDB[] getPrinterMaster(Connection conn, String[] ids) throws SQLException {
 
 		ArrayList<APlotPrinterMasterDB> list = new ArrayList<APlotPrinterMasterDB>();
 		list.clear();
-
+		Statement stmt = conn.createStatement();
+		String query = selectPrintAssignMaster(ids);
 		// プリンタ割当マスタテーブルの情報からスキーマを取得.
-		ResultSet rs = stmt.executeQuery(selectPrintAssignMaster(ids));
-		try {
+		try (ResultSet rs = stmt.executeQuery(query)) {
 			// 取得した情報からスキーマ名を取得.
 			while (rs.next()) {
 				// マスター検索.
-				APlotPrinterMasterDB data = APlotPrinterMasterDB.queryPrinterMaster(stmt, rs.getString("PRINTER_ID"), rs.getString("SCHEMA_NAME"));
+				APlotPrinterMasterDB data = APlotPrinterMasterDB.queryPrinterMaster(conn, rs.getString("PRINTER_ID"), rs.getString("SCHEMA_NAME"));
 				if (data != null) {
 					list.add(data);
 				}
@@ -200,10 +198,6 @@ public class APlotPrinterMasterDB extends AbstractAPlotSchemaBase {
 		} catch (SQLException ex) {
 			category.fatal("A-PLOT出図プリンタマスタ取得でSQLエラー", ex);
 			throw ex;
-		} finally {
-			if (rs != null) {
-				rs.close();
-			}
 		}
 
 		if (list.size() > 0) {

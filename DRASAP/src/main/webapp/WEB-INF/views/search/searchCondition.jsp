@@ -876,7 +876,7 @@
 									</select>
 								</td>
 								<td>
-									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[loop.index]}"/>
+									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${conditionValue[index]}"/>
 								</td>
 								<td>
 									<input type="button" name="sortWayButton${index}" value="　　　" onclick="changeOrder(this)" style="width: 60px;" />

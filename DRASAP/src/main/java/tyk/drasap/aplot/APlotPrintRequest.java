@@ -73,10 +73,8 @@ public class APlotPrintRequest {
 	 */
 	private static APlotPrinterMasterDB[] askPrintMaster(Connection conn, Printer printer) throws UserException, SQLException {
 
-		Statement stmt = conn.createStatement();
-
 		// プリンタマスタを DRASAP.PRINTER_ASSIGN_MASTERから取得.
-		APlotPrinterMasterDB[] printMaster = APlotPrinterMasterDB.getPrinterMaster(stmt,
+		APlotPrinterMasterDB[] printMaster = APlotPrinterMasterDB.getPrinterMaster(conn,
 				new String[] { printer.getId() } // プリンタId.
 		);
 
