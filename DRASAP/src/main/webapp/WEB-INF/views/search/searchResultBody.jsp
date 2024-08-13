@@ -29,7 +29,7 @@
 		}
 
 		.container {
-		display: inline-block;
+			display: inline-block;
 			gap: 10px;
 		}
 

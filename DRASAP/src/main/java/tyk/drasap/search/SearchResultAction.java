@@ -231,8 +231,19 @@ public class SearchResultAction extends BaseAction {
 			session.setAttribute("indication", "thumbnail_view");
 			return "result";
 		}
-		if ("THUMBNAIL".equals(searchResultForm.getAct())) {
+		if ("SEARCH_THUMBNAIL".equals(searchResultForm.getAct())) {
+			checkForPrint(searchResultForm, user, drasapInfo, errors);
+			if (!Objects.isNull(errors.getAttribute("message"))) {
+				request.setAttribute("errors", errors);
+				category.debug("--> search_error");
+			}
 			return "search_thumb";
+		}
+		if ("SEARCH".equals(searchResultForm.getAct())) {
+			SearchConditionForm condition = (SearchConditionForm) session.getAttribute("searchConditionForm");
+			session.setAttribute("searchConditionForm", condition);
+			request.setAttribute("task", "continue");
+			return "search";
 		}
 		return null;
 	}

@@ -45,7 +45,8 @@
 					if (links[i].disabled == true) return;
 				}
 			}
-			if(parm == "THUMBNAIL"){
+			if(parm == "SEARCH_THUMBNAIL"){
+				parent.result_body.document.forms[0].outputPrinter.value=parent.result_head.document.forms[0].outputPrinter.value;
 				parent.result_body.document.forms[0].act.value=parm;// 隠し属性actにをセット
 				parent.result_body.document.forms[0].target="_top";// ターゲットはtop
 				parent.result_body.document.forms[0].submit();
@@ -195,7 +196,14 @@
 				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('PRINT')" />
 			</c:when>
 			<c:when test="${sessionScope.indication == 'thumbnail_view'}">
-				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('THUMBNAIL')" />
+				<c:choose>
+					<c:when test="${sessionScope.user.language == 'Japanese'}">
+						<input type="button" value="　出力　" onclick="setActSubmit('SEARCH_THUMBNAIL')" />
+					</c:when>
+					<c:otherwise>
+						<input type="button" value="　Print Request　" onclick="setActSubmit('SEARCH_THUMBNAIL')" />
+					</c:otherwise>
+				</c:choose>
 			</c:when>
 		</c:choose>
 		</td>
