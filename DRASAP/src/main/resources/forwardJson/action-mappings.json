@@ -418,8 +418,14 @@
       "name" : "multi_pdf",
       "path" : "/preview.do"
     }, {
+      "name" : "search",
+      "path" : "/search/searchMain.jsp"
+    }, {
       "name" : "search_thumb",
       "path" : "/search/searchResultThumb.jsp"
+    }, {
+      "name" : "search_thumb_error",
+      "path" : "/search/search_thumb_error.jsp" 
     } ]
   }, {
     "name" : "tyk.drasap.springfw.form.BaseForm",
