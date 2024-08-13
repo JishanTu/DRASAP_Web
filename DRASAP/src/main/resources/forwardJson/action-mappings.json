@@ -400,6 +400,9 @@
       "name" : "notPrintable",
       "path" : "/search/searchWarningNotPrintable.jsp"
     }, {
+      "name" : "thumbNotPrintable",
+      "path" : "/search/thumbWarningNotPrintable.jsp"
+    }, {
       "name" : "error",
       "path" : "/root/common_error.jsp"
     }, {
@@ -448,7 +451,7 @@
     } ]
   }, {
     "name" : "tyk.drasap.search.SearchWarningNotPrintableForm",
-    "path" : "/warningNotPrintable",
+    "path" : "/searchWarningNotPrintable",
     "type" : "tyk.drasap.search.SearchWarningNotPrintableAction",
     "forwards" : [ {
       "name" : "backResult",
@@ -554,6 +557,20 @@
     }, {
       "name" : "input",
       "path" : "/search/delHostReq.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.ThumbWarningNotPrintableForm",
+    "path" : "/thumbWarningNotPrintable",
+    "type" : "tyk.drasap.search.ThumbWarningNotPrintableAction",
+    "forwards" : [ {
+      "name" : "backResult",
+      "path" : "/search/searchMain.jsp"
+    }, {
+      "name" : "search_error",
+      "path" : "/search/searchResultThumb.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/search/thumbWarningNotPrintable.jsp"
     } ]
   } ]
 }

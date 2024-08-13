@@ -55,14 +55,13 @@
 		}
 
 		// 印刷指示
-		function setActSubmit(parm){
+		function printerIndicationOut(parm){
 			if(!confirm("出力を行いますか?")){
 				return;
 			}
-			parent.result_body.document.forms[0].outputPrinter.value=parent.result_head.document.forms[0].outputPrinter.value;
-			parent.result_body.document.forms[0].act.value=parm;// 隠し属性actにをセット
-			parent.result_body.document.forms[0].target="_parent";// ターゲットは親
-			parent.result_body.document.forms[0].submit();
+			document.forms[0].act.value=parm;// 隠し属性actにをセット
+			document.forms[0].target="_parent";// ターゲットは画面全体
+			document.forms[0].submit();
 		}
 	</script>
 </head>
@@ -78,10 +77,10 @@
 		<div align="center">
 			<c:choose>
 				<c:when test="${user.language eq 'Japanese'}">
-					<input type="button" value="キャンセル" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
+					<input type="button" value="戻る" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
 				</c:when>
 				<c:otherwise>
-					<input type="button" value="cancel" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
+					<input type="button" value="back" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
 				</c:otherwise>
 			</c:choose>
 		</div>
@@ -226,7 +225,7 @@
 					</select>
 				</span>
 				<span class="normal10">
-					<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('PRINT')" />
+					<input type="button" value="　${searchResultForm.f_label4}　" onclick="printerIndicationOut('PRIENTER_THUMBNAIL')" />
 				</span>
 				<span class="normal10">
 					<c:choose>

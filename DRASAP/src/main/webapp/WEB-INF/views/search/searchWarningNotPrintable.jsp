@@ -22,6 +22,7 @@
 		// 隠し属性actにセットする
 		function setAct(param){
 			document.forms[0].act.value=param;// 隠し属性actにセット
+			document.forms[0].submit();
 		}
 		function onLoad() {
 			if (parent.condition != null) {
@@ -36,7 +37,7 @@
 	</script>
 </head>
 <body style="background-color: #FFFFFF; margin: 0;" onload="onLoad();">
-<form action="<%=request.getContextPath() %>/warningNotPrintable"  method = "post">
+<form action="<%=request.getContextPath() %>/searchWarningNotPrintable"  method = "post">
 <input type = "hidden" name = "act" value = ""/>
 <div style = "text-align:center;">
 <br />
