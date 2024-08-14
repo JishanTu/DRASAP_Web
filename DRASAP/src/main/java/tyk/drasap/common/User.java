@@ -621,7 +621,9 @@ public class User {
 	 */
 	public void setSearchSelCol(int idx, String string) {
 		String val = StringUtils.isEmpty(string) ? "" : string;
+
 		searchSelColList.add(idx, val);
+
 	}
 
 	/**
@@ -1110,7 +1112,9 @@ public class User {
 	 */
 	public void setViewSelCol(int idx, String string) {
 		String val = StringUtils.isEmpty(string) ? "" : string;
+
 		viewSelColList.add(idx, val);
+
 	}
 
 	/**
