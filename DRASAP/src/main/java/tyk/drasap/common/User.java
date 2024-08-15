@@ -621,8 +621,11 @@ public class User {
 	 */
 	public void setSearchSelCol(int idx, String string) {
 		String val = StringUtils.isEmpty(string) ? "" : string;
-
-		searchSelColList.add(idx, val);
+		if (searchSelColList.size() < searchSelColNum) {
+			searchSelColList.add(idx, val);
+		} else {
+			searchSelColList.set(idx, val);
+		}
 
 	}
 
