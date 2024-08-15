@@ -137,13 +137,17 @@
 	<tr>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
-				<tr><td nowrap="nowrap"><span class="normal10">
-					<b>${searchResultForm.h_label1 }</b></span></td></tr>
-			</table></td>
+				<tr>
+					<td nowrap="nowrap">
+						<span class="normal10">${searchResultForm.h_label1 }</span>
+					</td>
+				</tr>
+			</table>
+		</td>
 		<td><span class="normal10">
 			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.value");
 			if ("true".equals(thumbValue)) { %>
-			<span class="normal12" style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
+			<span style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
 											<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">${searchResultForm.h_label9}</span>
 			<select name="thumbnailSize" onchange="thumbnailSizeChange()"
 					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
@@ -194,7 +198,7 @@ if (me.isDelAdmin()) { %>
 			<input type="button" value="運用支援" onclick="management()" class="management" />
 		</c:when>
 		<c:otherwise>
-			<input type="button" value="operation support" onclick="management()" class="management" />
+			<input type="button" value="Operation Support" onclick="management()" class="management" />
 		</c:otherwise>
 	</c:choose>
 <%} %>
