@@ -50,7 +50,7 @@
 	</script>
 </head>
 <body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0" onload="onLoad();">
-<form action="<%=request.getContextPath() %>/warningOverHit" target="result">
+<form action="<%=request.getContextPath() %>/warningOverHit" target="result" method = "post">
 <input type = "hidden" name = "act" value = ""/>
 <%-- 次の実際に検索するActionで使用するためのデータを渡す --%>
 <%--
@@ -77,8 +77,8 @@
             この件数の表示には長時間かかります。<br />
             このまま表示を続けますか?<br />
             <br />
-            <button type="button" onclick="setAct('cancel')">中止する</button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="button" onclick="setAct('continue')">続ける</button>
+            <button type="button" onclick="setAct('cancel'); form.submit();">中止する</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" onclick="setAct('continue'); form.submit();">続ける</button>
         </span>
     </c:when>
     <c:otherwise>

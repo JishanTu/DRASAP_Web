@@ -442,7 +442,7 @@ public class SearchConditionForm extends BaseForm {
 			value = StringUtils.isEmpty(value) ? "" : value;
 			setConditionValue(j - 1, value);
 
-			paramName = "sortWayButton" + j;
+			paramName = "sortWay" + j;
 			value = request.getParameter(paramName);
 			value = StringUtils.isEmpty(value) ? "" : value;
 			setSortWay(j - 1, value);

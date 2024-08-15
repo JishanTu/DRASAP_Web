@@ -246,7 +246,7 @@
 				<c:forEach var="condition" items="${deleteHostReqForm.condition}" varStatus="loop">
 					<tr>
 						<td align="center"><input type="text" class="condition" name="condition"
-							style="color: red" tabindex="${loop.index + 2}" /></td>
+							style="${empty deleteHostReqForm.msgList ? 'color:black;' : 'color:red;'}" tabindex="${loop.index + 2}" /></td>
 					</tr>
 				</c:forEach>
 				<tr>

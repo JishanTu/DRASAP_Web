@@ -65,7 +65,7 @@ public class OutAttrCsvAction extends BaseAction {
 		// テンポラリのフォルダのフルパス
 		String tempDirName = DrasapUtil.getRealTempPath(request);
 		SearchResultForm searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-		String outAllFlug = (String) request.getAttribute("OUT_CSV_ALL");// 全属性か?
+		String outAllFlug = (String) session.getAttribute("OUT_CSV_ALL");// 全属性か?
 		// まずCSVファイルを作成する
 		String outFileName = tempDirName + File.separator + session.getId() + "_" + new Date().getTime();
 		File outFile = new File(outFileName);

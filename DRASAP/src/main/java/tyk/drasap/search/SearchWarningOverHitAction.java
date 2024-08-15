@@ -30,7 +30,7 @@ public class SearchWarningOverHitAction extends BaseAction {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping("/searchWarningOverHit")
+	@PostMapping("/warningOverHit")
 	public String execute(
 			SearchWarningOverHitForm form,
 			HttpServletRequest request,
