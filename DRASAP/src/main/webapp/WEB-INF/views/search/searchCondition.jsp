@@ -77,10 +77,9 @@
 		}
 		
 		.table-container {
-
             overflow-y: auto; 
-            overflow-x: auto; 
             height: 140px;
+            width: 565px
         }
 	</style>
 <script type="text/javascript">
@@ -104,7 +103,7 @@
         isOrderDrwgNo();
 	}
 	// 昇順、降順をサイクリックに切り替える
-	function changeOrder(obj){
+	function changeOrder(obj,index){
 		var ascStr;
 		var descStr;
 		var language = "${sessionScope.user.language}";
@@ -711,6 +710,8 @@
 		}
 		return ret;
 	}
+	
+	
 // 2020.03.13 yamamoto add end
 </script>
 </head>
@@ -855,7 +856,7 @@
 			class="normal12">
 			<tr>
 				<!--============ 検索条件 ============-->
-				<td style="width: 500px;">
+				<td style="width: 600px;">
 				<div class="table-container">
 					<table border="0" cellspacing="0" cellpadding="0"
 						style="font-size: 12pt; margin: 0px; padding: 0px;">
