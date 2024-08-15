@@ -63,6 +63,21 @@
 			document.forms[0].target="_parent";// ターゲットは画面全体
 			document.forms[0].submit();
 		}
+
+		function isChecked(index) {
+			var ischecked = document.getElementById('checkbox' + index).checked;
+			var checkElement = document.getElementById('checkbox' + index);
+			var hiddenInput = document.getElementById('checkbox' + 'Hidden' + index);
+			if (ischecked == true) {
+				// チェックが入っていたら無効化
+				checkElement.value = true
+			} else {
+				// チェックが入って無いなら有効化
+				checkElement.value = false
+			}
+			hiddenInput.value = checkElement.value;
+			hiddenInput.name = "searchResultList[" + index + "]."+ 'selected';
+		}
 	</script>
 </head>
 <body>
@@ -146,10 +161,9 @@
 								<c:choose>
 									<c:when test="${item.aclFlag == 1}">
 										<td>
-										<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/>
-										<input type="checkbox"id="checkbox${status.index}"
-											value="true" onclick="isChecked(${status.index},'drwg')"
-											<c:if test="${item.selected}">checked="checked"</c:if> /></td>
+											<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/>
+											<input type="checkbox"id="checkbox${status.index}" value="true" onclick="isChecked(${status.index})" <c:if test="${item.selected}">checked="checked"</c:if>/>
+										</td>
 									</c:when>
 									<c:otherwise>
 										<td />
@@ -217,6 +231,7 @@
 		<c:if test="${message == null}">
 			<div class="footer">
 				<span class="normal10">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					${searchResultForm.h_label5 }&nbsp;
 					<select name="outputPrinter">
 						<c:forEach items="${searchResultForm.printerKeyList}" var="outputPrinterKey" varStatus="loop">
@@ -236,6 +251,7 @@
 							<input type="button" value="cancel" onclick="setActSubmit('SEARCH')" />
 						</c:otherwise>
 					</c:choose>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</span>
 			</div>
 		</c:if>
