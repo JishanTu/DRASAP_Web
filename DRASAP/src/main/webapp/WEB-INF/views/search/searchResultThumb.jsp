@@ -17,7 +17,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	<title>Drawing Search and Print System [図面検索]</title>
+	<title>Drawing Search and Print System [印刷指示画面]</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
@@ -39,11 +39,11 @@
 			flex: 1;
 		}
 		.footer {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
+			position: fixed;
+			bottom: 0;
+			right: 0;
 			padding: 10px;
-			min-height: 100px;
+			min-height: 10px;
 		}
 	</style>
 	<script type="text/javascript">
@@ -127,24 +127,11 @@
 							<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
 								<span class="normal10">${sessionScope.searchResultForm.dispDwgNoName}</span>
 							</td>
-							<c:choose>
-								<c:when test="${user.language eq 'Japanese'}">
-									<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
-										<span class="normal10">装置名称(和)</span>
-									</td>
-									<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
-										<span class="normal10">装置名称(英)</span>
-									</td>
-								</c:when>
-								<c:otherwise>
-									<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
-										<span class="normal10">Dwg Name(Jp)</span>
-									</td>
-									<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
-										<span class="normal10">Dwg Name(En)</span>
-									</td>
-								</c:otherwise>
-							</c:choose>
+							<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
+								<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+									<span class="normal10">${sessionScope.searchResultForm.getDispAttrName(index - 1)}</span>
+								</td>
+							</c:forEach>
 						</tr>
 						<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status">
 							<c:set var="bgcolor1" value="#FFFFFF" />
@@ -216,12 +203,11 @@
 								<td nowrap="nowrap">
 									<span class="normal12blue">${item.drwgNoFormated}</span>
 								</td>
-								<td nowrap="nowrap">
-									<span class="normal12">&nbsp; ${item.getAttr("MACHINE_JP")}&nbsp;</span>
-								</td>
-								<td nowrap="nowrap">
-									<span class="normal12">&nbsp; ${item.getAttr("MACHINE_EN")}&nbsp;</span>
-								</td>
+								<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
+									<td nowrap="nowrap">
+										<span class="normal12">&nbsp; ${item.getAttr(sessionScope.searchResultForm.getDispAttr(index - 1))}&nbsp;</span>
+									</td>
+								</c:forEach>
 							</tr>
 						</c:forEach>
 					</table>
@@ -231,7 +217,6 @@
 		<c:if test="${message == null}">
 			<div class="footer">
 				<span class="normal10">
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					${searchResultForm.h_label5 }&nbsp;
 					<select name="outputPrinter">
 						<c:forEach items="${searchResultForm.printerKeyList}" var="outputPrinterKey" varStatus="loop">
@@ -240,9 +225,11 @@
 					</select>
 				</span>
 				<span class="normal10">
+					&nbsp;&nbsp;
 					<input type="button" value="　${searchResultForm.f_label4}　" onclick="printerIndicationOut('PRIENTER_THUMBNAIL')" />
 				</span>
 				<span class="normal10">
+					&nbsp;&nbsp;
 					<c:choose>
 						<c:when test="${user.language eq 'Japanese'}">
 							<input type="button" value="キャンセル" onclick="setActSubmit('SEARCH')" />
@@ -251,7 +238,6 @@
 							<input type="button" value="cancel" onclick="setActSubmit('SEARCH')" />
 						</c:otherwise>
 					</c:choose>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</span>
 			</div>
 		</c:if>
