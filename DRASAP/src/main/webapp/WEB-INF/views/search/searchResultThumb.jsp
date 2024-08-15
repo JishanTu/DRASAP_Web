@@ -201,7 +201,7 @@
 									</select>
 								</td>
 								<td nowrap="nowrap">
-									<span class="normal12blue">${item.drwgNoFormated}</span>
+									<span class="normal12">${item.drwgNoFormated}</span>
 								</td>
 								<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
 									<td nowrap="nowrap">

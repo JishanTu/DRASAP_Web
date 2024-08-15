@@ -262,6 +262,27 @@ public class SearchResultAction extends BaseAction {
 			return "search_thumb";
 		}
 		if ("PRIENTER_THUMBNAIL".equals(searchResultForm.getAct())) {
+			// 印刷の指示をする
+			// 1) 次のチェックを行う
+			// - 指定した枚数のチェック
+			// - 出力プロッタは選択されている?
+			// - 正しい出力サイズを指定している?
+			checkForPrint(searchResultForm, user, drasapInfo, errors);
+			if (!Objects.isNull(errors.getAttribute("message"))) {
+				//saveErrors(request, errors);
+				request.setAttribute("errors", errors);
+				category.debug("--> search_thumb");
+				return "search_thumb";
+			}
+			// 2) 印刷可能でない図番を指示していないか?
+			if (hasNotPrintable(searchResultForm, user)) {
+				category.debug("--> thumbNotPrintable");
+				return "thumbNotPrintable";
+			}
+			// 3) 参考図出力用テーブルに出力する
+			// 重複リクエストの調査のためのログ。2005-Mar-4 by Hirata.
+			PrintLoger.info(PrintLoger.ACT_RECEIVE, user);
+
 			int requestCount = requestPrint(searchResultForm, user, errors);
 			if (Objects.isNull(errors.getAttribute("message"))) {
 				// 成功したメッセージを
@@ -277,8 +298,6 @@ public class SearchResultAction extends BaseAction {
 			return "search_thumb";
 		}
 		if ("SEARCH".equals(searchResultForm.getAct())) {
-			SearchConditionForm condition = (SearchConditionForm) session.getAttribute("searchConditionForm");
-			session.setAttribute("searchConditionForm", condition);
 			request.setAttribute("task", "continue");
 			return "search";
 		}
