@@ -107,6 +107,7 @@ SET "END_TIME=%DT:~8,2%:%DT:~10,2%:%DT:~12,2%"
 CALL :LogAndEcho "%END_DATE% %END_TIME%に配置バッチ処理が完了しました。"
 
 REM 終了
+PAUSE
 EXIT /B
 
 :LogAndEcho
