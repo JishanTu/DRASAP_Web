@@ -113,16 +113,17 @@ ul {
 				<td rowspan="3" class="errMsg">
 					<!-- エラーの表示 --> <font color="RED"> <b>
 							<ul>
-							<c:forEach var="entry"
-                                    items="${pageContext.request.attributeNames}">
-                                    <c:if
-                                        test="${!fn:contains(entry, '.') && !fn:contains(entry, 'path') && !fn:containsIgnoreCase(entry, 'form')}">
-                                        <c:set var="attributeName" value="${entry}" />
-                                        <c:set var="attributeValue"
-                                            value="${requestScope[attributeName]}" />
-                                        <li>${attributeValue}</li>
-                                    </c:if>
-                                </c:forEach>
+								<c:forEach var="entry"
+									items="${pageContext.request.attributeNames}">
+									<c:if
+										test="${!fn:contains(entry, '.') && !fn:contains(entry, 'path') && !fn:containsIgnoreCase(entry, 'form')}">
+										<c:set var="attributeName" value="${entry}" />
+										<c:forEach var="attributeValue"
+											items="${requestScope[attributeName]}">
+											<li>${attributeValue}</li>
+										</c:forEach>
+									</c:if>
+								</c:forEach>
 							</ul>
 					</b>
 				</font>

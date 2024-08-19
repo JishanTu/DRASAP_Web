@@ -644,13 +644,26 @@
 	// 2020.03.13 yamamoto add start
     // 図番指定順のON/OFFチェック
 	function isOrderDrwgNo() {
-		var ischecked = document.forms[0].orderDrwgNo.checked;
+		var checkElement = document.getElementById('orderDrwgNoHidden');
+		var ischecked = document.forms[0].orderDrwgNocheckbox.checked;
 		if (ischecked == true) {
 			// チェックが入っていたら無効化
 			disableSearchForm();
+			checkElement.value = true
 		} else {
 			// チェックが入って無いなら有効化
 			enableSearchForm();
+			checkElement.value = false
+		}
+	}
+	 // 最新追番のみ表示ON/OFFチェック
+	function isOnlyNewest() {
+		var checkElement = document.getElementById('onlyNewestHidden');
+		var ischecked = document.forms[0].onlyNewestcheckbox.checked;
+		if (ischecked == true) {
+			checkElement.value = true
+		} else {
+			checkElement.value = false
 		}
 	}
 
@@ -952,11 +965,13 @@
 							<td align="center"><html:checkbox property="onlyNewest" /> <bean:write name="searchConditionForm"--%>
 							<td align="left" nowrap="nowrap">
 								<%-- 最新追番のみ表示 --%>
-								<input type="checkbox" name="onlyNewest" value="true" ${searchConditionForm.isOnlyNewest() ? 'checked' : ''}/>
+								<input type="hidden" id="onlyNewestHidden" name="onlyNewest" value="false"/>
+								<input type="checkbox" id="onlyNewestcheckbox" value="true" ${searchConditionForm.isOnlyNewest() ? 'checked' : ''} onclick="isOnlyNewest()"/>
 								${searchConditionForm.c_label2}
 								<br />
 								<%-- 図番指定順 --%>
-								<input type="checkbox" name="orderDrwgNo" value="true" onclick="isOrderDrwgNo()"/>
+								<input type="hidden" id="orderDrwgNoHidden" name="orderDrwgNo" value="false"/>
+								<input type="checkbox" id="orderDrwgNocheckbox" value="true" ${searchConditionForm.isOrderDrwgNo() ? 'checked' : ''} onclick="isOrderDrwgNo()"/>
 								${searchConditionForm.c_label17} 
 								<br />
 								<br />

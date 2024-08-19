@@ -42,6 +42,13 @@
 </c:forEach>
 	<hr/ style="border: none; height: 0.5px; background-color: red;">
 </c:if>
+<c:if test="${passwd != null}">
+<hr/ style="border: none; height: 0.5px; background-color: red;">
+	<c:forEach var="msg" items="${passwd}">
+		<li style="margin-left: 30px; line-height: 1.5; color: red; border-lift: 0px'">${msg}</li>
+</c:forEach>
+	<hr/ style="border: none; height: 0.5px; background-color: red;">
+</c:if>
 
     <form name="delete_LoginForm" action="<%=request.getContextPath() %>/delete_Login" method="post">
         <table align="center" border="0" cellspacing="0" cellpadding="5">

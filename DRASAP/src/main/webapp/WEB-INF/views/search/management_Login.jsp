@@ -36,7 +36,7 @@
 		}
 		// 初期フォーカス位置
 		function onInitFocus(){
-			document.management_LoginForm.passwd.focus();
+			document.forms[0].passwd.focus();
 		}
 	</script>
 </head>
@@ -44,13 +44,18 @@
 
   <font color="RED">
 <ul>
-    <c:if test="${message != null}">
-        <c:forEach var="msg" items="${message}">
-            <li>${msg}</li>
-        </c:forEach>
-    </c:if>
-</ul>
-</font>	
+			<c:if test="${message != null}">
+				<c:forEach var="msg" items="${message}">
+					<li>${msg}</li>
+				</c:forEach>
+			</c:if>
+			<c:if test="${passwd != null}">
+				<c:forEach var="passwdmsg" items="${passwd}">
+					<li>${passwdmsg}</li>
+				</c:forEach>
+			</c:if>
+		</ul>
+	</font>	
 
 <form action="<%=request.getContextPath() %>/management_Login" method = "post">
 

@@ -347,7 +347,6 @@ public class SearchConditionAction extends BaseAction {
 		for (int i = 0; i < searchConditionForm.getSearchSelColNum(); i++) {
 			if (!isRightCondition(searchConditionForm.getCondition(i), searchConditionForm.getConditionValue(i), drasapInfo, user, errors)) {
 				isRight = false;
-				break;
 			}
 		}
 		return isRight;

@@ -1,5 +1,12 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%-- ログイン情報の確認 --%>
+<c:if test="${empty sessionScope.user}">
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
+</c:if>
 <!DOCTYPE html>
 <html>
 <head>

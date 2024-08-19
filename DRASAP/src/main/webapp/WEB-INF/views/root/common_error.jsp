@@ -25,26 +25,28 @@
 	</script>
 </head>
 <body onload="onLoad();">
-<!-- エラーの表示 -->
- <c:if test="${not empty requestScope['errors']}">
-    <div style="color: red;">
-        ${requestScope['errors'].message}
-    </div>
-</c:if>
+	<!-- エラーの表示 -->
+	<c:if test="${not empty requestScope['errors']}">
+	<hr style="border: none; height: 1px; background-color: orange;">
+		<c:forEach var="msg" items="${requestScope['errors']['message']}">
 
-    <table class="nowsearch" id="nowSearch" style="visibility:hidden">
-        <tr valign="middle">
-            <td align="center" style="font-size:18pt;color:#0000FF;">
-                <c:choose>
-                    <c:when test="${user.language eq 'Japanese'}">
+			<li
+				style="margin-left: 30px; line-height: 1.5; color: red; border-left: 0px;">${msg}</li>
+		</c:forEach>
+		<hr style="border: none; height: 1px; background-color: orange;">
+	</c:if>
+
+	<table class="nowsearch" id="nowSearch" style="visibility: hidden">
+		<tr valign="middle">
+			<td align="center" style="font-size: 18pt; color: #0000FF;"><c:choose>
+					<c:when test="${user.language eq 'Japanese'}">
                         検索中・・・・
                     </c:when>
-                    <c:otherwise>
+					<c:otherwise>
                         Now Searching...
                     </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
+				</c:choose></td>
+		</tr>
+	</table>
 </body>
 </html>
