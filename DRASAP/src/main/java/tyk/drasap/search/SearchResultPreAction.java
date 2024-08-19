@@ -114,10 +114,20 @@ public class SearchResultPreAction extends BaseAction {
 
 			//コピー元ファイル
 			DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
+			String thumbnailSize = (String) session.getAttribute("thumbnailSize");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				String subPath = searchResultForm.searchResultList.get(i).pathName;
 				String thumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
 				String newThumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + subPath, thumbnailName, request);
+				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
+					if ("L".equals(thumbnailSize)) {
+						newThumbnailName = "NotFound_L_thumb.jpg";
+					} else if ("S".equals(thumbnailSize)) {
+						newThumbnailName = "NotFound_S_thumb.jpg";
+					} else {
+						newThumbnailName = "NotFound_M_thumb.jpg";
+					}
+				}
 				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
 			}
 			// アクセスログを
@@ -516,7 +526,7 @@ public class SearchResultPreAction extends BaseAction {
 		Path newOutPath = Paths.get(newOutPathName);
 		try {
 			if (!Files.exists(outPath)) {
-				return "NotFound_thumb.jpg";
+				return "NotFound_M_thumb.jpg";
 			}
 			FileTime thumbnailLastModifiedTime = Files.getLastModifiedTime(outPath);
 			if (Files.exists(newOutPath)) {

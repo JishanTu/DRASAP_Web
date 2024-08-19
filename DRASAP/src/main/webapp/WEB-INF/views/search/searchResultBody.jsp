@@ -33,17 +33,44 @@
 			gap: 10px;
 		}
 
-		.galleryr {
+		.galleryr-l {
 			display:flex;
 			padding: 5px;
 			margin: 5px;
 			text-align: center; 
-			transition: transform 0.3s ease;
 			float: left;
 			flex-direction: column;
-			border: 2px solid black;
+			border: 1px solid black;
+			justify-content: center;
+			width: 315px;
+			transition: none;
 		}
 
+		.galleryr-m {
+			display:flex;
+			padding: 5px;
+			margin: 5px;
+			text-align: center; 
+			float: left;
+			flex-direction: column;
+			border: 1px solid black;
+			justify-content: center;
+			width: 265px;
+			transition: none;
+		}
+
+		.galleryr-s {
+			display:flex;
+			padding: 5px;
+			margin: 5px;
+			text-align: center; 
+			float: left;
+			flex-direction: column;
+			border: 1px solid black;
+			justify-content: center;
+			width: 215px;
+			transition: none;
+		}
 		.controls {
 			align-items: center;
 			justify-content: center; 
@@ -290,9 +317,12 @@
 		function thumbnailLoad(imgElement,drwgSize,index) {
 			<% String thumbnailSize = (String) session.getAttribute("thumbnailSize"); %>
 			const thumbnailElement = document.getElementById('thumbnail[' + index + ']');
+			const galleryr = document.getElementById('galleryr' + index);
 			thumbnailElement.classList.remove('large-a0', 'medium-a0', 'small-a0','small-a4', 'medium-a4', 'large-a4');
+			galleryr.classList.remove('galleryr-l', 'galleryr-m', 'galleryr-s');
 			<% if ("L".equals(thumbnailSize)) { %>
 				changeSize('large');
+				galleryr.classList.add('galleryr-l');
 				if(drwgSize == "A4"){
 					thumbnailElement.classList.add('large-a4');
 				} else if(drwgSize == "A0L"){
@@ -303,6 +333,7 @@
 				}
 			<% } else if ("M".equals(thumbnailSize)) { %>
 				changeSize('medium');
+				galleryr.classList.add('galleryr-m');
 				if(drwgSize == "A4"){
 					thumbnailElement.classList.add('medium-a4');
 				} else if(drwgSize == "A0L"){
@@ -313,6 +344,7 @@
 				}
 			<% } else if ("S".equals(thumbnailSize)) { %>
 				changeSize('small');
+				galleryr.classList.add('galleryr-s');
 				if(drwgSize == "A4"){
 						thumbnailElement.classList.add('small-a4');
 				} else if(drwgSize == "A0L"){
@@ -328,7 +360,6 @@
 			let rule;
 			if("L" == thumbnailSize) {
 				rule = '.thumbnail.large-' + index + ' { width: 300px; height: calc(210 * var(--thumbnail-' + index + ') / 297); }';
-				console.log(rule);
 			} else if("M" == thumbnailSize) {
 				rule = '.thumbnail.medium-' + index + ' { width: 250px; height: calc(177 * var(--thumbnail-' + index + ') / 297); }';
 			} else{
@@ -528,7 +559,7 @@
 													<c:when test="${sessionScope.indication == 'thumbnail_view'}">display: block;</c:when>
 													<c:otherwise>display: none;</c:otherwise></c:choose>">
 				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
-					<div class="galleryr">
+					<div class="galleryr-m" id="galleryr${status.index}">
 						<c:choose>
 							<c:when test="${item.aclFlag == 1 }">
 								<a id="thumbnailPhotoLink[${status.index}]" href='<c:url value="/preview"/>'
@@ -538,7 +569,8 @@
 								</a>
 							</c:when>
 							<c:otherwise>
-								<img src="<%=request.getContextPath()%>/resources/img/thumb/NotAccess_thumb.jpg" class="thumbnail large"/>
+								<img src="<%=request.getContextPath()%>/resources/img/thumb/NotAccess_thumb.jpg" id="thumbnail[${status.index}]"
+										onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
 							</c:otherwise>
 						</c:choose>
 						<div class="controls">
