@@ -90,14 +90,7 @@
 			</ul>
 		</font>
 		<div align="center">
-			<c:choose>
-				<c:when test="${user.language eq 'Japanese'}">
-					<input type="button" value="戻る" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
-				</c:when>
-				<c:otherwise>
-					<input type="button" value="back" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
-				</c:otherwise>
-			</c:choose>
+			<input type="button" value="${sessionScope.searchResultForm.f_label12}" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
 		</div>
 	</c:if>
 	<div class="page">
@@ -105,14 +98,7 @@
 			<form action="<%=request.getContextPath() %>/result" method="post">
 				<input type="hidden" name="act" value="" />
 				<c:if test="${message == null}">
-					<c:choose>
-						<c:when test="${user.language eq 'Japanese'}">
-							<div class="header"><span class="normal10"><h2>印刷指示画面</h2></span></div>
-						</c:when>
-						<c:otherwise>
-							<div class="header"><span class="normal10"><h2>Print Indication View</h2></span></div>
-						</c:otherwise>
-					</c:choose>
+					<div class="header"><span class="normal10"><h2>${sessionScope.searchResultForm.h_label11}</h2></span></div>
 					<table border="0" cellspacing="1" cellpadding="0" align="center">	
 						<%-- userを定義する --%>
 						<c:set var="user" value="${sessionScope.user}" />
@@ -230,14 +216,7 @@
 				</span>
 				<span class="normal10">
 					&nbsp;&nbsp;
-					<c:choose>
-						<c:when test="${user.language eq 'Japanese'}">
-							<input type="button" value="キャンセル" onclick="setActSubmit('SEARCH')" />
-						</c:when>
-						<c:otherwise>
-							<input type="button" value="cancel" onclick="setActSubmit('SEARCH')" />
-						</c:otherwise>
-					</c:choose>
+					<input type="button" value="${searchResultForm.f_label13}" onclick="setActSubmit('SEARCH')" />
 				</span>
 			</div>
 		</c:if>

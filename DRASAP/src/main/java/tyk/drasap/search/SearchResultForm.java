@@ -44,6 +44,8 @@ public class SearchResultForm extends BaseForm {
 	String H_label7 = "リスト表示";
 	String H_label8 = "サムネイル表示";
 	String H_label9 = "サムネイルサイズ";
+	String H_label10 = "運用支援";
+	String H_label11 = "印刷指示画面";
 	// Footer 部
 	String F_label1 = "{0}件中  {1}-{2}件表示";
 	String F_label2 = "前の{0}件";
@@ -58,6 +60,9 @@ public class SearchResultForm extends BaseForm {
 	// 2020.03.10 yamamoto add. start
 	String F_label9 = "PDF単独zip出力";
 	String F_label10 = "図番削除";
+	String F_label11 = "出力";
+	String F_label12 = "戻る";
+	String F_label13 = "キャンセル";
 	// 2020.03.10 yamamoto add. end
 	String language = "";
 	private SearchUtil sUtil = new SearchUtil();
@@ -71,6 +76,8 @@ public class SearchResultForm extends BaseForm {
 	public final char H_LABEL7_LINE_NO = 34; // リスト表示
 	public final char H_LABEL8_LINE_NO = 35; // サムネイル表示
 	public final char H_LABEL9_LINE_NO = 36; // サムネイルサイズ
+	public final char H_LABEL10_LINE_NO = 37;
+	public final char H_LABEL11_LINE_NO = 38;
 	public final char F_LABEL1_LINE_NO = 15;
 	public final char F_LABEL2_LINE_NO = 16;
 	public final char F_LABEL3_LINE_NO = 17;
@@ -86,6 +93,9 @@ public class SearchResultForm extends BaseForm {
 	public final char F_LABEL9_LINE_NO = 31; // PDF単独zip出力
 	// 2020.03.10 yamamoto add. end
 	public final char F_LABEL10_LINE_NO = 33; // 図番削除
+	public final char F_LABEL11_LINE_NO = 39;
+	public final char F_LABEL12_LINE_NO = 40;
+	public final char F_LABEL13_LINE_NO = 41;
 	// ---------------------------------------------------- method
 	/* (非 Javadoc)
 	 * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
@@ -424,6 +434,18 @@ public class SearchResultForm extends BaseForm {
 		return F_label10;
 	}
 
+	public String getF_label11() {
+		return F_label11;
+	}
+
+	public String getF_label12() {
+		return F_label12;
+	}
+
+	public String getF_label13() {
+		return F_label13;
+	}
+
 	public String getH_label1() {
 		return H_label1;
 	}
@@ -458,6 +480,14 @@ public class SearchResultForm extends BaseForm {
 
 	public String getH_label9() {
 		return H_label9;
+	}
+
+	public String getH_label10() {
+		return H_label10;
+	}
+
+	public String getH_label11() {
+		return H_label11;
 	}
 
 	public void setF_label1(String f_label1) {
@@ -500,6 +530,18 @@ public class SearchResultForm extends BaseForm {
 		F_label10 = f_label10;
 	}
 
+	public void setF_label11(String f_label11) {
+		F_label11 = f_label11;
+	}
+
+	public void setF_label12(String f_label12) {
+		F_label12 = f_label12;
+	}
+
+	public void setF_label13(String f_label13) {
+		F_label13 = f_label13;
+	}
+
 	public void setH_label1(String h_label1) {
 		H_label1 = h_label1;
 	}
@@ -534,6 +576,14 @@ public class SearchResultForm extends BaseForm {
 
 	public void setH_label9(String h_label9) {
 		H_label9 = h_label9;
+	}
+
+	public void setH_label10(String h_label10) {
+		H_label10 = h_label10;
+	}
+
+	public void setH_label11(String h_label11) {
+		H_label11 = h_label11;
 	}
 
 	public String getLanguage() {

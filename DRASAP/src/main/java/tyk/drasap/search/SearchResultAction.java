@@ -234,6 +234,15 @@ public class SearchResultAction extends BaseAction {
 			String thumbnailSize = request.getParameter("thumbnailSize");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				String newThumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
+				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
+					if ("L".equals(thumbnailSize)) {
+						newThumbnailName = "NotAccess_L_thumb.jpg";
+					} else if ("S".equals(thumbnailSize)) {
+						newThumbnailName = "NotAccess_S_thumb.jpg";
+					} else {
+						newThumbnailName = "NotAccess_M_thumb.jpg";
+					}
+				}
 				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
 					if ("L".equals(thumbnailSize)) {
 						newThumbnailName = "NotFound_L_thumb.jpg";

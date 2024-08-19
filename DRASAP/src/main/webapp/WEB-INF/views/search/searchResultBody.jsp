@@ -569,7 +569,7 @@
 								</a>
 							</c:when>
 							<c:otherwise>
-								<img src="<%=request.getContextPath()%>/resources/img/thumb/NotAccess_thumb.jpg" id="thumbnail[${status.index}]"
+								<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]"
 										onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
 							</c:otherwise>
 						</c:choose>
