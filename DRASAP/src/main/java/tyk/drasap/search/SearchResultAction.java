@@ -231,8 +231,23 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("THUMBNAIL_SIZE".equals(searchResultForm.getAct())) {
 			thumbnailSizeChange(user, request.getParameter("thumbnailSize"), errors);
+			String thumbnailSize = request.getParameter("thumbnailSize");
+			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
+				String newThumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
+				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
+					if ("L".equals(thumbnailSize)) {
+						newThumbnailName = "NotFound_L_thumb.jpg";
+					} else if ("S".equals(thumbnailSize)) {
+						newThumbnailName = "NotFound_S_thumb.jpg";
+					} else {
+						newThumbnailName = "NotFound_M_thumb.jpg";
+					}
+				}
+				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
+			}
 			session.setAttribute("thumbnailSize", user.getThumbnailSize());
 			session.setAttribute("indication", "thumbnail_view");
+			session.setAttribute("searchResultForm", searchResultForm);
 			return "result";
 		}
 		if ("SEARCH_THUMBNAIL".equals(searchResultForm.getAct())) {
