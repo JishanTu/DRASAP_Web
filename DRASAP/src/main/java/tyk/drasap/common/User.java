@@ -626,7 +626,6 @@ public class User {
 		} else {
 			searchSelColList.set(idx, val);
 		}
-
 	}
 
 	/**
@@ -1120,7 +1119,6 @@ public class User {
 		} else {
 			viewSelColList.set(idx, val);
 		}
-
 	}
 
 	/**

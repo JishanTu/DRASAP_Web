@@ -114,10 +114,29 @@ public class SearchResultPreAction extends BaseAction {
 
 			//コピー元ファイル
 			DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
+			String thumbnailSize = (String) session.getAttribute("thumbnailSize");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				String subPath = searchResultForm.searchResultList.get(i).pathName;
 				String thumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
 				String newThumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + subPath, thumbnailName, request);
+				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
+					if ("L".equals(thumbnailSize)) {
+						newThumbnailName = "NotAccess_L_thumb.jpg";
+					} else if ("S".equals(thumbnailSize)) {
+						newThumbnailName = "NotAccess_S_thumb.jpg";
+					} else {
+						newThumbnailName = "NotAccess_M_thumb.jpg";
+					}
+				}
+				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
+					if ("L".equals(thumbnailSize)) {
+						newThumbnailName = "NotFound_L_thumb.jpg";
+					} else if ("S".equals(thumbnailSize)) {
+						newThumbnailName = "NotFound_S_thumb.jpg";
+					} else {
+						newThumbnailName = "NotFound_M_thumb.jpg";
+					}
+				}
 				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
 			}
 			// アクセスログを
@@ -473,6 +492,8 @@ public class SearchResultPreAction extends BaseAction {
 			searchResultForm.setH_label7((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL7_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			searchResultForm.setH_label8((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL8_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			searchResultForm.setH_label9((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL9_LINE_NO)) == null ? "" : lineData.get(langIdx));
+			searchResultForm.setH_label10((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL10_LINE_NO)) == null ? "" : lineData.get(langIdx));
+			searchResultForm.setH_label11((lineData = screenItemStrList.getLineData(searchResultForm.H_LABEL11_LINE_NO)) == null ? "" : lineData.get(langIdx));
 
 			searchResultForm.setF_label1((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL1_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			searchResultForm.setF_label2((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL2_LINE_NO)) == null ? "" : lineData.get(langIdx));
@@ -489,6 +510,9 @@ public class SearchResultPreAction extends BaseAction {
 			searchResultForm.setF_label9((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL9_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			// 2020.03.10 yamamoto add. end
 			searchResultForm.setF_label10((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL10_LINE_NO)) == null ? "" : lineData.get(langIdx));
+			searchResultForm.setF_label11((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL11_LINE_NO)) == null ? "" : lineData.get(langIdx));
+			searchResultForm.setF_label12((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL12_LINE_NO)) == null ? "" : lineData.get(langIdx));
+			searchResultForm.setF_label13((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL13_LINE_NO)) == null ? "" : lineData.get(langIdx));
 		} catch (FileNotFoundException e) {
 			return;
 		} catch (IOException e) {
@@ -516,7 +540,7 @@ public class SearchResultPreAction extends BaseAction {
 		Path newOutPath = Paths.get(newOutPathName);
 		try {
 			if (!Files.exists(outPath)) {
-				return "NotFound_thumb.jpg";
+				return "NotFound_M_thumb.jpg";
 			}
 			FileTime thumbnailLastModifiedTime = Files.getLastModifiedTime(outPath);
 			if (Files.exists(newOutPath)) {

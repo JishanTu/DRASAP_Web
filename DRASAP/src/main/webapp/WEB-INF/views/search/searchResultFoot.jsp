@@ -196,14 +196,7 @@
 				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('PRINT')" />
 			</c:when>
 			<c:when test="${sessionScope.indication == 'thumbnail_view'}">
-				<c:choose>
-					<c:when test="${sessionScope.user.language == 'Japanese'}">
-						<input type="button" value="　出力　" onclick="setActSubmit('SEARCH_THUMBNAIL')" />
-					</c:when>
-					<c:otherwise>
-						<input type="button" value="　Print Request　" onclick="setActSubmit('SEARCH_THUMBNAIL')" />
-					</c:otherwise>
-				</c:choose>
+				<input type="button" value="　${searchResultForm.f_label11}　" onclick="setActSubmit('SEARCH_THUMBNAIL')" />
 			</c:when>
 		</c:choose>
 		</td>

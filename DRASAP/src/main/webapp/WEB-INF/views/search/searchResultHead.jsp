@@ -159,9 +159,9 @@
 						<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>小</option>
 					</c:when>
 					<c:otherwise>
-						<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>large</option>
-						<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>medium</option>
-						<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>small</option>
+						<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>L</option>
+						<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>M</option>
+						<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>S</option>
 					</c:otherwise>
 				</c:choose>
 			</select>
@@ -193,14 +193,7 @@
 // ボタンを表示する
 User me = (User) session.getAttribute("user");
 if (me.isDelAdmin()) { %>
-	<c:choose>
-		<c:when test="${user.language == 'Japanese'}">
-			<input type="button" value="運用支援" onclick="management()" class="management" />
-		</c:when>
-		<c:otherwise>
-			<input type="button" value="Operation Support" onclick="management()" class="management" />
-		</c:otherwise>
-	</c:choose>
+	<input type="button" value="${sessionScope.searchResultForm.h_label10}" onclick="management()" class="management" />
 <%} %>
 <table border="1">
 	<tr>
