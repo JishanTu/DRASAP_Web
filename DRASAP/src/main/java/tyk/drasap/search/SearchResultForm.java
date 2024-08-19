@@ -253,8 +253,7 @@ public class SearchResultForm extends BaseForm {
 			} else if (i == 5) {
 				setDispAttr(5, "CREATE_DATE");
 			} else {
-				// TODO デフォルト値を田中さんに聞く
-				setDispAttr(i, "ATTACH01");
+				setDispAttr(i, "");
 			}
 		}
 	}
