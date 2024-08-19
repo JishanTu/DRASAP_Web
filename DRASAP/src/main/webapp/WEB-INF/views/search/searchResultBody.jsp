@@ -37,12 +37,13 @@
 			display:flex;
 			padding: 5px;
 			margin: 5px;
-			text-align: center; 
+			align-items: center;
 			float: left;
 			flex-direction: column;
 			border: 1px solid black;
 			justify-content: center;
 			width: 315px;
+			height: 280px;
 			transition: none;
 		}
 
@@ -50,12 +51,13 @@
 			display:flex;
 			padding: 5px;
 			margin: 5px;
-			text-align: center; 
+			align-items: center;
 			float: left;
 			flex-direction: column;
 			border: 1px solid black;
 			justify-content: center;
 			width: 265px;
+			height: 240px;
 			transition: none;
 		}
 
@@ -63,17 +65,19 @@
 			display:flex;
 			padding: 5px;
 			margin: 5px;
-			text-align: center; 
+			align-items: center;
 			float: left;
 			flex-direction: column;
 			border: 1px solid black;
 			justify-content: center;
 			width: 215px;
+			height: 200px;
 			transition: none;
 		}
+
 		.controls {
 			align-items: center;
-			justify-content: center; 
+			justify-content: center;
 			margin-top: 5px;
 		}
 
@@ -560,21 +564,23 @@
 													<c:otherwise>display: none;</c:otherwise></c:choose>">
 				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
 					<div class="galleryr-m" id="galleryr${status.index}">
-						<c:choose>
-							<c:when test="${item.aclFlag == 1 }">
-								<a id="thumbnailPhotoLink[${status.index}]" href='<c:url value="/preview"/>'
-									onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');" class="drwgNo large">
+						<div style="flex: 1; display: flex; justify-content: center; text-align: center; flex-direction: column;">
+							<c:choose>
+								<c:when test="${item.aclFlag == 1 }">
+									<a id="thumbnailPhotoLink[${status.index}]" href='<c:url value="/preview"/>'
+										onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');" class="drwgNo large">
+										<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]"
+											onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
+									</a>
+								</c:when>
+								<c:otherwise>
 									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]"
-										onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
-								</a>
-							</c:when>
-							<c:otherwise>
-								<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]"
-										onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
-							</c:otherwise>
-						</c:choose>
+											onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
+								</c:otherwise>
+							</c:choose>
+						</div>
 						<div class="controls">
-						<c:choose>
+							<c:choose>
 								<c:when test="${item.aclFlag == 1 }">
 									<input type="hidden" id="thumbnailcheckboxHidden${status.index}" value="${item.selected}"/>
 									<input type="checkbox" id="thumbnailcheckbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
