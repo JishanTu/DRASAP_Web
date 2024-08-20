@@ -7,6 +7,13 @@
 	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
+
+<c:if test="${empty sessionScope.parentPage}">
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
+</c:if>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +26,7 @@
     // 直リンク禁止
     var refinfo=document.referrer;
     if (!refinfo){
-        location.replace('<c:url value="/root/timeout.jsp" />');
+    	location.replace('<%=request.getContextPath()%>/timeout');
     }
 
     function onLoad() {
