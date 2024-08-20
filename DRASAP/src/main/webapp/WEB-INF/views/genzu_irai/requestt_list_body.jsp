@@ -46,7 +46,10 @@
                     <td nowrap="nowrap" align="center">
                         <select name="iraiList[${loop.index}].message">
                             <c:forEach items="${request_listForm.messageNameList}" var="messageName" varStatus="innerLoop">
-                                <option value="${messageName}">${request_listForm.messageNameList[innerLoop.index]}</option>
+                               <option value="${messageName}"
+                                <c:if test="${messageName eq request_listForm.iraiList[loop.index].message}">selected</c:if>>
+                            ${messageName}
+                        </option>
                             </c:forEach>
                         </select>
                     </td>
