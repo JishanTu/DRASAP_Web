@@ -83,7 +83,7 @@
 
 		<c:set var="gensi" value="" />
 		<c:set var="exist" value="${e.exist}" />
-		<c:if test="${'0' eq exist} }">
+		<c:if test="${'0' eq exist}">
 			<c:set var="gensi" value="1" />
 		</c:if>
 		<tr>

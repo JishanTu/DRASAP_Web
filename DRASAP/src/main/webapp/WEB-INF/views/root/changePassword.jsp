@@ -12,9 +12,11 @@
 </script>
 </c:if>
 
-<%--<!-- <logic:notPresent name="parentPage" scope="session"> -->--%>
-<%--<!-- 	<logic:redirect forward="timeout" /> -->--%>
-<%--<!-- </logic:notPresent> -->--%>
+<c:if test="${empty sessionScope.parentPage}">
+<script>
+	location.replace('<%=request.getContextPath()%>/timeout');
+</script>
+</c:if>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">

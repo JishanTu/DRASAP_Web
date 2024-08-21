@@ -27,6 +27,12 @@
 		    right:0px;
 		    margin-right:10px;
 		}
+		 .file-input-container input[type="file"] {
+            display: none;
+        }
+         .file-input-container input[type="text"] {
+            width: 600px;
+        }
 	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
@@ -110,6 +116,10 @@
 			document.forms[0].target = "_top";// ターゲットは画面全体
 			document.forms[0].submit();
 		}
+		
+		function upload() {
+			    document.getElementById('fileUpload').click();
+		}
 		// ダウンロード
 		function doDownload() {
 			document.forms[0].action = '<%=request.getContextPath() %>/accessLevelDownload';<%--//DL用のURLをセット--%>
@@ -137,8 +147,14 @@
 			<table border="0">
 				<tr>
 					<td nowrap="nowrap">
+					 <div class="file-input-container">
 						<label class="normal10">アップロードファイル</label>
-						<input type="file" name="uploadFile" size="100">
+						<input type="text" id="filePath" readonly placeholder="ファイルを選択されていません">
+						<input type="file" id="fileUpload" name="uploadFile">
+						<input type="button" value="参照" onclick="upload()" />
+        				
+        				</div>
+        				
 					</td>
 					<td>
 						&nbsp;<input type="button" value="アップロード" onclick="doUpload();lockButtons();" style="width: 100px;" />
@@ -172,5 +188,21 @@
 	</tr>
 </table>
 </form>
+<script>
+
+        document.getElementById('fileUpload').addEventListener('change', function() {
+            var fileInput = this;
+            var filePathInput = document.getElementById('filePath');
+
+            // Display file name in the input box
+            if (fileInput.files.length > 0) {
+                filePathInput.value = fileInput.files[0].name;
+            } else {
+                filePathInput.value = 'ファイルを選択されていません';
+            }
+        });
+        
+       
+    </script>
 </body>
 </html>
