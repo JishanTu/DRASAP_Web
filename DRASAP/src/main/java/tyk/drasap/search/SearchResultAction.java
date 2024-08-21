@@ -242,6 +242,7 @@ public class SearchResultAction extends BaseAction {
 					} else {
 						newThumbnailName = "NotAccess_M_thumb.jpg";
 					}
+					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
 				}
 				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
 					if ("L".equals(thumbnailSize)) {
@@ -251,6 +252,7 @@ public class SearchResultAction extends BaseAction {
 					} else {
 						newThumbnailName = "NotFound_M_thumb.jpg";
 					}
+					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
 				}
 				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
 			}
