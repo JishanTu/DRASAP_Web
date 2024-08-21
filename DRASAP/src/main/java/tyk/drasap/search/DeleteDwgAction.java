@@ -1,6 +1,9 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
+import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -166,7 +169,8 @@ public class DeleteDwgAction extends BaseAction {
 		if ("logout".equals(deleteDwgForm.getAct())) {
 			session.removeAttribute("deleteDwgForm");
 			return "logout";
-		} else if ("close".equals(deleteDwgForm.getAct())) {
+		}
+		if ("close".equals(deleteDwgForm.getAct())) {
 			session.removeAttribute("deleteDwgForm");
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
@@ -388,6 +392,19 @@ public class DeleteDwgAction extends BaseAction {
 			return DELETE_FILE_NOT_FOUND;
 		}
 
+		String newDelFileName = delPathName + File.separator + fileName.replace(".tif", "_thumb.jpg");
+		File newMoveFile = new File(newDelFileName);
+		if (!newMoveFile.exists()) {
+			// 元の原図が存在しない
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delDwg.failed.FileNotFound", new Object[] { drwgNo, newDelFileName }, null));
+			// for システム管理者
+			ErrorLoger.error(user, this,
+					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"));
+			// for MUR
+			category.error("[" + newDelFileName + "]が存在しないか、またはアクセスできません。");
+			return DELETE_FILE_NOT_FOUND;
+		}
+
 		String ymd = new SimpleDateFormat("yyyyMMdd").format(new Date());// YYMMDD形式の本日日付
 		String targetFolderName = backupPathBase + File.separator + ymd;
 		File targetFolder = new File(targetFolderName);
@@ -408,6 +425,21 @@ public class DeleteDwgAction extends BaseAction {
 			return DELETE_FILE_COPY_FAILED;
 		} finally {
 			moveFile.delete();
+		}
+
+		try {
+			copyFile(newMoveFile.getPath(), targetFolder + File.separator + fileName.replace(".tif", ".jpg"));
+		} catch (IOException e) {
+			// ファイルの保存に失敗。
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delDwg.failed.fileBackup", new Object[] { drwgNo, newDelFileName }, null));
+			// for システム管理者
+			ErrorLoger.error(user, this,
+					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"));
+			// for MUR
+			category.error("[削除ファイル[" + newDelFileName + "]の保存に失敗しました。");
+			return DELETE_FILE_COPY_FAILED;
+		} finally {
+			newMoveFile.delete();
 		}
 
 		category.debug(delFileName + " を移動しました");

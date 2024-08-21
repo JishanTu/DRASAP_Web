@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+    <!-- ========== Data Source Configuration =============================== -->
+    <data-sources />
+
+    <!-- ========== Form Bean Definitions ================================== -->
+    <form-beans>
+        <form-bean name="requestForm" type="tyk.drasap.genzu_irai.RequestForm" />
+        <form-bean name="request_listForm" type="tyk.drasap.genzu_irai.Request_listForm" />
+        <form-bean name="request_refForm" type="tyk.drasap.genzu_irai.Request_RefForm" />
+        <form-bean name="requestHistoryForm" type="tyk.drasap.genzu_irai.RequestHistoryForm" />
+
+    </form-beans>
+
+    <!-- ========== Global Exception Definitions ============================== -->
+    <global-exceptions />
+
+    <!-- ========== Global Forward Definitions =============================== -->
+    <global-forwards>
+        <forward name="timeout" path="/switch.do?prefix=&amp;page=/root/timeout.jsp" />
+
+    </global-forwards>
+
+    <!-- ========== Action Mapping Definitions =============================== -->
+    <action-mappings>
+        <action path="/switch" type="org.apache.struts.actions.SwitchAction" validate="false" />
+        <action
+            attribute="requestForm"
+            input="/request.jsp"
+            name="requestForm"
+            path="/req"
+            type="tyk.drasap.genzu_irai.RequestAction"
+            validate="false">
+            <forward name="success" path="/request.jsp" />
+        </action>
+        <action
+            attribute="request_listForm"
+            input="/requestt_list.jsp"
+            name="request_listForm"
+            path="/req_list"
+            type="tyk.drasap.genzu_irai.Request_listAction"
+            validate="false">
+
+            <forward name="success" path="/requestt_list_body.jsp" />
+            <forward name="list" path="/requestt_list_body.jsp" />
+            <forward name="print" path="/req_print.do" />
+            <forward name="history" path="/requestHistory.do" />
+        </action>
+        <action
+            attribute="request_resultForm"
+            input="/requestt_list.jsp"
+            name="request_listForm"
+            path="/req_result"
+            type="tyk.drasap.genzu_irai.RequestResultAction"
+            validate="false">
+            <forward name="success" path="/requestt_list_foot.jsp" />
+        </action>
+        <action
+            attribute="request_listForm"
+            input="/requestt_list_print.jsp"
+            name="request_listForm"
+            path="/req_print"
+            type="tyk.drasap.genzu_irai.RequestPriAction"
+            validate="false">
+            <forward name="success" path="/requestt_list_head.jsp" />
+            <forward name="printer" path="/requestt_list_print.jsp" />
+        </action>
+        <action
+            attribute="request_refForm"
+            input="/requestt_ref.jsp"
+            name="request_refForm"
+            path="/req_ref"
+            type="tyk.drasap.genzu_irai.Request_RefAction"
+            validate="false">
+            <forward name="list" path="/requestt_ref_message.jsp" />
+            <forward name="success" path="/requestt_ref_body.jsp" />
+        </action>
+        <action
+            name="requestHistoryForm" scope="session"
+            path="/requestHistory"
+            type="tyk.drasap.genzu_irai.RequestHistoryAction"
+            validate="false">
+            <forward name="success" path="/request_history.jsp" />
+        </action>
+
+    </action-mappings>
+
+    <!-- ========== Controller Configuration ================================ -->
+    <controller />
+
+    <!-- ========== Message Resources Definitions ============================ -->
+
+    <!-- ========== Plug Ins Configuration ================================= -->
+    <message-resources parameter="resources.genzu_irai" />
+</struts-config>
+
