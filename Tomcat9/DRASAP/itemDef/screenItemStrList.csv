@@ -31,11 +31,11 @@
 マルチPDF出力,Multi PDF output
 PDF単独zip出力,PDF zip output
 図番指定順（ワイルドカード使用不可）,Specify order (Can not use wildcard)
-図番削除,Delete Dwg No
+図番削除,図番削除
 リスト表示,List View
 サムネイル表示,Thumbnail View
 サムネイルサイズ,Thumbnail Size
-運用支援,Operation Support
+運用支援,運用支援
 印刷指示画面,Print Indication View
 出力,Print Request
 戻る,back
