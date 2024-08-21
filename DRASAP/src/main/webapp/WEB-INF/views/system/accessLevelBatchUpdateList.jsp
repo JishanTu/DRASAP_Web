@@ -47,9 +47,11 @@
 		method="post">
 		<input type="hidden" name="act" value="" />
 		<c:set var="itemNoCount" value="${sessionScope.accessLevelBatchUpdateForm.itemNoCount}" />
-		<c:if test="${not empty sessionScope.accessLevelBatchUpdate.info}">
+		<c:if test="${errors.info != null}">
 			<ul style="color: blue; font-size: 12pt;">
-				<li><c:out value="${sessionScope.accessLevelBatchUpdate.info}" /></li>
+			<c:forEach var="msg" items="${errors.info}">
+				<li><c:out value="${msg}" /></li>
+			</c:forEach>
 			</ul>
 		</c:if>
 		<% session.removeAttribute("accessLevelBatchUpdate.info"); %>

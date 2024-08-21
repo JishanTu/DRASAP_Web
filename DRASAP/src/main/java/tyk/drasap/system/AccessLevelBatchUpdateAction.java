@@ -151,7 +151,7 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 
 			// 完了メッセージ設定
 			//ActionMessages info = new ActionMessages();
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.update.success", null, null));
+			MessageSourceUtil.addAttribute(errors, "info", messageSource.getMessage("system.aclBatchUpdate.update.success", null, null));
 			//saveMessages(session, info);
 			session.setAttribute("info", errors);
 			session.setAttribute("accessLevelBatchUpdate.info", "1");

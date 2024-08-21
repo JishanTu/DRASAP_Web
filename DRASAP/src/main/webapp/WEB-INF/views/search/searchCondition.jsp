@@ -213,7 +213,7 @@
 		}
 
 		// 図番指定順にチェックありの場合
-		if (currentForm.orderDrwgNo.checked) {
+		if (currentForm.orderDrwgNocheckbox.checked) {
 			// ワイルドカードが使用されているか？
 			if(isWildCard(currentForm.multipleDrwgNo)) {
 				alert("<c:out value='${searchConditionForm.listOrderErrMsg}' />");
