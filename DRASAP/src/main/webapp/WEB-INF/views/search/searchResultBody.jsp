@@ -40,7 +40,7 @@
 			align-items: center;
 			float: left;
 			flex-direction: column;
-			border: 1px solid black;
+			border: 1px solid #d3d3d3;
 			justify-content: center;
 			width: 315px;
 			height: 280px;
@@ -54,7 +54,7 @@
 			align-items: center;
 			float: left;
 			flex-direction: column;
-			border: 1px solid black;
+			border: 1px solid #d3d3d3;
 			justify-content: center;
 			width: 265px;
 			height: 240px;
@@ -68,7 +68,7 @@
 			align-items: center;
 			float: left;
 			flex-direction: column;
-			border: 1px solid black;
+			border: 1px solid #d3d3d3;
 			justify-content: center;
 			width: 215px;
 			height: 200px;
