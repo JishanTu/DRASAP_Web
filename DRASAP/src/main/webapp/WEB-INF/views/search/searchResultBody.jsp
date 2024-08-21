@@ -24,7 +24,7 @@
 	<style type="text/css" id="dynamic-styles">
 		body {
 			margin: 0;
-			overflow-x: hidden;
+			overflow-x: auto;
 			overflow-y: auto;
 		}
 

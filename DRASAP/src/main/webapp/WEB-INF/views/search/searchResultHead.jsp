@@ -22,10 +22,11 @@
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<style type="text/css">
 		.management {
-			position: absolute;
+			position: absolute;;
 			top:0px;
-			right:0px;
-			margin-right:10px;
+			float: right;
+			margin-left: 10px;
+			
 		}
 		#list_view, #thumbnail_view {
 			width:120px;
@@ -129,11 +130,11 @@
 </head>
 <%-- 2013.07.16 yamagishi modified.
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0"> --%>
-<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;height: 100%;" onload="onLoad()">
+<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;height: 70px;" onload="onLoad()">
 <form action="<%=request.getContextPath() %>/result"  method = "post">
 <!--================ ヘッダ ==================================-->
 <c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<table border="0" cellspacing="0" cellpadding="0"  style = "width:1838px">
 	<tr>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
@@ -187,15 +188,18 @@
 			</select>
 			</span>
 		</td>
-	</tr>
-</table>
-<%// admin_flag='2'のユーザのみ
+		<td>
+			<%// admin_flag='2'のユーザのみ
 // ボタンを表示する
 User me = (User) session.getAttribute("user");
 if (me.isDelAdmin()) { %>
 	<input type="button" value="${sessionScope.searchResultForm.h_label10}" onclick="management()" class="management" />
 <%} %>
-<table border="1">
+		</td>
+	
+	</tr>
+</table>
+<table border="1" style = "width:1838px">
 	<tr>
 		<td>
 			<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
