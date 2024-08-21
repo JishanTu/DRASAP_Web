@@ -31,6 +31,15 @@
 					break;
 			}
 		}
+		
+		 function setTableWidth() {
+	            var availWidth = screen.availWidth;
+
+	            var table = document.getElementById('footTable');
+
+	            table.style.width = availWidth + 'px';
+	        }
+
 		// 検索結果リスト画面の属性actをセットして、サブミット
 		// 前のXX件、後ろのXX件
 		// 印刷指示
@@ -116,6 +125,7 @@
 				document.captureEvents(Event.MOUSEDOWN);
 			}
 			// 右クリック禁止
+			setTableWidth();
 			document.onmousedown = disableContextMenu;
 			document.oncontextmenu = disableOnContextMenu;
 		}
@@ -171,7 +181,7 @@
 <c:set var="cntEnd" value="${ fn:length(resultList)}"/>
 </c:otherwise>
 </c:choose>
-<table border="0" cellspacing="0" cellpadding="0" style = "width:1910px">
+<table border="0" cellspacing="0" cellpadding="0" id = "footTable">
 	<tr>
 		<td>&nbsp;&nbsp;</td>
 		<td valign="top">

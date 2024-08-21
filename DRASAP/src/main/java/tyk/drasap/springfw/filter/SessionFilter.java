@@ -24,7 +24,8 @@ public class SessionFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		String requestURI = httpRequest.getServletPath();
-		if ("/login".equals(requestURI) || "/timeout".equals(requestURI) || "/logout".equals(requestURI)) {
+		if ("/login".equals(requestURI) || "/timeout".equals(requestURI) || "/logout".equals(requestURI) || "/getip".equals(requestURI) ||
+				requestURI.contains("/notfound.jsp") || requestURI.contains("/syserror.jsp") || requestURI.contains("/loginPre.jsp")) {
 			chain.doFilter(request, response);
 			return;
 		}
