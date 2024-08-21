@@ -1,0 +1,108 @@
+$Id: deploy_DRASAP.txt,v 1.2 2005/03/18 04:41:29 fumi Exp $
+========= DRASAPのデプロイについて ===============
+
+DataSourceを事前に作成する
+==========================
+
+JNDI名：jdbc/drasap_oracle
+
+クラスパスにpdflib.jarを追加
+============================
+
+Windows2000の場合、
+%WL_HOME%/config/mydomain/startWebLogic.cmdを編集
+こんな感じ
+set CLASSPATH=%CLASSPATH%;C:\DRASAP_TOOL\pdflib.jar
+
+ユーザーcf20の環境変数を変更
+============================
+パスが必要なもの
+oceのモジュールへのパス
+PDFlibのライブラリへのパス
+
+デプロイの手順
+==============
+1. %WL_HOME%/config/mydomain/applicationsに
+	DRASAPディレクトリを作成
+
+2. DRASAP.warをDRASAPディレクトリにバイナリ転送
+
+3. jarコマンドで展開する。
+	jar xvf DRASAP.war
+
+4. web.xmlを編集する
+	<resource-ref>をコメントアウトする。
+	Tomcatの場合、このタグが必須となるが、
+	WebLogicの場合、このタグがあるとデプロイエラーになる。
+	
+<Error> <J2EE> <DRASAP のデプロイ中のエラー。デプロイメント エラー Could not load DRASAP、ネストされたエラー
+weblogic.xml.dom.DOMProcessingException: Could not setup environment for EJBReference or ResourceReference.
+Cannot find WEB-INF/weblogic.xml in the Web application.>
+
+5. config.xmlへDRASAPアプリケーションの記述を追加
+	必ずWebLogicを停止した状態で行うこと。
+	<Domain Name="mydomain">
+	・・・・・
+	★    <Application Deployed="true" Name="DRASAP" Path=".\config\mydomain\applications">
+	★        <WebAppComponent Name="DRASAP" Targets="myserver" URI="DRASAP"/>
+	★    </Application>
+	・・・・・
+	</Domain>
+
+	★のついた3行を追加する。config.xmlの最後のほうにあるはず。
+	上の例では http://localhost:7001/DRASAP/ となる。
+	
+	WebLogicは停止したときに、自動でconfig.xmlが上書きされるので注意。
+
+
+再デプロイの手順
+================
+上記の2,3,4を繰り返せば良い。
+ただし、drasap.properties,log4j.propertiesなどには注意のこと。
+
+
+
+Tomcatにおける再デプロイ手順の実際(ユーザーdrasap)
+==================================
+1. Tomcat停止。
+2. 現行のDRASAPディレクトリをバックアップする。
+3. DRASAP.warをftpでbinaryプットする。
+4. server.xmlの中のDRASAPに関するコンテキストの記述をコメントアウトする。
+	Tomcatで自動デプロイするためにはコメントアウトが必要。
+5. Tomcat開始。これでDRASAPが自動デプロイされる。
+6. Tomcat停止。先ほどのserver.xmlを元に戻す。
+7. 各種設定プロパティファイルのうち、システム環境に依存するものはコピーなどする。
+	ただしその内容に変更があったものについては、単純にコピーするとNG。
+	drasap.properties・・・Webコンテナの種類やOCEモジュールの絶対パスあり。
+	log4j.properties・・・ログ出力の状態。出力先は絶対パスあり。
+	EnDeEnv.properties・・・ポータルとの連携に必要なファイルの絶対パスあり。
+8. ポータルとの連携に必要なiniファイルを、コピーする。
+	WEB-INF/classesの直下にあり。
+	ende.ini
+	syspass.ini
+9. Tomcat開始
+
+
+
+WebLogicにおける再デプロイ手順の実際(ユーザーcf20)
+==================================
+1. DRASAPアプリを停止。
+2. 現行のDRASAPディレクトリをバックアップする。
+3. 新しいDRASAPディレクトリを作成。
+4. DRASAP.warを作成したDRASAPディレクトリにコピーする。
+5. DRASAP.warを展開する。・・・jar xvf DRASAP.war
+6. web.xmlの中の<resource-ref>タグを削除する。
+	WebLogicではこのタグに未対応のため。
+7. 各種設定プロパティファイルのうち、システム環境に依存するものはコピーなどする。
+	ただしその内容に変更があったものについては、単純にコピーするとNG。
+	drasap.properties・・・Webコンテナの種類やOCEモジュールの絶対パスあり。
+	log4j.properties・・・ログ出力の状態。出力先は絶対パスあり。
+	EnDeEnv.properties・・・ポータルとの連携に必要なファイルの絶対パスあり。
+8. ポータルとの連携に必要なiniファイルを、コピーする。
+	WEB-INF/classesの直下にあり。
+	ende.ini
+	syspass.ini
+9. JSPのプリコンパイルを行なう。
+	DRASAPホームの下の、jsp_cp_fumi.sh を実行する。
+	2.でバックアップしたディレクトリにあるはず。なければ information/jsp_cp_fumi.sh をコピーして使用する。
+10. DRASAPアプリを再デプロイ。
