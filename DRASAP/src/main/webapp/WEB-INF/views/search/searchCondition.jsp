@@ -81,6 +81,12 @@
             height: 140px;
             width: 565px
         }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            min-width: 800px; 
+        }
 	</style>
 <script type="text/javascript">
 	document.onkeydown = keys;
@@ -97,7 +103,6 @@
 //		var divisionTD = document.getElementById("divisionTD");
 //		var division = document.getElementById("division");
 //		division.offsetWidth = divisionTD.clientWidth;
-		createToolTip();
 		loadResultFrame();
 		// 図番指定順のチェック
         isOrderDrwgNo();
@@ -271,8 +276,10 @@
 	var intShow = null;
 	var speed=20;
 	function show_tool_tip(item_name, flg) {
+		createToolTip();
 		if (flg) {
 			document.getElementById(item_name).style.visibility='visible';
+			document.getElementById(item_name).style.display='block';
 			if (intHide != null) clearInterval(intHide);
 			intHide = null;
 
@@ -285,6 +292,7 @@
 			// IEの互換性無しの場合、Tooltipが画面上に残り続けるため、非表示とする
 			// intHide=setInterval("slideToolTip('"+item_name+"', 'right')",10);
 			document.getElementById('toolotip').style.visibility = "hidden";
+			document.getElementById(item_name).style.display='none';
 		}
 	}
 	function slideToolTip(tooltip, flg) {
@@ -356,6 +364,8 @@
 	function openNewWindow(){
 		var targetName = '_chgPass';//別の画面を開く
 		var WO1;
+		var currentWindowLeft = window.screenX;
+        var currentWindowTop = window.screenY;
 		var w = screen.availWidth/2;
 		var h = screen.availHeight/2;
 		var targetUrl = null;
@@ -363,7 +373,7 @@
 		// その他の場合
 		targetUrl = 'about:blank'
 		WO1=window.open(targetUrl, targetName,
-			'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
+			'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=' + currentWindowLeft + ',top=' + currentWindowTop);
 		//WO1.window.moveTo(50,50);//画面の位置指定
 		WO1.focus();
 
@@ -743,10 +753,10 @@
 		<!-- 	<html:hidden property="language" /> -->
 
 		<!-- ================= 職番などの表示エリア ======================= -->
-		<table border="0" cellspacing="0" cellpadding="0" width="100%">
+		<table border="0" cellspacing="0" cellpadding="0" style= "width:1920px">
 			<tr>
-				<td>
-					<table border="0">
+				<td >
+					<table border="0" >
 						<tr>
 							<td nowrap="nowrap" bgcolor="#EEEEEE"><span class="normal10"><b><c:out
 											value="${searchConditionForm.c_label1}" /></b></span></td>
@@ -865,7 +875,7 @@
 		</table>
 
 		<!--============ 検索条件と説明 ============-->
-		<table border="0" cellspacing="0" cellpadding="0" width="100%"
+		<table border="0" cellspacing="0" cellpadding="0" style= "width:1920px"
 			class="normal12">
 			<tr>
 				<!--============ 検索条件 ============-->
@@ -1068,7 +1078,7 @@ if (me.isAdmin() || me.isAclBatchUpdateFlag()) {
 			</tr>
 		</table>
 		<%-- searchHelpMsg表示領域定義 --%>
-		<iframe src="" frameborder="0" scrolling="no" id="toolotip" name="toolotip" class="tooltip"></iframe>
+		<iframe src="" frameborder="0" scrolling="no" id="toolotip" name="toolotip" class="tooltip"style="display: none;"></iframe>
 		<script>
 			document.getElementById("toolotip").addEventListener("mouseover", function() {
 				show_tool_tip('toolotip', true);
