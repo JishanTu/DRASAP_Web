@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+
+    Context configuration file for the DRASAP Web App
+
+		Copyright 2013, Oce-Japan Corporation, All Rights Reserved.
+-->
+
+
+<Context path="/DRASAP" docBase="${catalina.home}/webapps/drasap">
+	<!-- Link to the user database we will get roles from -->
+	<Resource
+		name="jdbc/drasap_oracle"
+		auth="Container"
+		type="javax.sql.DataSource"
+		driverClassName="oracle.jdbc.driver.OracleDriver"
+		username="drasap"
+		password="drasap4"
+		url="jdbc:oracle:thin:@localhost:1521:DRASAP4"
+		maxTotal="100"
+		maxIdle="50"
+		maxWaitMillis="-1"
+		testOnBorrow="true"
+		validationQuery="select 1 from dual"
+		removeAbandonedOnMaintenance="true"
+		removeAbandonedTimeout="60" />
+</Context>
