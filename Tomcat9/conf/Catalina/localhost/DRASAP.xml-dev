@@ -16,13 +16,12 @@
 		driverClassName="oracle.jdbc.driver.OracleDriver"
 		username="drasap"
 		password="drasap4"
-		url="jdbc:oracle:thin:@localhost:1521:DRASAP4"
+		url="jdbc:oracle:thin:@127.0.0.1:1521/xepdb1"
 		maxTotal="100"
 		maxIdle="50"
 		maxWaitMillis="-1"
 		testOnBorrow="true"
 		validationQuery="select 1 from dual"
-		removeAbandonedOnBollow="true"
 		removeAbandonedOnMaintenance="true"
 		removeAbandonedTimeout="60" />
 </Context>
