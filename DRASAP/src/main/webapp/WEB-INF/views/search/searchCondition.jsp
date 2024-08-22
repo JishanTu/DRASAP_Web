@@ -98,6 +98,15 @@
 				break;
 		}
 	}
+	 function setTableWidth() {
+         var availWidth = screen.availWidth;
+
+         var table1 = document.getElementById('conditionTable1');
+         var table2 = document.getElementById('conditionTable2');
+
+         table1.style.width = availWidth + 'px';
+         table2.style.width = availWidth + 'px';
+     }
 	function onLoad(){
 		onInitFocus();
 //		var divisionTD = document.getElementById("divisionTD");
@@ -106,6 +115,7 @@
 		loadResultFrame();
 		// 図番指定順のチェック
         isOrderDrwgNo();
+        setTableWidth();
 	}
 	// 昇順、降順をサイクリックに切り替える
 	function changeOrder(obj,index){
@@ -753,7 +763,7 @@
 		<!-- 	<html:hidden property="language" /> -->
 
 		<!-- ================= 職番などの表示エリア ======================= -->
-		<table border="0" cellspacing="0" cellpadding="0" style= "width:1920px">
+		<table border="0" cellspacing="0" cellpadding="0"  id = "conditionTable2">
 			<tr>
 				<td >
 					<table border="0" >
@@ -875,8 +885,8 @@
 		</table>
 
 		<!--============ 検索条件と説明 ============-->
-		<table border="0" cellspacing="0" cellpadding="0" style= "width:1920px"
-			class="normal12">
+		<table border="0" cellspacing="0" cellpadding="0"
+			class="normal12" id = "conditionTable1">
 			<tr>
 				<!--============ 検索条件 ============-->
 				<td style="width: 600px;">

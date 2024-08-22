@@ -31,6 +31,11 @@
 		#list_view, #thumbnail_view {
 			width:120px;
 		}
+		td.fixed-width {
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap;
+        }
 	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
@@ -42,6 +47,15 @@
 					break;
 			}
 		}
+		 function setTableWidth() {
+	         var availWidth = screen.availWidth;
+
+	         var table1 = document.getElementById('headTable1');
+	         var table2 = document.getElementById('headTable2');
+
+	         table1.style.width = availWidth + 'px';
+	         table2.style.width = availWidth + 'px';
+	     }
 		// 再表示
 		function doRefresh(){
 			// 表示属性をresult_bodyフレーム隠し属性にセット
@@ -134,9 +148,9 @@
 <form action="<%=request.getContextPath() %>/result"  method = "post">
 <!--================ ヘッダ ==================================-->
 <c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>
-<table border="0" cellspacing="0" cellpadding="0"  style = "width:1838px">
+<table border="0" cellspacing="0" cellpadding="0" id = "headTable1">
 	<tr>
-		<td>
+		<td class= "fixed-width">
 			<table border="0" bgcolor="#EEEEEE">
 				<tr>
 					<td nowrap="nowrap">
@@ -145,7 +159,7 @@
 				</tr>
 			</table>
 		</td>
-		<td><span class="normal10">
+		<td class= "fixed-width"><span class="normal10">
 			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.value");
 			if ("true".equals(thumbValue)) { %>
 			<span style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
@@ -188,24 +202,29 @@
 			</select>
 			</span>
 		</td>
+		
+
 		<td>
-			<%// admin_flag='2'のユーザのみ
+							<%// admin_flag='2'のユーザのみ
 // ボタンを表示する
 User me = (User) session.getAttribute("user");
 if (me.isDelAdmin()) { %>
 	<input type="button" value="${sessionScope.searchResultForm.h_label10}" onclick="management()" class="management" />
-<%} %>
+<%} %>	
 		</td>
-	
 	</tr>
 </table>
-<table border="1" style = "width:1838px">
+
+
+
+
+<table border="1" id = "headTable2">
 	<tr>
-		<td>
+		<td class="fixed-width">
 			<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
 		</td>
 		<c:forEach begin="1" end="${searchResultForm.getViewSelColNum()}" var="index">
-			<td>
+			<td class="fixed-width">
 				<select name="dispAttr${index}">
 					<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
 						<c:choose>
