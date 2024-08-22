@@ -206,7 +206,7 @@
 				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('PRINT')" />
 			</c:when>
 			<c:when test="${sessionScope.indication == 'thumbnail_view'}">
-				<input type="button" value="　${searchResultForm.f_label11}　" onclick="setActSubmit('SEARCH_THUMBNAIL')" />
+				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('SEARCH_THUMBNAIL')" />
 			</c:when>
 		</c:choose>
 		</td>

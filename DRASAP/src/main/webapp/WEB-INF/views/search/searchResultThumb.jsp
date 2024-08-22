@@ -90,7 +90,7 @@
 			</ul>
 		</font>
 		<div align="center">
-			<input type="button" value="${sessionScope.searchResultForm.f_label12}" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
+			<input type="button" value="${sessionScope.searchResultForm.f_label11}" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
 		</div>
 	</c:if>
 	<div class="page">
@@ -216,7 +216,7 @@
 				</span>
 				<span class="normal10">
 					&nbsp;&nbsp;
-					<input type="button" value="${searchResultForm.f_label13}" onclick="setActSubmit('SEARCH')" />
+					<input type="button" value="　${searchResultForm.f_label12}　" onclick="setActSubmit('SEARCH')" />
 				</span>
 			</div>
 		</c:if>

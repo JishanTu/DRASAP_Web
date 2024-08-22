@@ -514,7 +514,6 @@ public class SearchResultPreAction extends BaseAction {
 			searchResultForm.setF_label10((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL10_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			searchResultForm.setF_label11((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL11_LINE_NO)) == null ? "" : lineData.get(langIdx));
 			searchResultForm.setF_label12((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL12_LINE_NO)) == null ? "" : lineData.get(langIdx));
-			searchResultForm.setF_label13((lineData = screenItemStrList.getLineData(searchResultForm.F_LABEL13_LINE_NO)) == null ? "" : lineData.get(langIdx));
 		} catch (FileNotFoundException e) {
 			return;
 		} catch (IOException e) {

@@ -160,9 +160,9 @@
 						<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>小</option>
 					</c:when>
 					<c:otherwise>
-						<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>L</option>
-						<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>M</option>
-						<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>S</option>
+						<option value="L" <c:if test="${sessionScope.thumbnailSize == 'L'}">selected</c:if>>Large</option>
+						<option value="M" <c:if test="${sessionScope.thumbnailSize == 'M'}">selected</c:if>>Medium</option>
+						<option value="S" <c:if test="${sessionScope.thumbnailSize == 'S'}">selected</c:if>>Small</option>
 					</c:otherwise>
 				</c:choose>
 			</select>
