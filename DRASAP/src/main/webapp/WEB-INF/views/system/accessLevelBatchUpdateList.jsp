@@ -63,7 +63,7 @@
 		</c:if>
 		<c:if test="${errors.message != null}">
 			<c:forEach var="msg" items="${errors.message}">
-				<span style="margin-left: 40px; font-weight: bold; line-height: 1.5;color: #FF0000">${msg}</span>
+				<span style="margin-left: 40px; font-weight: bold; line-height: 1.5;color: #FF0000">${msg}</span><br/>
 			</c:forEach>
 		</c:if>
 		<table border="0" cellspacing="1" cellpadding="0">

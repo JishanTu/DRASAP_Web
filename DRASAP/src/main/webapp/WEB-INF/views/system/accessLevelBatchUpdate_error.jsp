@@ -34,7 +34,7 @@ session.removeAttribute("accessLevelBatchUpdate.erros");
 	<hr/ style="border: none; height: 0.5px; background-color: red;">
 	<c:if test="${errors.message != null}">
 		<c:forEach var="msg" items="${errors.message}">
-			<span style="margin-left: 40px; font-weight: bold; line-height: 1.5;color: #FF0000">${msg}</span>
+			<span style="margin-left: 40px; font-weight: bold; line-height: 1.5;color: #FF0000">${msg}</span><br/>
 		</c:forEach>
 	</c:if>
 	<hr/ style="border: none; height: 0.5px; background-color: red;">
