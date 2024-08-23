@@ -121,10 +121,13 @@
 				<tr>
 					<td>
 						<c:if test="${message != null}">
-							<c:forEach var="msg" items="${message}">
-								<span style="margin-left: 30px; line-height: 1.5; color: red; border-lift: 0px'">${msg}</span>
+							<hr style="border: none; height: 1px; background-color: orange;" />
+							<c:forEach var="msg" items="${message}" varStatus="status">
+								<li style="margin-left: 30px; line-height: 1.5; color: red; border-left: 0px;">${msg}</li>
 							</c:forEach>
+							<hr style="border: none; height: 1px; background-color: orange;" />
 						</c:if>
+					</td>
 				</tr>
 			</tbody>
 		</table>

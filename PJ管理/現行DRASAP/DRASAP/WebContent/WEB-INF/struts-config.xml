@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+    <!-- ========== Data Source Configuration =============================== -->
+    <data-sources />
+
+    <!-- ========== Form Bean Definitions ================================== -->
+    <form-beans>
+        <form-bean name="loginForm" type="tyk.drasap.root.LoginForm">
+            <form-property name="passwd" type="java.lang.String" />
+            <form-property name="id" type="java.lang.String" />
+        </form-bean>
+
+        <form-bean name="ChangePasswdForm" type="tyk.drasap.change_passwd.ChangePasswdForm">
+            <form-property name="oldpass" type="java.lang.String" />
+            <form-property name="newpass" type="java.lang.String" />
+            <form-property name="newPassConfirm" type="java.lang.String" />
+        </form-bean>
+
+        <form-bean name="systemMaintenanceLoginForm" type="tyk.drasap.system.SystemMaintenanceLoginForm" />
+        <form-bean name="masterMaintenanceMenuForm" type="tyk.drasap.system.MasterMaintenanceMenuForm" />
+        <form-bean name="adminSettingListForm" type="tyk.drasap.system.AdminSettingListForm" />
+        <form-bean name="tableMaintenanceForm" type="tyk.drasap.system.TableMaintenanceForm" />
+        <form-bean name="accessLevelMasterMaintenanceForm" type="tyk.drasap.system.AccessLevelMasterMaintenanceForm" />
+        <form-bean name="userGrpAclRelationMaintenanceForm" type="tyk.drasap.system.UserGrpAclRelationMaintenanceForm" />
+        <!-- 2013.07.03 yamagishi add below. -->
+        <form-bean name="accessLevelBatchUpdateForm" type="tyk.drasap.system.AccessLevelBatchUpdateForm" />
+        <!-- 2013.07.23 yamagishi add below. -->
+        <form-bean name="accessLevelUpdatedResultForm" type="tyk.drasap.system.AccessLevelUpdatedResultForm" />
+    </form-beans>
+
+    <!-- ========== Global Exception Definitions ============================== -->
+    <global-exceptions />
+
+    <!-- ========== Global Forward Definitions =============================== -->
+    <global-forwards>
+        <forward name="timeout" path="/root/timeout.jsp" />
+        <forward name="genzu_irai_request" path="/switch.do?prefix=/genzu_irai&amp;page=/req.do" />
+        <forward name="search_search_Main" path="/switch.do?prefix=/search&amp;page=/searchMain.jsp" />
+        <forward name="genzu_irai_request_list" path="/switch.do?prefix=/genzu_irai&amp;page=/requestt_list.jsp" />
+        <forward name="genzu_irai_request_ref" path="/switch.do?prefix=/genzu_irai&amp;page=/requestt_ref.jsp"  />
+        <!-- 2013.07.25 yamagishi add below for portal site. -->
+        <forward name="acl_batch_update" path="/switch.do?prefix=&amp;page=/system/accessLevelBatchUpdate.jsp" />
+        <forward name="acl_updated_result" path="/switch.do?prefix=&amp;page=/system/accessLevelUpdatedResult.jsp" />
+        <!-- 2013.07.09 yamagishi add below for download. -->
+        <forward name="accessLevelDownload" path="/switch.do?prefix=&amp;page=/accessLevelDownload.do" />
+        <!-- 2013.07.23 yamagishi add below for download. -->
+        <forward name="accessLevelLogDownload" path="/switch.do?prefix=&amp;page=/accessLevelUpdatedResult.do" />
+
+		<!-- 2022.04.13 Windows Edge対応. ログイン画面からのパスワード変更時の画面遷移不具合対応. -->
+        <forward name="start_change_passwd_success" path="/switch.do?prefix=/search&amp;page=/searchMain.jsp" />
+    </global-forwards>
+
+    <!-- ========== Action Mapping Definitions =============================== -->
+    <action-mappings>
+        <action path="/switch" type="org.apache.struts.actions.SwitchAction" validate="false" />
+        <action
+            attribute="loginForm"
+            input="/root/login.jsp"
+            name="loginForm"
+            path="/login"
+            type="tyk.drasap.root.LoginAction">
+            <forward name="failed" path="/root/login.jsp" />
+            <forward name="chgpasswd" path="/root/changePassword.jsp" />
+            <forward name="success" path="/switch.do?prefix=/search&amp;page=/searchMain.jsp" />
+        </action>
+
+        <action
+            attribute="ChangePasswdForm"
+            input="/root/changePassword.jsp"
+            name="ChangePasswdForm"
+            path="/changePasswd"
+            type="tyk.drasap.change_passwd.ChangePasswdAction">
+            <forward name="failed" path="/root/changePassword.jsp" />
+            <forward name="successFromLogin" path="/root/changePasswordSuccess.jsp" />
+            <forward name="successFromSearch" path="/root/changePasswordSuccess.jsp" />
+        </action>
+
+        <!-- login for single-sign-on -->
+        <action
+            path="/loginWithIdde"
+            type="tyk.drasap.root.LoginWithIddeAction">
+            <forward name="failed" path="/root/loginFailed.jsp" />
+            <forward name="success" path="/root/menu.jsp" />
+        </action>
+
+        <action
+            path="/loginWithIddePre"
+            type="tyk.drasap.root.LoginWithIddePreAction">
+            <forward name="success" path="/loginWithIdde.do" redirect="true"/>
+        </action>
+
+        <!-- login from other system for preview -->
+        <!-- 2005-Mar-3 by Hirata -->
+        <action
+            path="/directLoginForPreviewPre"
+            type="tyk.drasap.root.DirectLoginForPreviewPreAction">
+        </action>
+        <action
+            path="/directLoginForPreview"
+            type="tyk.drasap.root.DirectLoginForPreviewAction">
+            <forward name="failed" path="/root/loginFailed.jsp" />
+            <forward name="success" path="/switch.do?prefix=/search&amp;page=/directPreview.do" />
+        </action>
+        <action
+            path="/directLoginForMultiPreviewPre"
+            type="tyk.drasap.root.DirectLoginForMultiPreviewPreAction">
+        </action>
+        <action
+            path="/directLoginForMultiPreview"
+            type="tyk.drasap.root.DirectLoginForMultiPreviewAction">
+            <forward name="failed" path="/root/loginFailed.jsp" />
+           <forward name="success" path="/switch.do?prefix=/search&amp;page=/searchMain.jsp?task=multipreview"/>
+        </action>
+        <action
+            attribute="systemMaintenanceLoginForm"
+            input="/systemMaintenanceLogin.jsp"
+            name="systemMaintenanceLoginForm"
+            path="/systemMaintenanceLogin"
+            type="tyk.drasap.system.SystemMaintenanceLoginAction">
+            <forward name="failed" path="/system/systemMaintenanceLogin.jsp" />
+            <forward name="success" path="/system/masterMaintenanceMenu.jsp" />
+        </action>
+        <action
+            attribute="masterMaintenanceMenuForm"
+            input="/masterMaintenanceMenu.jsp"
+            name="masterMaintenanceMenuForm"
+            path="/masterMaintenanceMenu"
+            type="tyk.drasap.system.MasterMaintenanceMenuAction">
+            <forward name="failed" path="/system/masterMaintenanceMenu.jsp" />
+            <forward name="success" path="/system/masterMaintenanceMenu.jsp" />
+            <forward name="logout" path="/system/systemMaintenanceLogin.jsp" />
+            <forward name="adminSettingList" path="/adminSettingList.do?act=init" />
+            <forward name="userGroupMaster" path="/system/masterMaintenanceMenuRight.jsp" />
+            <forward name="deptMaster" path="/system/masterMaintenanceMenuRight.jsp" />
+            <forward name="userMaster" path="/system/masterMaintenanceMenuRight.jsp" />
+            <forward name="accessLevelMaster" path="/accessLevelMasterMaintenance.do?act=init" />
+            <forward name="userGroupAclRelation" path="/userGrpAclRelationMaintenance.do?act=init" />
+            <forward name="tableMaintenance" path="/tableMaintenance.do?act=init" />
+        </action>
+        <action
+            attribute="adminSettingListForm"
+            input="/adminSettingList.jsp"
+            name="adminSettingListForm"
+            path="/adminSettingList"
+            type="tyk.drasap.system.AdminSettingListAction"
+            scope="session"
+            validate="false">
+            <forward name="update" path="/system/adminSettingList.jsp" />
+            <forward name="success" path="/system/adminSettingList.jsp" />
+        </action>
+        <action
+            attribute="accessLevelMasterMaintenanceForm"
+            input="/accessLevelMasterMaintenance.jsp"
+            name="accessLevelMasterMaintenanceForm"
+            path="/accessLevelMasterMaintenance"
+            type="tyk.drasap.system.AccessLevelMasterMaintenanceAction"
+            scope="session"
+            validate="false">
+            <forward name="update" path="/system/accessLevelMasterMaintenance.jsp" />
+            <forward name="error" path="/system/accessLevelMasterMaintenance.jsp" />
+            <forward name="success" path="/system/accessLevelMasterMaintenance.jsp" />
+            <forward name="search" path="/system/accessLevelMasterMaintenance.jsp" />
+        </action>
+        <action
+            attribute="userGrpAclRelationMaintenanceForm"
+            input="/userGrpAclRelationMaintenance.jsp"
+            name="userGrpAclRelationMaintenanceForm"
+            path="/userGrpAclRelationMaintenance"
+            type="tyk.drasap.system.UserGrpAclRelationMaintenanceAction"
+            scope="session"
+            validate="false">
+            <forward name="update" path="/system/userGrpAclRelationMaintenance.jsp" />
+            <forward name="error" path="/system/userGrpAclRelationMaintenance.jsp" />
+            <forward name="success" path="/system/userGrpAclRelationMaintenance.jsp" />
+            <forward name="search" path="/system/userGrpAclRelationMaintenance.jsp" />
+        </action>
+        <action
+            attribute="tableMaintenanceForm"
+            input="/tableMaintenance.jsp"
+            name="tableMaintenanceForm"
+            path="/tableMaintenance"
+            type="tyk.drasap.system.TableMaintenanceAction"
+            scope="session"
+            validate="false">
+            <forward name="update" path="/system/tableMaintenance.jsp" />
+            <forward name="success" path="/system/tableMaintenance.jsp" />
+            <forward name="error" path="/system/tableMaintenance.jsp" />
+            <forward name="search" path="/system/tableMaintenance.jsp" />
+        </action>
+        <!-- =====/direct===== -->
+        <action
+            path="/directSearch"
+            type="tyk.drasap.root.DirectSearchAction">
+        </action>
+        <!-- 2013.07.03 yamagishi add below. -->
+        <action path="/accessLevelBatchUpdate"
+            name="accessLevelBatchUpdateForm"
+            scope="session"
+            type="tyk.drasap.system.AccessLevelBatchUpdateAction"
+            validate="false">
+            <forward name="init" path="/system/accessLevelBatchUpdateBody.jsp" />
+            <forward name="update" path="/system/accessLevelBatchUpdate.jsp" />
+            <forward name="upload" path="/system/accessLevelBatchUpdate.jsp" />
+            <forward name="error" path="/system/accessLevelBatchUpdate.jsp" />
+            <forward name="noPermission" path="/system/accessLevelBatchUpdate_error.jsp" />
+        </action>
+        <!-- 2013.07.08 yamagishi add below. -->
+        <action path="/accessLevelDownload"
+            name="accessLevelBatchUpdateForm"
+            type="tyk.drasap.system.AccessLevelDownloadAction"
+            validate="false">
+            <forward name="error" path="/switch.do?prefix=&amp;page=/system/accessLevelBatchUpdate_error.jsp" />
+        </action>
+        <!-- 2013.07.23 yamagishi add below. -->
+        <action path="/accessLevelUpdatedResult"
+            name="accessLevelUpdatedResultForm"
+            scope="request"
+            type="tyk.drasap.system.AccessLevelUpdatedResultAction"
+            validate="false">
+            <forward name="init" path="/system/accessLevelUpdatedResultBody.jsp" />
+            <forward name="error" path="/switch.do?prefix=&amp;page=/system/accessLevelBatchUpdate_error.jsp" />
+            <forward name="noPermission" path="/system/accessLevelBatchUpdate_error.jsp" />
+        </action>
+
+    </action-mappings>
+
+    <!-- ========== Controller Configuration ================================ -->
+    <controller />
+
+    <!-- ========== Message Resources Definitions ============================ -->
+
+    <!-- ========== Plug Ins Configuration ================================= -->
+    <message-resources parameter="resources.application" />
+</struts-config>
+
