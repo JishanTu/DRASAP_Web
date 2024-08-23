@@ -62,8 +62,9 @@ public class AdminSettingListAction extends BaseAction {
 		if (adminSettingListForm == null) {
 			adminSettingListForm = new AdminSettingListForm();
 			adminSettingListForm.setAct("init");
-		} else if ("init".equals(request.getParameter("act"))) {
+		} else if ("init".equals(session.getAttribute("act"))) {
 			adminSettingListForm.setAct("init");
+			session.removeAttribute("act");
 		}
 
 		//

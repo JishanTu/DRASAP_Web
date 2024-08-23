@@ -71,8 +71,9 @@ public class TableMaintenanceAction extends BaseAction {
 			return "timeout";
 		}
 		TableMaintenanceForm tableMaintenanceForm = form;
-		if ("init".equals(request.getParameter("act"))) {
+		if ("init".equals(session.getAttribute("act"))) {
 			tableMaintenanceForm.setAct("init");
+			session.removeAttribute("act");
 		}
 
 		tableMaintenanceForm.clearErrorMsg();
@@ -107,17 +108,15 @@ public class TableMaintenanceAction extends BaseAction {
 			session.setAttribute("tableMaintenanceForm", tableMaintenanceForm);
 			if (Objects.isNull(errors.getAttribute("message"))) {
 				return "update";
-			} else {
-				//saveErrors(request, errors);
-				request.setAttribute("errors", errors);
-				return "error";
 			}
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
+			return "error";
 		}
 		if ("delete".equals(tableMaintenanceForm.getAct())) {
 			deleteTableMaintenanceForm(tableMaintenanceForm, user, errors);
 			session.setAttribute("tableMaintenanceForm", tableMaintenanceForm);
-			if (Objects.isNull(errors.getAttribute("message"))) {
-			} else {
+			if (!Objects.isNull(errors.getAttribute("message"))) {
 				//saveErrors(request, errors);
 				request.setAttribute("errors", errors);
 				return "error";

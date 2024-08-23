@@ -43,6 +43,7 @@ public class MasterMaintenanceMenuAction extends BaseAction {
 			return "timeout";
 		}
 		if ("adminSettingList".equals(masterMaintenanceMenuForm.getAct())) {
+			session.setAttribute("act", "init");
 			return "adminSettingList";
 		}
 		if ("userGroupMaster".equals(masterMaintenanceMenuForm.getAct())) {
@@ -53,13 +54,20 @@ public class MasterMaintenanceMenuAction extends BaseAction {
 		}
 		if ("userMaster".equals(masterMaintenanceMenuForm.getAct())) {
 			return "userMaster";
-		} else if ("accessLevelMaster".equals(masterMaintenanceMenuForm.getAct())) {
+		}
+		if ("accessLevelMaster".equals(masterMaintenanceMenuForm.getAct())) {
+			session.setAttribute("act", "init");
 			return "accessLevelMaster";
-		} else if ("userGroupAclRelation".equals(masterMaintenanceMenuForm.getAct())) {
+		}
+		if ("userGroupAclRelation".equals(masterMaintenanceMenuForm.getAct())) {
+			session.setAttribute("act", "init");
 			return "userGroupAclRelation";
-		} else if ("tableMaintenance".equals(masterMaintenanceMenuForm.getAct())) {
+		}
+		if ("tableMaintenance".equals(masterMaintenanceMenuForm.getAct())) {
+			session.setAttribute("act", "init");
 			return "tableMaintenance";
-		} else if ("logout".equals(masterMaintenanceMenuForm.getAct())) {
+		}
+		if ("logout".equals(masterMaintenanceMenuForm.getAct())) {
 			session.invalidate();
 			return "logout";
 		}
