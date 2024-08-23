@@ -6,7 +6,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page import="tyk.drasap.system.AdminSettingListElement" %>
 
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -119,8 +118,8 @@
 	marginheight="0" marginwidth="0">
 	<form action="<%=request.getContextPath()%>/adminSettingList"
 		method="post">
-		<input type="hidden" name="act" value="" /> <input type="hidden"
-			name="updateIndex" value="" />
+		<input type="hidden" name="act" value="" />
+		<input type="hidden" name="updateIndex" value="" />
 
 		<table id="ListHead" border="1" cellspacing="0" cellpadding="0"
 			class="normal10">
@@ -180,8 +179,7 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td align="center" nowrap="nowrap"><input type="button"
-					value="更新" onclick="submitFunc('UPDATE')" /></td>
+				<td align="center" nowrap="nowrap"><input type="button" value="更新" onclick="submitFunc('UPDATE')" /></td>
 			</tr>
 		</table>
 	</form>
