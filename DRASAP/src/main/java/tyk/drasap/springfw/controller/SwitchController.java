@@ -91,6 +91,12 @@ public class SwitchController {
 		return "/root/login";
 	}
 
+	@GetMapping("/systemMaintenanceLogin")
+	public String accessSystemMaintenanceLogin(Model errors) {
+		category.debug("accessSystemMaintenanceLogin called");
+		return "/system/systemMaintenanceLogin";
+	}
+
 	@GetMapping("/{path}")
 	public Object accessPath(@PathVariable("path") String path, Model errors) {
 		category.debug("accessPath called with path: " + path);

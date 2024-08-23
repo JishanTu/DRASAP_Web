@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionFilter implements Filter {
 
 	// èúäOÉäÉXÉg
-	List<String> exclusionList = List.of("timeout", "login", "logout", "getip", "loginpre.jsp", "notfound.jsp", "syserror.jsp");
+	List<String> exclusionList = List.of("timeout", "login", "logout", "getip", "systemmaintenancelogin", "loginpre.jsp", "notfound.jsp", "syserror.jsp");
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
