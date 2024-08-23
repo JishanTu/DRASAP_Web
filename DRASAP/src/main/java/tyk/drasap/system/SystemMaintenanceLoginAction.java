@@ -1,6 +1,9 @@
 package tyk.drasap.system;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
+import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,7 +53,7 @@ public class SystemMaintenanceLoginAction extends BaseAction {
 			HttpServletResponse response,
 			Model errors)
 			throws Exception {
-		//		category.debug("start");
+		//category.debug("start");
 		SystemMaintenanceLoginForm loginForm = form;
 		User user = new User(request.getRemoteAddr());
 		HttpSession session = request.getSession();
@@ -68,10 +71,10 @@ public class SystemMaintenanceLoginAction extends BaseAction {
 			// ƒ†[ƒU[î•ñ‚ªŽæ“¾‚Å‚«‚½‚ç session‚ÉŠi”[‚·‚é
 			session.setAttribute("user", user);
 			session.setAttribute("drasapInfo", drasapInfo);
-			//			category.debug("--> success");
+			//category.debug("--> success");
 			return "success";
-
 		}
+
 		//saveErrors(request, errors);
 		request.setAttribute("errors", errors);// ƒGƒ‰[‚ð“o˜^
 		//category.debug("--> failed");
@@ -197,7 +200,5 @@ public class SystemMaintenanceLoginAction extends BaseAction {
 			}
 		}
 		return drasapInfo;
-
 	}
-
 }

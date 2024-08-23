@@ -196,7 +196,7 @@ public class AspectController {
 		}
 
 		// access log
-		accessLog("###  doAction      ", request, actResult);
+		accessLog("***  doAction      ", request, actResult);
 
 		// Œ‹‰Ê‚ª•¶š—ñ‚Ìê‡
 		if (actResult instanceof String) {
