@@ -329,7 +329,8 @@
 				galleryr.classList.add('galleryr-l');
 				if(drwgSize == "A4"){
 					thumbnailElement.classList.add('large-a4');
-				} else if(drwgSize == "A0L"){
+				} else if(drwgSize.endsWith("L")){
+					// 長尺（横図面）の場合
 					thumbnailElement.classList.add('large-'+ index);
 					updateStyles(index,"L");
 				} else if(drwgSize == "A0"|| drwgSize == "A1" || drwgSize == "A2" || drwgSize == "A3"){
@@ -340,7 +341,8 @@
 				galleryr.classList.add('galleryr-m');
 				if(drwgSize == "A4"){
 					thumbnailElement.classList.add('medium-a4');
-				} else if(drwgSize == "A0L"){
+				} else if(drwgSize.endsWith("L")){
+					// 長尺（横図面）の場合
 					thumbnailElement.classList.add('medium-'+ index);
 					updateStyles(index,"M");
 				} else if(drwgSize == "A0"|| drwgSize == "A1" || drwgSize == "A2" || drwgSize == "A3"){
@@ -350,8 +352,9 @@
 				changeSize('small');
 				galleryr.classList.add('galleryr-s');
 				if(drwgSize == "A4"){
-						thumbnailElement.classList.add('small-a4');
-				} else if(drwgSize == "A0L"){
+					thumbnailElement.classList.add('small-a4');
+				} else if(drwgSize.endsWith("L")){
+					// 長尺（横図面）の場合
 					thumbnailElement.classList.add('small-'+ index);
 					updateStyles(index,"S");
 				} else if(drwgSize == "A0"|| drwgSize == "A1" || drwgSize == "A2" || drwgSize == "A3"){
