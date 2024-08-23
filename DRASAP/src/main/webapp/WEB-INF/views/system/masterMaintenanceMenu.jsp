@@ -25,12 +25,10 @@
 	</style>
 </head>
 <frameset rows="50px,*">
-	<frame name="_frameHead" src="system/masterMaintenanceMenuHead.jsp" border="0" frameborder="0" noresize="noresize"
-		scrolling="no" />
+	<frame name="_frameHead" src="switch.do?page=/system/masterMaintenanceMenuHead.jsp" border="0" frameborder="0" noresize="noresize" scrolling="no" />
 	<frameset cols="240px,*">
-		<frame name="_frameLeft" src="system/masterMaintenanceMenuLeft.jsp" border="0" frameborder="0" noresize="noresize"
-			scrolling="no" />
-		<frame name="_frameRight" src="system/blank.jsp" border="0" frameborder="0" noresize="noresize" scrolling="auto" />
+		<frame name="_frameLeft" src="switch.do?page=/system/masterMaintenanceMenuLeft.jsp" border="0" frameborder="0" noresize="noresize" scrolling="no" />
+		<frame name="_frameRight" src="switch.do?page=/system/blank.jsp" border="0" frameborder="0" noresize="noresize" scrolling="auto" />
 	</frameset>
 </frameset>
 </html>

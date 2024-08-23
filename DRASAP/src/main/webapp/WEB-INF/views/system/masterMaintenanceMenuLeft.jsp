@@ -58,31 +58,31 @@
 		<table border="0" cellspacing="0" cellpadding="5" class="normal10">
 			<tr>
 				<td nowrap="nowrap" class="leftMenuItem" onmouseover="invert_sub_item(this,true)" onmouseout="invert_sub_item(this,false)" onclick="showFunction('adminSettingList')">
-					<img src="../img/point.gif"/>管理者設定変更</td>
+					<img src="<%=request.getContextPath()%>/resources/img/point.gif"/>管理者設定変更</td>
 			</tr>
 			<tr>
 				<td nowrap="nowrap" class="leftMenuItem" onmouseover="invert_sub_item(this,true)" onmouseout="invert_sub_item(this,false)" onclick="showFunction('userGroupMaster')">
-					<img src="../img/point.gif"/>利用者グループマスター</td>
+					<img src="<%=request.getContextPath()%>/resources/img/point.gif"/>利用者グループマスター</td>
 			</tr>
 			<tr>
 				<td nowrap="nowrap" class="leftMenuItem" onmouseover="invert_sub_item(this,true)" onmouseout="invert_sub_item(this,false)" onclick="showFunction('deptMaster')">
-					<img src="../img/point.gif"/>部門マスター</td>
+					<img src="<%=request.getContextPath()%>/resources/img/point.gif"/>部門マスター</td>
 			</tr>
 			<tr>
 				<td nowrap="nowrap" class="leftMenuItem" onmouseover="invert_sub_item(this,true)" onmouseout="invert_sub_item(this,false)" onclick="showFunction('userMaster')">
-					<img src="../img/point.gif"/>ユーザー管理マスター</td>
+					<img src="<%=request.getContextPath()%>/resources/img/point.gif"/>ユーザー管理マスター</td>
 			</tr>
 			<tr>
 				<td nowrap="nowrap" class="leftMenuItem" onmouseover="invert_sub_item(this,true)" onmouseout="invert_sub_item(this,false)" onclick="showFunction('accessLevelMaster')">
-					<img src="../img/point.gif"/>アクセスレベルマスター</td>
+					<img src="<%=request.getContextPath()%>/resources/img/point.gif"/>アクセスレベルマスター</td>
 			</tr>
 			<tr>
 				<td nowrap="nowrap" class="leftMenuItem" onmouseover="invert_sub_item(this,true)" onmouseout="invert_sub_item(this,false)" onclick="showFunction('userGroupAclRelation')">
-					<img src="../img/point.gif"/>利用者グループアクセスレベル関連</td>
+					<img src="<%=request.getContextPath()%>/resources/img/point.gif"/>利用者グループアクセスレベル関連</td>
 			</tr>
 			<tr>
 				<td nowrap="nowrap" class="leftMenuItem" onmouseover="invert_sub_item(this,true)" onmouseout="invert_sub_item(this,false)" onclick="showFunction('tableMaintenance')">
-					<img src="../img/point.gif"/>テーブルメンテナンス</td>
+					<img src="<%=request.getContextPath()%>/resources/img/point.gif"/>テーブルメンテナンス</td>
 			</tr>
 		</table>
 	</td></tr>
