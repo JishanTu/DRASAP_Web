@@ -62,8 +62,9 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 			return "timeout";
 		}
 		AccessLevelMasterMaintenanceForm accessLevelMasterMaintenanceForm = form;
-		if ("init".equals(request.getParameter("act"))) {
+		if ("init".equals(session.getAttribute("act"))) {
 			accessLevelMasterMaintenanceForm.setAct("init");
+			session.removeAttribute("act");
 		}
 		accessLevelMasterMaintenanceForm.clearErrorMsg();
 

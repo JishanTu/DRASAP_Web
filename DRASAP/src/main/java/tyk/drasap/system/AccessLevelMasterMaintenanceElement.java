@@ -96,6 +96,13 @@ public class AccessLevelMasterMaintenanceElement {
 	/**
 	 * @param
 	 */
+	public Boolean getNewFlg() {
+		return newFlg;
+	}
+
+	/**
+	 * @param
+	 */
 	public void setNew(boolean flg) {
 		newFlg = flg;
 	}
