@@ -81,6 +81,13 @@ public class TableMaintenanceRec {
 	}
 
 	/**
+	 * @return
+	 */
+	public boolean getNewFlg() {
+		return newFlg;
+	}
+
+	/**
 	 * @param
 	 */
 	public void setNew(boolean flg) {

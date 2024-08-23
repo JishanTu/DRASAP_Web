@@ -84,7 +84,16 @@
           </td>
         </tr>
   <tr>
-    <td><form:errors path="*" cssClass="error-message" />
+    <td>
+    <c:if test="${not empty requestScope['errors']}">
+	<hr style="border: none; height: 1px; background-color: orange;">
+		<c:forEach var="msg" items="${requestScope['errors']['message']}">
+
+			<li
+				style="margin-left: 30px; line-height: 1.5; color: red; border-left: 0px;">${msg}</li>
+		</c:forEach>
+		<hr style="border: none; height: 1px; background-color: orange;">
+	</c:if>
     </td>
   </tr>
       </table>

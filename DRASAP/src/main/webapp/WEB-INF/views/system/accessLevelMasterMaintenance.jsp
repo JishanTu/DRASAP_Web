@@ -80,25 +80,25 @@
 				varStatus="status">
 				<tr>
 					<td nowrap="nowrap"><c:choose>
-							<c:when test="${accessLevelMasterMaintenanceElement.new == true}">
+							<c:when test="${accessLevelMasterMaintenanceElement.newFlg}">
 								<input type="text"
-									style="<c:out value='${accessLevelMasterMaintenanceElement.aclIdStyle}' />"
-									name="aclId"
-									value="<c:out value='${accessLevelMasterMaintenanceElement.aclId}' />"
-									onchange="changeValue(<c:out value='${status.index}' />)" />
+									style="${accessLevelMasterMaintenanceElement.aclIdStyle}"
+									name="recList[${status.index}].aclId"
+									value="${accessLevelMasterMaintenanceElement.aclId}"
+									onchange="changeValue(${status.index})" />
 							</c:when>
 							<c:otherwise>
-								<c:out value="${accessLevelMasterMaintenanceElement.aclId}" />
+								${accessLevelMasterMaintenanceElement.aclId}
 							</c:otherwise>
 						</c:choose></td>
-					<td nowrap="nowrap"><input type="text" name="aclName"
-						value="<c:out value='${accessLevelMasterMaintenanceElement.aclName}' />"
-						onchange="changeValue(<c:out value='${status.index}' />)" /></td>
-					<td nowrap="nowrap"><input type="checkbox" name="update"
+					<td nowrap="nowrap"><input type="text" name="recList[${status.index}].aclName"
+						value="${accessLevelMasterMaintenanceElement.aclName}"
+						onchange="changeValue(${status.index})" /></td>
+					<td nowrap="nowrap"><input type="checkbox" name="recList[${status.index}].update"
 						value="true"
 						<c:if test="${accessLevelMasterMaintenanceElement.update}">checked</c:if> />
 						<input type="hidden" name="new"
-						value="<c:out value='${accessLevelMasterMaintenanceElement.new}' />" />
+						value="${accessLevelMasterMaintenanceElement.newFlg}" />
 					</td>
 				</tr>
 			</c:forEach>
@@ -125,12 +125,24 @@
 			<tr>
 				<td><br /></td>
 			</tr>
-			<c:forEach var="errorMessage"
-				items="${sessionScope.accessLevelMasterMaintenanceForm.errorMsg}">
-				<tr>
-					<td style="color: #FF0000"><c:out value="${errorMessage}" /></td>
-				</tr>
-			</c:forEach>
+			<c:if test="${not empty requestScope['errors']}">
+	<hr style="border: none; height: 1px; background-color: orange;">
+		<c:forEach var="msg" items="${requestScope['errors']['message']}">
+ 
+			<li
+				style="margin-left: 30px; line-height: 1.5; color: red; border-left: 0px;">${msg}</li>
+		</c:forEach>
+		<hr style="border: none; height: 1px; background-color: orange;">
+	</c:if>
+	<c:if test="${not empty accessLevelMasterMaintenanceForm.errorMsg}">
+	<hr style="border: none; height: 1px; background-color: orange;">
+		<c:forEach var="msg" items="${accessLevelMasterMaintenanceForm.errorMsg}">
+ 
+			<li
+				style="margin-left: 30px; line-height: 1.5; color: red; border-left: 0px;">${msg}</li>
+		</c:forEach>
+		<hr style="border: none; height: 1px; background-color: orange;">
+	</c:if>
 		</table>
 	</form>
 </body>

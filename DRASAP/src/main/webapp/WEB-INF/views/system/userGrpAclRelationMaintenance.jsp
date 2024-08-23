@@ -192,7 +192,7 @@
 					<colgroup span="4">
 						<col style="width: 140px;"></col>
 						<col style="width: 400px;"></col>
-						<col style="width: 80px;"></col>
+						<col style="width: 125px;"></col>
 						<col style="width: 80px;"></col>
 					</colgroup>
 					<tr bgcolor="#A1A0C0">
@@ -211,7 +211,7 @@
 				<colgroup span="4">
 					<col style="width: 140px;"></col>
 					<col style="width: 400px;"></col>
-					<col style="width: 80px;"></col>
+					<col style="width: 125px;"></col>
 					<col style="width: 80px;"></col>
 				</colgroup>
 				<c:forEach var="element"
@@ -222,15 +222,18 @@
 							type="hidden" name="aclId" value="${element.aclId}" /></td>
 						<td nowrap="nowrap">&nbsp; ${element.userGrpName} &nbsp; <input
 							type="hidden" name="userGrpCode" value="${element.userGrpCode}" /></td>
-						<td align="center" nowrap="nowrap"><select name="aclValue"
-							onchange="changeValue(${status.index})">
+						<td align="center" nowrap="nowrap">
+						<select name="recList[${status.index}].aclValue"
+							onchange="changeFlg(${status.index})">
 								<c:forEach var="option"
-									items="${sessionScope.userGrpAclRelationMaintenanceForm.aclValueList}">
-									<option value="${option.value}">${option.label}</option>
+									items="${sessionScope.userGrpAclRelationMaintenanceForm.aclValueList}" varStatus="loop">
+									<option value="${option}"
+									<c:if test="${option == element.aclValue}">selected</c:if>>
+									${sessionScope.userGrpAclRelationMaintenanceForm.aclNameList[loop.index]}</option>
 								</c:forEach>
 						</select></td>
 						<td align="center" nowrap="nowrap"><input type="checkbox"
-							name="update" value="true" /></td>
+							name="recList[${status.index}].update" value="true" /></td>
 					</tr>
 				</c:forEach>
 

@@ -6,7 +6,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page import="tyk.drasap.system.AdminSettingListElement" %>
 
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -100,7 +99,8 @@
 			// 更新時刻表示更新
 			document.forms[0].act.value='onchange';// 隠し属性actをセット
 			document.forms[0].updateIndex.value=idx;//
-			var chkList=document.getElementsByName('adminSettingList['+idx+'].update');
+			var chkList=document.getElementsByName('adminSettingList[' + idx + '].update');
+			
 		//			alert("checked="+chkList[0].checked);//
 			chkList[0].checked=true;
 		//			document.forms[0].submit();
@@ -118,8 +118,8 @@
 	marginheight="0" marginwidth="0">
 	<form action="<%=request.getContextPath()%>/adminSettingList"
 		method="post">
-		<input type="hidden" name="act" value="" /> <input type="hidden"
-			name="updateIndex" value="" />
+		<input type="hidden" name="act" value="" />
+		<input type="hidden" name="updateIndex" value="" />
 
 		<table id="ListHead" border="1" cellspacing="0" cellpadding="0"
 			class="normal10">
@@ -137,42 +137,49 @@
 				<td nowrap="nowrap" align="center">更新日</td>
 				<td nowrap="nowrap" align="center">更新有／無</td>
 			</tr>
-			<c:forEach var="adminSettingListElement"
-				items="${sessionScope.adminSettingListForm.adminSettingList}">
-				<tr>
-					<td nowrap="nowrap">&nbsp; <c:out
-							value="${adminSettingListElement.itemName}" />&nbsp;
-					</td>
-					<td nowrap="nowrap">&nbsp; <input type="text" name="val"
-						value="<c:out value='${adminSettingListElement.val}' />"
-						onchange="changeValue(<c:out value='${status.index}' />)" />&nbsp;
-					</td>
-					<td align="center" nowrap="nowrap"><select name="status"
-						onchange="changeValue(<c:out value='${status.index}' />)">
-							<c:forEach var="status"
-								items="${adminSettingListElement.statusList}">
-								<option value="<c:out value='${status}' />"
-									<c:if test="${status eq adminSettingListElement.status}">selected</c:if>><c:out
-										value="${fn:toUpperCase(status)}" /></option>
-							</c:forEach>
-					</select></td>
-					<td nowrap="nowrap">&nbsp; <c:out
-							value="${adminSettingListElement.modifiedDate}" />&nbsp;
-					</td>
-					<td nowrap="nowrap" align="center">&nbsp; <input
-						type="checkbox" name="update"
-						<c:if test="${adminSettingListElement.update}">checked</c:if> />&nbsp;
-					</td>
-				</tr>
-			</c:forEach>
+			 <c:forEach var="adminSettingListElement" items="${sessionScope.adminSettingListForm.adminSettingList}" varStatus="status1">
+        <tr>
+            <!-- Display itemName -->
+            <td nowrap="nowrap">&nbsp; ${adminSettingListElement.itemName} &nbsp;</td>
+            
+            <!-- Text input with onchange event -->
+            <td nowrap="nowrap">&nbsp; 
+                <input type="text" name="adminSettingList[${status1.index}].val"
+                    value="${adminSettingListElement.val}"
+                    onchange="changeValue(${status1.index})" />
+                &nbsp;
+            </td>
+            
+            <!-- Select dropdown -->
+            <td align="center" nowrap="nowrap">
+                <select name="adminSettingList[${status1.index}].status" onchange="changeValue(${status1.index})">
+                    <c:forEach var="status" items="${sessionScope.adminSettingListForm.statusList}" varStatus="loop">
+                        <option value="${status}"
+                            <c:if test="${status == adminSettingListElement.status}">selected</c:if>>
+                            ${sessionScope.adminSettingListForm.statsuNameList[loop.index]}
+                        </option>
+                    </c:forEach>
+                </select>
+            </td>
+            
+            <!-- Display modifiedDate -->
+            <td nowrap="nowrap">&nbsp; ${adminSettingListElement.modifiedDate} &nbsp;</td>
+            
+            <!-- Checkbox -->
+            <td nowrap="nowrap" align="center">&nbsp; 
+                <input type="checkbox" name="adminSettingList[${status1.index}].update"
+        <c:if test="${adminSettingListElement.update}">checked</c:if> />
+                &nbsp;
+            </td>
+        </tr>
+    </c:forEach>
 		</table>
 		<table align="center" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td align="center" nowrap="nowrap"><input type="button"
-					value="更新" onclick="submitFunc('UPDATE')" /></td>
+				<td align="center" nowrap="nowrap"><input type="button" value="更新" onclick="submitFunc('UPDATE')" /></td>
 			</tr>
 		</table>
 	</form>
