@@ -56,8 +56,9 @@ public class UserGrpAclRelationMaintenanceAction extends BaseAction {
 			return "timeout";
 		}
 		UserGrpAclRelationMaintenanceForm userGrpAclRelationMaintenanceForm = form;
-		if ("init".equals(request.getParameter("act"))) {
+		if ("init".equals(session.getAttribute("act"))) {
 			userGrpAclRelationMaintenanceForm.setAct("init");
+			session.removeAttribute("act");
 		}
 		userGrpAclRelationMaintenanceForm.clearErrorMsg();
 
@@ -78,11 +79,10 @@ public class UserGrpAclRelationMaintenanceAction extends BaseAction {
 			session.setAttribute("userGrpAclRelationMaintenanceForm", userGrpAclRelationMaintenanceForm);
 			if (Objects.isNull(errors.getAttribute("message"))) {
 				return "update";
-			} else {
-				//saveErrors(request, errors);
-				request.setAttribute("errors", errors);
-				return "error";
 			}
+			//saveErrors(request, errors);
+			request.setAttribute("errors", errors);
+			return "error";
 		}
 		if ("search".equals(userGrpAclRelationMaintenanceForm.getAct())) {
 			ArrayList<UserGrpAclRelationMaintenanceElement> userGrpAclRelationMasterList = getUserGrpAclRelationMaster(userGrpAclRelationMaintenanceForm, userGrpAclRelationMaintenanceForm.getOrderBy(), user, errors);

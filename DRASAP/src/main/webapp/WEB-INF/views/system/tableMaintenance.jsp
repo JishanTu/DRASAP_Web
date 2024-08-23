@@ -148,9 +148,9 @@
 				<td>&nbsp;&nbsp;&nbsp;</td>
 				<td align="center" nowrap="nowrap"><select name="selectPage"
 					onchange="submitFunc('DIRECTPAGE')">
-						<c:forEach var="page" items="${tableMaintenanceForm.pageList}">
-							<option value="<c:out value='${page.value}' />"><c:out
-									value='${page.label}' /></option>
+						<c:forEach var="page" items="${tableMaintenanceForm.pageList}" varStatus="loop">
+							<option value="${page}">
+                            ${tableMaintenanceForm.pageNameList[loop.index]}</option>
 						</c:forEach>
 				</select></td>
 				<td><span class="normal12">／</span></td>
@@ -178,19 +178,19 @@
 					<c:forEach var="val" items="${rec.valList}" varStatus="valStatus">
 						<td nowrap="nowrap"><c:choose>
 								<c:when
-									test="${sessionScope.tableMaintenanceForm.attrList[valStatus.index].key && rec.new}">
+									test="${sessionScope.tableMaintenanceForm.attrList[valStatus.index].key && rec.newFlg}">
 									<input type="text" style="${val.dispStyle}" name="val"
-										value="${val}" onchange="changeValue(${recStatus.index})" />
+										value="${val.val}" onchange="changeValue(${recStatus.index})" />
 								</c:when>
 								<c:otherwise>
-									<c:out value="${val}" />
+									<c:out value="${val.val}" />
 								</c:otherwise>
 							</c:choose></td>
 					</c:forEach>
 					<td nowrap="nowrap">&nbsp;<input type="checkbox" name="check"
 						value="${check}" />&nbsp;
 					</td>
-					<input type="hidden" name="new" value="${new}" />
+					<input type="hidden" name="new" value="${rec.newFlg}" />
 				</tr>
 			</c:forEach>
 

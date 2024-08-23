@@ -113,7 +113,7 @@
       "path" : "/system/systemMaintenanceLogin.jsp"
     }, {
       "name" : "adminSettingList",
-      "path" : "/adminSettingList.do?act=init"
+      "path" : "/adminSettingList.do?task=init"
     }, {
       "name" : "userGroupMaster",
       "path" : "/system/masterMaintenanceMenuRight.jsp"
