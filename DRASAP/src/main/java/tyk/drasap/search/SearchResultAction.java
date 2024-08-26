@@ -231,6 +231,10 @@ public class SearchResultAction extends BaseAction {
 		}
 		if ("THUMBNAIL_SIZE".equals(searchResultForm.getAct())) {
 			thumbnailSizeChange(user, request.getParameter("thumbnailSize"), errors);
+			if (!Objects.isNull(errors.getAttribute("message"))) {
+				request.setAttribute("errors", errors);
+				return "search_error";
+			}
 			String thumbnailSize = request.getParameter("thumbnailSize");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				String newThumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
@@ -280,7 +284,7 @@ public class SearchResultAction extends BaseAction {
 				return "thumbNotPrintable";
 			}
 			// 3) 参考図出力用テーブルに出力する
-			// 重複リクエストの調査のためのログ。2005-Mar-4 by Hirata.
+			// 重複リクエストの調査のためのログ。
 			PrintLoger.info(PrintLoger.ACT_RECEIVE, user);
 
 			request.setAttribute("errors", errors);
@@ -306,7 +310,7 @@ public class SearchResultAction extends BaseAction {
 				return "thumbNotPrintable";
 			}
 			// 3) 参考図出力用テーブルに出力する
-			// 重複リクエストの調査のためのログ。2005-Mar-4 by Hirata.
+			// 重複リクエストの調査のためのログ。
 			PrintLoger.info(PrintLoger.ACT_RECEIVE, user);
 
 			int requestCount = requestPrint(searchResultForm, user, errors);
@@ -314,7 +318,7 @@ public class SearchResultAction extends BaseAction {
 				// 成功したメッセージを
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.success.print.request." + user.getLanKey(),
 						new Object[] { String.valueOf(requestCount) }, null));
-				// 全てのチェックを外す '04.Feb.5
+				// 全てのチェックを外す
 				for (int i = 0; i < searchResultForm.searchResultList.size(); i++) {
 					searchResultForm.getSearchResultElement(i).setSelected(false);
 				}
@@ -534,7 +538,7 @@ public class SearchResultAction extends BaseAction {
 	 * @param errors
 	 * @throws Exception
 	 */
-	private void thumbnailSizeChange(User user, String thumbnailSize, Model errors) throws Exception {
+	private void thumbnailSizeChange(User user, String thumbnailSize, Model errors) {
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -544,15 +548,12 @@ public class SearchResultAction extends BaseAction {
 			user.setThumbnailSize(thumbnailSize);
 		} catch (Exception e) {
 			// for ユーザー
-			MessageSourceUtil.addAttribute(errors, "message",
-					messageSource.getMessage("root.failed.get.userinfo." + user.getLanKey(),
-							new Object[] { e.getMessage() }, null));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.get.userinfo." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			// for MUR
 			category.error("ユーザー情報の取得に失敗\n" + ErrorUtility.error2String(e));
-			throw e;
 		} finally {
 			try {
 				conn.close();
