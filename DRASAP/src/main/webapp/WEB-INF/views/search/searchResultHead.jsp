@@ -22,20 +22,18 @@
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<style type="text/css">
 		.management {
-			position: absolute;;
-			top:0px;
-			float: right;
-			margin-left: 10px;
-			
-		}
+	    position: absolute;
+	    top:0px;
+	    right:0px;
+	    margin-right:10px;
+	}
 		#list_view, #thumbnail_view {
 			width:120px;
 		}
-		td.fixed-width {
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-            white-space: nowrap;
-        }
+		
+		
+        
+       
 	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
@@ -47,15 +45,6 @@
 					break;
 			}
 		}
-		 function setTableWidth() {
-	         var availWidth = screen.availWidth;
-
-	         var table1 = document.getElementById('headTable1');
-	         var table2 = document.getElementById('headTable2');
-
-	         table1.style.width = availWidth + 'px';
-	         table2.style.width = availWidth + 'px';
-	     }
 		// 再表示
 		function doRefresh(){
 			// 表示属性をresult_bodyフレーム隠し属性にセット
@@ -144,13 +133,14 @@
 </head>
 <%-- 2013.07.16 yamagishi modified.
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0"> --%>
-<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;height: 70px;" onload="onLoad()">
+<body style="background-color: #CCCCCC; margin: 0;" onload="onLoad()">
 <form action="<%=request.getContextPath() %>/result"  method = "post">
 <!--================ ヘッダ ==================================-->
 <c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>
-<table border="0" cellspacing="0" cellpadding="0" id = "headTable1">
+<div class="container">
+<table border="0" cellspacing="0" cellpadding="0"  width = "100%">
 	<tr>
-		<td class= "fixed-width">
+		<td>
 			<table border="0" bgcolor="#EEEEEE">
 				<tr>
 					<td nowrap="nowrap">
@@ -159,7 +149,7 @@
 				</tr>
 			</table>
 		</td>
-		<td class= "fixed-width"><span class="normal10">
+		<td><span class="normal10">
 			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.value");
 			if ("true".equals(thumbValue)) { %>
 			<span style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
@@ -197,34 +187,32 @@
 			<select name="outputPrinter">
 				<c:forEach items="${searchResultForm.printerKeyList}"
 					var="outputPrinterKey" varStatus="loop">
-					<option value="${outputPrinterKey}" selected>${searchResultForm.printerNameList[loop.index]}</option>
+					<option value="${outputPrinterKey}">${searchResultForm.printerNameList[loop.index]}</option>
 				</c:forEach>
 			</select>
 			</span>
 		</td>
-		
+	</tr>
+</table>
+</div>
 
-		<td>
-							<%// admin_flag='2'のユーザのみ
+				<%// admin_flag='2'のユーザのみ
 // ボタンを表示する
 User me = (User) session.getAttribute("user");
 if (me.isDelAdmin()) { %>
-	<input type="button" value="${sessionScope.searchResultForm.h_label10}" onclick="management()" class="management" />
+	<input type="button" value="${sessionScope.searchResultForm.h_label10}" onclick="management()" class = "management"/>
 <%} %>	
-		</td>
-	</tr>
-</table>
 
 
 
 
-<table border="1" id = "headTable2">
+<table border="1">
 	<tr>
-		<td class="fixed-width">
+		<td >
 			<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
 		</td>
 		<c:forEach begin="1" end="${searchResultForm.getViewSelColNum()}" var="index">
-			<td class="fixed-width">
+			<td >
 				<select name="dispAttr${index}">
 					<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
 						<c:choose>
