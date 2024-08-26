@@ -258,8 +258,13 @@ public class DirectLoginForPreviewAction extends BaseAction {
 				// for ユーザー
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage(errMsg + user.getLanKey(), null, null));
 				// for システム管理者
-				ErrorLoger.error(user, this,
-						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"), user.getSys_id());
+				if (ret == 1) {
+					ErrorLoger.error(user, this,
+							DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.password.notset"), user.getSys_id());
+				} else {
+					ErrorLoger.error(user, this,
+							DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.password.expired"), user.getSys_id());
+				}
 				// for MUR
 				category.error("パスワード有効期限を過ぎた。戻り値=[" + ret + "]\n");
 				result = true;
