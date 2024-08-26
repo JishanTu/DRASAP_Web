@@ -130,7 +130,8 @@ public class LoginWithIddeAction extends BaseAction {
 			category.debug("--> genzu_irai_request");
 			return "genzu_irai_request";
 
-		} else if ("3".equals(fn)) {
+		}
+		if ("3".equals(fn)) {
 			// fn = 3 なら　原図庫作業依頼詳細
 			category.debug("--> genzu_irai_request_ref");
 			return "genzu_irai_request_ref";
@@ -242,7 +243,7 @@ public class LoginWithIddeAction extends BaseAction {
 
 			int ret = UserDB.checkPasswordExpiry(user, errors, conn);
 			if (ret != 0) {
-				String errMsg = ret == 1 ? "root.failed.passwaord.notset." : "root.failed.passwaord.expired.";
+				String errMsg = ret == 1 ? "root.failed.password.notset." : "root.failed.password.expired.";
 				// for ユーザー
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage(errMsg + user.getLanKey(), null, null));
 				// for システム管理者
@@ -254,7 +255,7 @@ public class LoginWithIddeAction extends BaseAction {
 			}
 		} catch (Exception e) {
 			// for ユーザー
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.check.passwaord.expiry." + user.getLanKey(), new Object[] { e.getMessage() }, null));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.check.password.expiry." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"), user.getSys_id());
