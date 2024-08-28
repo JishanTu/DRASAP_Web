@@ -19,13 +19,13 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<script type="text/javascript">
 		browserName = navigator.appName;
-		var WO1;
-		var w = screen.availWidth;
-		var h = screen.availHeight;
-		var xPos = (screen.availWidth- w)/2;
-		var yPos = (screen.availHeight - h)/2;
-		window.resizeTo(w, h);
-		window.moveTo(xPos,yPos);//画面の位置指定
+// 		var WO1;
+// 		var w = screen.availWidth;
+// 		var h = screen.availHeight;
+// 		var xPos = (screen.availWidth- w)/2;
+// 		var yPos = (screen.availHeight - h)/2;
+// 		window.resizeTo(w, h);
+// 		window.moveTo(xPos,yPos);//画面の位置指定
 		if (browserName != "Netscape") focus();
 	</script>
 </head>

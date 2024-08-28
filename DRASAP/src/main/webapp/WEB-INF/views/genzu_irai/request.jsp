@@ -23,13 +23,13 @@
 	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 	<script type="text/javascript">
 		browserName = navigator.appName;
-		var WO1;
-		var w = screen.availWidth;
-		var h = screen.availHeight;
-		var xPos = (screen.availWidth- w)/2;
-		var yPos = (screen.availHeight - h)/2;
-		window.resizeTo(w, h);
-		window.moveTo(xPos,yPos);//画面の位置指定
+// 		var WO1;
+// 		var w = screen.availWidth;
+// 		var h = screen.availHeight;
+// 		var xPos = (screen.availWidth- w)/2;
+// 		var yPos = (screen.availHeight - h)/2;
+// 		window.resizeTo(w, h);
+// 		window.moveTo(xPos,yPos);//画面の位置指定
 		if (browserName != "Netscape") focus();
 	</script>
 	<script type="text/javascript">
@@ -220,13 +220,21 @@
 		function help(){
 			var targetName = '_help';//別の画面を開く
 			var WO1;
-			var w = screen.availWidth - 100;
-			var h = screen.availHeight - 100;
+			
+			var w = window.outerWidth;
+			var h = window.outerHeight;
+			
+			var screenWidth = window.screen.availWidth;
+			var screenHeight = window.screen.availHeight;
+			
+			var left = (screenWidth - w) / 2;
+			var top = (screenHeight - h) / 2;
+
 
 			WO1=window.open("<%=request.getContextPath() %>/switch.do?page=/genzu_irai/requestHelp.jsp", targetName,
 					//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
-					'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
-			WO1.window.moveTo(50,50);//画面の位置指定
+					'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h +',top='+ top + ',left='+ left );
+			//WO1.window.moveTo(50,50);//画面の位置指定
 			WO1.focus();
 		}
 	</script>

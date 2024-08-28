@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SessionFilter implements Filter {
 
-	// 除外リスト
-	List<String> exclusionList = List.of("timeout", "login", "logout", "getip", "systemmaintenancelogin", "loginpre.jsp", "notfound.jsp", "syserror.jsp");
+	// 対象リスト
+	List<String> targetList = List.of("result");
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -31,18 +31,16 @@ public class SessionFilter implements Filter {
 
 		String[] parts = servletPath.split("\\?");
 		parts = parts[0].split("/");
-		String target = parts[parts.length - 1].toLowerCase();
+		String target = parts[parts.length - 1];
 
-		if (exclusionList.contains(target) || servletPath.contains("/resources/")) {
-			chain.doFilter(request, response);
-			return;
+		if (targetList.contains(target)) {
+			// セッションにuser情報が存在しない場合、タイムアウト画面へ遷移
+			if (httpRequest.getSession(false) == null || httpRequest.getSession().getAttribute("user") == null) {
+				httpResponse.sendRedirect(httpRequest.getContextPath() + "/timeout");
+				return;
+			}
 		}
 
-		// セッションにuser情報が存在しない場合、タイムアウト画面へ遷移
-		if (httpRequest.getSession(false) == null || httpRequest.getSession().getAttribute("user") == null) {
-			httpResponse.sendRedirect(httpRequest.getContextPath() + "/timeout");
-			return;
-		}
 		chain.doFilter(request, response);
 	}
 
