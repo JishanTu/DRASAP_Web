@@ -247,13 +247,20 @@
 	function help(){
 		var targetName = '_help';//別の画面を開く
 		var WO1;
-		var w = screen.availWidth - 100;
-		var h = screen.availHeight - 100;
+		
+		var w = window.outerWidth;
+		var h = window.outerHeight;
+		
+		var screenWidth = window.screen.availWidth;
+		var screenHeight = window.screen.availHeight;
+		
+		var left = (screenWidth - w) / 2;
+		var top = (screenHeight - h) / 2;
 
 		WO1=window.open("<%=request.getContextPath() %>/search/searchHelp.jsp", targetName,
 			//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
-			'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
-		WO1.window.moveTo(50,50);//画面の位置指定
+				'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h +',top='+ top + ',left='+ left );
+		//WO1.window.moveTo(50,50);//画面の位置指定
 		WO1.focus();
 	}
 	// 言語変更
@@ -374,16 +381,20 @@
 	function openNewWindow(){
 		var targetName = '_chgPass';//別の画面を開く
 		var WO1;
-		var currentWindowLeft = window.screenX;
-        var currentWindowTop = window.screenY;
-		var w = screen.availWidth/2;
-		var h = screen.availHeight/2;
+		var w = window.outerWidth;
+		var h = window.outerHeight;
+		
+		var screenWidth = window.screen.availWidth;
+		var screenHeight = window.screen.availHeight;
+		
+		var left = (screenWidth - w) / 2;
+		var top = (screenHeight - h) / 2;
 		var targetUrl = null;
 
 		// その他の場合
 		targetUrl = 'about:blank'
 		WO1=window.open(targetUrl, targetName,
-			'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=' + currentWindowLeft + ',top=' + currentWindowTop);
+			'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=' + left + ',top=' + top);
 		//WO1.window.moveTo(50,50);//画面の位置指定
 		WO1.focus();
 
@@ -496,13 +507,18 @@
 
 	// 子画面を開く
 	function openSubScreen(fn) {
-		var w = screen.availWidth;
-		var h = screen.availHeight-50;
-
+		var w = window.outerWidth;
+		var h = window.outerHeight;
+		
+		var screenWidth = window.screen.availWidth;
+		var screenHeight = window.screen.availHeight;
+		
+		var left = Math.max(0, (screenWidth - w) / 2);
+	    var top = Math.max(0, (screenHeight - h) / 2);
+	    
 		var targetName = null;
 		var targetUrl = null;
-		var option = 'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width='
-					+ w + ',height=' + h
+		var option = 'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=' + left + ',top=' + top
 
 		if (fn == "2") {
 			// 原図庫作業依頼
@@ -510,7 +526,7 @@
 			targetUrl = '/req.do';
 
 			orgReq = window.open("<%=request.getContextPath() %>" + targetUrl, targetName, option, "sub");
-			orgReq.window.moveTo(0,0);//画面の位置指定
+			//orgReq.window.moveTo(left,top);//画面の位置指定
 			orgReq.focus();
 		}
 		else if (fn == "3") {
@@ -519,7 +535,7 @@
 			targetUrl = '/switch.do?page=/genzu_irai/requestt_ref.jsp';
 
 			orgDetail = window.open("<%=request.getContextPath() %>" + targetUrl, targetName, option, "sub");
-			orgDetail.window.moveTo(0,0);//画面の位置指定
+			//orgDetail.window.moveTo(0,0);//画面の位置指定
 			orgDetail.focus();
 		}
 		else if (fn == "4") {
@@ -528,7 +544,7 @@
 			targetUrl = '/switch.do?page=/genzu_irai/requestt_list.jsp';
 
 			orgList = window.open("<%=request.getContextPath() %>" + targetUrl, targetName, option, "sub");
-			orgList.window.moveTo(0,0);//画面の位置指定
+			//orgList.window.moveTo(0,0);//画面の位置指定
 			orgList.focus();
 		}
 		else if (fn == "5") {
@@ -537,7 +553,7 @@
 			targetUrl = '/switch.do?page=/system/accessLevelBatchUpdate.jsp';
 
 			accessUpdate = window.open("<%=request.getContextPath() %>" + targetUrl, targetName, option, "sub");
-			accessUpdate.window.moveTo(0,0);//画面の位置指定
+			//accessUpdate.window.moveTo(0,0);//画面の位置指定
 			accessUpdate.focus();
 		}
 		else if (fn == "6") {
@@ -546,7 +562,7 @@
 			targetUrl = '/switch.do?page=/system/accessLevelUpdatedResult.jsp';
 
 			accessResult = window.open("<%=request.getContextPath() %>" + targetUrl, targetName, option, "sub");
-			accessResult.window.moveTo(0,0);//画面の位置指定
+			//accessResult.window.moveTo(0,0);//画面の位置指定
 			accessResult.focus();
 		}
 	}

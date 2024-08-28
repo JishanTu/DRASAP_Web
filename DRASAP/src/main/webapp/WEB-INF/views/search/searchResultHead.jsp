@@ -31,7 +31,6 @@
 			width:120px;
 		}
 		
-		
         
        
 	</style>
@@ -45,6 +44,13 @@
 					break;
 			}
 		}
+		function setTableWidth() {
+	         var availWidth = screen.availWidth;
+	         var div = document.getElementById('myDiv');
+	         var table2 = document.getElementById('headTable2');
+	         div.style.width = availWidth + 'px';
+	         table2.style.width = availWidth + 'px';
+	     }
 		// 再表示
 		function doRefresh(){
 			// 表示属性をresult_bodyフレーム隠し属性にセット
@@ -77,12 +83,17 @@
 			targetName = '_drasap_management_login';
 			targetUrl = '<%=request.getContextPath() %>/switch.do?page=/search/management_Login.jsp';
 			var WO1;
-			var w = screen.availWidth;
-			var h = screen.availHeight-50;
+			var w = window.outerWidth;
+			var h = window.outerHeight;
+			
+			var screenWidth = window.screen.availWidth;
+			var screenHeight = window.screen.availHeight;
+			
+			var left = (screenWidth - w) / 2;
+			var top = (screenHeight - h) / 2;
 
 			WO1=window.open(targetUrl, targetName,
-						'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
-			WO1.window.moveTo(0,0);//画面の位置指定
+						'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h +',top='+ top + ',left='+ left );
 			WO1.focus();
 		}
 		<%-- 2013.07.16 yamagishi add. start --%>
@@ -111,6 +122,7 @@
 			// 右クリック禁止
 			document.onmousedown = disableContextMenu;
 			document.oncontextmenu = disableOnContextMenu;
+			setTableWidth();
 		}
 		<%-- 2013.07.16 yamagishi add. end --%>
 		function listViewChange() {
@@ -133,12 +145,12 @@
 </head>
 <%-- 2013.07.16 yamagishi modified.
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0"> --%>
-<body style="background-color: #CCCCCC; margin: 0;" onload="onLoad()">
+<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;" onload="onLoad()">
 <form action="<%=request.getContextPath() %>/result"  method = "post">
 <!--================ ヘッダ ==================================-->
 <c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>
-<div class="container">
-<table border="0" cellspacing="0" cellpadding="0"  width = "100%">
+<div id = "myDiv">
+<table border="0" cellspacing="0" cellpadding="0"  width="100%">
 	<tr>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
@@ -206,14 +218,14 @@ if (me.isDelAdmin()) { %>
 
 
 
-<table border="1">
+<table border="1" id = "headtable2">
 	<tr>
-		<td >
+		<td nowrap="nowrap">
 			<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
 		</td>
 		<c:forEach begin="1" end="${searchResultForm.getViewSelColNum()}" var="index">
-			<td >
-				<select name="dispAttr${index}">
+			<td nowrap="nowrap">
+				<select name="dispAttr${index}" class = "fixed-width-select">
 					<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
 						<c:choose>
 							<c:when test="${dispKey == searchResultForm.getDispAttr(index - 1)}">
