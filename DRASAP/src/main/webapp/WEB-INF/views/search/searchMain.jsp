@@ -21,13 +21,13 @@
 	<script type="text/javascript">
 		browserName = navigator.appName;
 		//var WO1;
-		var w = screen.availWidth;
-		var h = screen.availHeight;
-		var xPos = (screen.availWidth - w)/2;
-		var yPos = (screen.availHeight - h)/2;
+// 		var w = screen.availWidth;
+// 		var h = screen.availHeight;
+// 		var xPos = (screen.availWidth - w)/2;
+// 		var yPos = (screen.availHeight - h)/2;
 		//window.resizeTo(w, h);
-		window.name = "_drasap_search"
-		window.moveTo(xPos,yPos);//画面の位置指定
+// 		window.name = "_drasap_search"
+// 		window.moveTo(xPos,yPos);//画面の位置指定
 		//if (browserName != "Netscape") focus();
 		document.onkeydown = keys;
 		function keys(){
