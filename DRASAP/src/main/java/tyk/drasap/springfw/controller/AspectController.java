@@ -124,14 +124,15 @@ public class AspectController {
 				if (result.contains(".jsp")) {
 					setRequestAttribute(request, result);
 					String[] parts = result.split(".jsp");
-					result = parts[0];
+					actResult = parts[0];
 					// ‘JˆÚæ‚É.do‚ªŠÜ‚Ü‚ê‚½ê‡
 				} else if (result.contains(".do")) {
 					// ActionÀs
-					result = (String) doAction(result, form, request, response, errors);
+					actResult = doAction(result, form, request, response, errors);
 				}
+			} else {
+				actResult = result;
 			}
-			actResult = result;
 		}
 		return actResult;
 	}
@@ -209,13 +210,14 @@ public class AspectController {
 				if (result.contains(".jsp")) {
 					setRequestAttribute(request, result);
 					String[] resultParts = result.split(".jsp");
-					result = resultParts[0];
+					actResult = resultParts[0];
 					// ‘JˆÚæ‚É.do‚ªŠÜ‚Ü‚ê‚½ê‡
 				} else if (result.contains(".do")) {
-					result = (String) doAction(result, form, request, response, errors);
+					actResult = doAction(result, form, request, response, errors);
 				}
+			} else {
+				actResult = result;
 			}
-			actResult = result;
 		}
 		return actResult;
 	}

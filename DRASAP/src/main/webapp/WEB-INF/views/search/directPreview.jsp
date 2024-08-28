@@ -27,7 +27,15 @@
 			<font color="#0066FF">Drawing Search and Print System</font>
 			<!-- エラーの表示 -->
 			<c:forEach var="error" items="${errors}">
-				<font color="red"><c:out value="${error}" /></font>
+				<hr color="sandybrown">
+				<font color="red" size="4">
+					<ul>
+						<li>
+							<c:out value="${message}" />
+						</li>
+					</ul>
+				</font>
+				<hr color="sandybrown">
 				<br/>
 			</c:forEach>
 			<!-- エラーがない場合、水平線を表示 -->

@@ -1,6 +1,9 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
+import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -161,13 +164,20 @@ public class PreviewAction extends BaseAction {
 		}
 
 		// リクエストパラメータから取得する
-		String drwgNo = request.getParameter("DRWG_NO");// 図番
-		String fileName = request.getParameter("FILE_NAME");// ファイル名
-		String pathName = request.getParameter("PATH_NAME");// ディレクトリのフルパス
+		//		String drwgNo = request.getParameter("DRWG_NO");// 図番
+		//		String fileName = request.getParameter("FILE_NAME");// ファイル名
+		//		String pathName = request.getParameter("PATH_NAME");// ディレクトリのフルパス
+		//		pathName = drasapInfo.getViewDBDrive() + pathName.replace("/", "\\");
+		//		String drwgSize = request.getParameter("DRWG_SIZE");// 図番サイズ
+		//		String pdfFlug = request.getParameter("PDF");// PDFに変換する?
+		//		String PRINT_SIZE = request.getParameter("PRINT_SIZE");
+		String drwgNo = (String) request.getAttribute("DRWG_NO");// 図番
+		String fileName = (String) request.getAttribute("FILE_NAME");// ファイル名
+		String pathName = (String) request.getAttribute("PATH_NAME");// ディレクトリのフルパス
 		pathName = drasapInfo.getViewDBDrive() + pathName.replace("/", "\\");
-		String drwgSize = request.getParameter("DRWG_SIZE");// 図番サイズ
-		String pdfFlug = request.getParameter("PDF");// PDFに変換する?
-		String PRINT_SIZE = request.getParameter("PRINT_SIZE");
+		String drwgSize = (String) request.getAttribute("DRWG_SIZE");// 図番サイズ
+		String pdfFlug = (String) request.getAttribute("PDF");// PDFに変換する?
+		String PRINT_SIZE = (String) request.getAttribute("PRINT_SIZE");
 
 		// 他システムからの呼び出しに対応するため、パラメータを追加
 		// DRASAP内部からの呼び出しでは、この値は null になる。
