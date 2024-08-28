@@ -134,11 +134,16 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 		}
 		// クッキーから言語設定を取得
 		CookieManage langCookie = new CookieManage();
-		String lanKey = langCookie.getCookie(request, user, "Language");
-		if (lanKey == null || lanKey.length() == 0) {
-			lanKey = "Japanese";
+		String lanKey = null;
+		if (request.getCookies() != null) {
+			lanKey = langCookie.getCookie(request, user, "Language");
+			if (lanKey == null || lanKey.length() == 0) {
+				lanKey = "Japanese";
+			}
+			user.setLanguage(lanKey);
+		} else {
+			user.setLanguage("Japanese");
 		}
-		user.setLanguage(lanKey);
 
 		// ユーザー情報が取得できたら sessionに格納する
 		session.setAttribute("user", user);

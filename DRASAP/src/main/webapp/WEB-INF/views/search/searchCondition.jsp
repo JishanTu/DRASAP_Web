@@ -284,7 +284,7 @@
 	}
 	function loadResultFrame() {
 		<%if("multipreview".equals(request.getParameter("act"))){  %>
-			parent.result.location.href = "/resultPre.do?task=multipreview";
+			parent.result.location.href = "<%=request.getContextPath() %>/resultPre.do?task=multipreview";
 		<% } %>
 	}
 	// 説明文スライド処理
