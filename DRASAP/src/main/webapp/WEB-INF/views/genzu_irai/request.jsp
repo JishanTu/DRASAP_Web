@@ -20,7 +20,13 @@
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<title>Drawing Search and Print System [図面登録依頼]</title>
-	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+	@import url( <%=request.getContextPath()%>/resources/css/default.css );
+	
+	td {
+	white-space: nowrap;
+     }
+	</style>
 	<script type="text/javascript">
 		browserName = navigator.appName;
 // 		var WO1;
@@ -288,7 +294,7 @@
 				<td>
 					<table border="0">
 						<tr>
-							<td nowrap="nowrap" bgcolor="#EEEEEE"><span class="normal18">図面登録依頼</span></td>
+							<td bgcolor="#EEEEEE"><span class="normal18">図面登録依頼</span></td>
 							<!--======================= 職番などの表示 =======================-->
 							<td><table border="1">
 									<tr>

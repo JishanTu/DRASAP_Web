@@ -17,7 +17,16 @@
 	<title>図面登録依頼詳細</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+	
+	@import url( <%=request.getContextPath()%>/resources/css/default.css );
+	
+	td {
+	white-space: nowrap;
+     }
+     
+     
+	</style>
 </head>
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0"
 	  rightmargin="0" marginheight="0" marginwidth="0">
@@ -27,7 +36,7 @@
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
 				<tr>
-					<td nowrap="nowrap"><span class="normal18">図面登録依頼詳細</span></td>
+					<td><span class="normal18">図面登録依頼詳細</span></td>
 				</tr>
 			</table>
 		</td>

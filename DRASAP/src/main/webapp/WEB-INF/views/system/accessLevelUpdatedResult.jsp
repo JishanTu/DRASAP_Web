@@ -42,8 +42,8 @@
 		}
 	</script>
 </head>
-<frameset rows="35,*" framespacing="0" border="0">
-	<frame name="acl_result_head" src="switch.do?page=/system/accessLevelUpdatedResultHead.jsp" scrolling="no" />
+<frameset rows="45,*" framespacing="0" border="0">
+	<frame name="acl_result_head" src="switch.do?page=/system/accessLevelUpdatedResultHead.jsp" scrolling="yes" />
 	<frame name="acl_result_body" src="accessLevelUpdatedResult.do?act=init" scrolling="yes" />
 </frameset>
 </html>

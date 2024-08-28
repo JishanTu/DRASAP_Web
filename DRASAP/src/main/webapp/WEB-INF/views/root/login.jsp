@@ -23,6 +23,14 @@
 	padding-right: 10px;
 	vertical-align: top;
 }
+
+td {
+	white-space: nowrap;
+}
+
+.container {
+    white-space: nowrap;
+}
 </style>
 <script type="text/javascript">
 	window.name='login';
@@ -136,10 +144,10 @@
 	</script>
 
 	<%	} %>
-
+	<div class = "container">
 	<img src="<%=request.getContextPath() %>/resources/img/DRASAPBanner.JPG" width="333" height="70" />
     <img src="<%=request.getContextPath() %>/resources/img/CONFIDENTIALBanner.JPG" width="167" height="70" />
-
+	</div>
 	<!-- message1 -->
 	<div id="message1"></div>
 	<br />

@@ -41,11 +41,18 @@ table {
 
 td {
 	padding-right: 10px;
+	white-space: nowrap;
 }
 
 ul {
 	color: #ff0000;
 	font size: 3;
+}
+li {
+     white-space: nowrap;
+}
+.container {
+    white-space: nowrap;
 }
 </style>
 <script type="text/javascript">
@@ -57,6 +64,7 @@ ul {
 	</script>
 </head>
 <body>
+<div class="container">
 	<img
 		src="<%=request.getContextPath()%>/resources/img/DRASAPBanner.JPG"
 		width="333" height="70" />
@@ -64,7 +72,7 @@ ul {
 		src="<%=request.getContextPath()%>/resources/img/CONFIDENTIALBanner.JPG"
 		width="167" height="70" />
 	<br />
-
+</div>
 	<ul>
 		<%-- ログイン画面から遷移した場合--%>
 		<c:if test="${sessionScope.parentPage == true}">

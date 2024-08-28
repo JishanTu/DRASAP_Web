@@ -45,18 +45,18 @@
 	}
 </script>
 </head>
-<frameset rows="35,*" framespacing="0" border="0">
+<frameset rows="45,*" framespacing="0" border="0">
 	<%
 	// リクエストパラメータを確認し、act=initであれば初期化する
 	if (request.getParameter("act") == null || "init".equals(request.getParameter("act"))) {
 	%>
-		<frame name="acl_head" src="switch.do?page=/system/accessLevelBatchUpdateHead.jsp" scrolling="no" />
+		<frame name="acl_head" src="switch.do?page=/system/accessLevelBatchUpdateHead.jsp" scrolling="yes" />
 		<frame name="acl_body" src="accessLevelBatchUpdate.do?act=init" scrolling="yes" />
 	<%
 	} else {
 	// それ以外の場合は、取得データを表示する
 	%>
-		<frame name="acl_head" src="switch.do?page=/system/accessLevelBatchUpdateHead.jsp" scrolling="no" />
+		<frame name="acl_head" src="switch.do?page=/system/accessLevelBatchUpdateHead.jsp" scrolling="yes" />
 		<frame name="acl_body" src="switch.do?page=/system/accessLevelBatchUpdateBody.jsp" scrolling="yes" />
 	<%
 	}

@@ -17,7 +17,15 @@
 	<title>図面登録依頼リスト</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+	
+	@import url( <%=request.getContextPath()%>/resources/css/default.css );
+	
+	td {
+	white-space: nowrap;
+     }
+     
+	</style>
 	<script type="text/javascript">
 
 		function doIraiKousin(){
@@ -62,12 +70,12 @@
 	<tr>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
-				<tr><td nowrap="nowrap"><span class="normal18">図面登録依頼リスト</span></td></tr>
+				<tr><td><span class="normal18">図面登録依頼リスト</span></td></tr>
 			</table></td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>
 			<table border="0" bgcolor="#EEEEEE" align="left">
-				<tr><td nowrap="nowrap"><span class="normal10">処理が済んだらチェックを入力して下さい。<br />
+				<tr><td><span class="normal10">処理が済んだらチェックを入力して下さい。<br />
 					その後に更新するために「更新」をクリックして下さい。</span></td></tr>
 			</table>
 		</td>

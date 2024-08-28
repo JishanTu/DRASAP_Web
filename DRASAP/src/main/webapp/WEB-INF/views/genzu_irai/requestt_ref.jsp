@@ -29,7 +29,7 @@
 		if (browserName != "Netscape") focus();
 	</script>
 </head>
-<frameset rows="35,*" framespacing="0" border="0">
+<frameset rows="45,*" framespacing="0" border="0">
 	<frame name="ref_head" src="<%=request.getContextPath() %>/switch.do?page=/genzu_irai/requestt_ref_head.jsp" />
 	<frame name="ref_body" src="<%=request.getContextPath() %>/req_ref.do" />
 </frameset>
