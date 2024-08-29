@@ -48,15 +48,14 @@ function downLoad() {
     var drwg_no = document.getElementById("drwg_no");
     var no = drwg_no.value;
     if (no == "") {
-	alert("部番を入力してください。");
-	return;
+        alert("図番を入力してください。");
+        return;
     }
-    url = "http://localhost:8081/DRASAP/directLoginForPreviewPre?en_string=1911909003030 0 1 71 28 101 229";
+    url = "http://localhost:8081/DRASAP/directLoginForPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229";
     url += "&drwg_no="+no;
     url += "&sys_id=0002";
     url += "&user_id_col=USER_ID_1";
     window.open(url, "_blank");
-
 }
 </script>
 </head>
