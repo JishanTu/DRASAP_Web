@@ -92,10 +92,12 @@ public class LoginWithIddeAction extends BaseAction {
 			//			}
 			// idを元にユーザー情報を取得し、userオブジェクトに付加する。
 			addUserInfo(user, id, errors);
-			// パスワード有効期限チェック
-			if (!isPasswordExpired(user, errors)) {
-				// システム情報を管理者設定マスターから取得
-				drasapInfo = getDrasapInfo(user, errors);
+			if (Objects.isNull(errors.getAttribute("message"))) {
+				// パスワード有効期限チェック
+				if (!isPasswordExpired(user, errors)) {
+					// システム情報を管理者設定マスターから取得
+					drasapInfo = getDrasapInfo(user, errors);
+				}
 			}
 		}
 
@@ -136,7 +138,8 @@ public class LoginWithIddeAction extends BaseAction {
 			category.debug("--> genzu_irai_request_ref");
 			return "genzu_irai_request_ref";
 
-		} else if ("4".equals(fn)) {
+		}
+		if ("4".equals(fn)) {
 			// fn = 4 なら　原図庫作業依頼リスト
 			category.debug("--> genzu_irai_request_list");
 			return "genzu_irai_request_list";
