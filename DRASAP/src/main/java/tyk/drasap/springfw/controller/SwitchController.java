@@ -34,6 +34,13 @@ public class SwitchController {
 			return "/root/login";
 		}
 
+		String parentPage = (String) session.getAttribute("parentPage");
+		// 前画面がログイン画面の場合
+		if ("Login".equals(parentPage)) {
+			// パスワード変更中
+			return "/root/login";
+		}
+
 		// ログイン済
 		return "/search/searchMain";
 	}
