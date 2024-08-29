@@ -107,9 +107,11 @@ public class LoginWithIddeAction extends BaseAction {
 				}
 			}
 		} catch (Exception e) {
+			// for ユーザー
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.login.othersys." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
-					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), null);
+					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
 			// for MUR
 			category.error("他のシステムからのログインに失敗\n" + ErrorUtility.error2String(e));
 		}
