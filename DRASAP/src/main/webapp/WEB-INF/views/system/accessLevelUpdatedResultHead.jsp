@@ -17,7 +17,15 @@
 	<title>アクセスレベル更新結果</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+	
+	@import url( <%=request.getContextPath()%>/resources/css/default.css );
+	
+	td {
+	white-space: nowrap;
+     }
+	
+	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
 		function keys() {

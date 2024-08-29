@@ -17,7 +17,15 @@
 	<title>Drawing Search and Print System [運用支援ツールログイン]</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+	
+	@import url( <%=request.getContextPath()%>/resources/css/default.css );
+	
+	td {
+	white-space: nowrap;
+}
+	
+	</style>
 	<script type="text/javascript">
 		var browserName = navigator.appName;
 		function onLoad() {

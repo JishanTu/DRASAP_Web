@@ -20,12 +20,19 @@
 	<script type="text/javascript">
 		var browserName = navigator.appName;
 		function onLoad() {
-                    var w = screen.availWidth;
-                    var h = screen.availHeight;
+
+			var w = window.outerWidth;
+			var h = window.outerHeight;
+			
+			var screenWidth = window.screen.availWidth;
+			var screenHeight = window.screen.availHeight;
+			
+			var left = (screenWidth - w) / 2;
+			var top = (screenHeight - h) / 2;
                     mx = 0;
                     my = 0;
                     window.resizeTo(w, h);
-                    window.moveTo(mx,my);//画面の位置指定
+                    window.moveTo(left,top);//画面の位置指定
                     if (browserName != "Netscape") focus();
 		}
 	</script>

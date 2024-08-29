@@ -17,7 +17,14 @@
 	<title>アクセスレベル一括更新</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
+	<style type="text/css">
+	@import url( <%=request.getContextPath()%>/resources/css/default.css );
+	
+	td {
+	white-space: nowrap;
+     }
+     
+	</style>
 	<script type="text/javascript" src="<%=request.getContextPath() %>/resources/js/prototype.js" ></script>
 	<script type="text/javascript">
 		document.onkeydown = keys;
@@ -49,13 +56,13 @@
 		}
 	</script>
 </head>
-<body bgcolor="#CCCCCC" style="margin: 0; overflow: hidden;">
+<body bgcolor="#CCCCCC" style="margin: 0;">
 <!--================== ヘッダ =======================-->
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
-				<tr><td nowrap="nowrap"><span class="normal18">アクセスレベル一括更新</span></td></tr>
+				<tr><td><span class="normal18">アクセスレベル一括更新</span></td></tr>
 			</table>
 		</td>
 		<!--=================== 職番などの表示 ===========================-->
