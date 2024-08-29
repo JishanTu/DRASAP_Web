@@ -1,0 +1,610 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/tr/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<title>Drawing Search and Print System [Direct Preview Sample]</title>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<style type="text/css">
+body {
+	font-size:10pt;
+	color:#000000;
+	font-weight:normal;
+	font-family:'ＭＳ Ｐゴシック','ＭＳ ゴシック';
+	list-style: none;
+}
+h2 {
+	text-align:left;
+	padding-left:200px;
+}
+input.btn {
+	font-size:10pt;
+	color:#000000;
+	font-weight:normal;
+	font-family:Terminal;
+}
+input.drwg_no {
+	width:100px;
+	font-size:10pt;
+	color:#000000;
+	font-weight:normal;
+	font-family:Terminal;
+}
+ul {
+	font-size:10pt;
+	color:#000000;
+	font-weight:normal;
+	font-family:Terminal;
+	list-style: none;
+}
+.copyright {
+	width:100%;
+	font-size:10pt;
+	text-align:right;
+}
+</style>
+<script LANGUAGE="JavaScript">
+function downLoad() {
+    var drwg_no = document.getElementById("drwg_no");
+    var no = drwg_no.value;
+    if (no == "") {
+	alert("部番を入力してください。");
+	return;
+    }
+    url = "http://localhost:8081/DRASAP/directLoginForPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229";
+    url += "&drwg_no="+no;
+    url += "&sys_id=0002";
+    url += "&user_id_col=USER_ID_1";
+    window.open(url, "_blank");
+
+}
+</script>
+</head>
+<body bgcolor="#ffffff">
+<h2>(DRASAP)外部システムＩ／Ｆテスト</h2>
+
+<div id="flow" style="display:none;margin-left:60px;">
+<img src="./images/flow2.jpg">
+</div>
+<ul>
+<li>（１）	外部システムIF(1図番指定)
+	<ul>
+	<li>
+	</li>
+	<li><span style="color:#0000AA;">↓ここに部番を入力して図面のダウンロードができます。</span>
+	</li>
+	<li style="height:8px;">
+	</li>
+	<li>
+	<span >
+	部番：<input type="text" class="drwg_no" id="drwg_no" value="ET000000120"/>
+	<input type="button"class="btn" value="プレビュー" onclick="javascript:downLoad();">
+	</span>
+	</li>
+	</ul>
+</li>
+<li style="height:8px;">
+</li>
+<li>（２）	外部システムIF(複数図番指定)
+	<ul>
+	<li>
+	</li>
+	<li><span style="color:#0000AA;">↓ここから複数図面のダウンロードができます。</span>
+	</li>
+	<form name=“directPreviewForm" method="POST" target="_blank"
+	action="http://localhost:8081/DRASAP/directLoginForMultiPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229&sys_id=0200&user_id_col=USER_ID_1">
+	・２件だけ　<input type="text" id="DRWG_NO_0" name="DRWG_NO" value="ET000000120"/>
+	<input type="text" id="DRWG_NO_1" name="DRWG_NO" value="84091210020"/>
+	<input type="submit" value="DRASAP連携"/>
+	</form>
+	<form name=“directPreviewForm" method="POST" target="_blank"
+	action="http://localhost:8081/DRASAP/directLoginForMultiPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229&sys_id=0200&user_id_col=USER_ID_1">
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET000000120"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET000000120"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00000090A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET000010000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00001026B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00001027B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00002227B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00002227D"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00002227E"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00002227F"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00002227G"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET000073101"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00A200010"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00A200011"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00A200012"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET00A3Y0000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET010319210"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02380001AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02390001AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02390002AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02390003AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02390004AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02390005AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02970004AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02970005AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02970006AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02970007AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02970008AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02970009AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET02AFB004AD"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET036899010"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET053718010"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET053718011"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET060131050"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET081589100"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET089719180"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET09AAA094AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10068013AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST009"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01AI"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST01ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST020"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST021"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST029"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST03AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST03AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST03AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST03AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST03AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST03AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST03AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST03ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST040"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST041"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST049"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST05AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST05AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST05AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST05AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST05AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST05AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST05AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST05ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST060"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST061"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST069"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST07AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST07AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST07AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST07AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST07AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST07AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST07AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST07ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST080"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST081"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST089"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST09AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST09AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST09AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST09AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST09AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST09AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST09AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST09ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST100"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST101"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST109"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST11AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST11AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST11AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST11AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST11AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST11AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST11AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST11ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST120"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST121"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST129"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST13AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST13AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST13AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST13AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST13AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST13AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST13AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST13ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST140"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST141"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST149"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST150"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST151"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST159"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST16AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST16AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST16AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST16AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST16AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST16AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST16AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST16ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST170"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST18AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST18AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST18AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST18AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST18AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST18AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST18AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST18ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST19AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST19AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST19AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST19AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST19AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST19AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST19AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST19ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST200"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST201"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST209"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST21AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST21AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST21AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST21AJ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST21AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST21AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST21AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST21ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET10TEST990"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET120700000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET17400001AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET17400001AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET17400001AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET17400001AD"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET198219360"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000000A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000000B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000001AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000001AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000002A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000002B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000003AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000003AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000004A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000004B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000005AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000005AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000006A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000006B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000007AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000007AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000008A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000008B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000009AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000009AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000010A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000010B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000011AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000011AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000012A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000012B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000013AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000013AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000014A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000014B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000015AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000015AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000016A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000016B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000017AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20000017AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200503082"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200503083"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200503084"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20050624AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20050624AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20050624AD"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20050624AE"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200603210"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200603211"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200603212"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20060809AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200608250"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200608260"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200610260"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200610261"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200610262"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200611210"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200611230"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200611231"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200611240"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200611280"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200611281"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200611290"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200611291"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200612040"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200612041"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200612042"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200612120"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200612140"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200612141"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200612190"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200701100"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200701101"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200701110"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200701120"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200701121"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200701150"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200701300"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200702A0A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200702A1A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200702A2A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200702A3A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200702A4A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200702ALA"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200703140"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200703141"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200703300"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200704060"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200705110"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200705111"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200705120"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200705121"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200706250"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200706251"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707010"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707011"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707020"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707021"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707030"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707031"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707041"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707050"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707051"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707060"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200707061"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200708010"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200708011"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200708210"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200708211"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20070927AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200710010"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200710019"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200710020"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200710110"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20071012AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200712170"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200712171"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200712172"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200712173"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200712174"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200712500"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200712501"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20071250AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20071250AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200715000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200715001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20071500AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20071500AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200717500"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200717501"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20071750AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20071750AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200720000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200720001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20072000AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20072000AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A0000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A000AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A000AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A1000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A1001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A100AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A100AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A2000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A2001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A200AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A200AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A2Y2AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A2Y2AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A3000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A3001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A300AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A300AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A3M00"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A3M01"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A3Y1AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A3Y1AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A4000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2007A4001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200800000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200800001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200800002"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200801000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200801001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200801002"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080115AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080115AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080115AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080115AD"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200801170"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200801171"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200801172"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200801173"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080205AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080205AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080205AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080304AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20080324AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20081250AG"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20081500AM"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20081750AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20082000AV"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20082502AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20082502AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20082502AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20082502AD"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825030"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825031"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825032"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825033"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825040"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825041"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825042"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825043"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20082521AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20082521AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET20082521AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S2AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S2AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S2AC"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S2AD"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S30"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S31"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S32"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S33"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S40"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S41"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S42"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825S43"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825SS0"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825SS1"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825SS2"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200825SS3"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET2008A000AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200MANIFAA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200MANIFAB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200YUA22A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200YUA22B"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200YUAT1AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200YUAT1AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200YUAT2AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET200YUAT2AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET207718010"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET209499680"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES120"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES121"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES122"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES13AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES13AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES140"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES141"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES142"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES143"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES170"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES171"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES172"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES173"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES18A"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES18AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES18AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES19AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET212TES19AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TES0000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST000"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST001"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST008"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST009"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01AZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01BA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01ZY"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST01ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST020"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST021"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST028"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST029"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST03AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST03AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST03AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST03AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST03AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST03AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST03ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST040"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST041"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST048"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST049"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST05AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST05AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST05AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST05AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST05AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST05AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST05ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST060"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST061"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST068"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST069"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST07AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST07AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST07AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST07AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST07AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST07AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST07ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST080"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST081"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST088"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST089"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST09AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST09AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST09AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST09AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST09AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST09AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST09ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST100"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST101"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST108"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST109"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST11AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST11AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST11AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST11AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST11AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST11AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST11ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST120"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST121"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST128"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST129"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST13AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST13AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST13AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST13AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST13AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST13AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST13ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST140"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST141"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST148"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST149"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST150"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST151"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST158"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST159"/>        
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST16AA"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST16AB"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST16AH"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST16AN"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST16AP"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST16AR"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST16ZZ"/>       
+<input type="hidden" id="DRWG_NO_0" name="DRWG_NO" value="ET21TEST170"/>        
+	・５００件<input type="submit" value="DRASAP連携500件"/>
+	</form>	
+	</li>
+	</ul>
+</li>
+</ul>
+<br/>
+</body>
+</html>

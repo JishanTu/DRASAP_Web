@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/tr/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<title>Drawing Search and Print System [図面検索]</title>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<style type="text/css">
+ul.none {list-style-type: none}
+</style>
+<script language="JavaScript">
+	// それぞれのFunctionへ遷移する
+	function showFunction(functionNo){
+		// Window名とそのURL・・・functionNoに応じて変更させる
+		var targetName = null;
+		var targetUrl = null;
+		if(functionNo == "1"){
+			targetName = '_drasap_search';
+			targetUrl = '03  804201280261  602 2041215 8';
+		} else if(functionNo == "2"){
+			targetName = '_drasap_search';
+			targetUrl = '02 0 6A 1 2 31850002 10486 0225';
+		} else if(functionNo == "3"){
+			targetName = '_drasap_search';
+			targetUrl = '38 8 02107105723952 00 003 11 0';
+		} else if(functionNo == "4"){
+			targetName = '_drasap_search';
+			targetUrl = '00  808205380081  002 1024215 8';
+		} else if(functionNo == "5"){
+			targetName = '_drasap_search';
+			targetUrl = '0  126011020080 5 02614408 8 87';
+		} else if(functionNo == "6"){
+			targetName = '_drasap_search';
+			targetUrl = '8 170050024021 26981   2 090003';
+		} else if(functionNo == "7"){
+			targetName = '_drasap_search';
+			targetUrl = '6  2 18021202248101  4 20010951';
+		}
+		var WO1;
+		var w = screen.availWidth;
+		var h = screen.availHeight-50;
+
+		WO1=window.open('http://localhost:8081/DRASAP/loginWithIddePre.do?en_string=' + targetUrl + '&fn=1', targetName,
+					//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
+					'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
+		WO1.focus();
+	}
+</script>
+</head>
+<body>
+<BODY>
+<b>ポータルテストログイン</b><BR>
+<ul class="none">
+	<li><a href="javascript:showFunction('1')">職番：123456 名前：豊田　太郎 </a>
+	<li><a href="javascript:showFunction('2')">職番：A0236 名前：岩月　敬一 </a>
+	<li><a href="javascript:showFunction('3')">職番：103739 名前：服部　淳二 </a>
+	<li><a href="javascript:showFunction('4')">職番：400250 名前：平向　寿志 </a>
+	<li><a href="javascript:showFunction('5')">職番：084160 名前：板倉　勝明 </a>
+	<li><a href="javascript:showFunction('6')">職番：400296 名前：山元　香織 </a>
+	<li><a href="javascript:showFunction('7')">職番：116442 名前：岡田　紀久利 </a>
+</ul>
+</body>
+</html>
