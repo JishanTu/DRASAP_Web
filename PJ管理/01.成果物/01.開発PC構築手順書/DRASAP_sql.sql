@@ -1,7 +1,7 @@
 -- 開発環境用
 update ADMIN_SETTING_MASTER 
 set
-    VALUE = 'C:\WORK\Vaults' 
+    VALUE = 'D:\Vaults'
 where
     SETTING_ID = '001';
 
