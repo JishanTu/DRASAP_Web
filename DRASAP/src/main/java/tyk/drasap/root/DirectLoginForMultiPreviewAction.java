@@ -112,10 +112,12 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 			} else {
 				// idを元にユーザー情報を取得し、userオブジェクトに付加する。
 				addUserInfo(user, id, user_id_col, errors);
-				// パスワード有効期限チェック
-				if (!isPasswordExpired(user, errors)) {
-					// システム情報を管理者設定マスターから取得
-					drasapInfo = getDrasapInfo(user, errors);
+				if (Objects.isNull(errors.getAttribute("message"))) {
+					// パスワード有効期限チェック
+					if (!isPasswordExpired(user, errors)) {
+						// システム情報を管理者設定マスターから取得
+						drasapInfo = getDrasapInfo(user, errors);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -134,11 +136,16 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 		}
 		// クッキーから言語設定を取得
 		CookieManage langCookie = new CookieManage();
-		String lanKey = langCookie.getCookie(request, user, "Language");
-		if (lanKey == null || lanKey.length() == 0) {
-			lanKey = "Japanese";
+		String lanKey = null;
+		if (request.getCookies() != null) {
+			lanKey = langCookie.getCookie(request, user, "Language");
+			if (lanKey == null || lanKey.length() == 0) {
+				lanKey = "Japanese";
+			}
+			user.setLanguage(lanKey);
+		} else {
+			user.setLanguage("Japanese");
 		}
-		user.setLanguage(lanKey);
 
 		// ユーザー情報が取得できたら sessionに格納する
 		session.setAttribute("user", user);

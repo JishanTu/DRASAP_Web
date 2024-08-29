@@ -269,7 +269,6 @@ public class SearchResultAction extends BaseAction {
 			// 印刷の指示をする
 			// 1) 次のチェックを行う
 			// - 指定した枚数のチェック
-			// - 出力プロッタは選択されている?
 			// - 正しい出力サイズを指定している?
 			checkForPrint(searchResultForm, user, drasapInfo, errors);
 			if (!Objects.isNull(errors.getAttribute("message"))) {
@@ -451,13 +450,15 @@ public class SearchResultAction extends BaseAction {
 			}
 			// 2) 出力プロッタは選択されている?
 			if (searchResultForm.getOutputPrinter() == null || "".equals(searchResultForm.getOutputPrinter())) {
-				String requiredStr;
-				if ("jp".equals(user.getLanKey())) {
-					requiredStr = "出力プロッタ";
-				} else {
-					requiredStr = "PLOTTER";
+				if (!"SEARCH_THUMBNAIL".equals(searchResultForm.getAct())) {
+					String requiredStr;
+					if ("jp".equals(user.getLanKey())) {
+						requiredStr = "出力プロッタ";
+					} else {
+						requiredStr = "PLOTTER";
+					}
+					MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.required." + user.getLanKey(), new Object[] { requiredStr }, null));
 				}
-				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.required." + user.getLanKey(), new Object[] { requiredStr }, null));
 			} else {
 				// 出力先が指定されていれば、出力サイズの指定をチェックする
 				Printer selectedPrinter = user.getPrinter(searchResultForm.getOutputPrinter());

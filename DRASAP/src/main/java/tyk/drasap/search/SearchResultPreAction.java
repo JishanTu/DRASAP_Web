@@ -182,6 +182,35 @@ public class SearchResultPreAction extends BaseAction {
 			searchResultForm.setLanguage(user.getLanguage());
 			// 検索結果を取得し、searchResultFormにセットする
 			searchResultForm.searchResultList = search(user, sys_id, request, errors, null);
+			//コピー元ファイル
+			DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
+			String thumbnailSize = (String) session.getAttribute("thumbnailSize");
+			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
+				String subPath = searchResultForm.searchResultList.get(i).pathName;
+				String thumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
+				String newThumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + subPath, thumbnailName, request);
+				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
+					if ("L".equals(thumbnailSize)) {
+						newThumbnailName = "NotAccess_L_thumb.jpg";
+					} else if ("S".equals(thumbnailSize)) {
+						newThumbnailName = "NotAccess_S_thumb.jpg";
+					} else {
+						newThumbnailName = "NotAccess_M_thumb.jpg";
+					}
+					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
+				}
+				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
+					if ("L".equals(thumbnailSize)) {
+						newThumbnailName = "NotFound_L_thumb.jpg";
+					} else if ("S".equals(thumbnailSize)) {
+						newThumbnailName = "NotFound_S_thumb.jpg";
+					} else {
+						newThumbnailName = "NotFound_M_thumb.jpg";
+					}
+					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
+				}
+				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
+			}
 			// アクセスログを
 			AccessLoger.loging(user, AccessLoger.FID_SEARCH, sys_id);
 		}

@@ -110,10 +110,12 @@ public class DirectLoginForPreviewAction extends BaseAction {
 			} else {
 				// idを元にユーザー情報を取得し、userオブジェクトに付加する。
 				addUserInfo(user, id, user_id_col, errors);
-				// パスワード有効期限チェック
-				if (!isPasswordExpired(user, errors)) {
-					// システム情報を管理者設定マスターから取得
-					drasapInfo = getDrasapInfo(user, errors);
+				if (Objects.isNull(errors.getAttribute("message"))) {
+					// パスワード有効期限チェック
+					if (!isPasswordExpired(user, errors)) {
+						// システム情報を管理者設定マスターから取得
+						drasapInfo = getDrasapInfo(user, errors);
+					}
 				}
 			}
 		} catch (Exception e) {
