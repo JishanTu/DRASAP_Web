@@ -75,7 +75,6 @@ public class DirectLoginForPreviewAction extends BaseAction {
 		String sys_id = "";
 		String user_id_col = "";
 		try {
-
 			// sessionからパラメータを取得し、複号する
 			String enString = (String) session.getAttribute("en_string");
 			session.removeAttribute("en_string");// sessionからremoveする
