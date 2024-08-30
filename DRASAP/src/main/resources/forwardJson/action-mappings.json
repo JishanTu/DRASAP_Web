@@ -82,7 +82,7 @@
       "path" : "/root/loginFailed.jsp"
     }, {
       "name" : "success",
-      "path" : "/search/searchMain.jsp"
+      "path" : "/search/searchMain.jsp?task=multipreview"
     } ]
   }, {
     "name" : "tyk.drasap.system.SystemMaintenanceLoginForm",
@@ -356,7 +356,7 @@
       "path" : "/resultPre.do?task=search"
     }, {
       "name" : "multipreview",
-      "path" : "/search/searchMain.jsp"
+      "path" : "/search/searchCondition.jsp?act=multipreview"
     }, {
       "name" : "changeLanguage",
       "path" : "/search/searchMain.jsp"

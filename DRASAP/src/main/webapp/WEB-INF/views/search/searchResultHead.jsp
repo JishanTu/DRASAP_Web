@@ -26,13 +26,11 @@
 	    top:0px;
 	    right:0px;
 	    margin-right:10px;
-	}
+		}
+
 		#list_view, #thumbnail_view {
 			width:120px;
 		}
-		
-        
-       
 	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
@@ -218,7 +216,7 @@ if (me.isDelAdmin()) { %>
 
 
 
-<table border="1" id = "headtable2">
+<table border="1" id = "headTable2">
 	<tr>
 		<td nowrap="nowrap">
 			<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>

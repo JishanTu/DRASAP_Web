@@ -1,6 +1,9 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
+import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -85,8 +88,17 @@ public class SearchConditionAction extends BaseAction {
 		session.setAttribute("parentPage", "Search");
 
 		session.setAttribute("default_css", "jp".equals(lanKey) ? "default.css" : "defaultEN.css");
+
 		// act属性で処理を分ける
-		category.debug("act属性は" + searchConditionForm.act);
+		String actVal = request.getParameter("act");
+		category.debug("act属性は" + searchConditionForm.act + " / " + actVal);
+
+		if (StringUtils.isEmpty(searchConditionForm.act)) {
+			if (StringUtils.isNotEmpty(actVal)) {
+				searchConditionForm.act = actVal;
+			}
+		}
+
 		if ("search".equals(searchConditionForm.act)) {
 			System.currentTimeMillis();
 			// ユーザーの最高アクセスレベル値が、1より小さいなら検索できない

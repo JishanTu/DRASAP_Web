@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionFilter implements Filter {
 
 	// ‘ÎÛƒŠƒXƒg
-	List<String> targetList = List.of("result");
+	List<String> targetList = List.of("result", "searchCondition");
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {

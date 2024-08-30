@@ -179,6 +179,11 @@
                             <includes>
                                 <include>**/*.jar</include>
                             </includes>
+                            <!--
+                            <excludes>
+                                <exclude>pdflib.jar</exclude>
+                            </excludes>
+                            -->
                         </resource>
                     </webResources>
                 </configuration>

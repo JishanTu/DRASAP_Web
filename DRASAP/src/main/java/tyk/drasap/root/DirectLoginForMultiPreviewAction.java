@@ -75,7 +75,6 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 		String sys_id = "";
 		String user_id_col = "";
 		try {
-
 			// sessionからパラメータを取得し、複号する
 			String enString = (String) session.getAttribute("en_string");
 			session.removeAttribute("en_string");// sessionからremoveする
@@ -112,13 +111,17 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 			} else {
 				// idを元にユーザー情報を取得し、userオブジェクトに付加する。
 				addUserInfo(user, id, user_id_col, errors);
-				// パスワード有効期限チェック
-				if (!isPasswordExpired(user, errors)) {
-					// システム情報を管理者設定マスターから取得
-					drasapInfo = getDrasapInfo(user, errors);
+				if (Objects.isNull(errors.getAttribute("message"))) {
+					// パスワード有効期限チェック
+					if (!isPasswordExpired(user, errors)) {
+						// システム情報を管理者設定マスターから取得
+						drasapInfo = getDrasapInfo(user, errors);
+					}
 				}
 			}
 		} catch (Exception e) {
+			// for ユーザー
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.login.othersys." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), sys_id);
