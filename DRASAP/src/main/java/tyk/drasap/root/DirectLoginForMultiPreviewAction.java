@@ -75,7 +75,6 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 		String sys_id = "";
 		String user_id_col = "";
 		try {
-
 			// sessionからパラメータを取得し、複号する
 			String enString = (String) session.getAttribute("en_string");
 			session.removeAttribute("en_string");// sessionからremoveする
@@ -121,6 +120,8 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 				}
 			}
 		} catch (Exception e) {
+			// for ユーザー
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.login.othersys." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), sys_id);
@@ -136,16 +137,11 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 		}
 		// クッキーから言語設定を取得
 		CookieManage langCookie = new CookieManage();
-		String lanKey = null;
-		if (request.getCookies() != null) {
-			lanKey = langCookie.getCookie(request, user, "Language");
-			if (lanKey == null || lanKey.length() == 0) {
-				lanKey = "Japanese";
-			}
-			user.setLanguage(lanKey);
-		} else {
-			user.setLanguage("Japanese");
+		String lanKey = langCookie.getCookie(request, user, "Language");
+		if (lanKey == null || lanKey.length() == 0) {
+			lanKey = "Japanese";
 		}
+		user.setLanguage(lanKey);
 
 		// ユーザー情報が取得できたら sessionに格納する
 		session.setAttribute("user", user);

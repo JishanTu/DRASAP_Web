@@ -51,54 +51,69 @@ public class LoginWithIddeAction extends BaseAction {
 			Model errors)
 			throws Exception {
 		category.debug("start");
+
 		// まずUserを作成する
 		User user = new User(request.getRemoteAddr());
 		HttpSession session = request.getSession();
 		session.removeAttribute("user");// ついでにsessionから削除する
 		category.debug("session ID=" + session.getId());
+
 		//ActionMessages errors = new ActionMessages();
 		DrasapInfo drasapInfo = null;
+		String fn = null;
 
-		// sessionからパラメータを取得し、複号する
-		String enString = (String) session.getAttribute("en_string");
-		session.removeAttribute("en_string");// sessionからremoveする
-		category.debug("en_string = " + enString);
-		if (enString == null) {
-			return "timeout";
-		}
-		String id = IDDE.decode(enString);// 復号化した結果
-		category.debug("id = " + id);
-		// パラメータ fnを追加
-		String fn = (String) session.getAttribute("fn");
-		session.removeAttribute("fn");// sessionからremoveする
-		if (fn == null) {
-			return "timeout";
-		}
-		category.debug("fn = " + fn);
+		try {
+			// sessionからパラメータを取得し、複号する
+			String enString = (String) session.getAttribute("en_string");
+			session.removeAttribute("en_string");// sessionからremoveする
+			category.debug("en_string = " + enString);
+			if (enString == null) {
+				return "timeout";
+			}
 
-		if ("-1".equals(id)) {
-			// ログインID異常
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.decode." + user.getLanKey(), new Object[] { id, "ログインID異常" }, null));
-		} else if ("-2".equals(id)) {
-			// SYSpass異常
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.decode." + user.getLanKey(), new Object[] { id, "SYSpass異常" }, null));
-		} else {
-			//			int serverPort = request.getServerPort();
-			//			category.debug("serverPort="+Integer.toString(serverPort));
-			//			try{
-			//				ds = DataSourceFactory.getOracleDataSource(serverPort);
-			//			} catch(Exception e){
-			//				category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-			//			}
-			// idを元にユーザー情報を取得し、userオブジェクトに付加する。
-			addUserInfo(user, id, errors);
-			if (Objects.isNull(errors.getAttribute("message"))) {
-				// パスワード有効期限チェック
-				if (!isPasswordExpired(user, errors)) {
-					// システム情報を管理者設定マスターから取得
-					drasapInfo = getDrasapInfo(user, errors);
+			String id = IDDE.decode(enString);// 復号化した結果
+			category.debug("id = " + id);
+
+			// パラメータ fnを追加
+			fn = (String) session.getAttribute("fn");
+			session.removeAttribute("fn");// sessionからremoveする
+			if (fn == null) {
+				return "timeout";
+			}
+			category.debug("fn = " + fn);
+
+			if ("-1".equals(id)) {
+				// ログインID異常
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.decode." + user.getLanKey(), new Object[] { id, "ログインID異常" }, null));
+			} else if ("-2".equals(id)) {
+				// SYSpass異常
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.decode." + user.getLanKey(), new Object[] { id, "SYSpass異常" }, null));
+			} else {
+				//			int serverPort = request.getServerPort();
+				//			category.debug("serverPort="+Integer.toString(serverPort));
+				//			try{
+				//				ds = DataSourceFactory.getOracleDataSource(serverPort);
+				//			} catch(Exception e){
+				//				category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
+				//			}
+				// idを元にユーザー情報を取得し、userオブジェクトに付加する。
+				addUserInfo(user, id, errors);
+				if (Objects.isNull(errors.getAttribute("message"))) {
+					// パスワード有効期限チェック
+					if (!isPasswordExpired(user, errors)) {
+						// システム情報を管理者設定マスターから取得
+						drasapInfo = getDrasapInfo(user, errors);
+					}
 				}
 			}
+		} catch (Exception e) {
+			// for ユーザー
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.login.othersys." + user.getLanKey(), new Object[] { e.getMessage() }, null));
+			// for システム管理者
+			ErrorLoger.error(user, this,
+					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());
+			// for MUR
+			category.error("他のシステムからのログインに失敗\n" + ErrorUtility.error2String(e));
 		}
 
 		if (!Objects.isNull(errors.getAttribute("message"))) {
@@ -125,42 +140,37 @@ public class LoginWithIddeAction extends BaseAction {
 			// fn = 1 なら　図面検索
 			category.debug("--> search_search_Main");
 			return "search_search_Main";
-
 		}
 		if ("2".equals(fn)) {
 			// fn = 2 なら　原図庫作業依頼
 			category.debug("--> genzu_irai_request");
 			return "genzu_irai_request";
-
 		}
 		if ("3".equals(fn)) {
 			// fn = 3 なら　原図庫作業依頼詳細
 			category.debug("--> genzu_irai_request_ref");
 			return "genzu_irai_request_ref";
-
 		}
 		if ("4".equals(fn)) {
 			// fn = 4 なら　原図庫作業依頼リスト
 			category.debug("--> genzu_irai_request_list");
 			return "genzu_irai_request_list";
-
 			// 2013.07.25 yamagishi add. start
-		} else if ("5".equals(fn)) {
+		}
+		if ("5".equals(fn)) {
 			// fn = 5 なら　アクセスレベル一括更新
 			category.debug("--> acl_batch_update");
 			return "acl_batch_update";
-		} else if ("6".equals(fn)) {
+		}
+		if ("6".equals(fn)) {
 			// fn = 6 なら　アクセスレベル更新結果
 			category.debug("--> acl_updated_result");
 			return "acl_updated_result";
 			// 2013.07.25 yamagishi add. end
-
-		} else {
-			// それ以外の場合はメニューへ
-			category.debug("--> success");
-			return "success";
-
 		}
+		// それ以外の場合はメニューへ
+		category.debug("--> success");
+		return "success";
 	}
 
 	/**

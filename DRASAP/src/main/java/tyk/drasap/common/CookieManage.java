@@ -9,6 +9,9 @@ public class CookieManage {
 		String cookieValue = "";
 		// クッキーから言語設定を取得
 		Cookie[] cookies = request.getCookies();
+		if (cookies == null) {
+			return cookieValue;
+		}
 		if (user != null && user.getId() != null && user.getId().length() > 0) {
 			for (int i = 0; i < cookies.length; i++) {
 				if ((user.getId() + key).equals(cookies[i].getName())) {

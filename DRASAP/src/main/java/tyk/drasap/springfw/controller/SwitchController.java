@@ -33,7 +33,6 @@ public class SwitchController {
 			// 未ログイン
 			return "/root/login";
 		}
-
 		String parentPage = (String) session.getAttribute("parentPage");
 		// 前画面がログイン画面の場合
 		if ("Login".equals(parentPage)) {
@@ -92,7 +91,7 @@ public class SwitchController {
 
 		HttpSession session = request.getSession(true);
 		// セッション破棄
-		session.invalidate();
+		session.removeAttribute("user");
 
 		// ログイン画面に遷移
 		return "/root/login";

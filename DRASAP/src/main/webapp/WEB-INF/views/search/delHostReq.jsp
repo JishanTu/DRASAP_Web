@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%-- ログイン情報の確認 --%>
 <c:if test="${empty sessionScope.user}">
@@ -177,6 +178,7 @@
 	marginheight="0" marginwidth="0">
 	<c:set var="deleteHostReqForm"
 		value="${sessionScope.deleteHostReqForm}" />
+			
 	<form action="<%=request.getContextPath() %>/delHostReq" method="post">
 		<input type="hidden" name="act" value="${act}" />
 			<!--============ ヘッダ ============-->
@@ -210,9 +212,9 @@
 								class="normal12">
 								<tr>
 									<td><input type="radio" name="seachKind" tabindex="1"
-										value="delSeisan" onclick="searchCheck(this.value)" />HOST生産出図依頼削除&nbsp;&nbsp;<br />
+										value="delSeisan" ${deleteHostReqForm.seachKind == 'delSeisan' ? 'checked' : ''} onclick="searchCheck(this.value)" />HOST生産出図依頼削除&nbsp;&nbsp;<br />
 										<input type="radio" name="seachKind" tabindex="1"
-										value="delPrt" onclick="searchCheck(this.value)" />HOST帳票出力依頼削除&nbsp;&nbsp;<br />
+										value="delPrt" ${deleteHostReqForm.seachKind == 'delPrt' ? 'checked' : ''} onclick="searchCheck(this.value)" />HOST帳票出力依頼削除&nbsp;&nbsp;<br />
 									</td>
 								</tr>
 							</table>
@@ -245,8 +247,8 @@
 				</tr>
 				<c:forEach var="condition" items="${deleteHostReqForm.condition}" varStatus="loop">
 					<tr>
-						<td align="center"><input type="text" class="condition" name="condition"
-							style="${empty deleteHostReqForm.msgList ? 'color:black;' : 'color:red;'}" tabindex="${loop.index + 2}" /></td>
+						<td align="center"><input type="text" class="condition" name="condition" value = "${condition}"
+							style="${empty message ? 'color:black;' : 'color:red;'}" tabindex="${loop.index + 2}" /></td>
 					</tr>
 				</c:forEach>
 				<tr>
@@ -263,36 +265,37 @@
 						tabindex="13" style="width: 100px; margin-left: 10px;"
 						${deleteHostReqForm.deleteOK ? "" : "disabled"} /></td>
 				</tr>
-				<tr>
-					<td align="left">
-						<!-- message -->
-						<ul style="list-style: none;" id="msgList">
-							<c:if test="${message != null}">
-								<hr/ style="border: none; height: 0.5px; background-color: red;">
-								<c:forEach var="msg" items="${message}">
-									<span style="margin-left: 40px; color: red;">${msg}</span><br/>
-								</c:forEach>
-								<hr/ style="border: none; height: 0.5px; background-color: red;">
-							</c:if>
-							<c:forEach var="msg" items="${deleteHostReqForm.msgList}">
-								<c:if test="${msg != null}">
-									<hr/ style="border: none; height: 0.5px; background-color: red;">
-										<span style="${msg.msgStyle}">${msg.msg}</span><br/>
-									<hr/ style="border: none; height: 0.5px; background-color: red;">
-								</c:if>
-							</c:forEach>
-							
-
-						</ul>
-					</td>
-				</tr>
-				<tr>
-				<%-- 	<td align="left" class="normal12blue"><c:forEach var="error"
-							items="${errors}">
-							<c:out value="${error}" />
+			<tr>
+				<td align="left">
+					<!-- message -->
+					<ul style="list-style: none;" id="msgList">
+						<c:forEach var="msgInfo" items="${deleteHostReqForm.msgList}"
+							varStatus="status">
+							<li style="${msgInfo.msgStyle}">${msgInfo.msg}</li>
 							<br />
-						</c:forEach></td> --%>
-				</tr>
+						</c:forEach>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+    <td align="left" class="normal12blue">
+        <c:if test="${not empty sessionScope.errors}">
+            <ul>
+                <c:forEach var="entry"
+									items="${pageContext.request.attributeNames}">
+									<c:if
+										test="${!fn:contains(entry, '.') && !fn:contains(entry, 'path') && !fn:containsIgnoreCase(entry, 'form')}">
+										<c:set var="attributeName" value="${entry}" />
+										<c:forEach var="attributeValue"
+											items="${requestScope[attributeName]}">
+											<li>${attributeValue}</li>
+										</c:forEach>
+									</c:if>
+								</c:forEach>
+            </ul>
+        </c:if>
+    </td>
+</tr>
 			</table>
 
 		<table class="keyLock" id="keyLock" style="visibility: hidden">
