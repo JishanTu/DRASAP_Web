@@ -104,8 +104,6 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
 		AccessLevelBatchUpdateForm accessLevelBatchUpdateForm = form;
-		AccessLevelBatchUpdateForm accessLevelBatchUpdateForm1 = (AccessLevelBatchUpdateForm) session.getAttribute("accessLevelBatchUpdateForm");
-		System.out.print(accessLevelBatchUpdateForm1);
 		if ("init".equals(request.getParameter("act"))) {
 			accessLevelBatchUpdateForm.setAct("init");
 		}

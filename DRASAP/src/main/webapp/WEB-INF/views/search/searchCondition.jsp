@@ -866,9 +866,9 @@
 							<td nowrap="nowrap">
 								<span class="normal10">
 									<select name="displayCount">
-										<option value="20">20</option>
-										<option value="50">50</option>
-										<option value="100">100</option>
+										<option value="20" <c:if test="${searchConditionForm.displayCount == '20'}">selected</c:if>>20</option>
+    									<option value="50" <c:if test="${searchConditionForm.displayCount == '50'}">selected</c:if>>50</option>
+   										<option value="100" <c:if test="${searchConditionForm.displayCount == '100'}">selected</c:if>>100</option>
 									</select>
 									<c:choose>
 										<c:when test="${sessionScope.user.language == 'Japanese'}">件</c:when>

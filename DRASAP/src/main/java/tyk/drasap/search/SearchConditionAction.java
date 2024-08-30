@@ -1,9 +1,6 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -307,6 +304,11 @@ public class SearchConditionAction extends BaseAction {
 		searchConditionForm.sortOrderKeyList.add("3");
 		searchConditionForm.sortOrderKeyList.add("4");
 		searchConditionForm.sortOrderKeyList.add("5");
+		searchConditionForm.sortOrderKeyList.add("6");
+		searchConditionForm.sortOrderKeyList.add("7");
+		searchConditionForm.sortOrderKeyList.add("8");
+		searchConditionForm.sortOrderKeyList.add("9");
+		searchConditionForm.sortOrderKeyList.add("10");
 		searchConditionForm.sortOrderNameList = searchConditionForm.sortOrderKeyList;
 		// 「全ての属性条件を」はANDをデフォルトに '04.Feb.5変更
 		searchConditionForm.eachCondition = "AND";
