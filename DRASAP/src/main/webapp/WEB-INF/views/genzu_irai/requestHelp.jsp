@@ -4,12 +4,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false"%>
 
-<%-- ログイン情報の確認 --%>
-<c:if test="${empty sessionScope.user}">
-<script>
-	location.replace('<%=request.getContextPath()%>/timeout');
-</script>
-</c:if>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
