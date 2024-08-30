@@ -91,7 +91,7 @@ public class SwitchController {
 
 		HttpSession session = request.getSession(true);
 		// セッション破棄
-		session.removeAttribute("user");
+		session.invalidate();
 
 		// ログイン画面に遷移
 		return "/root/login";
