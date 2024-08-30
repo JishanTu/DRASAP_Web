@@ -33,13 +33,17 @@
 <body onload="onLoad();">
 <!-- エラーの表示 -->
 <font color="RED">
-<ul>
+
     <c:if test="${message != null}">
+    <hr style="border: none; height: 1px; background-color: orange;">
         <c:forEach var="msg" items="${message}">
+        <ul>
             <li>${msg}</li>
+        </ul>
         </c:forEach>
+      <hr style="border: none; height: 1px; background-color: orange;">
     </c:if>
-</ul>
+
 </font>					
 <div align="center">
 <input type="button" value="戻る" onclick="backSearchResult()"  style="font-size:12pt;" />
