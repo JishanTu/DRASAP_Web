@@ -75,7 +75,7 @@ li {
 </div>
 	<ul>
 		<%-- ログイン画面から遷移した場合--%>
-		<c:if test="${sessionScope.parentPage == true}">
+		<c:if test="${sessionScope.parentPage == 'Login'}">
 			<c:choose>
 				<c:when test="${sessionScope.samePasswdId == true}">
 					<li>ユーザーIDと同じパスワードは使用不可です。パスワード変更してください。<br /> Cannot use the
@@ -113,60 +113,65 @@ li {
 				<td></td>
 			</tr>
 			<tr>
-				<td><label for="oldpass">現在のパスワード<br /></label> <label
-					for="oldpass">Current Password</label> <br />
-				<br /></td>
-				<td><input type="password" name="oldpass" maxlength="20"
-					style="width: 180px;" tabindex="1" /> <%-- <html:password property="oldpass" maxlength="20" style="width:180px;" tabindex="1" /> --%>
-					<br />
-				<br /></td>
+				<td>
+					<label for="oldpass">現在のパスワード<br /></label> 
+					<label for="oldpass">Current Password</label> <br /><br />
+				</td>
+				<td>
+					<input type="password" name="oldpass" maxlength="20"style="width: 180px;" tabindex="1" /> 
+					<%-- <html:password property="oldpass" maxlength="20" style="width:180px;" tabindex="1" /> --%>
+					<br /><br />
+				</td>
 				<td rowspan="3" class="errMsg">
-					<!-- エラーの表示 --> <font color="RED"> <b>
+					<!-- エラーの表示 --> 
+					<font color="RED"> 
+						<b>
 							<ul>
-								<c:forEach var="entry"
-									items="${pageContext.request.attributeNames}">
-									<c:if
-										test="${!fn:contains(entry, '.') && !fn:contains(entry, 'path') && !fn:containsIgnoreCase(entry, 'form')}">
+								<c:forEach var="entry" items="${pageContext.request.attributeNames}">
+									<c:if test="${!fn:contains(entry, '.') && !fn:contains(entry, 'path') && !fn:containsIgnoreCase(entry, 'form')}">
 										<c:set var="attributeName" value="${entry}" />
-										<c:forEach var="attributeValue"
-											items="${requestScope[attributeName]}">
+										<c:forEach var="attributeValue" items="${requestScope[attributeName]}">
 											<li>${attributeValue}</li>
 										</c:forEach>
 									</c:if>
 								</c:forEach>
 							</ul>
-					</b>
-				</font>
+						</b>
+					</font>
 				</td>
 			</tr>
 			<tr>
-				<td><label for="newpass">新しいパスワード<br /></label> <label
-					for="newpass">New Password</label> <br /> <br /></td>
-				<td><input type="password" name="newpass" maxlength="20"
-					style="width: 180px;" tabindex="2"
+				<td>
+					<label for="newpass">新しいパスワード<br /></label>
+					<label for="newpass">New Password</label> <br /> <br />
+				</td>
+				<td>
+					<input type="password" name="newpass" maxlength="20" style="width: 180px;" tabindex="2" 
 					title="入力可能文字は半角英数記号のみです&#10;Only single-byte alphanumeric characters can be entered" />
 					<%
 					// <html:password property="newpass" size="32" maxlength="32" tabindex="2" />
-					%> <br />
-				<br /></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td><label for="newPassConfirm">新しいパスワード（再入力）<br /></label> <label
-					for="newPassConfirm">Re-enter New Password</label> <br /> <br />
+					%> <br /><br />
 				</td>
-				<td><input type="password" name="newPassConfirm" maxlength="20"
-					style="width: 180px;" tabindex="3" /> <%
- // <html:password property="newPassConfirm" size="32" maxlength="32" tabindex="3" />
- %> <br />
-				<br /></td>
 				<td></td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="更新 / Update" tabindex="3">
-					<br /> <br /></td>
-				<td><input type="button" value="キャンセル / Cancel"
-					onclick="self.close()" /> <br /> <br /></td>
+				<td>
+					<label for="newPassConfirm">新しいパスワード（再入力）<br /></label>
+					<label for="newPassConfirm">Re-enter New Password</label> <br /> <br />
+				</td>
+				<td>
+					<input type="password" name="newPassConfirm" maxlength="20" style="width: 180px;" tabindex="3" /> 
+					<%// <html:password property="newPassConfirm" size="32" maxlength="32" tabindex="3" />%> <br /><br />
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>
+					<input type="submit" value="更新 / Update" tabindex="3"><br /> <br />
+				</td>
+				<td>
+					<input type="button" value="キャンセル / Cancel" onclick="self.close()" /> <br /> <br />
+				</td>
 				<td></td>
 			</tr>
 		</table>
