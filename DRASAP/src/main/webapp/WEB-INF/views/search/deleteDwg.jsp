@@ -38,8 +38,8 @@
 	<script type="text/javascript">
 		browserName = navigator.appName;
 		// 遷移する
-		function submitFunc(parm){
-		    if (parm == "DELETE") {
+        function submitFunc(parm){
+            if (parm == "DELETE") {
                 var msg1 = document.getElementById("msg1");
                 var msg2 = document.getElementById("msg2");
                 msg1.innerHTML = "削除しています。しばらくお待ちください。";
@@ -52,8 +52,8 @@
                 backButton.disabled=true;
                 document.forms[0].act.value='delete';// 隠し属性actをセット
                 document.forms[0].submit();
-		    }
-		}
+            }
+        }
 		// ログアウト処理
 		function doLogout(){
 		}
