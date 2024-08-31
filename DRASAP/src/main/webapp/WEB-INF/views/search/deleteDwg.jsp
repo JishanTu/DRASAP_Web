@@ -40,18 +40,18 @@
 		// 遷移する
 		function submitFunc(parm){
 		    if (parm == "DELETE") {
-			var msg1 = document.getElementById("msg1");
-			var msg2 = document.getElementById("msg2");
-			msg1.innerHTML = "削除しています。しばらくお待ちください。";
-			msg2.innerHTML = "";
-		
-		        document.body.style.cursor="wait";
-		        var deleteButton = document.getElementById("deleteButton");
-		        var backButton = document.getElementById("backButton");
-		        deleteButton.disabled=true;
-		        backButton.disabled=true;
-			document.forms[0].act.value='delete';// 隠し属性actをセット
-			document.forms[0].submit();
+                var msg1 = document.getElementById("msg1");
+                var msg2 = document.getElementById("msg2");
+                msg1.innerHTML = "削除しています。しばらくお待ちください。";
+                msg2.innerHTML = "";
+
+                document.body.style.cursor="wait";
+                var deleteButton = document.getElementById("deleteButton");
+                var backButton = document.getElementById("backButton");
+                deleteButton.disabled=true;
+                backButton.disabled=true;
+                document.forms[0].act.value='delete';// 隠し属性actをセット
+                document.forms[0].submit();
 		    }
 		}
 		// ログアウト処理
@@ -64,22 +64,23 @@
 	    }
 	</script>
 </head>
-<body marginwidth="0" marginheight="0" bgcolor="#ffffff" rightmargin="0"
-	topmargin="0" leftmargin="0" bottommargin="0">
-	<c:set var="deleteDwgForm" scope="session"
-		value="${sessionScope.deleteDwgForm}" />
+<body marginwidth="0" marginheight="0" bgcolor="#ffffff" rightmargin="0" topmargin="0" leftmargin="0" bottommargin="0">
+	<c:set var="deleteDwgForm" scope="session" value="${sessionScope.deleteDwgForm}" />
 
 	<form action="<%=request.getContextPath() %>/deleteDwg" method="post">
-		<c:set var="deleteDwgForm" scope="session"
-			value="${sessionScope.deleteDwgForm}" />
-
+		<!--
+		<c:set var="deleteDwgForm" scope="session" value="${sessionScope.deleteDwgForm}" />
 		<c:set var="deleteDwgForm" value="${sessionScope.deleteDwgForm}" />
+		-->
+
 		<table cellspacing="0" cellpadding="0" border="0">
 			<tbody>
 				<tr>
-					<td><input type="hidden" name="act"
-						value="${deleteDwgForm.act}" /><br /> <input type="hidden"
-						name="previewIdx" value="${deleteDwgForm.previewIdx}" /></td>
+					<td>
+						<input type="hidden" name="act" value="${deleteDwgForm.act}" />
+						<br />
+						<input type="hidden" name="previewIdx" value="${deleteDwgForm.previewIdx}" />
+					</td>
 				</tr>
 				<tr>
 					<td>削除図面</td>
@@ -97,10 +98,12 @@
 									<tr class="normal12">
 										<c:forEach var="value" items="${record.valList}"
 											varStatus="status">
-											<td nowrap="nowrap"><c:choose>
+											<td nowrap="nowrap">
+												<c:choose>
 													<c:when test="${status.index == 0}">
-														<a href="<c:url value='preview'/>" target="_parent"> <c:out
-																value="${value}" /><br />
+														<a href="<c:url value='preview'/>" target="_parent">
+															<c:out value="${value}" />
+															<br />
 														</a>
 													</c:when>
 													<c:otherwise>
@@ -116,7 +119,10 @@
 					</td>
 				</tr>
 				<tr>
-					<td><br /> <br /></td>
+					<td>
+						<br />
+						<br />
+					</td>
 				</tr>
 				<tr>
 					<td>
@@ -141,23 +147,20 @@
 				<tr>
 					<td id="msg2"><c:out value="${deleteDwgForm.msg2}" /></td>
 				</tr>
-				    <%-- 2022.04.13 Windows Edge対応. 削除ボタンが押せない障害を修正. --%>
-    <tr><td align="center">
-    <input type="button" style="width: 80px; margin-right:20px;" onclick="submitFunc('DELETE')" value="削除" id="deleteButton" ${deleteDwgForm.isDeleteOK() ? '' : 'disabled'} />
-    <input type="button" onclick="backSearchResult()" value="　戻る　" id="backButton"  />
-    </td></tr>
+				 <%-- 2022.04.13 Windows Edge対応. 削除ボタンが押せない障害を修正. --%>
+				<tr>
+					<td align="center">
+						<input type="button" style="width: 80px; margin-right:20px;" onclick="submitFunc('DELETE')" value="削除" id="deleteButton" ${deleteDwgForm.isDeleteOK() ? '' : 'disabled'} />
+						<input type="button" onclick="backSearchResult()" value="　戻る　" id="backButton"  />
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		
 		<%-- 2022.04.13 Windows Edge対応. 削除ボタンが押せない障害を修正.
-		<span class="deleteBtn"> <input type="button"
-			style="width: 80px;" onclick="submitFunc('DELETE')" value="削除"
-			id="deleteButton" ${deleteDwgForm.deleteOK ? '' : 'disabled'} />
-		</span> <span class="goBackBtn"> <input type="button"
-			onclick="backSearchResult()" value="　戻る　" id="backButton" />
-		</span>
-		 --%>  
-
+		<span class="deleteBtn"> <input type="button" style="width: 80px;" onclick="submitFunc('DELETE')" value="削除" id="deleteButton" ${deleteDwgForm.deleteOK ? '' : 'disabled'} /></span>
+		<span class="goBackBtn"> <input type="button" onclick="backSearchResult()" value="　戻る　" id="backButton" />	</span>
+		--%>
 	</form>
 </body>
 </html>
