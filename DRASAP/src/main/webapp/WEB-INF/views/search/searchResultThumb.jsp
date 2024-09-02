@@ -90,7 +90,12 @@
 			</ul>
 		</font>
 		<div align="center">
+		<c:if test="${sessionScope.Thumb_Flag == 'SEARCH_THUMBNAIL'}">
 			<input type="button" value="${sessionScope.searchResultForm.f_label11}" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />
+		</c:if>
+		<c:if test="${sessionScope.Thumb_Flag == 'PRIENTER_THUMBNAIL'}">
+			<input type="button" value="${sessionScope.searchResultForm.f_label11}" onclick="setActSubmit('SEARCH_THUMBNAIL')" style="font-size:12pt;" />
+		</c:if>
 		</div>
 	</c:if>
 	<div class="page">
