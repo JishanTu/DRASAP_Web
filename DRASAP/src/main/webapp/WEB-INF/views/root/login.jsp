@@ -126,6 +126,25 @@ td {
                  }
             });
         }
+        
+        function onLoad() {
+
+        	var w = window.outerWidth;
+    		var h = window.outerHeight;
+			
+			var screenWidth = window.screen.availWidth;
+			var screenHeight = window.screen.availHeight;
+			
+			var left = (screenWidth - w) / 2;
+			var top = (screenHeight - h) / 2;
+                    mx = 0;
+                    my = 0;
+                    window.resizeTo(w, h);
+                    window.moveTo(left,top);//画面の位置指定
+                    if (browserName != "Netscape") focus();
+		}
+		
+		window.onload = onLoad;
     </script>
 </head>
 <body>

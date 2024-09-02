@@ -248,8 +248,8 @@
 		var targetName = '_help';//別の画面を開く
 		var WO1;
 		
-		var w = window.outerWidth;
-		var h = window.outerHeight;
+		var w = window.outerWidth - 20;
+		var h = window.outerHeight - 72;
 		
 		var screenWidth = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
@@ -381,8 +381,8 @@
 	function openNewWindow(){
 		var targetName = '_chgPass';//別の画面を開く
 		var WO1;
-		var w = window.outerWidth;
-		var h = window.outerHeight;
+		var w = window.outerWidth - 20;
+		var h = window.outerHeight - 72;
 		
 		var screenWidth = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
@@ -507,8 +507,8 @@
 
 	// 子画面を開く
 	function openSubScreen(fn) {
-		var w = window.outerWidth;
-		var h = window.outerHeight;
+		var w = window.outerWidth - 20;
+		var h = window.outerHeight - 72;
 		
 		var screenWidth = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
@@ -1119,8 +1119,8 @@ if (me.isAdmin() || me.isAclBatchUpdateFlag()) {
 			<table bgcolor="#CCCCCC" cellspacing="0" cellpadding="0">
 				<tr>
 					<td class="slideBar">《</td>
-					<td bgcolor="#EEEEEE" valign="top" style="padding-left: 10px; z-index: 100; white-space: normal;" width="420">
-						<textarea 	name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="background-color: #EEEEEE; border-style: none; width: 100%; height: 120px; overflow: visible; font-size: 10pt;">
+					<td bgcolor="#EEEEEE" style=" z-index: 100; white-space: normal; vertical-align: top;" width="450px">
+						<textarea 	name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="box-sizing: border-box; text-align: left; background-color: #EEEEEE; border-style: none; width: 100%; height: 120px; overflow: hidden; font-size: 10pt;">
 							${searchConditionForm.searchHelpMsg}
 						</textarea>
 					</td>

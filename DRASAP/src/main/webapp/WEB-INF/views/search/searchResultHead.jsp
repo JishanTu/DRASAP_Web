@@ -81,8 +81,8 @@
 			targetName = '_drasap_management_login';
 			targetUrl = '<%=request.getContextPath() %>/switch.do?page=/search/management_Login.jsp';
 			var WO1;
-			var w = window.outerWidth;
-			var h = window.outerHeight;
+			var w = window.outerWidth - 20;
+			var h = window.outerHeight - 72;
 			
 			var screenWidth = window.screen.availWidth;
 			var screenHeight = window.screen.availHeight;
