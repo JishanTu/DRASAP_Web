@@ -271,6 +271,7 @@ public class SearchResultAction extends BaseAction {
 			// - 指定した枚数のチェック
 			// - 正しい出力サイズを指定している?
 			checkForPrint(searchResultForm, user, drasapInfo, errors);
+			session.setAttribute("Thumb_Flag", "SEARCH_THUMBNAIL");
 			if (!Objects.isNull(errors.getAttribute("message"))) {
 				//saveErrors(request, errors);
 				request.setAttribute("errors", errors);
@@ -297,6 +298,7 @@ public class SearchResultAction extends BaseAction {
 			// - 出力プロッタは選択されている?
 			// - 正しい出力サイズを指定している?
 			checkForPrint(searchResultForm, user, drasapInfo, errors);
+			session.setAttribute("Thumb_Flag", "PRIENTER_THUMBNAIL");
 			if (!Objects.isNull(errors.getAttribute("message"))) {
 				//saveErrors(request, errors);
 				request.setAttribute("errors", errors);
@@ -322,6 +324,7 @@ public class SearchResultAction extends BaseAction {
 					searchResultForm.getSearchResultElement(i).setSelected(false);
 				}
 			}
+
 			request.setAttribute("errors", errors);
 			category.debug("--> search_thumb");
 			return "search_thumb";
