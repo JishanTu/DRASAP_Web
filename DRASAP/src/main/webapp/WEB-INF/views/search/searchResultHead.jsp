@@ -195,12 +195,20 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			${searchResultForm.h_label5 }&nbsp;
 			<select name="outputPrinter">
-				<c:forEach items="${searchResultForm.printerKeyList}"
-					var="outputPrinterKey" varStatus="loop">
-					<option value="${outputPrinterKey}">${searchResultForm.printerNameList[loop.index]}</option>
-				</c:forEach>
-			</select>
-			</span>
+								<c:forEach items="${searchResultForm.printerKeyList}"
+									var="outputPrinterKey" varStatus="loop">
+									<c:choose>
+										<c:when
+											test="${outputPrinterKey == searchResultForm.getOutputPrinter()}">
+											<option value="${outputPrinterKey}" selected>${searchResultForm.printerNameList[loop.index]}</option>
+										</c:when>
+										<c:otherwise>
+											<option value="${outputPrinterKey}">${searchResultForm.printerNameList[loop.index]}</option>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+						</select>
+					</span>
 		</td>
 	</tr>
 </table>

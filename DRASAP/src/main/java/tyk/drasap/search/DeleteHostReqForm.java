@@ -29,16 +29,18 @@ public class DeleteHostReqForm extends BaseForm {
 
 	@Override
 	public Model validate(HttpServletRequest request, Model errors, MessageSource messageSource) {
+
+		msgList.clear();
 		if ("delete".equals(act)) {
 
 			//            ActionErrors errors = new ActionErrors();
 			// HOST依頼選択チェック
 			if (seachKind == null || !"delSeisan".equals(seachKind) && !"delPrt".equals(seachKind)) {
-				MessageSourceUtil.addAttribute(errors, "seachKind", messageSource.getMessage("search.delHost.miss.seachKind", null, null));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.miss.seachKind", null, null));
 				return errors;
 			}
 			if (condition.size() <= 0) {
-				MessageSourceUtil.addAttribute(errors, "condition", messageSource.getMessage("search.delHost.miss.condition", null, null));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.miss.condition", null, null));
 				return errors;
 			}
 			// 依頼番号チェック
@@ -52,9 +54,9 @@ public class DeleteHostReqForm extends BaseForm {
 				// 入力桁数チェック
 				if (condition.get(i).length() != 14) {
 					if ("delSeisan".equals(seachKind)) {
-						MessageSourceUtil.addAttribute(errors, "condition[" + Integer.toString(i) + "]", messageSource.getMessage("search.delHost.miss.delSeisan", null, null));
+						MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.miss.delSeisan", null, null));
 					} else {
-						MessageSourceUtil.addAttribute(errors, "condition[" + Integer.toString(i) + "]", messageSource.getMessage("search.delHost.miss.delPrt", null, null));
+						MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.miss.delPrt", null, null));
 					}
 					continue;
 				}
@@ -62,20 +64,20 @@ public class DeleteHostReqForm extends BaseForm {
 				if ("delSeisan".equals(seachKind)) {
 					if ("A".equals(condition.get(i).substring(8, 9)) || "C".equals(condition.get(i).substring(8, 9))) { // 本社
 					} else {
-						MessageSourceUtil.addAttribute(errors, "condition[" + Integer.toString(i) + "]", messageSource.getMessage("search.delHost.miss.delSeisan", null, null));
+						MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.miss.delSeisan", null, null));
 					}
 				} else if ("B".equals(condition.get(i).substring(8, 9)) || "D".equals(condition.get(i).substring(8, 9))) { // 本社
 				} else {
-					MessageSourceUtil.addAttribute(errors, "condition[" + Integer.toString(i) + "]", messageSource.getMessage("search.delHost.miss.delPrt", null, null));
+					MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.miss.delPrt", null, null));
 				}
 				int ymd = DateCheck.convertIntYMD(condition.get(i).substring(0, 8));
 				if (ymd == -1 || !DateCheck.isDate(ymd)) {
 					// 日付として解釈できない
-					MessageSourceUtil.addAttribute(errors, "condition[" + Integer.toString(i) + "]", messageSource.getMessage("search.delHost.miss.condition.dateformat", new Object[] { condition.get(i).substring(0, 8) }, null));
+					MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.miss.condition.dateformat", new Object[] { condition.get(i).substring(0, 8) }, null));
 				}
 			}
 			if (condition_count == 0) {
-				MessageSourceUtil.addAttribute(errors, "condition", messageSource.getMessage("search.delHost.miss.condition", null, null));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.miss.condition", null, null));
 			}
 		}
 		return errors;
