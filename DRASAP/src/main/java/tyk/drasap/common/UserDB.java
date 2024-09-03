@@ -72,7 +72,7 @@ public class UserDB {
 		String userId = user.getId();
 		String currentPass = UserDB.getPassword(userId, conn);
 
-		if (StringUtils.isEmpty(currentPass) || userId.equals(currentPass)) {
+		if (StringUtils.isBlank(currentPass) || userId.equals(currentPass)) {
 			// パスワード未設定 もしくは パスワードがユーザIDと同じ
 			return 1;
 		}
