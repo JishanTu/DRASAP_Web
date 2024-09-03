@@ -83,6 +83,7 @@ public class SearchResultPreAction extends BaseAction {
 		}
 
 		SearchResultForm searchResultForm = form;
+		session.setAttribute("thumbnailSize", user.getThumbnailSize());
 
 		// requsetパラメータを確認して、処理を振り分ける
 		if ("init".equals(request.getAttribute("task"))) {
@@ -118,26 +119,20 @@ public class SearchResultPreAction extends BaseAction {
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				String subPath = searchResultForm.searchResultList.get(i).pathName;
 				String thumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
+
+				// サムネイル画像をコピー
 				String newThumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + subPath, thumbnailName, request);
+
+				// DRWG_SIZEの設定値でTHUMB_SIZEの値を設定
+				searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", searchResultForm.searchResultList.get(i).getAttr("DRWG_SIZE"));
+
+				// アクセス権限がない場合
 				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
-					if ("L".equals(thumbnailSize)) {
-						newThumbnailName = "NotAccess_L_thumb.jpg";
-					} else if ("S".equals(thumbnailSize)) {
-						newThumbnailName = "NotAccess_S_thumb.jpg";
-					} else {
-						newThumbnailName = "NotAccess_M_thumb.jpg";
-					}
-					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
-				}
-				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
-					if ("L".equals(thumbnailSize)) {
-						newThumbnailName = "NotFound_L_thumb.jpg";
-					} else if ("S".equals(thumbnailSize)) {
-						newThumbnailName = "NotFound_S_thumb.jpg";
-					} else {
-						newThumbnailName = "NotFound_M_thumb.jpg";
-					}
-					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
+					newThumbnailName = "NotAccess_" + thumbnailSize + "_thumb.jpg";
+					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
+				} else if (newThumbnailName.startsWith("NotFound_")) {
+					newThumbnailName = "NotFound_" + thumbnailSize + "_thumb.jpg";
+					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
 				}
 				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
 			}
@@ -188,26 +183,20 @@ public class SearchResultPreAction extends BaseAction {
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				String subPath = searchResultForm.searchResultList.get(i).pathName;
 				String thumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
+
+				// サムネイル画像をコピー
 				String newThumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + subPath, thumbnailName, request);
+
+				// DRWG_SIZEの設定値でTHUMB_SIZEの値を設定
+				searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", searchResultForm.searchResultList.get(i).getAttr("DRWG_SIZE"));
+
+				// アクセス権限がない場合
 				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
-					if ("L".equals(thumbnailSize)) {
-						newThumbnailName = "NotAccess_L_thumb.jpg";
-					} else if ("S".equals(thumbnailSize)) {
-						newThumbnailName = "NotAccess_S_thumb.jpg";
-					} else {
-						newThumbnailName = "NotAccess_M_thumb.jpg";
-					}
-					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
-				}
-				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
-					if ("L".equals(thumbnailSize)) {
-						newThumbnailName = "NotFound_L_thumb.jpg";
-					} else if ("S".equals(thumbnailSize)) {
-						newThumbnailName = "NotFound_S_thumb.jpg";
-					} else {
-						newThumbnailName = "NotFound_M_thumb.jpg";
-					}
-					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
+					newThumbnailName = "NotAccess_" + thumbnailSize + "_thumb.jpg";
+					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
+				} else if (newThumbnailName.startsWith("NotFound_")) {
+					newThumbnailName = "NotFound_" + thumbnailSize + "_thumb.jpg";
+					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
 				}
 				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
 			}
@@ -582,7 +571,7 @@ public class SearchResultPreAction extends BaseAction {
 			Files.copy(outPath, newOutPath, StandardCopyOption.REPLACE_EXISTING);
 			Files.setLastModifiedTime(newOutPath, thumbnailLastModifiedTime);
 		} catch (IOException e) {
-			return "NotFound_thumb.jpg";
+			return "NotFound_M_thumb.jpg";
 		}
 		return thumbnailName;
 	}
