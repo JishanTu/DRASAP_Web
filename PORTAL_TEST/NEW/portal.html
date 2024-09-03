@@ -37,12 +37,18 @@ ul.none {list-style-type: none}
 			targetUrl = '6  2 18021202248101  4 20010951';
 		}
 		var WO1;
-		var w = screen.availWidth;
-		var h = screen.availHeight-50;
+		var w = window.outerWidth - 20;
+		var h = window.outerHeight - 72;
+		
+		var screenWidth = window.screen.availWidth;
+		var screenHeight = window.screen.availHeight;
+		
+		var left = Math.max(0, (screenWidth - w) / 2);
+	    var top = Math.max(0, (screenHeight - h) / 2);
 
 		WO1=window.open('http://localhost:8080/DRASAP/loginWithIddePre.do?en_string=' + targetUrl + '&fn=' + functionNo, targetName,
 					//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
-					'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
+					'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=' + left + ',top=' + top);
 		WO1.focus();
 	}
 </script>
