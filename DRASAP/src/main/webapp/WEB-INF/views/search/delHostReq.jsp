@@ -250,9 +250,11 @@
 					</span></td>
 				</tr>
 				<c:forEach var="condition" items="${deleteHostReqForm.condition}" varStatus="loop">
+				 <c:set var="itemPrefix" value="${fn:substring(condition, 0, 8)}" />
+				<c:set var="isInMessage" value="${not empty itemPrefix and fn:contains(message, itemPrefix)}" />
 					<tr>
 						<td align="center"><input type="text" class="condition" name="condition" value = "${condition}"
-							style="${empty message ? 'color:black;' : 'color:red;'}" tabindex="${loop.index + 2}" /></td>
+							style="${isInMessage ? 'color:red;' : 'color:black;'}" tabindex="${loop.index + 2}" /></td>
 					</tr>
 				</c:forEach>
 				<tr>
@@ -282,7 +284,8 @@
 				</td>
 			</tr>
 			<tr>
-				<td align="left" class="normal12blue"><c:if
+				<td align="left" class="normal12blue">
+				<c:if
 						test="${message != null}">
 						<hr color="sandybrown">
 						<font color="red" size="4">

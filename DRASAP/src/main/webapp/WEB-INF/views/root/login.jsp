@@ -141,7 +141,6 @@ td {
                     my = 0;
                     window.resizeTo(w, h);
                     window.moveTo(left,top);//画面の位置指定
-                    if (browserName != "Netscape") focus();
 		}
 		
 		window.onload = onLoad;
