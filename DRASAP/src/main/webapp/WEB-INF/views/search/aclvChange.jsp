@@ -29,11 +29,11 @@
 			
 			var left = (screenWidth - w) / 2;
 			var top = (screenHeight - h) / 2;
-                    mx = 0;
-                    my = 0;
-                    window.resizeTo(w, h);
-                    window.moveTo(left,top);//画面の位置指定
-                    if (browserName != "Netscape") focus();
+					mx = 0;
+					my = 0;
+					window.resizeTo(w, h);
+					window.moveTo(left,top);//画面の位置指定
+					if (browserName != "Netscape") focus();
 		}
 	</script>
 </head>
