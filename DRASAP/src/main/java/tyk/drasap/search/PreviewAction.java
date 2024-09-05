@@ -1,10 +1,5 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -485,19 +480,8 @@ public class PreviewAction extends BaseAction {
 			//			if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 			//			if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 			//			String mabikiPath = beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.mabiki.path");
-			String apServerHome = System.getenv(BEA_HOME);
-			if (apServerHome == null) {
-				apServerHome = System.getenv(CATALINA_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-			}
-
-			String mabikiPath = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.mabiki.path");
 			// 2013.06.14 yamagishi modified. end
+			String mabikiPath = DrasapPropertiesFactory.getFullPath("oce.mabiki.path");
 			StringBuilder sbCmd = new StringBuilder(mabikiPath);
 			sbCmd.append(' ');
 			sbCmd.append(inFile);// ä‘à¯Ç´ëŒè€ÉtÉ@ÉCÉã
@@ -660,22 +644,12 @@ public class PreviewAction extends BaseAction {
 		//		String beaHome = System.getenv("BEA_HOME");
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-			// 2013.06.14 yamagishi modified. end
-		}
+		// 2013.06.14 yamagishi modified. end
 
 		Process process = null;
 		BufferedReader br = null;
 
-		String textMergePath = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.textMerge.path");
+		String textMergePath = DrasapPropertiesFactory.getFullPath("oce.textMerge.path");
 		StringBuilder sbCmd = new StringBuilder(textMergePath);
 		try {
 			process = Runtime.getRuntime().exec(sbCmd.toString());
@@ -743,29 +717,20 @@ public class PreviewAction extends BaseAction {
 		//		String beaHome = System.getenv("BEA_HOME");
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
 		// 2013.06.14 yamagishi modified. end
 		Process process = null;
 		BufferedReader br = null;
 		String errMsg = null;
 
-		String stampMergePath = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.stampMerge.path");
-		StringBuilder sbCmd = new StringBuilder(stampMergePath);
-		sbCmd.append(' ');
-		sbCmd.append(inFile);// ÉoÉiÅ[ògÇsÇhÇeÇeÉtÉ@ÉCÉã
-		sbCmd.append(' ');
-		sbCmd.append(outFile);// ÉeÉLÉXÉgÉ}Å[ÉWå„ÇÃÇsÇhÇeÇeÉtÉ@ÉCÉã
-		sbCmd.append(' ');
 		try {
+			String stampMergePath = DrasapPropertiesFactory.getFullPath("oce.stampMerge.path");
+			StringBuilder sbCmd = new StringBuilder(stampMergePath);
+			sbCmd.append(' ');
+			sbCmd.append(inFile);// ÉoÉiÅ[ògÇsÇhÇeÇeÉtÉ@ÉCÉã
+			sbCmd.append(' ');
+			sbCmd.append(outFile);// ÉeÉLÉXÉgÉ}Å[ÉWå„ÇÃÇsÇhÇeÇeÉtÉ@ÉCÉã
+			sbCmd.append(' ');
+
 			process = Runtime.getRuntime().exec(sbCmd.toString());
 			br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			int exitCode;
@@ -967,19 +932,9 @@ public class PreviewAction extends BaseAction {
 		//		String beaHome = System.getenv("BEA_HOME");
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
 		// 2013.06.14 yamagishi modified. end
-		String template = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.textMergeTemplate");
-		String mergeText = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.textMergeTxt");
+		String template = DrasapPropertiesFactory.getFullPath("tyk.preview.textMergeTemplate");
+		String mergeText = DrasapPropertiesFactory.getFullPath("tyk.preview.textMergeTxt");
 
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
@@ -1087,28 +1042,19 @@ public class PreviewAction extends BaseAction {
 		//		String beaHome = System.getenv("BEA_HOME");
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-			// 2013.06.14 yamagishi modified. end
-		}
+		// 2013.06.14 yamagishi modified. end
 
 		Process process = null;
 		BufferedReader br = null;
 
-		String setBannerWidth = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.setBannerWidth.path");
-		double dBannerWidth = (bannerStr.getBytes().length + 4) * mojiWidth * 100;
-		long bannerWidth = (long) (dBannerWidth / 2);
-		setBannerWidth = setBannerWidth + " " + bannerWidth;
-		StringBuilder sbCmd = new StringBuilder(setBannerWidth);
 		try {
+			String setBannerWidth = DrasapPropertiesFactory.getFullPath("oce.setBannerWidth.path");
+			double dBannerWidth = (bannerStr.getBytes().length + 4) * mojiWidth * 100;
+			long bannerWidth = (long) (dBannerWidth / 2);
+			setBannerWidth = setBannerWidth + " " + bannerWidth;
+			StringBuilder sbCmd = new StringBuilder(setBannerWidth);
 			process = Runtime.getRuntime().exec(sbCmd.toString());
+
 			br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			int exitCode;
 			exitCode = process.waitFor();
@@ -1173,19 +1119,9 @@ public class PreviewAction extends BaseAction {
 		//		String beaHome = System.getenv("BEA_HOME");
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
 		// 2013.06.14 yamagishi modified. end
-		String tmpStamp = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.tempStamp.path");
-		String mergeText = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.stampMergeTxt");
+		String tmpStamp = DrasapPropertiesFactory.getFullPath("tyk.preview.tempStamp.path");
+		String mergeText = DrasapPropertiesFactory.getFullPath("tyk.preview.stampMergeTxt");
 
 		BufferedWriter writer = null;
 		String outLine = null;
@@ -1273,19 +1209,8 @@ public class PreviewAction extends BaseAction {
 
 	private void createCorrespondingTextMergeText(String correspondingStampStr,
 			String drwgNo, User user, Model errors) throws IOException, InterruptedException {
-
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
-		String template = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.textMergeTemplate");
-		String mergeText = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.textMergeTxt");
+		String template = DrasapPropertiesFactory.getFullPath("tyk.preview.textMergeTemplate");
+		String mergeText = DrasapPropertiesFactory.getFullPath("tyk.preview.textMergeTxt");
 
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
@@ -1378,27 +1303,16 @@ public class PreviewAction extends BaseAction {
 
 	private boolean setCorrespondingBannerWidth(String bannerStr, double mojiWidth, User user, Model errors)
 			throws InterruptedException, IOException {
-
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
-
 		Process process = null;
 		BufferedReader br = null;
 
-		String setCorrespondingBannerWidth = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.setCorrespondingBannerWidth.path");
-		double dCorrespondingBannerWidth = (bannerStr.getBytes().length + 3) * mojiWidth * 100;
-		long correspondingBannerWidth = (long) (dCorrespondingBannerWidth / 2);
-		setCorrespondingBannerWidth = setCorrespondingBannerWidth + " " + correspondingBannerWidth;
-		StringBuilder sbCmd = new StringBuilder(setCorrespondingBannerWidth);
 		try {
+			String setCorrespondingBannerWidth = DrasapPropertiesFactory.getFullPath("oce.setCorrespondingBannerWidth.path");
+			double dCorrespondingBannerWidth = (bannerStr.getBytes().length + 3) * mojiWidth * 100;
+			long correspondingBannerWidth = (long) (dCorrespondingBannerWidth / 2);
+			setCorrespondingBannerWidth = setCorrespondingBannerWidth + " " + correspondingBannerWidth;
+			StringBuilder sbCmd = new StringBuilder(setCorrespondingBannerWidth);
+
 			process = Runtime.getRuntime().exec(sbCmd.toString());
 			br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			int exitCode;
@@ -1460,18 +1374,8 @@ public class PreviewAction extends BaseAction {
 
 	// 2013.09.06 yamagishi add. start
 	private void createCorrespondingStampMergeText(String deep, String x, String y, User user, Model errors) throws IOException {
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
-		String tmpStamp = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.tempStamp.path");
-		String mergeText = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.preview.stampMergeTxt");
+		String tmpStamp = DrasapPropertiesFactory.getFullPath("tyk.preview.tempStamp.path");
+		String mergeText = DrasapPropertiesFactory.getFullPath("tyk.preview.stampMergeTxt");
 
 		BufferedWriter writer = null;
 		String outLine = null;
@@ -1859,22 +1763,9 @@ public class PreviewAction extends BaseAction {
 	 */
 	private void doTiffJoint(String drwgNo, String inPath, ArrayList<String> FileList, String outFile, User user, Model errors) {
 		category.debug("ÇsÇhÇeÇeåãçáèàóùÇÃäJén");
-		//		String outFileName = "";
 
 		// ÉrÉÖÅ[êÍópÇÃÉçÉO
 		try {
-
-			String apServerHome = System.getenv(BEA_HOME);
-			if (apServerHome == null) {
-				apServerHome = System.getenv(CATALINA_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-			}
-
 			// àÍéûäiî[ÉtÉHÉãÉ_ÇçÏê¨å„ÅAåãçáëŒè€ÇÃTiffÇÉRÉsÅ[
 			File f_inPath = new File(inPath);
 			boolean success = f_inPath.mkdir();
@@ -1898,8 +1789,7 @@ public class PreviewAction extends BaseAction {
 			category.debug("tiff_join_file:" + outFile);
 
 			Process process;
-			StringBuilder sbCmd = new StringBuilder(
-					apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.tiffmulti.path"));
+			StringBuilder sbCmd = new StringBuilder(DrasapPropertiesFactory.getFullPath("oce.tiffmulti.path"));
 			sbCmd.append(' ');
 			sbCmd.append(inPath);// TIFFê}ñ äiî[ÉpÉX
 			sbCmd.append(' ');

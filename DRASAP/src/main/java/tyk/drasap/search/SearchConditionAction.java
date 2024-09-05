@@ -1,7 +1,5 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -1022,18 +1020,8 @@ public class SearchConditionAction extends BaseAction {
 			//			if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 			//			if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 			//			screenItemStrList = new CsvItemStrList(beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.csvdef.screenItemStrList.path"));
-			String apServerHome = System.getenv(BEA_HOME);
-			if (apServerHome == null) {
-				apServerHome = System.getenv(CATALINA_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-			}
-			screenItemStrList = new CsvItemStrList(apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.csvdef.screenItemStrList.path"));
 			// 2013.06.14 yamagishi modified. end
+			screenItemStrList = new CsvItemStrList(DrasapPropertiesFactory.getFullPath("tyk.csvdef.screenItemStrList.path"));
 			// 2013.06.27 yamagishi modified. start
 			//			searchConditionForm.setC_label1(screenItemStrList.getLineData(1)== null?"":screenItemStrList.getLineData(1).get(langIdx));
 			//			searchConditionForm.setC_label2(screenItemStrList.getLineData(2)== null?"":screenItemStrList.getLineData(2).get(langIdx));
@@ -1093,18 +1081,8 @@ public class SearchConditionAction extends BaseAction {
 		//		String beaHome = System.getenv("BEA_HOME");
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
 		// 2013.06.14 yamagishi modified. end
-		String infoFileName = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty(key);
+		String infoFileName = DrasapPropertiesFactory.getFullPath(key);
 		try {
 			File infoFile = new File(infoFileName);
 			if (!infoFile.exists()) {

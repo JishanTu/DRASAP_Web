@@ -1,10 +1,5 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -475,18 +470,8 @@ public class SearchResultPreAction extends BaseAction {
 			//			if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 			//			if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 			//			screenItemStrList = new CsvItemStrList(beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.csvdef.screenItemStrList.path"));
-			String apServerHome = System.getenv(BEA_HOME);
-			if (apServerHome == null) {
-				apServerHome = System.getenv(CATALINA_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-			}
-			screenItemStrList = new CsvItemStrList(apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.csvdef.screenItemStrList.path"));
 			// 2013.06.14 yamagishi modified. end
+			screenItemStrList = new CsvItemStrList(DrasapPropertiesFactory.getFullPath("tyk.csvdef.screenItemStrList.path"));
 			// 2013.06.27 yamagishi modified. start
 			//			searchResultForm.setH_label1(screenItemStrList.getLineData(9)==null?"":screenItemStrList.getLineData(9).get(langIdx));
 			//			searchResultForm.setH_label2(screenItemStrList.getLineData(10)==null?"":screenItemStrList.getLineData(10).get(langIdx));

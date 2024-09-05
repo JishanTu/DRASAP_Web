@@ -11,6 +11,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -551,7 +553,9 @@ public class DeleteHostReqAction extends BaseAction {
 	private MoveFilePrp getFilePop(String node) throws InvalidPropertiesFormatException, FileNotFoundException, IOException {
 		MoveFilePrp moveFilePrp = new MoveFilePrp();
 		Properties delhostPop = new Properties();
-		InputStream is = this.getClass().getClassLoader().getResourceAsStream("delHostReq.xml");
+		// ÉtÉ@ÉCÉãÇ©ÇÁInputStreamÇçÏê¨
+		String delHostReqXml = DrasapPropertiesFactory.getFullPath("tyk.xmldef.delHostReq.xml.path");
+		InputStream is = Files.newInputStream(Paths.get(delHostReqXml));
 		if (is == null) {
 			throw new FileNotFoundException("delHostReq.xml");
 		}
