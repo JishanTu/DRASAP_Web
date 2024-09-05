@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
+﻿<%@ page contentType="text/html;rset=UTF-8" %>
 <%@ page import="tyk.drasap.search.*,tyk.drasap.common.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -20,7 +20,12 @@
 	<title>Drawing Search and Print System [図面検索]</title>
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache-Control" content="no-cache" />
-	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
+	<style type="text/css">
+	
+	@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );
+	
+	
+	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
 		function keys(){
@@ -32,13 +37,13 @@
 			}
 		}
 		
-		 function setTableWidth() {
-	            var availWidth = screen.availWidth;
+// 		 function setTableWidth() {
+// 	            var availWidth = screen.availWidth;
 
-	            var table = document.getElementById('footTable');
+// 	            var table = document.getElementById('footTable');
 
-	            table.style.width = availWidth + 'px';
-	        }
+// 	            table.style.width = availWidth + 'px';
+// 	        }
 
 		// 検索結果リスト画面の属性actをセットして、サブミット
 		// 前のXX件、後ろのXX件
@@ -125,7 +130,7 @@
 				document.captureEvents(Event.MOUSEDOWN);
 			}
 			// 右クリック禁止
-			setTableWidth();
+			//setTableWidth();
 			document.onmousedown = disableContextMenu;
 			document.oncontextmenu = disableOnContextMenu;
 		}
@@ -163,7 +168,7 @@
 </head>
 <%-- 2013.07.16 yamagishi modified.
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0"> --%>
-<body style="bacground-color: #CCCCCC; margin: 0;overflow-y: hidden;padding-bottom:20px;" onload="onLoad()" >
+<body style="bacground-color: #CCCCCC; margin: 0;" onload="onLoad()" >
 <form action="<%=request.getContextPath() %>/result" method = "post">
 <c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>
 <c:set var="resultList" value="${sessionScope.searchResultForm.searchResultList}"/>
@@ -181,7 +186,7 @@
 <c:set var="cntEnd" value="${ fn:length(resultList)}"/>
 </c:otherwise>
 </c:choose>
-<table border="0" cellspacing="0" cellpadding="0" id = "footTable">
+<table border="0" cellspacing="0"  cellpadding="0" style = "width:100%;">
 	<tr>
 		<td>&nbsp;&nbsp;</td>
 		<td valign="top">
