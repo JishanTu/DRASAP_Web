@@ -66,6 +66,7 @@ public class Request_listAction extends BaseAction {
 			//‰Šúƒf[ƒ^‚ğæ“¾‚·‚é
 			request_listForm.iraiList = getData_Search(request_listForm, iraiList, user, classId);
 			setSelectList(request_listForm);
+			session.setAttribute("request_listForm", request_listForm);
 
 		} else if ("button_update".equals(request_listForm.action)) {
 			//Š®—¹î•ñ“o˜^‚ğ‚·‚é
@@ -191,6 +192,7 @@ public class Request_listAction extends BaseAction {
 						category.debug("ˆË—Š“o˜^‚ğ‚µ‚Ü‚µ‚½");
 						request_listForm.listErrors.add(MessageManager.getInstance().getMessage("msg.irai.touroku"));
 					}
+					session.setAttribute("request_listForm", request_listForm);
 				} else if (conn != null) {
 					category.debug("ƒ[ƒ‹ƒoƒbƒN");
 					request_listForm.listErrors.add(MessageManager.getInstance().getMessage("msg.irai.touroku.error"));
@@ -226,6 +228,7 @@ public class Request_listAction extends BaseAction {
 			setSelectList(request_listForm);
 			request_listForm.iraiList = new ArrayList<>();
 			request_listForm.iraiList = getData_Search(request_listForm, iraiList, user, classId);
+			session.setAttribute("request_listForm", request_listForm);
 		}
 
 		errors.addAttribute("request_listForm", request_listForm);

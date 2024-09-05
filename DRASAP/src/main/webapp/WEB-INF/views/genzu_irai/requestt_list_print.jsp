@@ -24,12 +24,12 @@
 <br />
 <font color="red" size="4" >
 	<c:forEach var="error" items="${request_listForm.listErrors}">
-       <li><c:out value="${error}" /></li>
-    </c:forEach>
+		<li><c:out value="${error}" /></li>
+	</c:forEach>
 </font>
 <div style="text-align: center;">
-    <span class="normal12">図面登録依頼リスト</span>
-    <span class="normal10">&nbsp;&nbsp;${request_listForm.time}</span>
+	<span class="normal12">図面登録依頼リスト</span>
+	<span class="normal10">&nbsp;&nbsp;${request_listForm.time}</span>
 </div>
 <table border="0" align="center">
 	<tr bgcolor="#CCCCCC">
@@ -44,33 +44,33 @@
 		<td align="left"><span class="normal10">部署名</span></td>
 	</tr>
 	<c:forEach var="item" items="${request_listForm.printList}">
-	<c:set var="e" value="${item}"/>
-	<c:set var="job_id" value="${e.job_id}"/>
-	<c:set var="job_name" value="${e.job_Name}"/>
-	<c:set var="bangou" value="${e.number}"/>
-	<c:if test="${empty bangou}">
-	   <c:set var="bangou" value=""/>
-    </c:if>
-    <c:set var="gouki" value="${e.gouki}"/>
-    <c:if test="${empty gouki}">
-	   <c:set var="gouki" value=""/>
-    </c:if>
-    <c:set var="genzu" value="${e.genzu}"/>
-    <c:if test="${empty genzu}">
-	   <c:set var="genzu" value=""/>
-    </c:if>
-    <c:set var="irai" value="${e.irai}"/>
-    <c:set var="busyo" value="${e.busyo}"/>
-	
-	<tr>
-		<td align="center"><span class="normal10">&nbsp;${job_id}&nbsp;</span></td>
-        <td align="center"><span class="normal10">&nbsp;${job_name}&nbsp;</span></td>
-        <td align="center"><span class="normal10">&nbsp;${bangou}&nbsp;</span></td>
-        <!-- <td align="center"><span class="normal10">&nbsp;${gouki}&nbsp;</span></td>
-        <td align="center"><span class="normal10">&nbsp;${genzu}&nbsp;</span></td> -->
-        <td align="center"><span class="normal10">&nbsp;${irai}&nbsp;</span></td>
-        <td align="left"><span class="normal10">&nbsp;${busyo}&nbsp;</span></td>
-	</tr>
+		<c:set var="e" value="${item}"/>
+		<c:set var="job_id" value="${e.job_id}"/>
+		<c:set var="job_name" value="${e.job_Name}"/>
+		<c:set var="bangou" value="${e.number}"/>
+		<c:if test="${empty bangou}">
+			<c:set var="bangou" value=""/>
+		</c:if>
+		<c:set var="gouki" value="${e.gouki}"/>
+		<c:if test="${empty gouki}">
+			<c:set var="gouki" value=""/>
+		</c:if>
+		<c:set var="genzu" value="${e.genzu}"/>
+		<c:if test="${empty genzu}">
+			<c:set var="genzu" value=""/>
+		</c:if>
+		<c:set var="irai" value="${e.irai}"/>
+		<c:set var="busyo" value="${e.busyo}"/>
+		
+		<tr>
+			<td align="center"><span class="normal10">&nbsp;${job_id}&nbsp;</span></td>
+			<td align="center"><span class="normal10">&nbsp;${job_name}&nbsp;</span></td>
+			<td align="center"><span class="normal10">&nbsp;${bangou}&nbsp;</span></td>
+			<!-- <td align="center"><span class="normal10">&nbsp;${gouki}&nbsp;</span></td>
+			<td align="center"><span class="normal10">&nbsp;${genzu}&nbsp;</span></td> -->
+			<td align="center"><span class="normal10">&nbsp;${irai}&nbsp;</span></td>
+			<td align="left"><span class="normal10">&nbsp;${busyo}&nbsp;</span></td>
+		</tr>
 	</c:forEach>
 </table>
 </body>

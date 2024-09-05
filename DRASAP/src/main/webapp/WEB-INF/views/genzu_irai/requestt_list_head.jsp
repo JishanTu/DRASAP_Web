@@ -75,8 +75,10 @@
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>
 			<table border="0" bgcolor="#EEEEEE" align="left">
-				<tr><td><span class="normal10">処理が済んだらチェックを入力して下さい。<br />
-					その後に更新するために「更新」をクリックして下さい。</span></td></tr>
+				<tr>
+					<td><span class="normal10">処理が済んだらチェックを入力して下さい。<br />
+					その後に更新するために「更新」をクリックして下さい。</span></td>
+				</tr>
 			</table>
 		</td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
