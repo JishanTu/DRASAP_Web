@@ -30,9 +30,12 @@
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>
 			<table border="0" bgcolor="#EEEEEE" align="left">
-				<tr><td nowrap="nowrap"><span class="normal10">完了した依頼が、過去10日分表示されています。<br />
-					表示は完了日時の降順です。</span></td></tr>
-			</table></td>
+				<tr>
+					<td nowrap="nowrap"><span class="normal10">完了した依頼が、過去10日分表示されています。<br />
+					表示は完了日時の降順です。</span></td>
+				</tr>
+			</table>
+		</td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td width="100%" valign="bottom">
 			<input type="button" value="Close"  onclick="parent.window.close()" /></td>
