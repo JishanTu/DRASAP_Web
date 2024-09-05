@@ -24,8 +24,8 @@
 	@import url( <%=request.getContextPath()%>/resources/css/default.css );
 	
 	td {
-	white-space: nowrap;
-     }
+		white-space: nowrap;
+	}
 	</style>
 	<script type="text/javascript">
 		browserName = navigator.appName;
@@ -226,13 +226,13 @@
 		function help(){
 			var targetName = '_help';//別の画面を開く
 			var WO1;
-			
+
 			var w = window.outerWidth - 20;
 			var h = window.outerHeight - 72;
-			
+
 			var screenWidth = window.screen.availWidth;
 			var screenHeight = window.screen.availHeight;
-			
+
 			var left = (screenWidth - w) / 2;
 			var top = (screenHeight - h) / 2;
 
@@ -257,9 +257,7 @@
 	</font>
 	<hr color="sandybrown">
 </c:if>
-<body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0"
-	rightmargin="0" marginheight="0" marginwidth="0"
-	onload="actionOnSelectIrai()">
+<body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0" onload="actionOnSelectIrai()">
 	<form action="<%=request.getContextPath()%>/req" method="post">
 		<input type="hidden" name="action" />
 		<input type="hidden" name="gouki1" />
@@ -296,22 +294,19 @@
 						<tr>
 							<td bgcolor="#EEEEEE"><span class="normal18">図面登録依頼</span></td>
 							<!--======================= 職番などの表示 =======================-->
-							<td><table border="1">
+							<td>
+								<table border="1">
 									<tr>
-										<td><span class="normal12">職番：<c:out
-													value="${user.id}" /></span></td>
-										<td><span class="normal12">氏名：<c:out
-													value="${user.name}" /></span></td>
-										<td><span class="normal12">部署名(店名)：<c:out
-													value="${user.deptName}" /></span></td>
+										<td><span class="normal12">職番：<c:out value="${user.id}" /></span></td>
+										<td><span class="normal12">氏名：<c:out value="${user.name}" /></span></td>
+										<td><span class="normal12">部署名(店名)：<c:out value="${user.deptName}" /></span></td>
 									</tr>
-								</table></td>
+								</table>
+							</td>
 						</tr>
 					</table>
 				</td>
-				<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;<a
-					href="javascript:help()"><span class="normal10blue">HELP</span></a>&nbsp;&nbsp;&nbsp;&nbsp;
-				</td>
+				<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:help()"><span class="normal10blue">HELP</span></a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			</tr>
 		</table>
 		<!--======================= 依頼内容の入力エリア =======================-->
@@ -343,7 +338,8 @@
 			</tr>
 			<!--======================= 依頼の詳細 =======================-->
 			<tr>
-				<td><table border="0">
+				<td>
+					<table border="0">
 						<tr>
 							<td align="center"><span class="normal10">No</span></td>
 							<%-- // 2019.10.23 yamamoto modified. start
@@ -359,9 +355,7 @@
 						</tr>
 						<!--	No1の行  -->
 						<tr>
-
-							<td><input type="hidden" name="hiddenNo1" /> <span
-								class="normal10">1</span></td>
+							<td><input type="hidden" name="hiddenNo1" /> <span class="normal10">1</span></td>
 							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki1" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
@@ -370,11 +364,9 @@
 			     	</form:select>
 			    </td>
 --%>
-							<td><input type="text" name="kaisiNo1" maxlength="20"
-								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo1}" /></td>
+							<td><input type="text" name="kaisiNo1" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo1}" /></td>
 							<td><span class="normal10">～</span></td>
-							<td><input type="text" name="syuuryouNo1" maxlength="20"
-								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo1}" /></td>
+							<td><input type="text" name="syuuryouNo1" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo1}" /></td>
 
 							<%--
 				<td><html:text name="requestForm" property="busuu1" size="2"
@@ -394,8 +386,7 @@
 						</tr>
 						<!--	No2の行  -->
 						<tr>
-							<td><input type="hidden" name="hiddenNo2" /> <span
-								class="normal10">2</span></td>
+							<td><input type="hidden" name="hiddenNo2" /> <span class="normal10">2</span></td>
 							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki2" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
@@ -404,11 +395,9 @@
 			     	</form:select>
 			     </td>
 --%>
-							<td><input type="text" name="kaisiNo2" maxlength="20"
-								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo2}"/></td>
+							<td><input type="text" name="kaisiNo2" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo2}"/></td>
 							<td><span class="normal10">～</span></td>
-							<td><input type="text" name="syuuryouNo2" maxlength="20"
-								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo2}"/></td>
+							<td><input type="text" name="syuuryouNo2" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo2}"/></td>
 
 							<%--
 				<td><html:text name="requestForm" property="busuu2" size="2"
@@ -427,8 +416,7 @@
 						</tr>
 						<!--	No3の行  -->
 						<tr>
-							<td><input type="hidden" name="hiddenNo3" /> <span
-								class="normal10">3</span></td>
+							<td><input type="hidden" name="hiddenNo3" /> <span class="normal10">3</span></td>
 							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki3" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
@@ -437,11 +425,9 @@
 			     	</form:select>
 			    </td>
 --%>
-							<td><input type="text" name="kaisiNo3" maxlength="20"
-								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo3}"/></td>
+							<td><input type="text" name="kaisiNo3" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo3}"/></td>
 							<td><span class="normal10">～</span></td>
-							<td><input type="text" name="syuuryouNo3" maxlength="20"
-								style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo3}"/></td>
+							<td><input type="text" name="syuuryouNo3" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo3}"/></td>
 
 							<%--
 				<td><html:text name="requestForm" property="busuu3" size="2"
@@ -460,8 +446,7 @@
 						</tr>
 						<!--	No4の行  -->
 						<tr>
-							<td><input type="hidden" name="hiddenNo4" /> <span
-								class="normal10">4</span></td>
+							<td><input type="hidden" name="hiddenNo4" /> <span class="normal10">4</span></td>
 							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki4" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
@@ -470,11 +455,9 @@
 			     	</form:select>
 			     </td>
 --%>
-							<td><input type="text" name="kaisiNo4" maxlength="20"
-								style="ime-mode: disabled" class="normal12"  value="${sessionScope.requestForm.kaisiNo4}"/></td>
+							<td><input type="text" name="kaisiNo4" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo4}"/></td>
 							<td><span class="normal10">～</span></td>
-							<td><input type="text" name="syuuryouNo4" maxlength="20"
-								style="ime-mode: disabled" class="normal12"  value="${sessionScope.requestForm.syuuryouNo4}"/></td>
+							<td><input type="text" name="syuuryouNo4" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.syuuryouNo4}"/></td>
 
 							<%--
 				<td><html:text name="requestForm" property="busuu4" size="2"
@@ -493,8 +476,7 @@
 						</tr>
 						<!--	No5の行  -->
 						<tr>
-							<td><input type="hidden" name="hiddenNo4" /> <span
-								class="normal10">5</span></td>
+							<td><input type="hidden" name="hiddenNo4" /> <span class="normal10">5</span></td>
 							<%-- // 2019.10.23 yamamoto modified. start
 				<td><html:text name="requestForm" property="gouki5" maxlength="8" style="ime-mode:disabled" styleClass="normal12"/></td>
 				<td>
@@ -503,11 +485,9 @@
 			     	</form:select>
 			    </td>
 --%>
-							<td><input type="text" name="kaisiNo5" maxlength="20"
-								style="ime-mode: disabled" class="normal12"  value="${sessionScope.requestForm.kaisiNo5}"/></td>
+							<td><input type="text" name="kaisiNo5" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo5}"/></td>
 							<td><span class="normal10">～</span></td>
-							<td><input type="text" name="syuuryouNo5" maxlength="20"
-								style="ime-mode: disabled" class="normal12"  value="${sessionScope.requestForm.kaisiNo5}"/></td>
+							<td><input type="text" name="syuuryouNo5" maxlength="20" style="ime-mode: disabled" class="normal12" value="${sessionScope.requestForm.kaisiNo5}"/></td>
 
 							<%--
 				<td><html:text name="requestForm" property="busuu5" size="2"
@@ -524,21 +504,19 @@
 			     </td>
 // 2019.10.23 yamamoto modified. end --%>
 						</tr>
-					</table></td>
+					</table>
+				</td>
 			</tr>
 			<!--======================= 依頼ボタン =======================-->
 			<tr>
 				<td>
 					<table border="0" align="center">
 						<tr>
-							<td><input type="submit" value="依　頼" onclick="doIrai()"
-								style="font-size: 12px;" /></td>
+							<td><input type="submit" value="依　頼" onclick="doIrai()" style="font-size: 12px;" /></td>
 						</tr>
 					</table>
-
 				</td>
-				<td><input type="button" value="Close" style="font-size: 12px;"
-					onclick="window.close()" /></td>
+				<td><input type="button" value="Close" style="font-size: 12px;" onclick="window.close()" /></td>
 			</tr>
 		</table>
 		<!--======================= 操作説明 =======================-->
@@ -550,8 +528,8 @@
 						なお、大きいサイズで印刷したいなど、印刷ができない場合は原図庫へTEL/FAXにて依頼してください。<br /> <br />
 						※番号の範囲指定について<br /> 範囲指定するには１１桁の図番の先頭９桁が同じである必要があります。<br />
 						（ハイフンは含みません）<br /> １２ケタの図番について範囲指定をする事はできません。<br /> <br />
-						★この画面に関する詳細は右上にある「HELP」を参照ください。<br />
-				</span></td>
+						★この画面に関する詳細は右上にある「HELP」を参照ください。<br /></span>
+				</td>
 			</tr>
 		</table>
 	</form>

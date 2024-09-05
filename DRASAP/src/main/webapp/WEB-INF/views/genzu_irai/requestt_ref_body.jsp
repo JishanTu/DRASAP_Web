@@ -42,8 +42,7 @@
 		//-->
 	</script>
 </head>
-<body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0"
-	rightmargin="0" marginheight="0" marginwidth="0">
+<body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
 <form action="<%=request.getContextPath()%>/req_ref" method="post">
 	<input type="hidden" name="action" /> <input type="hidden" name="job" />
 	<font color="red" size="4">

@@ -80,7 +80,6 @@
 				<c:when test="${exist eq '0'}">
 					<c:set var="gensi" value="1" />
 				</c:when>
-
 			</c:choose>
 
 
