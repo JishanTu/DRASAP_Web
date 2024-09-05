@@ -23,13 +23,13 @@
 	
 	td {
 	white-space: nowrap;
-     }
-     
-     
+	}
+
+
 	</style>
 </head>
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0"
-	  rightmargin="0" marginheight="0" marginwidth="0">
+	rightmargin="0" marginheight="0" marginwidth="0">
 <!--================== ヘッダ =======================-->
 <table border="0" cellspacing="0" cellpadding="0">
 	<tr>
