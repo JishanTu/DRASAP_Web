@@ -1,7 +1,5 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,18 +26,8 @@ public class SearchUtil {
 			//			if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 			//			if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 			//			searchItemStrList = new CsvItemStrList(beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.csvdef.searchItemStrList.path"));
-			String apServerHome = System.getenv(BEA_HOME);
-			if (apServerHome == null) {
-				apServerHome = System.getenv(CATALINA_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-			}
-			if (apServerHome == null) {
-				apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-			}
-			searchItemStrList = new CsvItemStrList(apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.csvdef.searchItemStrList.path"));
 			// 2013.06.14 yamagishi modified. end
+			searchItemStrList = new CsvItemStrList(DrasapPropertiesFactory.getFullPath("tyk.csvdef.searchItemStrList.path"));
 		} catch (FileNotFoundException e) {
 			return;
 		} catch (IOException e) {

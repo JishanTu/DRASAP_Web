@@ -1,10 +1,5 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -198,18 +193,8 @@ public class DeleteDwgAction extends BaseAction {
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 		//    	String backupPathBase = beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.delDwg.Backup.path");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
-		String backupPathBase = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.delDwg.Backup.path");
 		// 2013.06.13 yamagishi modified. end
+		String backupPathBase = DrasapPropertiesFactory.getFullPath("tyk.delDwg.Backup.path");
 		File DWG_Backup = new File(backupPathBase);
 		if (!DWG_Backup.exists()) {
 			// ï€ä«óÃàÊÇ™Ç»Ç¢
@@ -366,18 +351,8 @@ public class DeleteDwgAction extends BaseAction {
 		//		String beaHome = System.getenv("BEA_HOME");
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
 		// 2013.06.13 yamagishi modified. end
-		String backupPathBase = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.delDwg.Backup.path");
+		String backupPathBase = DrasapPropertiesFactory.getFullPath("tyk.delDwg.Backup.path");
 
 		// îOÇÃÇΩÇﬂå≥ÇÃå¥ê}Ç™Ç†ÇÈÇ©ämîFÇ∑ÇÈ '04.Mar.2 Hirata
 		File moveFile = new File(delFileName);

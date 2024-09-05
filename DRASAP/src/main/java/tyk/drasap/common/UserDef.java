@@ -1,7 +1,5 @@
 package tyk.drasap.common;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,24 +55,13 @@ public class UserDef {
 	 * @return
 	 */
 	public String loadMessage(String Filepath, Charset charSet) {
-
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
-
 		String str = "";
 		List<String> lines = null;
 		Path path = null;
 		StringBuilder sb = null;
 
 		try {
+			String apServerHome = DrasapPropertiesFactory.getFullPath("");
 			path = Paths.get(apServerHome + Filepath);
 			lines = Files.readAllLines(path, charSet);
 
@@ -108,20 +95,7 @@ public class UserDef {
 	 */
 	public HashMap<String, String> getPasswdDefinition(Model errors) throws FileNotFoundException, IOException {
 		MessageSource messageSource = MessageSourceUtil.getMessageSource();
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
-
-		String passwdDefFile = apServerHome
-				+ DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.passwddef.passwd.path");
-
+		String passwdDefFile = DrasapPropertiesFactory.getFullPath("tyk.passwddef.passwd.path");
 		int pwdMinLen = DEFALUT_PWD_MIN_LEN; // パスワード最小桁数
 		String pwdValRole = DEFALUT_PWD_VAL_ROLE; // パスワード組合せ制約
 		int pwdLmtDay = DEFALUT_PWD_LMT_DAY; // パスワード有効期限日数
