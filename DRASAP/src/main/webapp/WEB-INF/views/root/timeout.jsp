@@ -133,11 +133,11 @@
 		top.resizeTo(w, h);
 		top.moveTo(xPos,yPos);//画面の位置指定
 	}
-</script>
+	</script>
 </head>
 <body>
 <%		CookieManage langCookie = new CookieManage(); %>
-<%      String lanKey = langCookie.getCookie (request, null, "Language"); %>
+<%		String lanKey = langCookie.getCookie (request, null, "Language"); %>
 <%		if (lanKey.equals("English")) { %>
 	Invalid Login. Please try again.<br />
 	The followings are considered.<br />
