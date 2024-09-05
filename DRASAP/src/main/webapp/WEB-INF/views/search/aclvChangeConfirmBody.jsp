@@ -37,15 +37,15 @@
 	</tr>
 	<!-- 変更対象を表示する部分 -->
 	<c:forEach var="aclvChangeElement" items="${aclvChangeForm.aclvChangeList}">
-    <c:if test="${aclvChangeElement.selected and aclvChangeElement.modified}">
-        <tr>
-            <td><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
-            <td align="center"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
-            <td align="center"><span class="normal12">${aclvChangeElement.newAclId}</span></td>
-            <td align="center"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
-            <td align="center"><span class="normal12">${aclvChangeElement.newProhibit eq 'NG' ? '×' : '○'}</span></td>
-        </tr>
-    </c:if>
+	<c:if test="${aclvChangeElement.selected and aclvChangeElement.modified}">
+		<tr>
+			<td><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
+			<td align="center"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
+			<td align="center"><span class="normal12">${aclvChangeElement.newAclId}</span></td>
+			<td align="center"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
+			<td align="center"><span class="normal12">${aclvChangeElement.newProhibit eq 'NG' ? '×' : '○'}</span></td>
+		</tr>
+	</c:if>
 </c:forEach>
 </table>
 </body>

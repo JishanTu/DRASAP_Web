@@ -22,17 +22,17 @@
 	<style type="text/css">@import url( <%=request.getContextPath() %>/resources/css/<%=session.getAttribute("default_css")%> );</style>
 	<style type="text/css">
 		.management {
-		    position: absolute;
-		    top:0px;
-		    right:0px;
-		    margin-right:10px;
+			position: absolute;
+			top:0px;
+			right:0px;
+			margin-right:10px;
 		}
 		 .file-input-container input[type="file"] {
-            display: none;
-        }
-         .file-input-container input[type="text"] {
-            width: 600px;
-        }
+			display: none;
+		}
+		.file-input-container input[type="text"] {
+			width: 600px;
+		}
 	</style>
 	<script type="text/javascript">
 		document.onkeydown = keys;
@@ -118,7 +118,7 @@
 		}
 		
 		function upload() {
-			    document.getElementById('fileUpload').click();
+			document.getElementById('fileUpload').click();
 		}
 		// ダウンロード
 		function doDownload() {
@@ -131,8 +131,8 @@
 </head>
 <body bgcolor="#CCCCCC" style="margin: 0;">
 <form action="<%=request.getContextPath() %>/accessLevelBatchUpdate" enctype = "multipart/form-data" method = "post">
-    <input type = "hidden" name = "act" value = ""/>
-    <input type = "hidden" name = "aclUpdateNo" value = "${accessLevelBatchUpdateForm.aclUpdateNo}"/>
+	<input type = "hidden" name = "act" value = ""/>
+	<input type = "hidden" name = "aclUpdateNo" value = "${accessLevelBatchUpdateForm.aclUpdateNo}"/>
 	<input type="hidden" name="dlFileType" value = ""/>
 <!--================ ヘッダ ==================================-->
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
@@ -152,9 +152,9 @@
 						<input type="text" id="filePath" readonly placeholder="ファイルを選択されていません">
 						<input type="file" id="fileUpload" name="uploadFile">
 						<input type="button" value="参照" onclick="upload()" />
-        				
-        				</div>
-        				
+
+					</div>
+
 					</td>
 					<td>
 						&nbsp;<input type="button" value="アップロード" onclick="doUpload();lockButtons();" style="width: 100px;" />
@@ -175,8 +175,8 @@
 		</td>
 		<td width="25%">
 			<span style="background-color: #EEEEEE;" class="normal12">管理NO</span>&nbsp;<c:out value="${accessLevelBatchUpdateForm.aclUpdateNo}" />&nbsp;&nbsp;
-            <span style="background-color: #EEEEEE;" class="normal12">品番数</span>&nbsp;<c:out value="${accessLevelBatchUpdateForm.itemNoCount}" />&nbsp;
-        </td>
+			<span style="background-color: #EEEEEE;" class="normal12">品番数</span>&nbsp;<c:out value="${accessLevelBatchUpdateForm.itemNoCount}" />&nbsp;
+		</td>
 		<td width="10%" align="right">
 				<table border="0">
 					<tr>
@@ -190,19 +190,19 @@
 </form>
 <script>
 
-        document.getElementById('fileUpload').addEventListener('change', function() {
-            var fileInput = this;
-            var filePathInput = document.getElementById('filePath');
+		document.getElementById('fileUpload').addEventListener('change', function() {
+			var fileInput = this;
+			var filePathInput = document.getElementById('filePath');
 
-            // Display file name in the input box
-            if (fileInput.files.length > 0) {
-                filePathInput.value = fileInput.files[0].name;
-            } else {
-                filePathInput.value = 'ファイルを選択されていません';
-            }
-        });
-        
-       
-    </script>
+			// Display file name in the input box
+			if (fileInput.files.length > 0) {
+				filePathInput.value = fileInput.files[0].name;
+			} else {
+				filePathInput.value = 'ファイルを選択されていません';
+			}
+		});
+
+
+	</script>
 </body>
 </html>

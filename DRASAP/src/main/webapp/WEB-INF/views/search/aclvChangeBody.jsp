@@ -26,7 +26,7 @@
 <!-- メッセージの表示部分 -->
 <font color="red" size="3"><ul>
 <c:forEach var="errorMessage" items="${aclvChangeForm.errorMessages}">
-    <li><c:out value="${errorMessage}" /></li>
+	<li><c:out value="${errorMessage}" /></li>
 </c:forEach>
 
 </ul></font>
@@ -49,36 +49,36 @@
 	<tr>
 		<td><input type="checkbox" name="aclvChangeElement[${loop.index}].selected" value="true" 
 			<c:if test="${aclvChangeElement.selected}">checked="checked"</c:if> /></td>
-        <td><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
-        <td align="center"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
-        <td align="center">
-        	<select name="aclvChangeElement[${loop.index}].newAclId" style="font-size:12pt">
-        		<c:forEach var="aclvNameElement" items="${sessionScope.aclvChangeForm.aclvNameList}">
-        			<option value="${aclvNameElement}" <c:if test="${aclvNameElement == aclvChangeElement.oldAclId}">selected</c:if>>${aclvNameElement}</option>
-        		</c:forEach>
-        	</select>
-        </td>
-        <td align="center"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
-        <td align="center">
-        	<select name="aclvChangeElement[${loop.index}].newProhibit" style="font-size:12pt">
+		<td><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
+		<td align="center"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
+		<td align="center">
+			<select name="aclvChangeElement[${loop.index}].newAclId" style="font-size:12pt">
+				<c:forEach var="aclvNameElement" items="${sessionScope.aclvChangeForm.aclvNameList}">
+					<option value="${aclvNameElement}" <c:if test="${aclvNameElement == aclvChangeElement.oldAclId}">selected</c:if>>${aclvNameElement}</option>
+				</c:forEach>
+			</select>
+		</td>
+		<td align="center"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
+		<td align="center">
+			<select name="aclvChangeElement[${loop.index}].newProhibit" style="font-size:12pt">
 				<option value="OK">○</option>
 				<option value="NG">×</option>
 			</select>
-        </td>
+		</td>
 	</tr>
 </c:forEach>
 
 </table>
 <c:if test="${not empty aclvChangeForm.aclvNotChangeList}">
-    <hr width="80%" color="#FF3333" />
-    <center>
-        <span class="normal10red">以下の図番には、変更権限が付与されていませんので、対象外となります。</span>
-        <ul>
-            <c:forEach var="notChangedDrwgNo" items="${aclvChangeForm.aclvNotChangeList}">
-                <li><c:out value="${notChangedDrwgNo}" /></li>
-            </c:forEach>
-        </ul>
-    </center>
+	<hr width="80%" color="#FF3333" />
+	<center>
+		<span class="normal10red">以下の図番には、変更権限が付与されていませんので、対象外となります。</span>
+		<ul>
+			<c:forEach var="notChangedDrwgNo" items="${aclvChangeForm.aclvNotChangeList}">
+				<li><c:out value="${notChangedDrwgNo}" /></li>
+			</c:forEach>
+		</ul>
+	</center>
 </c:if>
 </form>
 </body>

@@ -49,10 +49,10 @@ ul {
 	font size: 3;
 }
 li {
-     white-space: nowrap;
+	white-space: nowrap;
 }
 .container {
-    white-space: nowrap;
+	white-space: nowrap;
 }
 </style>
 <script type="text/javascript">
@@ -64,15 +64,11 @@ li {
 	</script>
 </head>
 <body>
-<div class="container">
-	<img
-		src="<%=request.getContextPath()%>/resources/img/DRASAPBanner.JPG"
-		width="333" height="70" />
-	<img
-		src="<%=request.getContextPath()%>/resources/img/CONFIDENTIALBanner.JPG"
-		width="167" height="70" />
-	<br />
-</div>
+	<div class="container">
+		<img src="<%=request.getContextPath()%>/resources/img/DRASAPBanner.JPG" width="333" height="70" />
+		<img src="<%=request.getContextPath()%>/resources/img/CONFIDENTIALBanner.JPG" width="167" height="70" />
+		<br />
+	</div>
 	<ul>
 		<%-- ログイン画面から遷移した場合--%>
 		<c:if test="${sessionScope.parentPage == 'Login'}">
@@ -100,31 +96,29 @@ li {
 		}
 		%>
 	</ul>
-	<form action="<%=request.getContextPath()%>/changePasswd"
-		method="post" target="_chgPass">
+	<form action="<%=request.getContextPath()%>/changePasswd" method="post" target="_chgPass">
 		<table>
 			<tr>
 				<td><label for="name">ユーザーＩＤ<br /></label> <label for="name">User
-						ID</label> <br />
-				<br /></td>
-				<td>${sessionScope.user.id} <br />
-				<br />
+						ID</label> <br /><br />
+				</td>
+				<td>${sessionScope.user.id} <br /><br />
 				</td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>
-					<label for="oldpass">現在のパスワード<br /></label> 
+					<label for="oldpass">現在のパスワード<br /></label>
 					<label for="oldpass">Current Password</label> <br /><br />
 				</td>
 				<td>
-					<input type="password" name="oldpass" maxlength="20"style="width: 180px;" tabindex="1" /> 
+					<input type="password" name="oldpass" maxlength="20"style="width: 180px;" tabindex="1" />
 					<%-- <html:password property="oldpass" maxlength="20" style="width:180px;" tabindex="1" /> --%>
 					<br /><br />
 				</td>
 				<td rowspan="3" class="errMsg">
-					<!-- エラーの表示 --> 
-					<font color="RED"> 
+					<!-- エラーの表示 -->
+					<font color="RED">
 						<b>
 							<ul>
 								<c:forEach var="entry" items="${pageContext.request.attributeNames}">
@@ -146,7 +140,7 @@ li {
 					<label for="newpass">New Password</label> <br /> <br />
 				</td>
 				<td>
-					<input type="password" name="newpass" maxlength="20" style="width: 180px;" tabindex="2" 
+					<input type="password" name="newpass" maxlength="20" style="width: 180px;" tabindex="2"
 					title="入力可能文字は半角英数記号のみです&#10;Only single-byte alphanumeric characters can be entered" />
 					<%
 					// <html:password property="newpass" size="32" maxlength="32" tabindex="2" />
@@ -160,7 +154,7 @@ li {
 					<label for="newPassConfirm">Re-enter New Password</label> <br /> <br />
 				</td>
 				<td>
-					<input type="password" name="newPassConfirm" maxlength="20" style="width: 180px;" tabindex="3" /> 
+					<input type="password" name="newPassConfirm" maxlength="20" style="width: 180px;" tabindex="3" />
 					<%// <html:password property="newPassConfirm" size="32" maxlength="32" tabindex="3" />%> <br /><br />
 				</td>
 				<td></td>

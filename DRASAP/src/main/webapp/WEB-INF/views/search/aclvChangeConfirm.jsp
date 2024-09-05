@@ -19,7 +19,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<title>Drawing Search and Print System [アクセスレベル変更前確認]</title>
 </head>
-	<frameset rows="75,*,30" framespacing="0" border="0">
+	<frameset rows="105,*,30" framespacing="0" border="0">
 		<frame name="aclv_changeConfirm_head" src="switch.do?page=/search/aclvChangeConfirmHead.jsp" />
 		<frame name="aclv_changeConfirm_body" src="switch.do?page=/search/aclvChangeConfirmBody.jsp" />
 		<frame name="aclv_changeConfirm_foot" src="switch.do?page=/search/aclvChangeConfirmFoot.jsp" />

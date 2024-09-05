@@ -44,8 +44,7 @@
 		}
 	</script>
 </head>
-<body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0"
-	rightmargin="0" marginheight="0" marginwidth="0">
+<body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
 	<!--===================== ヘッダ =====================-->
 	<table border="0" cellspacing="0" cellpadding="0" width="100%">
 		<tr>
@@ -73,26 +72,26 @@
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<!--===================== 表示内容の変更 =====================-->
-			<td><table border="1">
+			<td>
+				<table border="1">
 					<tr>
-						<td><span class="normal10">職番：<c:out
-									value="${user.id}" /></span></td>
-						<td><span class="normal10">氏名：<c:out
-									value="${user.name}" /></span></td>
-						<td><span class="normal10">部署名(店名)：<c:out
-									value="${user.dept}" /></span></td>
+						<td><span class="normal10">職番：<c:out value="${user.id}" /></span></td>
+						<td><span class="normal10">氏名：<c:out value="${user.name}" /></span></td>
+						<td><span class="normal10">部署名(店名)：<c:out value="${user.dept}" /></span></td>
 					</tr>
-				</table></td>
+				</table>
+			</td>
 			<!--===================== 表示内容の変更 =====================-->
-			<td><span class="normal10"> &nbsp;&nbsp;&nbsp;&nbsp; <c:set
-						var="disabledString" value="" /> <c:if
-						test="${empty aclvChangeForm.aclvChangeList}">
+			<td>
+				<span class="normal10"> &nbsp;&nbsp;&nbsp;&nbsp;
+					<c:set var="disabledString" value="" />
+					<c:if test="${empty aclvChangeForm.aclvChangeList}">
 						<c:set var="disabledString" value="disabled='disabled'" />
-					</c:if> <input type="button" value="全てチェック"
-					onclick="setActSubmit('CHECK_ON')" ${disabledString} /> <input
-					type="button" value="全て外す" onclick="setActSubmit('CHECK_OFF')"
-					${disabledString} />
-			</span></td>
+					</c:if>
+					<input type="button" value="全てチェック" onclick="setActSubmit('CHECK_ON')" ${disabledString} />
+					<input type="button" value="全て外す" onclick="setActSubmit('CHECK_OFF')"${disabledString} />
+				</span>
+			</td>
 
 		</tr>
 	</table>

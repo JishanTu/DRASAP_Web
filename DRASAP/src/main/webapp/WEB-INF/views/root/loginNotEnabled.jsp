@@ -11,7 +11,7 @@
 </head>
 <body bgcolor="#FF9966"><font color="#FFFF00" style="font-family: 'ＭＳ Ｐゴシック','ＭＳ ゴシック';">
 <%		CookieManage langCookie = new CookieManage(); %>
-<%      String lanKey = langCookie.getCookie (request, null, "Language"); %>
+<%		String lanKey = langCookie.getCookie (request, null, "Language"); %>
 <%		if (lanKey.equals("English")) { %>
 	The page you accessed is not currently available.<br />
 	Please ask your administrator.<br />

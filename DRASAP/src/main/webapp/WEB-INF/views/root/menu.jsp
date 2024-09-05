@@ -24,13 +24,13 @@
 
 		var w = window.outerWidth - 20;
 		var h = window.outerHeight - 72;
-		
+
 		var screenWidth = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
-		
+
 		var left = Math.max(0, (screenWidth - w) / 2);
-	    var top = Math.max(0, (screenHeight - h) / 2);
-	    
+		var top = Math.max(0, (screenHeight - h) / 2);
+
 		var targetName = null;
 		var targetUrl = null;
 			// Window名とそのURL・・・functionNoに応じて変更させる
