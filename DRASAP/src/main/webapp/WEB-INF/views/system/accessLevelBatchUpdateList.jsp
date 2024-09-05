@@ -43,8 +43,7 @@
 	</script>
 </head>
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
-	<form action="<%=request.getContextPath() %>/accessLevelBatchUpdate"
-		method="post">
+	<form action="<%=request.getContextPath() %>/accessLevelBatchUpdate" method="post">
 		<input type="hidden" name="act" value="" />
 		<c:set var="itemNoCount" value="${sessionScope.accessLevelBatchUpdateForm.itemNoCount}" />
 		<c:if test="${errors.info != null}">

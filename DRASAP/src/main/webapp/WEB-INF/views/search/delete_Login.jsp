@@ -23,10 +23,10 @@
 		function cancel(){
 			// キャンセル
 			// 2022.04.13 Windows Edge対応. 削除ツールログインの「キャンセル」で戻れない不具合修正.
-            //location.href = "switch.do?prefix=/search&amp;page=/searchResult.jsp";
-            parent.condition.document.forms[0].act.value="search";// 隠し属性actに'search'をセット
-            parent.condition.document.forms[0].target="result";// targetは'result'
-            parent.condition.document.forms[0].submit();
+			//location.href = "switch.do?prefix=/search&amp;page=/searchResult.jsp";
+			parent.condition.document.forms[0].act.value="search";// 隠し属性actに'search'をセット
+			parent.condition.document.forms[0].target="result";// targetは'result'
+			parent.condition.document.forms[0].submit();
 		}
 		// 初期フォーカス位置
 		function onInitFocus(){
@@ -35,39 +35,39 @@
 	</script>
 </head>
 <body onload="onInitFocus()">
-<c:if test="${message != null}">
-<hr/ style="border: none; height: 0.5px; background-color: red;">
-	<c:forEach var="msg" items="${message}">
-		<li style="margin-left: 30px; line-height: 1.5; color: red; border-lift: 0px'">${msg}</li>
-</c:forEach>
-	<hr/ style="border: none; height: 0.5px; background-color: red;">
-</c:if>
-<c:if test="${passwd != null}">
-<hr/ style="border: none; height: 0.5px; background-color: red;">
-	<c:forEach var="msg" items="${passwd}">
-		<li style="margin-left: 30px; line-height: 1.5; color: red; border-lift: 0px'">${msg}</li>
-</c:forEach>
-	<hr/ style="border: none; height: 0.5px; background-color: red;">
-</c:if>
+	<c:if test="${message != null}">
+		<hr/ style="border: none; height: 0.5px; background-color: red;">
+		<c:forEach var="msg" items="${message}">
+			<li style="margin-left: 30px; line-height: 1.5; color: red; border-lift: 0px'">${msg}</li>
+		</c:forEach>
+		<hr/ style="border: none; height: 0.5px; background-color: red;">
+	</c:if>
+	<c:if test="${passwd != null}">
+		<hr/ style="border: none; height: 0.5px; background-color: red;">
+		<c:forEach var="msg" items="${passwd}">
+			<li style="margin-left: 30px; line-height: 1.5; color: red; border-lift: 0px'">${msg}</li>
+		</c:forEach>
+		<hr/ style="border: none; height: 0.5px; background-color: red;">
+	</c:if>
 
-    <form name="delete_LoginForm" action="<%=request.getContextPath() %>/delete_Login" method="post">
-        <table align="center" border="0" cellspacing="0" cellpadding="5">
-            <caption align="center"><b>削除ツールログイン</b></caption>
-            <tr>
-                <td align="center" colspan="2">図番削除用のパスワードを入力してください。</td>
-            </tr>
-            <tr style="background-color:#EEEEEE;">
-                <td align="right">passwd : </td>
-                <td><input type="password" id="passwd" name="passwd" value="" style="width:180px;" /></td>
-            </tr>
-            <tr>
-                <td align="center" colspan="2" style="background-color:#FFFFFF;">
-                    <input type="submit" style="margin-right:20px;" value="ログイン" />
-                    <input type="button" value="キャンセル" onclick="cancel()" />
-                </td>
-            </tr>
-        </table>
-    </form>
+	<form name="delete_LoginForm" action="<%=request.getContextPath() %>/delete_Login" method="post">
+		<table align="center" border="0" cellspacing="0" cellpadding="5">
+			<caption align="center"><b>削除ツールログイン</b></caption>
+			<tr>
+				<td align="center" colspan="2">図番削除用のパスワードを入力してください。</td>
+			</tr>
+			<tr style="background-color:#EEEEEE;">
+				<td align="right">passwd : </td>
+				<td><input type="password" id="passwd" name="passwd" value="" style="width:180px;" /></td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2" style="background-color:#FFFFFF;">
+					<input type="submit" style="margin-right:20px;" value="ログイン" />
+					<input type="button" value="キャンセル" onclick="cancel()" />
+				</td>
+			</tr>
+		</table>
+	</form>
 </body>
 
 </html>

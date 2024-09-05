@@ -32,11 +32,9 @@
 	</script>
 </head>
 <body style="background-color: #FFFFFF; margin: 0;">
-	<form action="<%=request.getContextPath()%>/accessLevelUpdatedResult"
-		method="post">
+	<form action="<%=request.getContextPath()%>/accessLevelUpdatedResult" method="post">
 		<input type="hidden" name="act" value="" />
-		<c:set var="fileCount"
-			value="${sessionScope.accessLevelUpdatedResultForm.fileCount}" />
+		<c:set var="fileCount" value="${sessionScope.accessLevelUpdatedResultForm.fileCount}" />
 
 		<c:if test="${fileCount == 0}">
 			<ul style="color: red; font-size: 12pt;">
@@ -53,20 +51,17 @@
 					<td nowrap="nowrap" align="center"><span class="normal10">ファイル種類</span></td>
 				</tr>
 			</c:if>
-			<c:forEach var="accessLevelUpdatedResultElement"
-				items="${sessionScope.accessLevelUpdatedResultForm.accessLevelUpdatedResultList}">
+			<c:forEach var="accessLevelUpdatedResultElement" items="${sessionScope.accessLevelUpdatedResultForm.accessLevelUpdatedResultList}">
 				<tr>
-					<td nowrap="nowrap" align="left"><a
-						href="accessLevelUpdatedResult.do?act=download&FILE_NAME=${accessLevelUpdatedResultElement.fileName}" target="acl_result_body"> <span
-							class="normal12blue">&nbsp;${accessLevelUpdatedResultElement.fileName}&nbsp;</span>
-					</a></td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;${accessLevelUpdatedResultElement.lastModifiedFormatted}&nbsp;</span>
+					<td nowrap="nowrap" align="left">
+						<a href="accessLevelUpdatedResult.do?act=download&FILE_NAME=${accessLevelUpdatedResultElement.fileName}" target="acl_result_body">
+							<span class="normal12blue">&nbsp;${accessLevelUpdatedResultElement.fileName}&nbsp;</span>
+						</a>
 					</td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;${accessLevelUpdatedResultElement.fileTypeDescription}&nbsp;</span>
-					</td>
+					<td nowrap="nowrap"><span class="normal12">&nbsp;${accessLevelUpdatedResultElement.lastModifiedFormatted}&nbsp;</span></td>
+					<td nowrap="nowrap"><span class="normal12">&nbsp;${accessLevelUpdatedResultElement.fileTypeDescription}&nbsp;</span></td>
 				</tr>
 			</c:forEach>
-
 		</table>
 	</form>
 </body>
