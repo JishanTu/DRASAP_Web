@@ -21,12 +21,12 @@
 </head>
 <body bgcolor="#FFFFFF" bottommargin="0" leftmargin="0" topmargin="0"
 	  rightmargin="0" marginheight="0" marginwidth="0">
-<font color="red" size="4"> <c:if
-		test="${not empty request_refForm.listErrors}">
-	<c:forEach var="error" items="${request_refForm.listErrors}">
-		<li><c:out value="${error}" /></li>
-	</c:forEach>
-</c:if>
+<font color="red" size="4">
+	<c:if test="${not empty request_refForm.listErrors}">
+		<c:forEach var="error" items="${request_refForm.listErrors}">
+			<li><c:out value="${error}" /></li>
+		</c:forEach>
+	</c:if>
 </font>
 
 <c:set var="touroku" value="${request_refForm.touroku}" />
@@ -38,13 +38,8 @@
 		<td align="center"><span class="normal12">依頼内容</span></td>
 	</tr>
 	<tr>
-		<td><span class="normal12">&nbsp;<c:out
-				value="${request_refForm.job_id}" />&nbsp;
-			</span></td>
-		<td><span class="normal12">&nbsp;<c:out
-				value="${request_refForm.job_name}" />&nbsp;
-			</span></td>
-
+		<td><span class="normal12">&nbsp;<c:out value="${request_refForm.job_id}" />&nbsp;</span></td>
+		<td><span class="normal12">&nbsp;<c:out value="${request_refForm.job_name}" />&nbsp;</span></td>
 	</tr>
 </table>
 <hr width="80%" />
@@ -53,8 +48,7 @@
 		<td bgcolor="#FFFFFF" />
 		<%-- // 2019.10.23 yamamoto modified. start --%>
 		<td align="center"><span class="normal12">図番</span></td>
-		<%--
-    <td align="center"><span class="normal12">号口・号機</span></td>
+<%--<td align="center"><span class="normal12">号口・号機</span></td>
     <td align="center"><span class="normal12">原図内容</span></td>
 // 2019.10.23 yamamoto modified. end --%>
 		<td align="center"><span class="normal12">メッセージ</span></td>
