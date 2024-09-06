@@ -31,7 +31,7 @@
 			position: absolute;
 			cursor: default;
 			top: 35px;
-			right: -440px;
+			right:0;
 			/*	    font-size:16pt;*/
 			visibility: visible;
 			z-index: 100;
@@ -1103,10 +1103,8 @@ if (me.isAdmin() || me.isAclBatchUpdateFlag()) {
 			<table bgcolor="#CCCCCC" cellspacing="0" cellpadding="0">
 				<tr>
 					<td class="slideBar">《</td>
-					<td bgcolor="#EEEEEE" style=" z-index: 100; white-space: normal; vertical-align: top;" width="450px">
-						<textarea 	name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="box-sizing: border-box; text-align: left; background-color: #EEEEEE; border-style: none; width: 100%; height: 120px; overflow: hidden; font-size: 10pt;">
-							${searchConditionForm.searchHelpMsg}
-						</textarea>
+					<td bgcolor="#EEEEEE"valign="top" style=" padding-left:10px;margin: 0;z-index: 100; white-space: normal;" width="420px">
+						<textarea 	name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="background-color: #EEEEEE; border: none; width: 100%; height: 120px; overflow:visible; font-size: 10pt;text-align: left;">${searchConditionForm.searchHelpMsg}</textarea>
 					</td>
 				</tr>
 			</table>
