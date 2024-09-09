@@ -1,7 +1,5 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
@@ -86,18 +84,8 @@ public class Management_LoginAction extends BaseAction {
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 		//		String passwdFile = beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.csvdef.delHostReqPs.path");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
-		String passwdFile = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.csvdef.delHostReqPs.path");
 		// 2013.06/14 yamagishi modified. end
+		String passwdFile = DrasapPropertiesFactory.getFullPath("tyk.csvdef.delHostReqPs.path");
 		try {
 			delHostReqPs = new CsvItemStrList(passwdFile);
 			if (delHostReqPs.searchLineData(user.getId()) != null) {

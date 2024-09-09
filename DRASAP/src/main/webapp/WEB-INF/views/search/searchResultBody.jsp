@@ -573,12 +573,12 @@
 									<a id="thumbnailPhotoLink[${status.index}]" href='<c:url value="/preview"/>'
 										onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');" class="drwgNo large">
 										<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]"
-											 title='<c:out value="${item.aclBalloon}"/>' onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
+											 title='<c:out value="${item.aclBalloon}"/>' onload="thumbnailLoad(this,'${item.getAttr('THUMB_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
 									</a>
 								</c:when>
 								<c:otherwise>
 									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]" title='<c:out value="${item.aclBalloon}"/>'
-											onload="thumbnailLoad(this,'${item.getAttr('DRWG_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
+											onload="thumbnailLoad(this,'${item.getAttr('THUMB_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
 								</c:otherwise>
 							</c:choose>
 						</div>

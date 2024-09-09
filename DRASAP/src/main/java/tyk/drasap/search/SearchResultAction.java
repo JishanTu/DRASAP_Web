@@ -238,25 +238,14 @@ public class SearchResultAction extends BaseAction {
 			String thumbnailSize = request.getParameter("thumbnailSize");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 				String newThumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
+
+				// アクセス権限がない場合
 				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
-					if ("L".equals(thumbnailSize)) {
-						newThumbnailName = "NotAccess_L_thumb.jpg";
-					} else if ("S".equals(thumbnailSize)) {
-						newThumbnailName = "NotAccess_S_thumb.jpg";
-					} else {
-						newThumbnailName = "NotAccess_M_thumb.jpg";
-					}
-					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
-				}
-				if ("NotFound_L_thumb.jpg".equals(newThumbnailName) || "NotFound_S_thumb.jpg".equals(newThumbnailName) || "NotFound_M_thumb.jpg".equals(newThumbnailName)) {
-					if ("L".equals(thumbnailSize)) {
-						newThumbnailName = "NotFound_L_thumb.jpg";
-					} else if ("S".equals(thumbnailSize)) {
-						newThumbnailName = "NotFound_S_thumb.jpg";
-					} else {
-						newThumbnailName = "NotFound_M_thumb.jpg";
-					}
-					searchResultForm.searchResultList.get(i).addAttr("DRWG_SIZE", "A0");
+					newThumbnailName = "NotAccess_" + thumbnailSize + "_thumb.jpg";
+					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
+				} else if (newThumbnailName.startsWith("NotFound_")) {
+					newThumbnailName = "NotFound_" + thumbnailSize + "_thumb.jpg";
+					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
 				}
 				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
 			}

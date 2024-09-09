@@ -31,14 +31,14 @@
 	</script>
 </head>
 <frameset rows="100,*" framespacing="0" border="0">
-<frame name="acl_condition" src="switch.do?page=/system/accessLevelBatchUpdateCondition.jsp" />
-<c:if test="${sessionScope.accessLevelBatchUpdateErrors != null}">
-<frame name="acl_list" src="switch.do?page=/system/accessLevelBatchUpdate_error.jsp" />
-</c:if>
+	<frame name="acl_condition" src="switch.do?page=/system/accessLevelBatchUpdateCondition.jsp" />
+	<c:if test="${sessionScope.accessLevelBatchUpdateErrors != null}">
+		<frame name="acl_list" src="switch.do?page=/system/accessLevelBatchUpdate_error.jsp" />
+	</c:if>
 
-<c:if test="${sessionScope.accessLevelBatchUpdateErrors == null}">
-<frame name="acl_list" src="switch.do?page=/system/accessLevelBatchUpdateList.jsp" />
-</c:if>
+	<c:if test="${sessionScope.accessLevelBatchUpdateErrors == null}">
+		<frame name="acl_list" src="switch.do?page=/system/accessLevelBatchUpdateList.jsp" />
+	</c:if>
 
 </frameset>
 </html>

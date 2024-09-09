@@ -22,9 +22,9 @@
 	@import url( <%=request.getContextPath()%>/resources/css/default.css );
 	
 	td {
-	white-space: nowrap;
-     }
-     
+		white-space: nowrap;
+	}
+
 	</style>
 	<script type="text/javascript">
 
@@ -65,28 +65,31 @@
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
 <!--=============== ヘッダ ===============-->
 <form action="<%=request.getContextPath() %>/req_list" method="post">
-<input type="hidden" name="action" value="${action}" />
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-	<tr>
-		<td>
-			<table border="0" bgcolor="#EEEEEE">
-				<tr><td><span class="normal18">図面登録依頼リスト</span></td></tr>
-			</table></td>
-		<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td>
-			<table border="0" bgcolor="#EEEEEE" align="left">
-				<tr><td><span class="normal10">処理が済んだらチェックを入力して下さい。<br />
-					その後に更新するために「更新」をクリックして下さい。</span></td></tr>
-			</table>
-		</td>
-		<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td width="100%" valign="bottom">
-			<input type="submit" value="依頼更新" onclick="doIraiKousin()">
-            <input type="submit" value="印刷画面" onclick="goNext('_printer')">
-            <input type="submit" value="作業依頼履歴" onclick="goNext('_irai_history')">
-		</td>
-	</tr>
-</table>
+	<input type="hidden" name="action" value="${action}" />
+	<table border="0" cellspacing="0" cellpadding="0" width="100%">
+		<tr>
+			<td>
+				<table border="0" bgcolor="#EEEEEE">
+					<tr><td><span class="normal18">図面登録依頼リスト</span></td></tr>
+				</table>
+			</td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td>
+				<table border="0" bgcolor="#EEEEEE" align="left">
+					<tr>
+						<td><span class="normal10">処理が済んだらチェックを入力して下さい。<br />
+						その後に更新するために「更新」をクリックして下さい。</span></td>
+					</tr>
+				</table>
+			</td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td width="100%" valign="bottom">
+				<input type="submit" value="依頼更新" onclick="doIraiKousin()">
+				<input type="submit" value="印刷画面" onclick="goNext('_printer')">
+				<input type="submit" value="作業依頼履歴" onclick="goNext('_irai_history')">
+			</td>
+		</tr>
+	</table>
 </form>
 </body>
 </html>

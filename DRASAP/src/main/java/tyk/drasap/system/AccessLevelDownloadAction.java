@@ -1,7 +1,10 @@
 package tyk.drasap.system;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
-import static tyk.drasap.common.DrasapUtil.*;
+import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
+import static tyk.drasap.common.DrasapUtil.defaultString;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -153,20 +156,8 @@ public class AccessLevelDownloadAction extends BaseAction {
 		if (category.isDebugEnabled()) {
 			category.debug("雛形ファイルダウンロード処理の開始");
 		}
-		//
-		Properties drasapProperties = DrasapPropertiesFactory.getDrasapProperties(this);
-
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = drasapProperties.getProperty(OCE_AP_SERVER_BASE);
-		}
-		final String ORIGIN_FILE_NAME = apServerHome + drasapProperties.getProperty("tyk.download.template.path"); // テンプレートファイル
+		// テンプレートファイル
+		final String ORIGIN_FILE_NAME = DrasapPropertiesFactory.getFullPath("tyk.download.template.path");
 
 		// テンプレートファイルがあるか確認する
 		if (!new File(ORIGIN_FILE_NAME).exists()) {

@@ -69,7 +69,6 @@ public class ThumbWarningNotPrintableAction extends BaseAction {
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.success.print.request." + user.getLanKey(),
 						new Object[] { String.valueOf(requestCount) }, null));
 			}
-			//saveErrors(request, errors);
 			request.setAttribute("errors", errors);
 			category.debug("--> search_error");
 			return "search_error";

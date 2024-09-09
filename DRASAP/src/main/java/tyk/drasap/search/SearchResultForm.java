@@ -301,6 +301,10 @@ public class SearchResultForm extends BaseForm {
 		return outputPrinter;
 	}
 
+	public String getOutputPrinterKey(int idx) {
+		return printerKeyList.get(idx);
+	}
+
 	/**
 	 * @param string
 	 */

@@ -77,6 +77,9 @@
 	        }
 		var msgList = document.getElementById("msgList");
 	        msgList.innerHTML = "";
+	        
+	    var errorMsg = document.getElementById("errorMsg");
+	        errorMsg.innerHTML = "";
 	    }
 	    function delReq() {
 		var delCnt = inputChk();
@@ -96,6 +99,7 @@
 	        msgList.innerHTML = "";
 	        msgList.innerHTML = "<li align='left' style='color:#0000FF;'>依頼の削除には時間がかかることがあります。しばらくお待ちください。</li><br/>";
 		document.forms[0].act.value='delete';// 隠し属性actをセット
+		msgList.value = "";
 		document.forms[0].submit();
 	    }
 	    function closeReq() {
@@ -246,9 +250,11 @@
 					</span></td>
 				</tr>
 				<c:forEach var="condition" items="${deleteHostReqForm.condition}" varStatus="loop">
+				 <c:set var="itemPrefix" value="${fn:substring(condition, 0, 8)}" />
+				<c:set var="isInMessage" value="${not empty itemPrefix and fn:contains(message, itemPrefix)}" />
 					<tr>
 						<td align="center"><input type="text" class="condition" name="condition" value = "${condition}"
-							style="${empty message ? 'color:black;' : 'color:red;'}" tabindex="${loop.index + 2}" /></td>
+							style="${isInMessage ? 'color:red;' : 'color:black;'}" tabindex="${loop.index + 2}" /></td>
 					</tr>
 				</c:forEach>
 				<tr>
@@ -278,25 +284,21 @@
 				</td>
 			</tr>
 			<tr>
-    <td align="left" class="normal12blue">
-        <c:if test="${not empty sessionScope.errors}">
-            <ul>
-                <c:forEach var="entry"
-									items="${pageContext.request.attributeNames}">
-									<c:if
-										test="${!fn:contains(entry, '.') && !fn:contains(entry, 'path') && !fn:containsIgnoreCase(entry, 'form')}">
-										<c:set var="attributeName" value="${entry}" />
-										<c:forEach var="attributeValue"
-											items="${requestScope[attributeName]}">
-											<li>${attributeValue}</li>
-										</c:forEach>
-									</c:if>
+				<td align="left" class="normal12blue">
+				<c:if
+						test="${message != null}">
+						<hr color="sandybrown">
+						<font color="red" size="4">
+							<ul>
+								<c:forEach var="msg" items="${message}">
+									<li>${msg}</li>
 								</c:forEach>
-            </ul>
-        </c:if>
-    </td>
-</tr>
-			</table>
+							</ul>
+						</font>
+						<hr color="sandybrown">
+					</c:if></td>
+			</tr>
+		</table>
 
 		<table class="keyLock" id="keyLock" style="visibility: hidden">
 			<tr valign="middle">

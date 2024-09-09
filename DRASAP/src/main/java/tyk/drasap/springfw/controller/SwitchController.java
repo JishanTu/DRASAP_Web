@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.User;
 
 @Controller
@@ -100,7 +101,13 @@ public class SwitchController {
 	@GetMapping("/systemMaintenanceLogin")
 	public String accessSystemMaintenanceLogin(Model errors) {
 		category.debug("accessSystemMaintenanceLogin called");
-		return "/system/systemMaintenanceLogin";
+		String sysMainLogin = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("system.maintenance.login");
+		if ("true".equals(sysMainLogin)) {
+			// システムメンテログイン画面に遷移
+			return "/system/systemMaintenanceLogin";
+		}
+		// notfound画面に遷移
+		return "/root/notfound";
 	}
 
 	@GetMapping("/{path}")

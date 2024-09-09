@@ -29,7 +29,7 @@ td {
 }
 
 .container {
-    white-space: nowrap;
+	white-space: nowrap;
 }
 </style>
 <script type="text/javascript">
@@ -100,52 +100,51 @@ td {
 	}
 	</script>
 	<script type="text/javascript">
-        // IEの場合、Broadcastはエラーになるので、Edgeのみ処理
-        const agent = window.navigator.userAgent.toLowerCase();
-        if(agent.indexOf('chrome') !== -1)
-        {
-            var IP;
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/DRASAP/getip');
-            xhr.send();
+		// IEの場合、Broadcastはエラーになるので、Edgeのみ処理
+		const agent = window.navigator.userAgent.toLowerCase();
+		if(agent.indexOf('chrome') !== -1)
+		{
+			var IP;
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', '/DRASAP/getip');
+			xhr.send();
 
-            xhr.onreadystatechange = function()
-            {
-                if(xhr.readyState === 4 && xhr.status === 200)
-                {
-                    IP = xhr.responseText;
-                }
-            }
+			xhr.onreadystatechange = function()
+			{
+				if(xhr.readyState === 4 && xhr.status === 200)
+				{
+					IP = xhr.responseText;
+				}
+			}
 
-            var broadcast = new BroadcastChannel("DRASAP_LOGIN");
-            broadcast.addEventListener('message',({data})=>{
-                if(data === 'newlogin_' +IP)
-                {
-                    var login = window.open('about:blank','_self');
-                    login.close();
-                 }
-            });
-        }
-        
-        function onLoad() {
+			var broadcast = new BroadcastChannel("DRASAP_LOGIN");
+			broadcast.addEventListener('message',({data})=>{
+				if(data === 'newlogin_' +IP)
+				{
+					var login = window.open('about:blank','_self');
+					login.close();
+				}
+			});
+		}
 
-        	var w = window.outerWidth;
-    		var h = window.outerHeight;
+		function onLoad() {
+
+			var w = window.outerWidth;
+			var h = window.outerHeight;
 			
 			var screenWidth = window.screen.availWidth;
 			var screenHeight = window.screen.availHeight;
 			
 			var left = (screenWidth - w) / 2;
 			var top = (screenHeight - h) / 2;
-                    mx = 0;
-                    my = 0;
-                    window.resizeTo(w, h);
-                    window.moveTo(left,top);//画面の位置指定
-                    if (browserName != "Netscape") focus();
+					mx = 0;
+					my = 0;
+					window.resizeTo(w, h);
+					window.moveTo(left,top);//画面の位置指定
 		}
 		
 		window.onload = onLoad;
-    </script>
+	</script>
 </head>
 <body>
 	<!-- drasap.propertiesの「web.container」で判定して、
@@ -164,8 +163,8 @@ td {
 
 	<%	} %>
 	<div class = "container">
-	<img src="<%=request.getContextPath() %>/resources/img/DRASAPBanner.JPG" width="333" height="70" />
-    <img src="<%=request.getContextPath() %>/resources/img/CONFIDENTIALBanner.JPG" width="167" height="70" />
+		<img src="<%=request.getContextPath() %>/resources/img/DRASAPBanner.JPG" width="333" height="70" />
+		<img src="<%=request.getContextPath() %>/resources/img/CONFIDENTIALBanner.JPG" width="167" height="70" />
 	</div>
 	<!-- message1 -->
 	<div id="message1"></div>

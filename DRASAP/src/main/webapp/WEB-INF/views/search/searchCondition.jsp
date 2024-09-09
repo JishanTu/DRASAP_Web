@@ -31,7 +31,7 @@
 			position: absolute;
 			cursor: default;
 			top: 35px;
-			right: -440px;
+			right:0;
 			/*	    font-size:16pt;*/
 			visibility: visible;
 			z-index: 100;
@@ -79,14 +79,8 @@
 		.table-container {
             overflow-y: auto; 
             height: 140px;
-            width: 565px
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            min-width: 800px; 
-        }
+            width: 550px
+        }  
 	</style>
 <script type="text/javascript">
 	document.onkeydown = keys;
@@ -98,15 +92,16 @@
 				break;
 		}
 	}
-	 function setTableWidth() {
-         var availWidth = screen.availWidth;
+// 	 function setTableWidth() {
+//          var availWidth = screen.availWidth;
 
-         var table1 = document.getElementById('conditionTable1');
-         var table2 = document.getElementById('conditionTable2');
+//          var table1 = document.getElementById('conditionTable1');
+//          var table2 = document.getElementById('conditionTable2');
 
-         table1.style.width = availWidth + 'px';
-         table2.style.width = availWidth + 'px';
-     }
+//          table1.style.width = availWidth + 'px';
+//          table2.style.width = availWidth + 'px';
+//      }
+
 	function onLoad(){
 		onInitFocus();
 //		var divisionTD = document.getElementById("divisionTD");
@@ -115,7 +110,7 @@
 		loadResultFrame();
 		// 図番指定順のチェック
         isOrderDrwgNo();
-        setTableWidth();
+        //setTableWidth();
 	}
 	// 昇順、降順をサイクリックに切り替える
 	function changeOrder(obj,index){
@@ -764,7 +759,7 @@
 // 2020.03.13 yamamoto add end
 </script>
 </head>
-<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;overflow-x: auto;height: 100%;"
+<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;overflow-x: auto;"
 	onload="onLoad()">
 	<form action="<%=request.getContextPath() %>/searchCondition" method="post" >
 <%-- 		<c:set var="searchConditionForm" --%>
@@ -779,13 +774,12 @@
 		<!-- 	<html:hidden property="language" /> -->
 
 		<!-- ================= 職番などの表示エリア ======================= -->
-		<table border="0" cellspacing="0" cellpadding="0"  id = "conditionTable2">
+		<table border="0" cellspacing="0" cellpadding="0"  style = "width:100%">
 			<tr>
 				<td >
 					<table border="0" >
 						<tr>
-							<td nowrap="nowrap" bgcolor="#EEEEEE"><span class="normal10"><b><c:out
-											value="${searchConditionForm.c_label1}" /></b></span></td>
+							<td nowrap="nowrap" bgcolor="#EEEEEE"><span class="normal10"><b>${searchConditionForm.c_label1}</b></span></td>
 							<td valign="top" nowrap="nowrap">
 								<table cellspacing="0" cellpadding="0">
 									<tr>
@@ -793,25 +787,15 @@
 											<table border="1">
 												<tr>
 													<td nowrap="nowrap">
-														<span class="normal10">
-															<c:out value="${searchConditionForm.c_label6}" />
-															：
-															<c:out value="${user.id}" />
-														</span>
+														<span class="normal10">${searchConditionForm.c_label6}：${user.id}</span>
 													</td>
 													<td nowrap="nowrap">
-														<span class="normal10">
-															<c:out value="${searchConditionForm.c_label7}" />
-															：
-															<c:out value="${user.name}" />
+														<span class="normal10">${searchConditionForm.c_label7}：${user.name}
 														</span>
 													</td>
 													<td id="divisionTD">
 														<div id="division" class="normal10"
-															style="height: 14px;font-size: 12px">
-															<c:out value="${searchConditionForm.c_label8}" />
-															：
-															<c:out value="${user.deptName}" />
+															style="height: 14px;overflow:hidden">${searchConditionForm.c_label8}：${user.deptName}
 														</div>
 													</td>
 												</tr>
@@ -902,10 +886,10 @@
 
 		<!--============ 検索条件と説明 ============-->
 		<table border="0" cellspacing="0" cellpadding="0"
-			class="normal12" id = "conditionTable1">
+			class="normal12" style = "width:100%">
 			<tr>
 				<!--============ 検索条件 ============-->
-				<td style="width: 600px;">
+				<td style="width: 550px;">
 				<div class="table-container">
 					<table border="0" cellspacing="0" cellpadding="0"
 						style="font-size: 12pt; margin: 0px; padding: 0px;">
@@ -929,7 +913,7 @@
 									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"/>
 								</td>
 								<td>
-									<input type="button" name="sortWayButton${index}" value="${searchConditionForm.sortWayList[index-1]}" onclick="changeOrder(this)" style="width: 60px;" />
+									<input type="button" name="sortWayButton${index}" value="${searchConditionForm.sortWayList[index-1]}" onclick="changeOrder(this)" style="width: 40px;" />
 									<input type="hidden" name="sortWay${index}" />
 								</td>
 								<td>
@@ -1119,10 +1103,8 @@ if (me.isAdmin() || me.isAclBatchUpdateFlag()) {
 			<table bgcolor="#CCCCCC" cellspacing="0" cellpadding="0">
 				<tr>
 					<td class="slideBar">《</td>
-					<td bgcolor="#EEEEEE" style=" z-index: 100; white-space: normal; vertical-align: top;" width="450px">
-						<textarea 	name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="box-sizing: border-box; text-align: left; background-color: #EEEEEE; border-style: none; width: 100%; height: 120px; overflow: hidden; font-size: 10pt;">
-							${searchConditionForm.searchHelpMsg}
-						</textarea>
+					<td bgcolor="#EEEEEE"valign="top" style=" padding-left:10px;margin: 0;z-index: 100; white-space: normal;" width="420px">
+						<textarea 	name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="background-color: #EEEEEE; border: none; width: 100%; height: 120px; overflow:visible; font-size: 10pt;text-align: left;">${searchConditionForm.searchHelpMsg}</textarea>
 					</td>
 				</tr>
 			</table>

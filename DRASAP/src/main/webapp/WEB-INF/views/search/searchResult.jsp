@@ -29,7 +29,7 @@
 		}
 	</script>
 </head>
-<frameset rows="75,*,40" framespacing="0" border="0">
+<frameset rows="75,*,30" framespacing="0" border="0">
 <frame name="result_head" src="switch.do?page=/search/searchResultHead.jsp" />
 <frame name="result_body" src="switch.do?page=/search/searchResultBody.jsp" />
 <frame name="result_foot" src="switch.do?page=/search/searchResultFoot.jsp" />

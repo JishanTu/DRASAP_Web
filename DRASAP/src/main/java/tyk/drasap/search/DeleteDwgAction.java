@@ -1,10 +1,5 @@
 package tyk.drasap.search;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
-import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -198,18 +193,8 @@ public class DeleteDwgAction extends BaseAction {
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
 		//    	String backupPathBase = beaHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.delDwg.Backup.path");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
-		String backupPathBase = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.delDwg.Backup.path");
 		// 2013.06.13 yamagishi modified. end
+		String backupPathBase = DrasapPropertiesFactory.getFullPath("tyk.delDwg.Backup.path");
 		File DWG_Backup = new File(backupPathBase);
 		if (!DWG_Backup.exists()) {
 			// 保管領域がない
@@ -366,18 +351,8 @@ public class DeleteDwgAction extends BaseAction {
 		//		String beaHome = System.getenv("BEA_HOME");
 		//		if (beaHome == null) beaHome = System.getenv("OCE_BEA_HOME");
 		//		if (beaHome == null) beaHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("oce.BEA_BASE");
-		String apServerHome = System.getenv(BEA_HOME);
-		if (apServerHome == null) {
-			apServerHome = System.getenv(CATALINA_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = System.getenv(OCE_AP_SERVER_HOME);
-		}
-		if (apServerHome == null) {
-			apServerHome = DrasapPropertiesFactory.getDrasapProperties(this).getProperty(OCE_AP_SERVER_BASE);
-		}
 		// 2013.06.13 yamagishi modified. end
-		String backupPathBase = apServerHome + DrasapPropertiesFactory.getDrasapProperties(this).getProperty("tyk.delDwg.Backup.path");
+		String backupPathBase = DrasapPropertiesFactory.getFullPath("tyk.delDwg.Backup.path");
 
 		// 念のため元の原図があるか確認する '04.Mar.2 Hirata
 		File moveFile = new File(delFileName);
@@ -389,19 +364,6 @@ public class DeleteDwgAction extends BaseAction {
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"));
 			// for MUR
 			category.error("[" + delFileName + "]が存在しないか、またはアクセスできません。");
-			return DELETE_FILE_NOT_FOUND;
-		}
-
-		String newDelFileName = delPathName + File.separator + fileName.replace(".tif", "_thumb.jpg");
-		File newMoveFile = new File(newDelFileName);
-		if (!newMoveFile.exists()) {
-			// 元の原図が存在しない
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delDwg.failed.FileNotFound", new Object[] { drwgNo, newDelFileName }, null));
-			// for システム管理者
-			ErrorLoger.error(user, this,
-					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"));
-			// for MUR
-			category.error("[" + newDelFileName + "]が存在しないか、またはアクセスできません。");
 			return DELETE_FILE_NOT_FOUND;
 		}
 
@@ -427,19 +389,23 @@ public class DeleteDwgAction extends BaseAction {
 			moveFile.delete();
 		}
 
-		try {
-			copyFile(newMoveFile.getPath(), targetFolder + File.separator + fileName.replace(".tif", ".jpg"));
-		} catch (IOException e) {
-			// ファイルの保存に失敗。
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delDwg.failed.fileBackup", new Object[] { drwgNo, newDelFileName }, null));
-			// for システム管理者
-			ErrorLoger.error(user, this,
-					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"));
-			// for MUR
-			category.error("[削除ファイル[" + newDelFileName + "]の保存に失敗しました。");
-			return DELETE_FILE_COPY_FAILED;
-		} finally {
-			newMoveFile.delete();
+		String newDelFileName = delPathName + File.separator + fileName.replace(".tif", "_thumb.jpg");
+		File newMoveFile = new File(newDelFileName);
+		if (newMoveFile.exists()) {
+			try {
+				copyFile(newMoveFile.getPath(), targetFolder + File.separator + fileName.replace(".tif", ".jpg"));
+			} catch (IOException e) {
+				// ファイルの保存に失敗。
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delDwg.failed.fileBackup", new Object[] { drwgNo, newDelFileName }, null));
+				// for システム管理者
+				ErrorLoger.error(user, this,
+						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"));
+				// for MUR
+				category.error("[削除ファイル[" + newDelFileName + "]の保存に失敗しました。");
+				return DELETE_FILE_COPY_FAILED;
+			} finally {
+				newMoveFile.delete();
+			}
 		}
 
 		category.debug(delFileName + " を移動しました");

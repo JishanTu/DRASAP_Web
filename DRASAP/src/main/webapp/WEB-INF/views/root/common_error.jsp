@@ -27,7 +27,7 @@
 <body onload="onLoad();">
 	<!-- エラーの表示 -->
 	<c:if test="${not empty requestScope['errors']}">
-	<hr style="border: none; height: 1px; background-color: orange;">
+		<hr style="border: none; height: 1px; background-color: orange;">
 		<c:forEach var="msg" items="${requestScope['errors']['message']}">
 			<li style="margin-left: 30px; line-height: 1.5; color: red; border-left: 0px;">${msg}</li>
 		</c:forEach>
@@ -36,14 +36,16 @@
 
 	<table class="nowsearch" id="nowSearch" style="visibility: hidden">
 		<tr valign="middle">
-			<td align="center" style="font-size: 18pt; color: #0000FF;"><c:choose>
+			<td align="center" style="font-size: 18pt; color: #0000FF;">
+				<c:choose>
 					<c:when test="${user.language eq 'Japanese'}">
-                        検索中・・・・
-                    </c:when>
+						検索中・・・・
+					</c:when>
 					<c:otherwise>
-                        Now Searching...
-                    </c:otherwise>
-				</c:choose></td>
+						Now Searching...
+					</c:otherwise>
+				</c:choose>
+			</td>
 		</tr>
 	</table>
 </body>
