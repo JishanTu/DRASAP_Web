@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+        
     <wb-module deploy-name="DRASAP">
+                
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+                
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="pdflib.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/C:/WORK/DRASAP_Web/Tomcat9/DRASAP/pdflib/ver9_32bit/pdflib.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+                
         <property name="context-root" value="DRASAP"/>
+                
         <property name="java-output-path" value="/DRASAP/build/classes"/>
+            
     </wb-module>
+    
 </project-modules>
