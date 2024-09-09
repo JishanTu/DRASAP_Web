@@ -168,7 +168,7 @@
 </head>
 <%-- 2013.07.16 yamagishi modified.
 <body bgcolor="#CCCCCC" bottommargin="0" leftmargin="0" topmargin="0" rightmargin="0" marginheight="0" marginwidth="0"> --%>
-<body style="bacground-color: #CCCCCC; margin: 0;" onload="onLoad()" >
+<body style="bacground-color: #CCCCCC; margin: 0;padding-bottom:20px;" onload="onLoad()" >
 <form action="<%=request.getContextPath() %>/result" method = "post">
 <c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>
 <c:set var="resultList" value="${sessionScope.searchResultForm.searchResultList}"/>
