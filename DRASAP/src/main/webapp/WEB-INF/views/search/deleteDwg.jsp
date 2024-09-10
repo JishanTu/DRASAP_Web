@@ -138,8 +138,7 @@
 			</tbody>
 		</table>
 
-		<table cellspacing="0" cellpadding="0" border="0" align="center"
-			class="normal12blue">
+		<table cellspacing="0" cellpadding="0" border="0" align="center" class="normal12blue">
 			<tbody>
 				<tr>
 					<td id="msg1"><c:out value="${deleteDwgForm.msg1}" /></td>

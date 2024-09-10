@@ -103,6 +103,7 @@ public class SearchConditionAction extends BaseAction {
 				request.setAttribute("errors", errors);
 				return "error";
 			}
+
 			// act‚É'search'‚ªİ’è‚³‚ê‚Ä‚¢‚é‚Æ‚«
 			// 1) ŒŸõğŒ‚ÌŠm”F
 			if (!checkSearchCondition(searchConditionForm, drasapInfo, user, errors)) {
@@ -202,6 +203,17 @@ public class SearchConditionAction extends BaseAction {
 			searchConditionForm.setLanguage(user.getLanguage());
 			// ‰æ–Ê•\¦•¶š—ñæ“¾
 			getScreenItemStrList(searchConditionForm, user);
+
+			SearchConditionForm searchForm = (SearchConditionForm) session.getAttribute("searchConditionForm");
+			if (searchForm != null) {
+				ArrayList<String> ConditionValueList = searchConditionForm.getConditionValueList();
+				if (ConditionValueList.isEmpty() || ConditionValueList.stream().allMatch(String::isEmpty)) {
+					ArrayList<String> valueList = searchForm.getConditionValueList();
+					if (!valueList.isEmpty() && !valueList.stream().allMatch(String::isEmpty)) {
+						searchConditionForm.setConditionValueList(valueList);
+					}
+				}
+			}
 
 			session.setAttribute("searchConditionForm", searchConditionForm);
 			return "input";

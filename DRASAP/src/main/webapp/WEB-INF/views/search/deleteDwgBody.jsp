@@ -19,37 +19,34 @@
 	<meta content="no-cache" http-equiv="Cache-Control" />
 	<style type="text/css">@import url( <%=request.getContextPath()%>/resources/css/default.css );</style>
 </head>
-<body marginwidth="0" marginheight="0" bgcolor="#ffffff" rightmargin="0"
-	topmargin="0" leftmargin="0" bottommargin="0">
-	<c:set var="deleteDwgForm" scope="session"
-		value="${sessionScope.deleteDwgForm}" />
+<body marginwidth="0" marginheight="0" bgcolor="#ffffff" rightmargin="0" topmargin="0" leftmargin="0" bottommargin="0">
+	<c:set var="deleteDwgForm" scope="session" value="${sessionScope.deleteDwgForm}" />
 	<form action="<%=request.getContextPath() %>/deleteDwg">
-		<c:set var="deleteDwgForm" scope="session"
-			value="${sessionScope.deleteDwgForm}" />
+		<c:set var="deleteDwgForm" scope="session" value="${sessionScope.deleteDwgForm}" />
 
 		<c:if test="${not empty deleteDwgForm}">
 			<table cellspacing="0" cellpadding="0" border="0">
 				<tbody>
 					<tr>
-						<td><input type="hidden" name="act"
-							value="${deleteDwgForm.act}" /> <input type="hidden"
-							name="previewIdx" value="${deleteDwgForm.previewIdx}" /></td>
+						<td>
+							<input type="hidden" name="act" value="${deleteDwgForm.act}" />
+							<input type="hidden" name="previewIdx" value="${deleteDwgForm.previewIdx}" />
+						</td>
 					</tr>
 					<tr>
 						<td>
 							<table cellspacing="0" cellpadding="3" border="1" align="left">
 								<tbody>
 									<tr bgcolor="#cccccc" class="normal10">
-										<c:forEach var="colName"
-											items="${deleteDwgForm.colNameJPList}">
+										<c:forEach var="colName" items="${deleteDwgForm.colNameJPList}">
 											<th nowrap="nowrap"><c:out value="${colName}" /></th>
 										</c:forEach>
 									</tr>
 									<c:forEach var="record" items="${deleteDwgForm.recList}">
 										<tr class="normal12">
-											<c:forEach var="value" items="${record.valList}"
-												varStatus="status">
-												<td nowrap="nowrap"><c:choose>
+											<c:forEach var="value" items="${record.valList}" varStatus="status">
+												<td nowrap="nowrap">
+													<c:choose>
 														<c:when test="${status.index == 0}">
 															<a href="<c:url value='preview'/>" target="_parent">
 																<c:out value="${value}" /><br />
@@ -59,7 +56,8 @@
 															<c:out value="${value}" />
 															<br />
 														</c:otherwise>
-													</c:choose></td>
+													</c:choose>
+												</td>
 											</c:forEach>
 										</tr>
 									</c:forEach>
@@ -73,8 +71,7 @@
 				</tbody>
 			</table>
 		</c:if>
-		<table cellspacing="0" cellpadding="0" border="0" align="center"
-			class="normal12blue">
+		<table cellspacing="0" cellpadding="0" border="0" align="center" class="normal12blue">
 			<tbody>
 				<tr>
 					<td id="msg1"><c:out value="${deleteDwgForm.msg1}" /></td>
