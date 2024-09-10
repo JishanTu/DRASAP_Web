@@ -42,13 +42,6 @@
 					break;
 			}
 		}
-		function setTableWidth() {
-	         var availWidth = screen.availWidth;
-	         var div = document.getElementById('myDiv');
-	         var table2 = document.getElementById('headTable2');
-	         div.style.width = availWidth + 'px';
-	         table2.style.width = availWidth + 'px';
-	     }
 		// 再表示
 		function doRefresh(){
 			// 表示属性をresult_bodyフレーム隠し属性にセット
@@ -120,7 +113,6 @@
 			// 右クリック禁止
 			document.onmousedown = disableContextMenu;
 			document.oncontextmenu = disableOnContextMenu;
-			setTableWidth();
 		}
 		<%-- 2013.07.16 yamagishi add. end --%>
 		function listViewChange() {
@@ -147,7 +139,7 @@
 <form action="<%=request.getContextPath() %>/result"  method = "post">
 <!--================ ヘッダ ==================================-->
 <c:set var="searchResultForm" value="${sessionScope.searchResultForm}"/>
-<div id = "myDiv">
+
 <table border="0" cellspacing="0" cellpadding="0"  width="100%">
 	<tr>
 		<td>
@@ -159,7 +151,7 @@
 				</tr>
 			</table>
 		</td>
-		<td><span class="normal10">
+		<td  nowrap="nowrap"><span class="normal10">
 			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.value");
 			if ("true".equals(thumbValue)) { %>
 			<span style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
@@ -212,7 +204,7 @@
 		</td>
 	</tr>
 </table>
-</div>
+
 
 				<%// admin_flag='2'のユーザのみ
 // ボタンを表示する
@@ -224,7 +216,7 @@ if (me.isDelAdmin()) { %>
 
 
 
-<table border="1" id = "headTable2">
+<table border="1">
 	<tr>
 		<td nowrap="nowrap">
 			<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
