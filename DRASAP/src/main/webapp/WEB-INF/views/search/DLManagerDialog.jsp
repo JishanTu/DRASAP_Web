@@ -18,12 +18,12 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <c:choose>
-  <c:when test="${user.language eq 'Japanese'}">
-    <title>DLマネージャ</title>
-  </c:when>
-  <c:otherwise>
-    <title>DL Manager</title>
-  </c:otherwise>
+	<c:when test="${user.language eq 'Japanese'}">
+		<title>DLマネージャ</title>
+	</c:when>
+	<c:otherwise>
+		<title>DL Manager</title>
+	</c:otherwise>
 </c:choose>
 
 <meta http-equiv="Pragma" content="no-cache"></meta>
@@ -83,8 +83,8 @@ applet {
 			fileName:'<%= dlmInfo.getFileName() %>',
 			pathName:'<%= URLEncoder.encode(dlmInfo.getPathName(), "UTF-8") %>',
 			drwgNo:'<%= dlmInfo.getDrwgNo() %>',
-		    saveFlag:saveFlagValue,
-	        language:languageValue,	
+			saveFlag:saveFlagValue,
+			language:languageValue,
 			domain:'<%= url.getHost() %>',
 			sid:'<%= session.getId() %>'
 		};

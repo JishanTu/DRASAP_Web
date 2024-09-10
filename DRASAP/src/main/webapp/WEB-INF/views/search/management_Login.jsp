@@ -22,8 +22,8 @@
 	@import url( <%=request.getContextPath()%>/resources/css/default.css );
 	
 	td {
-	white-space: nowrap;
-}
+		white-space: nowrap;
+	}
 	
 	</style>
 	<script type="text/javascript">
