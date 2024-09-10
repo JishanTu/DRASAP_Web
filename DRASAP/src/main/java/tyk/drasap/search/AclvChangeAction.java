@@ -146,7 +146,6 @@ public class AclvChangeAction extends BaseAction {
 			// '04.Nov.23•ÏX }”Ô‚ğƒƒMƒ“ƒO‚·‚é‚½‚ßA‚±‚±‚Å‚ÌƒƒMƒ“ƒO‚Ís‚í‚È‚¢
 			//AccessLoger.loging(user, AccessLoger.FID_CHG_ACL);
 			//category.debug("XV‚µ‚½Œ”‚Í " + cnt);
-			request.setAttribute("task", "clear_result");
 			category.debug("--> search2");
 			return "search2";
 		}
