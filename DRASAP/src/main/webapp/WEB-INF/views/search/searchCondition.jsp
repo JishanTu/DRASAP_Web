@@ -38,8 +38,8 @@
 		}
 		
 		#toolotipContents {
-            display: none;
-        }
+			display: none;
+		}
 		
 		img {
 			background-color: #CCCCCC;
@@ -72,15 +72,15 @@
 			vertical-align: top;
 		}
 		.searchbutton{
-		    margin-left : 5px;
-		    vertical-align : top;
+			margin-left : 5px;
+			vertical-align : top;
 		}
 		
 		.table-container {
-            overflow-y: auto; 
-            height: 140px;
-            width: 550px
-        }  
+			overflow-y: auto; 
+			height: 140px;
+			width: 595px
+		}
 	</style>
 <script type="text/javascript">
 	document.onkeydown = keys;
@@ -92,15 +92,15 @@
 				break;
 		}
 	}
-// 	 function setTableWidth() {
-//          var availWidth = screen.availWidth;
+//	function setTableWidth() {
+//			var availWidth = screen.availWidth;
 
-//          var table1 = document.getElementById('conditionTable1');
-//          var table2 = document.getElementById('conditionTable2');
+//			var table1 = document.getElementById('conditionTable1');
+//			var table2 = document.getElementById('conditionTable2');
 
-//          table1.style.width = availWidth + 'px';
-//          table2.style.width = availWidth + 'px';
-//      }
+//			table1.style.width = availWidth + 'px';
+//			table2.style.width = availWidth + 'px';
+//		}
 
 	function onLoad(){
 		onInitFocus();
@@ -109,8 +109,8 @@
 //		division.offsetWidth = divisionTD.clientWidth;
 		loadResultFrame();
 		// 図番指定順のチェック
-        isOrderDrwgNo();
-        //setTableWidth();
+		isOrderDrwgNo();
+		//setTableWidth();
 	}
 	// 昇順、降順をサイクリックに切り替える
 	function changeOrder(obj,index){
@@ -120,10 +120,10 @@
 		if (language=="Japanese") {
 			ascStr = "昇順";
 			descStr = "降順";
-        } else {
-        	ascStr = "Asc";
-        	descStr = "Desc";
-        }
+		} else {
+			ascStr = "Asc";
+			descStr = "Desc";
+		}
 		//alert(obj.value);
 		if(obj.value==ascStr){
 			obj.value=descStr;
@@ -201,7 +201,7 @@
 		if (parent.result.result_head != null) unLockDocmentButtons(parent.result.result_head.document);
 		if (parent.result.result_foot != null) unLockDocmentButtons(parent.result.result_foot.document);
 		// 図番指定順のチェック
-        isOrderDrwgNo();
+		isOrderDrwgNo();
 	}
 
 	// 検索する
@@ -398,22 +398,22 @@
 
 		// １秒間隔で子画面の状態を監視
 		var interval = setInterval(function() {
-		    // 子画面が閉じていたら
-		    if(!WO1 || WO1.closed) {
+			// 子画面が閉じていたら
+			if(!WO1 || WO1.closed) {
 
-		        // Intervalを破棄
-		        clearInterval(interval);
+				// Intervalを破棄
+				clearInterval(interval);
 
-		        // 親画面のシェードを外す
-		        screenUnLock('screenLock');
-		    }
-		    // 画面が起動していたら
-		    else {
-		        // 子画面にフォーカスを当てる
-		        if(!WO1.document.hasFocus()) {
-		        	WO1.focus();
-		        }
-		    }
+				// 親画面のシェードを外す
+				screenUnLock('screenLock');
+			}
+			// 画面が起動していたら
+			else {
+				// 子画面にフォーカスを当てる
+				if(!WO1.document.hasFocus()) {
+					WO1.focus();
+				}
+			}
 		},1000);
 	}
 
@@ -439,7 +439,7 @@
 		element.style.opacity = '0';
 		element.style.backgroundColor = 'gray';
 
-	    return element;
+		return element;
 	}
 
 	// 画面ロック
@@ -454,8 +454,8 @@
 		} else {
 			// その他の場合
 			// 親画面全体にシェードをかける
-		    var objBody = top.document.getElementsByTagName("html").item(0);
-		    objBody.appendChild(screenLockStyle('screenLock'));
+			var objBody = top.document.getElementsByTagName("html").item(0);
+			objBody.appendChild(screenLockStyle('screenLock'));
 		}
 
 		// ボタンやリンクのロック
@@ -486,8 +486,8 @@
 			// その他の場合
 			// 親画面全体のシェードを解除
 			var dom_obj = top.document.getElementById(id_name);
-		    var dom_obj_parent = dom_obj.parentNode;
-		    dom_obj_parent.removeChild(dom_obj);
+			var dom_obj_parent = dom_obj.parentNode;
+			dom_obj_parent.removeChild(dom_obj);
 		}
 
 		// ボタンやリンクのロック解除
@@ -504,13 +504,13 @@
 	function openSubScreen(fn) {
 		var w = window.outerWidth - 20;
 		var h = window.outerHeight - 72;
-		
+
 		var screenWidth = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
-		
+
 		var left = Math.max(0, (screenWidth - w) / 2);
-	    var top = Math.max(0, (screenHeight - h) / 2);
-	    
+		var top = Math.max(0, (screenHeight - h) / 2);
+
 		var targetName = null;
 		var targetUrl = null;
 		var option = 'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=' + left + ',top=' + top
@@ -673,7 +673,7 @@
 	}
 	// 2019.09.25 yamamoto add end
 	// 2020.03.13 yamamoto add start
-    // 図番指定順のON/OFFチェック
+	// 図番指定順のON/OFFチェック
 	function isOrderDrwgNo() {
 		var checkElement = document.getElementById('orderDrwgNoHidden');
 		var ischecked = document.forms[0].orderDrwgNocheckbox.checked;
@@ -754,8 +754,8 @@
 		}
 		return ret;
 	}
-	
-	
+
+
 // 2020.03.13 yamamoto add end
 </script>
 </head>
@@ -830,7 +830,7 @@
 								<a href="javascript:changeLang('Japanese');"	style="text-decoration:underline">Japanese</a> /
 								<a href="javascript:changeLang('English');"	style="text-decoration:underline">English</a></b>
 								 -->
-					 			<select name="language" onchange="changeLang('English');" style="margin-right: 10px;">
+								<select name="language" onchange="changeLang('English');" style="margin-right: 10px;">
 									<option value="Japanese" ${sessionScope.user.language == 'Japanese' ? 'selected' : ''}>Japanese</option>
 									<option value="English" ${sessionScope.user.language == 'English' ? 'selected' : ''}>English</option>
 								</select>
@@ -851,8 +851,8 @@
 								<span class="normal10">
 									<select name="displayCount">
 										<option value="20" <c:if test="${searchConditionForm.displayCount == '20'}">selected</c:if>>20</option>
-    									<option value="50" <c:if test="${searchConditionForm.displayCount == '50'}">selected</c:if>>50</option>
-   										<option value="100" <c:if test="${searchConditionForm.displayCount == '100'}">selected</c:if>>100</option>
+										<option value="50" <c:if test="${searchConditionForm.displayCount == '50'}">selected</c:if>>50</option>
+											<option value="100" <c:if test="${searchConditionForm.displayCount == '100'}">selected</c:if>>100</option>
 									</select>
 									<c:choose>
 										<c:when test="${sessionScope.user.language == 'Japanese'}">件</c:when>
@@ -896,7 +896,7 @@
 						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()}" var="index">
 							<tr>
 								<td>
-									<select name="condition${index}">
+									<select name="condition${index}" style = "width: 141px;">
 										<c:forEach items="${searchConditionForm.conditionKeyList}" var="conditionKey" varStatus="loop">
 											<c:choose>
 												<c:when test="${conditionKey == searchConditionForm.getCondition(index - 1)}">
@@ -910,7 +910,7 @@
 									</select>
 								</td>
 								<td>
-									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"/>
+									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"style="width: 353px;"/>
 								</td>
 								<td>
 									<input type="button" name="sortWayButton${index}" value="${searchConditionForm.sortWayList[index-1]}" onclick="changeOrder(this)" style="width: 40px;" />

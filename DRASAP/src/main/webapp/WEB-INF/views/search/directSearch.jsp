@@ -8,14 +8,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form name="DirectPreviewForm" 
-	method="post"
-	target="_blank"
-	action="<%=request.getContextPath() %>/directLoginForPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229&sys_id=0002">
-	<input type="hidden" name="DRWG_NO" value="T0199M0009E"/>
-	<input type="hidden" name="DRWG_NO" value="T0199M0001C"/>
-	<input type="hidden" name="DRWG_NO" value="T900A30019A"/>
-	<input type="submit" value="DRASAP˜AŒg"/>
-</form>
+	<form name="DirectPreviewForm" method="post" target="_blank"
+		action="<%=request.getContextPath() %>/directLoginForPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229&sys_id=0002">
+		<input type="hidden" name="DRWG_NO" value="T0199M0009E"/>
+		<input type="hidden" name="DRWG_NO" value="T0199M0001C"/>
+		<input type="hidden" name="DRWG_NO" value="T900A30019A"/>
+		<input type="submit" value="DRASAP˜AŒg"/>
+	</form>
 </body>
 </html>

@@ -213,7 +213,7 @@
 		}
 		<%-- 2013.07.16 yamagishi add. end --%>
 		<%-- 2013.09.06 yamagishi add. start --%>
-		var dialogFlag = false; // 二重起動防止
+		<%-- var dialogFlag = false; // 二重起動防止 --%>
 		function openDLManagerDialog(idx,switchFlag) {
 			var DRWG_NO = document.getElementById("DRWG_NO[" + idx + "]").value;
 			var FILE_NAME = document.getElementById("FILE_NAME[" + idx + "]").value;
@@ -249,9 +249,9 @@
 										+ '&PDF=' + encodeURIComponent(PDF)
 										+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
 			}
-	<%		// DLマネージャが利用可能な場合
+<%--<%		// DLマネージャが利用可能な場合
 			User me = (User) session.getAttribute("user");
-			if (me.isDLManagerAvailable()) { %>
+			if (me.isDLManagerAvailable()) {%>
 			if (!dialogFlag) {
 				dialogFlag = true;
 				var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
@@ -265,12 +265,14 @@
 					w = 305;
 					h = 130;
 				}
+				alert(targetUrl);
 				window.showModalDialog(targetUrl, null, 'center=yes;status=no;scroll=no;resizable=no;dialogWidth=' + w + 'px;dialogHeight=' + h + 'px;'); // ※IEのみ
 				dialogFlag = false;
+				alert(2);
 			}
 			// hrefをキャンセル
 			return false;
-	<%		} %>
+	<%		} %> --%>
 		}
 		<%-- 2013.09.06 yamagishi add. end --%>
 
