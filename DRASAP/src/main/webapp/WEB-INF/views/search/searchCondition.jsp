@@ -79,7 +79,7 @@
 		.table-container {
 			overflow-y: auto; 
 			height: 140px;
-			width: 550px
+			width: 595px
 		}
 	</style>
 <script type="text/javascript">
@@ -896,7 +896,7 @@
 						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()}" var="index">
 							<tr>
 								<td>
-									<select name="condition${index}">
+									<select name="condition${index}" style = "width: 141px;">
 										<c:forEach items="${searchConditionForm.conditionKeyList}" var="conditionKey" varStatus="loop">
 											<c:choose>
 												<c:when test="${conditionKey == searchConditionForm.getCondition(index - 1)}">
@@ -910,7 +910,7 @@
 									</select>
 								</td>
 								<td>
-									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"/>
+									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"style="width: 353px;"/>
 								</td>
 								<td>
 									<input type="button" name="sortWayButton${index}" value="${searchConditionForm.sortWayList[index-1]}" onclick="changeOrder(this)" style="width: 40px;" />
