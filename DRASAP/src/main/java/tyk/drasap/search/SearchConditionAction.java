@@ -979,10 +979,26 @@ public class SearchConditionAction extends BaseAction {
 						sb.append(st.nextToken());
 					}
 					tempNextValue = sb.toString();
+				} else if ("PAGES".equals(conditionName) // ページ数
+						|| "ACL_ID".equals(conditionName) // アクセスレベル
+						|| "ATTACH_MAX".equals(conditionName) // 添付図数
+						|| "MEDIA_ID".equals(conditionName)) { // メディアID
+					// DBの定義がCHARで、値はスペースで左詰めになっているため
+					// 入力条件の桁が足りない場合、ヒットして来れない
+					// DBの定義は下記となる
+					// 　"PAGES" CHAR(4),
+					// 　"ACL_ID" CHAR(2) NOT NULL ENABLE,
+					// 　"ATTACH_MAX" CHAR(2),
+					// 　"MEDIA_ID" CHAR(8) NOT NULL ENABLE,
+					int len = "PAGES".equals(conditionName)
+							? 4
+							: "MEDIA_ID".equals(conditionName)
+									? 8
+									: 2;
+					tempNextValue = String.format("%-" + len + "s", tempNextValue);
 				}
 				sbSql.append(tempNextValue);
 				sbSql.append("'");
-
 			}
 			// 4) 次のループのための準備
 			if (nextOrAndIndex == -1) {
