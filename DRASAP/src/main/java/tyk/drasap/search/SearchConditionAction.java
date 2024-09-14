@@ -979,10 +979,11 @@ public class SearchConditionAction extends BaseAction {
 						sb.append(st.nextToken());
 					}
 					tempNextValue = sb.toString();
-				} else if ("PAGES".equals(conditionName) // ページ数
-						|| "ACL_ID".equals(conditionName) // アクセスレベル
-						|| "ATTACH_MAX".equals(conditionName) // 添付図数
-						|| "MEDIA_ID".equals(conditionName)) { // メディアID
+				} else if (!tempNextValue.endsWith("%")
+						&& ("PAGES".equals(conditionName) // ページ数
+								|| "ACL_ID".equals(conditionName) // アクセスレベル
+								|| "ATTACH_MAX".equals(conditionName) // 添付図数
+								|| "MEDIA_ID".equals(conditionName))) { // メディアID
 					// DBの定義がCHARで、値はスペースで左詰めになっているため
 					// 入力条件の桁が足りない場合、ヒットして来れない
 					// DBの定義は下記となる
