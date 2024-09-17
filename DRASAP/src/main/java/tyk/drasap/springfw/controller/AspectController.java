@@ -251,7 +251,7 @@ public class AspectController {
 			Method setMessage = clazz.getMethod("setMessageSource", MessageSource.class);
 			Method execute = clazz.getMethod("execute", formClass, HttpServletRequest.class, HttpServletResponse.class, Model.class);
 
-			// TODO reset()呼出除外条件追加
+			// reset()呼出除外条件追加
 			//if ("RequestHistoryForm".equals(action.getAttribute()) || !(form instanceof tyk.drasap.genzu_irai.Request_listForm)) {
 			if (!(form instanceof tyk.drasap.genzu_irai.Request_listForm)) {
 				for (Method method : formClass.getMethods()) {
@@ -397,8 +397,6 @@ public class AspectController {
 
 		// URLとクエリ文字列を確認
 		category.debug("method:[" + method + " = (" + result + ")]     " + request.getMethod() + " ---> " + fullUrl);
-
-		// TODO 最後に削除する予定
 		System.out.println("method:[" + method + " = (" + result + ")]     " + request.getMethod() + " ---> " + fullUrl);
 		return fullUrl;
 	}
