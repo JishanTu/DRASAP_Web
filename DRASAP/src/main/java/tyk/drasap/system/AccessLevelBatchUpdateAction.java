@@ -530,10 +530,10 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 
 		// セル値を文字列で返す
 		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_BOOLEAN:
+		case BOOLEAN:
 			value = String.valueOf(cell.getBooleanCellValue());
 			break;
-		case Cell.CELL_TYPE_NUMERIC:
+		case NUMERIC:
 			if (DateUtil.isCellDateFormatted(cell)) {
 				// 日付（yyyy/MM/dd）
 				value = new SimpleDateFormat("yyyy/MM/dd").format(cell
@@ -543,20 +543,20 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 				value = String.valueOf((long) cell.getNumericCellValue());
 			}
 			break;
-		case Cell.CELL_TYPE_STRING:
+		case STRING:
 			value = cell.getStringCellValue();
 			break;
 
-		case Cell.CELL_TYPE_FORMULA: {
+		case FORMULA: {
 			// 計算式の結果を取得
 			cellValue = evaluator.evaluate(cell);
 
 			// 関数値を文字列で返す
 			switch (cellValue.getCellType()) {
-			case Cell.CELL_TYPE_BOOLEAN:
+			case BOOLEAN:
 				value = String.valueOf(cellValue.getBooleanValue());
 				break;
-			case Cell.CELL_TYPE_NUMERIC:
+			case NUMERIC:
 				// 関数のセルが日付形式か
 				if (DateUtil.isCellDateFormatted(cell)) {
 					// 日付（yyyy/MM/dd）
@@ -567,7 +567,7 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 					value = String.valueOf((long) cellValue.getNumberValue());
 				}
 				break;
-			case Cell.CELL_TYPE_STRING:
+			case STRING:
 				value = cellValue.getStringValue();
 				break;
 			default:
@@ -575,8 +575,8 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 			}
 			break;
 		}
-		case Cell.CELL_TYPE_BLANK:
-		case Cell.CELL_TYPE_ERROR:
+		case BLANK:
+		case ERROR:
 		default:
 			break;
 		}
