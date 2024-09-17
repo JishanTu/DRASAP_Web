@@ -152,7 +152,7 @@
 			</table>
 		</td>
 		<td  nowrap="nowrap"><span class="normal10">
-			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.value");
+			<%	String thumbValue = DrasapPropertiesFactory.getDrasapProperties(this).getProperty("thumbnail.view");
 			if ("true".equals(thumbValue)) { %>
 			<span style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
 											<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">${searchResultForm.h_label9}</span>
