@@ -36,17 +36,18 @@ public class SearchOrderSentenceMaker {
 		}
 		// ソート順が設定されていないときは、9番とする
 		if (sortOrder == null || sortOrder.length() == 0) {
-			sortOrder = "9";
+			sortOrder = "99";
 		}
 		// sqlListに追加する部分を事前に作成しておく
 		String sqlPart = columnName;
-		if ("降順".equals(sortWay)) {
+		if ("降順".equals(sortWay) || "Desc".equals(sortWay)) {
 			sqlPart += " DESC";
 		}
 		// 挿入位置を探す
 		boolean inserted = false;// 挿入したらtrue
 		for (int i = 0; i < sortOrderList.size(); i++) {
-			if (sortOrder.compareTo(sortOrderList.get(i)) < 0) {
+			String sortOrderTemp = String.format("%02d", Integer.parseInt(sortOrder));
+			if (sortOrderTemp.compareTo(sortOrderList.get(i)) < 0) {
 				sortOrderList.add(i, sortOrder);// ソート順序のリストに追加
 				sqlList.add(i, sqlPart);// SQL文保持のリストに追加
 				inserted = true;
