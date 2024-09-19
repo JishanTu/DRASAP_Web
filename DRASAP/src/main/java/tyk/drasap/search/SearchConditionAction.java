@@ -445,7 +445,7 @@ public class SearchConditionAction extends BaseAction {
 				}
 			}
 			// 日付型属性のチェック /////////////////////////////////////////////////////////////////
-			if ("CREATE_DATE".equals(conditionName)) {
+			if ("CREATE_DATE".equals(conditionName) || "PROHIBIT_DATE".equals(conditionName) || "ACL_UPDATE".equals(conditionName)) {
 				// カンマまたはアンバサンドで区切られた文字列を
 				StringTokenizer st = new StringTokenizer(conditionValue, ",&");
 				while (st.hasMoreTokens()) {
@@ -873,7 +873,7 @@ public class SearchConditionAction extends BaseAction {
 				nextValue = StringCheck.changeDbToSbAscii(nextValue).toUpperCase();
 			}
 			//
-			if ("CREATE_DATE".equals(conditionName)) {
+			if ("CREATE_DATE".equals(conditionName) || "PROHIBIT_DATE".equals(conditionName) || "ACL_UPDATE".equals(conditionName)) {
 				// 日付型の場合
 				nextValue = nextValue.replace('　', ' ');// 全角スペースを半角スペースに
 				nextValue = nextValue.trim();// trimして半角スペースを除く
