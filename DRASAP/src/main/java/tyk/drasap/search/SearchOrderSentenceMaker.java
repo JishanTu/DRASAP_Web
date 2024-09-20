@@ -46,8 +46,8 @@ public class SearchOrderSentenceMaker {
 		// 挿入位置を探す
 		boolean inserted = false;// 挿入したらtrue
 		for (int i = 0; i < sortOrderList.size(); i++) {
-			String sortOrderTemp = String.format("%02d", Integer.parseInt(sortOrder));
-			if (sortOrderTemp.compareTo(sortOrderList.get(i)) < 0) {
+			int sortOrderTemp = Integer.parseInt(sortOrder);
+			if (sortOrderTemp < Integer.parseInt(sortOrderList.get(i))) {
 				sortOrderList.add(i, sortOrder);// ソート順序のリストに追加
 				sqlList.add(i, sqlPart);// SQL文保持のリストに追加
 				inserted = true;
