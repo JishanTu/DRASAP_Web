@@ -207,7 +207,7 @@
 User me = (User) session.getAttribute("user");
 if (me.isDelAdmin()) { %>
 	<input type="button" value="${sessionScope.searchResultForm.h_label10}" onclick="management()" class = "management"/>
-<%} %>	
+<%} %>
 
 <table border="1">
 	<tr>

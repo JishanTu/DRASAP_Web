@@ -249,7 +249,8 @@
 										+ '&PDF=' + encodeURIComponent(PDF)
 										+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
 			}
-<%--<%		// DLマネージャが利用可能な場合
+<%--
+	<%		// DLマネージャが利用可能な場合
 			User me = (User) session.getAttribute("user");
 			if (me.isDLManagerAvailable()) {%>
 			if (!dialogFlag) {
@@ -272,7 +273,8 @@
 			}
 			// hrefをキャンセル
 			return false;
-	<%		} %> --%>
+	<%		} %>
+--%>
 		}
 		<%-- 2013.09.06 yamagishi add. end --%>
 
@@ -383,7 +385,7 @@
 	<form action="<%=request.getContextPath() %>/result" method="post" >
 		<input type="hidden" name="act" /> 
 		<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
-		<%-- この隠し属性がないと、次のXX件をクリックすると、表示属性が消えてしまう --%>
+			<%-- この隠し属性がないと、次のXX件をクリックすると、表示属性が消えてしまう --%>
 			<input type="hidden"name="dispAttr${index}" value="${sessionScope.searchResultForm.getDispAttr(index - 1)}"/>
 		</c:forEach>
 		<input type="hidden" name="outputPrinter" />
@@ -391,9 +393,7 @@
 		<input type="hidden" name="thumbnailSize" />
 
 		<%-- ファイル出力で全属性か --%>
-
-		<c:set var="resultList"
-			value="${sessionScope.searchResultForm.searchResultList}" />
+		<c:set var="resultList" value="${sessionScope.searchResultForm.searchResultList}" />
 		<c:choose>
 			<c:when test="${empty resultList}">
 				<ul style="color: red; font-size: 12pt;">
@@ -418,30 +418,26 @@
 			<%-- userを定義する --%>
 			<c:set var="user" value="${sessionScope.user}" />
 			<%-- iterateに必要なoffsetとlengthを定義する --%>
-			<c:set var="iterateLength"
-				value="${sessionScope.searchResultForm.dispNumberPerPage}" />
-			<c:set var="iterateOffest"
-				value="${sessionScope.searchResultForm.dispNumberOffest}" />
+			<c:set var="iterateLength" value="${sessionScope.searchResultForm.dispNumberPerPage}" />
+			<c:set var="iterateOffest" value="${sessionScope.searchResultForm.dispNumberOffest}" />
 
-			<c:forEach var="item"
-				items="${sessionScope.searchResultForm.getSearchResultList()}"
-				varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
+			<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin="${iterateOffest}" end="${iterateLength + iterateOffest - 1}">
 				<c:if test="${((status.index - iterateOffest) % 15) == 0}">
 					<tr>
 						<td></td>
 						<!--
-				アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
-				<td></td>
-				-->
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispOutputSizeName}</span></td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispCopiesName}</span></td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC"><span
-							class="normal10">
-								${sessionScope.searchResultForm.dispDwgNoName}</span></td>
+						アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
+						<td></td>
+						-->
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+							<span class="normal10">${sessionScope.searchResultForm.dispOutputSizeName}</span>
+						</td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+							<span class="normal10">${sessionScope.searchResultForm.dispCopiesName}</span>
+						</td>
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+							<span class="normal10">${sessionScope.searchResultForm.dispDwgNoName}</span>
+						</td>
 						<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
 							<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
 								<span class="normal10">${sessionScope.searchResultForm.getDispAttrName(index - 1)}</span>
@@ -460,16 +456,17 @@
 						<c:set var="bgcolor1" value="#FFFFA4" />
 					</c:when>
 				</c:choose>
+
 				<tr bgcolor="${bgcolor1}">
 					<%-- 2013.08.21 yamagishi modified. start
-			<td><html:checkbox name="searchResultElement" property="selected" indexed="true" /></td> --%>
+					<td><html:checkbox name="searchResultElement" property="selected" indexed="true" /></td> --%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1}">
 							<td>
-							<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/>
-							<input type="checkbox"id="checkbox${status.index}"
-								value="true" onclick="isChecked(${status.index},'drwg')"
-								<c:if test="${item.selected}">checked="checked"</c:if> /></td>
+								<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/>
+								<input type="checkbox"id="checkbox${status.index}" value="true" onclick="isChecked(${status.index},'drwg')"
+								<c:if test="${item.selected}">checked="checked"</c:if> />
+							</td>
 						</c:when>
 						<c:otherwise>
 							<td />
@@ -477,17 +474,17 @@
 					</c:choose>
 					<%-- 2013.08.21 yamagishi modified. end --%>
 					<!--
-			アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
-			<%-- // この図面が、このユーザーにとって印刷可能なら
-				if(user.isPrintable(searchResultElement)) { --%>
-				<td></td>
-			<%-- } else { --%>
-				<td bgcolor="#FF0000"><span class="normal10white">×</span></td>
-			<%-- } --%>
-			-->
+					アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
+					<%-- // この図面が、このユーザーにとって印刷可能なら
+						if(user.isPrintable(searchResultElement)) { --%>
+						<td></td>
+					<%-- } else { --%>
+						<td bgcolor="#FF0000"><span class="normal10white">×</span></td>
+					<%-- } --%>
+					-->
 					<td align="center">
-								<input type="hidden" id="printSizeHidden${status.index}" value="${item.printSize}"/> 
-					<select name="printSize"id="printSizeSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'printSize')">
+						<input type="hidden" id="printSizeHidden${status.index}" value="${item.printSize}"/>
+						<select name="printSize"id="printSizeSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'printSize')">
 							<option value="ORG">
 								<c:choose>
 									<c:when test="${user.language == 'Japanese'}">原寸</c:when>
@@ -512,10 +509,11 @@
 								<c:if test="${item.printSize == '35.4%'}">selected</c:if>>35.4%</option>
 							<option value="25%"
 								<c:if test="${item.printSize == '25%'}">selected</c:if>>25%</option>
-					</select></td>
+						</select>
+					</td>
 					<td>
-					<input type="hidden" id="copiesHidden${status.index}" value="${item.copies}"/> 
-					<select name="copies" id="copiesSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'copies')">
+						<input type="hidden" id="copiesHidden${status.index}" value="${item.copies}"/>
+						<select name="copies" id="copiesSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'copies')">
 							<option value="1"<c:if test="${item.copies == '1'}">selected</c:if>>1</option>
 							<option value="2"<c:if test="${item.copies == '2'}">selected</c:if>>2</option>
 							<option value="3"<c:if test="${item.copies == '3'}">selected</c:if>>3</option>
@@ -526,23 +524,26 @@
 							<option value="8"<c:if test="${item.copies == '8'}">selected</c:if>>8</option>
 							<option value="9"<c:if test="${item.copies == '9'}">selected</c:if>>9</option>
 							<option value="10"<c:if test="${item.copies == '10'}">selected</c:if>>10</option>
-					</select></td>
+						</select>
+					</td>
 
 					<%-- 2013.06.24 yamagishi modified. start
-			<td nowrap="nowrap"><span class="normal12blue">
-				<html:link forward="preview" name="searchResultElement" property="linkParmMap">
-					<bean:write name="searchResultElement" property="drwgNoFormated" />
-				</html:link></span></td> --%>
+					<td nowrap="nowrap"><span class="normal12blue">
+					<html:link forward="preview" name="searchResultElement" property="linkParmMap">
+						<bean:write name="searchResultElement" property="drwgNoFormated" />
+					</html:link></span></td>
+					--%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1 }">
-							<td nowrap="nowrap"><span class="normal12blue"> <a
-									id="drwgNoLink[${status.index}]"
-									href='<c:url value="/preview"/>'
-									title='<c:out value="${item.aclBalloon}"/>'
-									onclick="return openDLManagerDialog(${status.index},'drwgNo');">${item.drwgNoFormated}
-								</a>
-
-							</span></td>
+							<td nowrap="nowrap">
+								<span class="normal12blue">
+									<a id="drwgNoLink[${status.index}]"
+										href='<c:url value="/preview"/>'
+										title='<c:out value="${item.aclBalloon}"/>'
+										onclick="return openDLManagerDialog(${status.index},'drwgNo');">${item.drwgNoFormated}
+									</a>
+								</span>
+							</td>
 							<input type="hidden" id="DRWG_NO[${status.index}]" value="${item.drwgNo}"/>
 							<input type="hidden" id="FILE_NAME[${status.index}]" value="${item.fileName}"/>
 							<input type="hidden" id="PATH_NAME[${status.index}]" value="${item.pathName}"/>
@@ -550,8 +551,9 @@
 							<input type="hidden" id="PRINT_SIZE[${status.index}]" value="${item.printSize}"/>
 						</c:when>
 						<c:otherwise>
-							<td nowrap="nowrap"><span class="normal12"
-								title="${item.aclBalloon}"> ${item.drwgNoFormated}</span></td>
+							<td nowrap="nowrap">
+								<span class="normal12" title="${item.aclBalloon}"> ${item.drwgNoFormated}</span>
+							</td>
 						</c:otherwise>
 					</c:choose>
 					<%-- 2013.06.24 yamagishi modified. end --%>
@@ -564,34 +566,60 @@
 			</c:forEach>
 		</table>
 		<table border="0" cellspacing="1" cellpadding="0">
-			<div class="container"style="<c:choose><c:when test="${sessionScope.resultDispMode == 'list_view'}">display: none;</c:when>
+			<div class="container" style="<c:choose><c:when test="${sessionScope.resultDispMode == 'list_view'}">display: none;</c:when>
 													<c:when test="${sessionScope.resultDispMode == 'thumbnail_view'}">display: block;</c:when>
 													<c:otherwise>display: none;</c:otherwise></c:choose>">
-				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
-					<div class="galleryr-m" id="galleryr${status.index}">
+				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin="${iterateOffest}" end="${iterateLength + iterateOffest - 1}">
+					<c:set var="bgcolor1" value="#FFFFFF" />
+					<c:choose>
+						<c:when test="${item.getAttrMap().get('PROHIBIT') == 'NG'}">
+							<c:set var="bgcolor1" value="#FF66FF" />
+						</c:when>
+						<c:when
+							test="${fn:length(item.getAttrMap().get('TWIN_DRWG_NO')) > 0}">
+							<c:set var="bgcolor1" value="#FFFFA4" />
+						</c:when>
+					</c:choose>
+
+					<div class="galleryr-m" id="galleryr${status.index}"">
 						<div style="flex: 1; display: flex; justify-content: center; text-align: center; flex-direction: column;">
 							<c:choose>
 								<c:when test="${item.aclFlag == 1 }">
-									<a id="thumbnailPhotoLink[${status.index}]" href='<c:url value="/preview"/>'
-										onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');" class="drwgNo large">
-										<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]"
-											 title='<c:out value="${item.aclBalloon}"/>' onload="thumbnailLoad(this,'${item.getAttr('THUMB_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
+									<a id="thumbnailPhotoLink[${status.index}]"
+									   href='<c:url value="/preview"/>'
+										onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');"
+										class="drwgNo large">
+										<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}"
+											 id="thumbnail[${status.index}]"
+											 title='<c:out value="${item.aclBalloon}"/>'
+											 onload="thumbnailLoad(this,'${item.getAttr('THUMB_SIZE')}',${status.index})"
+											 class="thumbnail medium-a0"/>
 									</a>
 								</c:when>
 								<c:otherwise>
-									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}" id="thumbnail[${status.index}]" title='<c:out value="${item.aclBalloon}"/>'
-											onload="thumbnailLoad(this,'${item.getAttr('THUMB_SIZE')}',${status.index})" class="thumbnail medium-a0"/>
+									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}"
+										 id="thumbnail[${status.index}]"
+										 title='<c:out value="${item.aclBalloon}"/>'
+										 onload="thumbnailLoad(this,'${item.getAttr('THUMB_SIZE')}',${status.index})"
+										 class="thumbnail medium-a0"/>
 								</c:otherwise>
 							</c:choose>
 						</div>
-						<div class="controls">
+						<div class="controls" style="background-color: ${bgcolor1};">
 							<c:choose>
 								<c:when test="${item.aclFlag == 1 }">
 									<input type="hidden" id="thumbnailcheckboxHidden${status.index}" value="${item.selected}"/>
-									<input type="checkbox" id="thumbnailcheckbox${status.index}" value="true" <c:if test="${item.selected}">checked="checked"</c:if>
-										onclick="isChecked(${status.index},'thumbnail')" class="checkbox large"/>
-									<a id="thumbnailNoLink[${status.index}]" href='<c:url value="/preview"/>' title='<c:out value="${item.aclBalloon}"/>'
-										onclick="return openDLManagerDialog(${status.index},'thumbnailNo');" class="drwgNo large">${item.drwgNoFormated}</a>
+									<input type="checkbox"
+										   id="thumbnailcheckbox${status.index}"
+										   value="true" <c:if test="${item.selected}">checked="checked"</c:if>
+										   onclick="isChecked(${status.index},'thumbnail')"
+										   class="checkbox large"/>
+									<a id="thumbnailNoLink[${status.index}]"
+									   href='<c:url value="/preview"/>'
+									   title='<c:out value="${item.aclBalloon}"/>'
+									   onclick="return openDLManagerDialog(${status.index},'thumbnailNo');"
+									   class="drwgNo large">${item.drwgNoFormated}
+									</a>
 								</c:when>
 								<c:otherwise>
 									<span class="normal12">&nbsp;&nbsp;</span>
@@ -611,13 +639,10 @@
 		<table class="nowsearch" id="nowSearch" style="visibility: hidden">
 			<tr valign="middle">
 				<td align="center" style="font-size: 18pt; color: #0000FF;"><c:choose>
-						<c:when test="${sessionScope.user.language == 'Japanese' }">
-検索中・・・・
-</c:when>
-						<c:otherwise>
-Now Searching...
-</c:otherwise>
-					</c:choose></td>
+						<c:when test="${sessionScope.user.language == 'Japanese' }">検索中・・・・</c:when>
+						<c:otherwise>Now Searching...</c:otherwise>
+					</c:choose>
+				</td>
 			</tr>
 		</table>
 		<%-- IE互換性表示対策--%>
