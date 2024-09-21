@@ -40,6 +40,7 @@ public class User {
 	ArrayList<Printer> enablePrinters = new ArrayList<Printer>();// 利用可能なプリンター。内部はPrinter。
 	String displayCount = "";// 検索の1ページ当たりの表示件数
 	String thumbnailSize = "M";// サムネイルサイズ
+	String resultDispMode = "L";// 結果表示モード
 	public static int searchSelColNum = 10;
 	public static int viewSelColNum = 12;
 	private ArrayList<String> searchSelColList = new ArrayList<>(); // 検索条件カラムリスト
@@ -643,10 +644,24 @@ public class User {
 	}
 
 	/**
-	 * @param string
+	 * @param thumbnailSize
 	 */
 	public void setThumbnailSize(String thumbnailSize) {
 		this.thumbnailSize = StringUtils.isBlank(thumbnailSize) ? "M" : thumbnailSize;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getResultDispMode() {
+		return resultDispMode;
+	}
+
+	/**
+	 * @param resultDispMode
+	 */
+	public void setResultDispMode(String resultDispMode) {
+		this.resultDispMode = StringUtils.isBlank(resultDispMode) ? "L" : resultDispMode;
 	}
 
 	/**

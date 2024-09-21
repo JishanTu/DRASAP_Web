@@ -152,10 +152,10 @@
 			</table>
 		</td>
 		<td  nowrap="nowrap"><span class="normal10">
-			<span style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
+			<span style="<c:choose><c:when test="${sessionScope.resultDispMode == 'thumbnail_view'}">visibility: visible;</c:when>
 											<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">${searchResultForm.h_label9}</span>
 			<select name="thumbnailSize" onchange="thumbnailSizeChange()"
-					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">visibility: visible;</c:when>
+					style="<c:choose><c:when test="${sessionScope.resultDispMode == 'thumbnail_view'}">visibility: visible;</c:when>
 									<c:otherwise>visibility: hidden;</c:otherwise></c:choose>">
 				<c:choose>
 					<c:when test="${user.language == 'Japanese'}">
@@ -171,10 +171,10 @@
 				</c:choose>
 			</select>
 			<input type="button" id="list_view" value="${searchResultForm.h_label8}" onclick="listViewChange()"
-					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
+					style="<c:choose><c:when test="${sessionScope.resultDispMode == 'thumbnail_view'}">display: none;</c:when>
 							<c:otherwise>display: inline-block;</c:otherwise></c:choose>"/>
 			<input type="button" id="thumbnail_view" value="${searchResultForm.h_label7}" onclick="thumbnailViewChange()"
-					style="<c:choose><c:when test="${sessionScope.indication == 'thumbnail_view'}">display: inline-block;</c:when>
+					style="<c:choose><c:when test="${sessionScope.resultDispMode == 'thumbnail_view'}">display: inline-block;</c:when>
 							<c:otherwise>display: none;</c:otherwise></c:choose>"/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="button" value="${searchResultForm.h_label2}" onclick="checkOnAll()" />
@@ -184,34 +184,30 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			${searchResultForm.h_label5 }&nbsp;
 			<select name="outputPrinter">
-								<c:forEach items="${searchResultForm.printerKeyList}"
-									var="outputPrinterKey" varStatus="loop">
-									<c:choose>
-										<c:when
-											test="${outputPrinterKey == searchResultForm.getOutputPrinter()}">
-											<option value="${outputPrinterKey}" selected>${searchResultForm.printerNameList[loop.index]}</option>
-										</c:when>
-										<c:otherwise>
-											<option value="${outputPrinterKey}">${searchResultForm.printerNameList[loop.index]}</option>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
-						</select>
-					</span>
+				<c:forEach items="${searchResultForm.printerKeyList}"
+					var="outputPrinterKey" varStatus="loop">
+					<c:choose>
+						<c:when
+							test="${outputPrinterKey == searchResultForm.getOutputPrinter()}">
+							<option value="${outputPrinterKey}" selected>${searchResultForm.printerNameList[loop.index]}</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${outputPrinterKey}">${searchResultForm.printerNameList[loop.index]}</option>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+			</select>
+			</span>
 		</td>
 	</tr>
 </table>
 
-
-				<%// admin_flag='2'のユーザのみ
+<%// admin_flag='2'のユーザのみ
 // ボタンを表示する
 User me = (User) session.getAttribute("user");
 if (me.isDelAdmin()) { %>
 	<input type="button" value="${sessionScope.searchResultForm.h_label10}" onclick="management()" class = "management"/>
 <%} %>	
-
-
-
 
 <table border="1">
 	<tr>

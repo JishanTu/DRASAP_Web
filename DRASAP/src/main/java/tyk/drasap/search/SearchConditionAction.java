@@ -72,8 +72,10 @@ public class SearchConditionAction extends BaseAction {
 		if (user == null) {
 			return "timeout";
 		}
-		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
+		session.setAttribute("resultDispMode", "T".equals(user.getResultDispMode()) ? "thumbnail_view" : "list_view");
+		session.setAttribute("thumbnailSize", user.getThumbnailSize());
 
+		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
 		String lanKey = user.getLanKey();
 
 		// リクエストから情報を取得

@@ -412,8 +412,8 @@
 			</c:otherwise>
 		</c:choose>
 
-		<table border="0" cellspacing="1" cellpadding="0" style="<c:choose><c:when test="${sessionScope.indication == 'list_view'}">display: block;</c:when>
-																<c:when test="${sessionScope.indication == 'thumbnail_view'}">display: none;</c:when>
+		<table border="0" cellspacing="1" cellpadding="0" style="<c:choose><c:when test="${sessionScope.resultDispMode == 'list_view'}">display: block;</c:when>
+																<c:when test="${sessionScope.resultDispMode == 'thumbnail_view'}">display: none;</c:when>
 																<c:otherwise>display: block;</c:otherwise></c:choose>">
 			<%-- userを定義する --%>
 			<c:set var="user" value="${sessionScope.user}" />
@@ -564,8 +564,8 @@
 			</c:forEach>
 		</table>
 		<table border="0" cellspacing="1" cellpadding="0">
-			<div class="container"style="<c:choose><c:when test="${sessionScope.indication == 'list_view'}">display: none;</c:when>
-													<c:when test="${sessionScope.indication == 'thumbnail_view'}">display: block;</c:when>
+			<div class="container"style="<c:choose><c:when test="${sessionScope.resultDispMode == 'list_view'}">display: none;</c:when>
+													<c:when test="${sessionScope.resultDispMode == 'thumbnail_view'}">display: block;</c:when>
 													<c:otherwise>display: none;</c:otherwise></c:choose>">
 				<c:forEach var="item" items="${sessionScope.searchResultForm.getSearchResultList()}" varStatus="status" begin = "${iterateOffest}" end = "${iterateLength + iterateOffest - 1}">
 					<div class="galleryr-m" id="galleryr${status.index}">

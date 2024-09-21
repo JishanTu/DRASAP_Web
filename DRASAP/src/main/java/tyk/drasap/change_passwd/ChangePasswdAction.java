@@ -59,22 +59,21 @@ public class ChangePasswdAction extends BaseAction {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false); // 自動コミットしない
 
-			//			category.debug("oldpass=" + passwdForm.getOldpass());
-			//			category.debug("newpass=" + passwdForm.getNewpass());
+			// category.debug("oldpass=" + passwdForm.getOldpass());
+			// category.debug("newpass=" + passwdForm.getNewpass());
 
 			// パスワード更新
-			UserDB.updatePassword(user.getId(), passwdForm.getNewpass(), conn);
-
+			UserDB.updateUserMaster(user.getId(), "PASSWD", passwdForm.getNewpass(), conn);
 		} catch (Exception e) {
 			// for ユーザー
 			MessageSourceUtil.addAttribute(errors, "message",
-					messageSource.getMessage("root.failed.get.userinfo." + user.getLanKey(),
+					messageSource.getMessage("root.failed.update.userinfo." + user.getLanKey(),
 							new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			// for MUR
-			category.error("ユーザー情報の取得に失敗\n" + ErrorUtility.error2String(e));
+			category.error("ユーザー情報のパスワードへの更新に失敗\n" + ErrorUtility.error2String(e));
 			throw e;
 		} finally {
 			try {

@@ -207,10 +207,10 @@
 		</td>
 		<td align="left">
 		<c:choose>
-			<c:when test="${sessionScope.indication == 'list_view' || empty sessionScope.indication}">
+			<c:when test="${sessionScope.resultDispMode == 'list_view' || empty sessionScope.resultDispMode}">
 				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('PRINT')" />
 			</c:when>
-			<c:when test="${sessionScope.indication == 'thumbnail_view'}">
+			<c:when test="${sessionScope.resultDispMode == 'thumbnail_view'}">
 				<input type="button" value="　${searchResultForm.f_label4}　" onclick="setActSubmit('SEARCH_THUMBNAIL')" />
 			</c:when>
 		</c:choose>

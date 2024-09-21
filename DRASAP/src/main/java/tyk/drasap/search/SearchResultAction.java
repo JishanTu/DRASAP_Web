@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -65,13 +66,8 @@ public class SearchResultAction extends BaseAction {
 			return "timeout";
 		}
 		DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
-		if (user.getThumbnailSize() == null) {
-			session.setAttribute("thumbnailSize", "M");
-		} else {
-			session.setAttribute("thumbnailSize", user.getThumbnailSize());
-		}
 
-		//
+		// offset
 		int offset = Integer.parseInt(searchResultForm.getDispNumberOffest());// 今のoffset値
 		int dispNumberPerPage = Integer.parseInt(searchResultForm.getDispNumberPerPage());// 1ページ当たりの表示件数
 		// act属性による処理の切り分け
@@ -87,18 +83,15 @@ public class SearchResultAction extends BaseAction {
 			searchResultForm.setDispNumberOffest(String.valueOf(offset));//オフセット値を変更する
 			session.setAttribute("searchResultForm", searchResultForm);
 			return "result";
-
 		}
 		if ("NEXT".equals(searchResultForm.getAct())) {
 			// 次へなら
 			if (searchResultForm.getSearchResultList().size() > offset + dispNumberPerPage) {
 				searchResultForm.setDispNumberOffest(String.valueOf(offset + dispNumberPerPage));
 			}
-			//
 			searchResultForm.setAct("");// act属性をクリア
 			session.setAttribute("searchResultForm", searchResultForm);
 			return "result";
-
 		}
 		if ("REFRESH".equals(searchResultForm.getAct())
 				|| "CHANGELANGUAGE".equals(searchResultForm.getAct())) {
@@ -139,7 +132,6 @@ public class SearchResultAction extends BaseAction {
 			searchResultForm.setAct("");// act属性をクリア
 			session.setAttribute("searchResultForm", searchResultForm);
 			return "result";
-
 		}
 		if ("PRINT".equals(searchResultForm.getAct())) {
 			// 印刷の指示をする
@@ -179,14 +171,12 @@ public class SearchResultAction extends BaseAction {
 				// '04.Nov.23 PrintRequestDBで図番ごとにロギングするように変更したので
 				// コメントアウトする。
 				// AccessLoger.loging(user, AccessLoger.FID_OUT_DRWG);
-
 			}
 
 			//saveErrors(request, errors);
 			request.setAttribute("errors", errors);
 			category.debug("--> search_error");
 			return "search_error";
-
 		}
 		if ("OUT_CSV".equals(searchResultForm.getAct())) {
 			// 全属性かどうかを、request#setAttributeする
@@ -194,7 +184,6 @@ public class SearchResultAction extends BaseAction {
 			// 検索結果をファイル出力する
 			category.debug("--> out_csv");
 			return "out_csv";
-
 		}
 		if ("ACLV_CHG".equals(searchResultForm.getAct())) {
 			// アクセスレベルの変更画面へ
@@ -222,15 +211,17 @@ public class SearchResultAction extends BaseAction {
 			// 2020.03.10 yamamoto add. end
 		}
 		if ("LIST_VIEW".equals(searchResultForm.getAct())) {
-			session.setAttribute("indication", "thumbnail_view");
+			session.setAttribute("resultDispMode", "thumbnail_view");
+			changeUserMaster(user, "RESULT_DISP_MODE", "T", errors);
 			return "result";
 		}
 		if ("THUMBNAIL_VIEW".equals(searchResultForm.getAct())) {
-			session.setAttribute("indication", "list_view");
+			session.setAttribute("resultDispMode", "list_view");
+			changeUserMaster(user, "RESULT_DISP_MODE", "L", errors);
 			return "result";
 		}
 		if ("THUMBNAIL_SIZE".equals(searchResultForm.getAct())) {
-			thumbnailSizeChange(user, request.getParameter("thumbnailSize"), errors);
+			changeUserMaster(user, "THUMBNAIL_SIZE", request.getParameter("thumbnailSize"), errors);
 			if (!Objects.isNull(errors.getAttribute("message"))) {
 				request.setAttribute("errors", errors);
 				return "search_error";
@@ -250,7 +241,7 @@ public class SearchResultAction extends BaseAction {
 				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
 			}
 			session.setAttribute("thumbnailSize", user.getThumbnailSize());
-			session.setAttribute("indication", "thumbnail_view");
+			session.setAttribute("resultDispMode", "thumbnail_view");
 			session.setAttribute("searchResultForm", searchResultForm);
 			return "result";
 		}
@@ -531,22 +522,35 @@ public class SearchResultAction extends BaseAction {
 	 * @param errors
 	 * @throws Exception
 	 */
-	private void thumbnailSizeChange(User user, String thumbnailSize, Model errors) {
+	private void changeUserMaster(User user, String column, String value, Model errors) {
 		Connection conn = null;
+		String colMsg = null;
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false); // 自動コミットしない
-			// サムネイルサイズ更新
-			UserDB.updateThumbnailSize(user.getId(), thumbnailSize, conn);
-			user.setThumbnailSize(thumbnailSize);
+
+			if ("THUMBNAIL_SIZE".equals(column)) {
+				// サムネイルサイズ更新
+				colMsg = "サムネイルサイズ";
+				value = StringUtils.isBlank(value) ? "M" : value;
+				user.setThumbnailSize(value);
+			} else if ("RESULT_DISP_MODE".equals(column)) {
+				// 結果表示モード更新
+				colMsg = "結果表示モード";
+				value = StringUtils.isBlank(value) ? "L" : value;
+				user.setResultDispMode(value);
+			}
+
+			// ユーザマスタ更新
+			UserDB.updateUserMaster(user.getId(), column, value, conn);
 		} catch (Exception e) {
 			// for ユーザー
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.get.userinfo." + user.getLanKey(), new Object[] { e.getMessage() }, null));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.update.userinfo." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			// for MUR
-			category.error("ユーザー情報の取得に失敗\n" + ErrorUtility.error2String(e));
+			category.error("ユーザー情報の" + colMsg + "への更新に失敗\n" + ErrorUtility.error2String(e));
 		} finally {
 			try {
 				conn.close();

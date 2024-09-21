@@ -205,6 +205,7 @@ public class UserDB {
 			String defaultUserGroup = rs.getString("USER_GRP_CODE");// 原価部門の利用者グループ
 			user.setDefaultUserGroup(defaultUserGroup);
 			user.setThumbnailSize(rs.getString("THUMBNAIL_SIZE"));
+			user.setResultDispMode(rs.getString("RESULT_DISP_MODE"));
 			// 利用可能な全ての利用者グループを取得
 			ArrayList<String> userGroupCodeArray = new ArrayList<String>();
 			if (defaultUserGroup != null) {// 原価部門の利用者グループ
@@ -328,48 +329,42 @@ public class UserDB {
 	}
 
 	/**
-	 * パスワード更新する
+	 * ユーザマスタ更新
 	 *
 	 * @param id
+	 * @param column
+	 * @param value
 	 * @param conn
-	 * @return 正常：パスワード文字列 <br>
-	 *         異常：null/ユーザIDが無効 <br> 空文字/パスワード未設定
 	 * @throws Exception
 	 */
-	public static void updatePassword(String id, String passwd, Connection conn) throws Exception {
-
+	public static void updateUserMaster(String id, String column, String value, Connection conn) throws Exception {
 		// idを大文字に
 		id = id.toUpperCase();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-			Date nowDate = new Date();
-
-			// 現在日時の取得
-			//			Calendar nowCal = Calendar.getInstance();
-			//
-			//			// 時分秒をクリア
-			//		    nowCal.clear(Calendar.MINUTE);
-			//		    nowCal.clear(Calendar.SECOND);
-			//		    nowCal.clear(Calendar.MILLISECOND);
-			//		    nowCal.set(Calendar.HOUR_OF_DAY, 0);
-			//		    Date nowDate = (Date) nowCal.getTime(); // Calendar -> DATE
-
-			// password更新
+			// ユーザマスタ更新
 			stmt = conn.createStatement();
+
+			// SQL文を組み立てる
 			String sql = "update USER_MASTER" +
-					" set PASSWD='" + passwd.trim() + "'" +
-					"     ,PASSWD_UPD_DATE=TO_DATE('" + sdf.format(nowDate) + "','YYYY/MM/DD')" +
-					" where USER_ID='" + id.trim() + "'";
-			category.debug("nowdate:" + sdf.format(nowDate));
+					" set " + column + "='" + value.trim() + "'";
+
+			if ("PASSWD".equals(column)) {
+				// パスワード更新する
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+				Date nowDate = new Date();
+
+				sql = sql + "     ,PASSWD_UPD_DATE=TO_DATE('" + sdf.format(nowDate) + "','YYYY/MM/DD')";
+				category.debug("nowdate:" + sdf.format(nowDate));
+			}
+			sql = sql + " where USER_ID='" + id.trim() + "'";
 
 			category.debug("SQL:" + stmt.toString());
 			stmt.executeUpdate(sql);
 
 			// コミット
 			conn.commit();
-
 		} catch (Exception e) {
 			// ロールバック
 			try {
@@ -377,7 +372,6 @@ public class UserDB {
 			} catch (Exception e2) {
 			}
 			throw e;
-
 		} finally {
 			// CLOSE処理
 			try {
@@ -394,51 +388,4 @@ public class UserDB {
 			}
 		}
 	}
-
-	public static void updateThumbnailSize(String id, String thumbnailSize, Connection conn) throws Exception {
-		id = id.toUpperCase();
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-			Date nowDate = new Date();
-			// サムネイルサイズ更新
-			stmt = conn.createStatement();
-			String sql = "update USER_MASTER" +
-					" set THUMBNAIL_SIZE='" + thumbnailSize.trim() + "'" +
-					"     ,PASSWD_UPD_DATE=TO_DATE('" + sdf.format(nowDate) + "','YYYY/MM/DD')" +
-					" where USER_ID='" + id.trim() + "'";
-			category.debug("nowdate:" + sdf.format(nowDate));
-
-			category.debug("SQL:" + stmt.toString());
-			stmt.executeUpdate(sql);
-
-			// コミット
-			conn.commit();
-
-		} catch (Exception e) {
-			// ロールバック
-			try {
-				conn.rollback();
-			} catch (Exception e2) {
-			}
-			throw e;
-
-		} finally {
-			// CLOSE処理
-			try {
-				if (Objects.nonNull(rs)) {
-					rs.close();
-				}
-			} catch (Exception e) {
-			}
-			try {
-				if (Objects.nonNull(stmt)) {
-					stmt.close();
-				}
-			} catch (Exception e) {
-			}
-		}
-	}
-
 }
