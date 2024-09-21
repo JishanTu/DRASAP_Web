@@ -93,8 +93,7 @@ public class Management_LoginAction extends BaseAction {
 					MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.passMissmatch", new Object[] { "Password" }, null));
 				}
 			} else {
-				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delLogin.userNotFound", new Object[] { user.getName() }, null));
-
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delHost.userNotFound", new Object[] { user.getName() }, null));
 			}
 
 		} catch (FileNotFoundException e) {
