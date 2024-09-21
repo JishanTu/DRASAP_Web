@@ -646,7 +646,7 @@ public class User {
 	 * @param string
 	 */
 	public void setThumbnailSize(String thumbnailSize) {
-		this.thumbnailSize = thumbnailSize;
+		this.thumbnailSize = StringUtils.isBlank(thumbnailSize) ? "M" : thumbnailSize;
 	}
 
 	/**
