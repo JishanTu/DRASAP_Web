@@ -140,7 +140,7 @@ public class DirectPreviewAction extends BaseAction {
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.not.registered." + user.getLanKey(), new Object[] { drwgNo }, null));
 				// for MUR
 				category.error("指定図番なし[" + drwgNo + "]");
-				throw new UserException("指定図番なし[" + drwgNo + "]"));
+				throw new UserException("指定図番なし[" + drwgNo + "]");
 			}
 			String aclId = rs1.getString("ACL_ID");// アクセスレベルID
 			// 2013.06.26 yamagishi modified. start
