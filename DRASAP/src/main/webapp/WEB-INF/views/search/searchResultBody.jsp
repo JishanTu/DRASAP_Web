@@ -79,6 +79,8 @@
 			align-items: center;
 			justify-content: center;
 			margin-top: 5px;
+			display: flex;
+			width: 100%;
 		}
 
 		.thumbnail {
@@ -581,7 +583,7 @@
 						</c:when>
 					</c:choose>
 
-					<div class="galleryr-m" id="galleryr${status.index}"">
+					<div class="galleryr-m" id="galleryr${status.index}">
 						<div style="flex: 1; display: flex; justify-content: center; text-align: center; flex-direction: column;">
 							<c:choose>
 								<c:when test="${item.aclFlag == 1 }">
