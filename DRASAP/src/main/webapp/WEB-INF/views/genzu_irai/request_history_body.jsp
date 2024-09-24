@@ -33,9 +33,6 @@
 		<c:if test="${historyListSize == 0}">
 			<li>0件です。</li>
 		</c:if>
-		<c:if test="${historyListSize > 0}">
-			<li>${historyListSize}件です。</li>
-		</c:if>
 	</ul>
 </font>
 <table border="0" align="center">
