@@ -119,30 +119,6 @@
 			height: 210px;
 		}
 
-		.checkbox.small {
-			transform: scale(0.75);
-		}
-
-		.checkbox.medium {
-			transform: scale(1);
-		}
-
-		.checkbox.large {
-			transform: scale(1.5);
-		}
-		
-		.drwgNo.small {
-			font-size: 12px;
-		}
-
-		.drwgNo.medium {
-			font-size: 16px;
-		}
-
-		.drwgNo.large {
-			font-size: 20px;
-		}
-		
 		.thumbnail:hover {
 			transform: scale(1.1);
 		}
@@ -310,20 +286,6 @@
 			
 		}
 
-		function changeSize(thumbnailSize) {
-			document.querySelectorAll('.checkbox, .drwgNo').forEach(element => {
-				element.classList.remove('small', 'medium', 'large');
-			});
-
-			document.querySelectorAll('.checkbox').forEach(element => {
-				element.classList.add(thumbnailSize);
-			});
-
-			document.querySelectorAll('.drwgNo').forEach(element => {
-				element.classList.add(thumbnailSize);
-			});
-		}
-
 		function thumbnailLoad(imgElement,drwgSize,index) {
 			<% String thumbnailSize = (String) session.getAttribute("thumbnailSize"); %>
 			const thumbnailElement = document.getElementById('thumbnail[' + index + ']');
@@ -331,7 +293,6 @@
 			thumbnailElement.classList.remove('large-a0', 'medium-a0', 'small-a0','small-a4', 'medium-a4', 'large-a4');
 			galleryr.classList.remove('galleryr-l', 'galleryr-m', 'galleryr-s');
 			<% if ("L".equals(thumbnailSize)) { %>
-				changeSize('large');
 				galleryr.classList.add('galleryr-l');
 				if(drwgSize == "A4"){
 					thumbnailElement.classList.add('large-a4');
@@ -343,7 +304,6 @@
 					thumbnailElement.classList.add('large-a0');
 				}
 			<% } else if ("M".equals(thumbnailSize)) { %>
-				changeSize('medium');
 				galleryr.classList.add('galleryr-m');
 				if(drwgSize == "A4"){
 					thumbnailElement.classList.add('medium-a4');
@@ -355,7 +315,6 @@
 					thumbnailElement.classList.add('medium-a0');
 				}
 			<% } else if ("S".equals(thumbnailSize)) { %>
-				changeSize('small');
 				galleryr.classList.add('galleryr-s');
 				if(drwgSize == "A4"){
 					thumbnailElement.classList.add('small-a4');
@@ -611,16 +570,13 @@
 							<c:choose>
 								<c:when test="${item.aclFlag == 1 }">
 									<input type="hidden" id="thumbnailcheckboxHidden${status.index}" value="${item.selected}"/>
-									<input type="checkbox"
-										   id="thumbnailcheckbox${status.index}"
-										   value="true" <c:if test="${item.selected}">checked="checked"</c:if>
-										   onclick="isChecked(${status.index},'thumbnail')"
-										   class="checkbox large"/>
-									<a id="thumbnailNoLink[${status.index}]"
-									   href='<c:url value="/preview"/>'
-									   title='<c:out value="${item.aclBalloon}"/>'
-									   onclick="return openDLManagerDialog(${status.index},'thumbnailNo');"
-									   class="drwgNo large">${item.drwgNoFormated}
+									<input type="checkbox" id="thumbnailcheckbox${status.index}" value="true" style="margin-top: -1px;"
+										<c:if test="${item.selected}">checked="checked"</c:if>
+										onclick="isChecked(${status.index},'thumbnail')"/>&nbsp;
+									<a id="thumbnailNoLink[${status.index}]" href='<c:url value="/preview"/>'
+										style = "font-size: 16px;"
+										title='<c:out value="${item.aclBalloon}"/>'
+										onclick="return openDLManagerDialog(${status.index},'thumbnailNo');">${item.drwgNoFormated}
 									</a>
 								</c:when>
 								<c:otherwise>
