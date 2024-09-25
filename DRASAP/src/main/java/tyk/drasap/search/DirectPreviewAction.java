@@ -140,20 +140,20 @@ public class DirectPreviewAction extends BaseAction {
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.not.registered." + user.getLanKey(), new Object[] { drwgNo }, null));
 				// for MUR
 				category.error("指定図番なし[" + drwgNo + "]");
-				throw new UserException("");
+				throw new UserException("指定図番なし[" + drwgNo + "]");
 			}
 			String aclId = rs1.getString("ACL_ID");// アクセスレベルID
 			// 2013.06.26 yamagishi modified. start
-			//				String aclValue = (String)user.getAclMap().get(aclId);// アクセスレベル値
+			// String aclValue = (String)user.getAclMap().get(aclId);// アクセスレベル値
 			String aclValue = user.getAclMap(conn).get(aclId);// アクセスレベル値
 			// 2013.06.26 yamagishi modified. end
 			if (aclValue == null || "0".equals(aclValue)) {
 				// このユーザーから導かれるアクセスレベル値が null または 0 なら
 				// 図面を参照する権限もない。つまり表示できない。
-				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.no.authority.reading." + user.getLanKey(), null, null));
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.no.authority.reading." + user.getLanKey(), new Object[] { drwgNo }, null));
 				// for MUR
 				category.error("権限なし[" + drwgNo + "]");
-				throw new UserException("");
+				throw new UserException("権限なし[" + drwgNo + "]");
 			}
 			// Previewに必要な情報を linkParmMap に 格納する。
 			linkParmMap.put("DRWG_NO", drwgNo);// 図番
@@ -161,7 +161,7 @@ public class DirectPreviewAction extends BaseAction {
 			linkParmMap.put("PATH_NAME", rs1.getString("PATH_NAME"));// ディレクトリのフルパス
 			linkParmMap.put("DRWG_SIZE", rs1.getString("DRWG_SIZE"));// 図面サイズ
 			// 2013.06.26 yamagishi modified. start
-			//					linkParmMap.put("PDF", user.getViewPrintDoc(aclId));// PDF変換する?
+			// linkParmMap.put("PDF", user.getViewPrintDoc(aclId));// PDF変換する?
 			linkParmMap.put("PDF", user.getViewPrintDoc(aclId, conn));// PDF変換する?
 			// 2013.06.26 yamagishi modified. end
 		} catch (UserException e) {
@@ -170,12 +170,10 @@ public class DirectPreviewAction extends BaseAction {
 			// for ユーザー
 			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.search.list." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
-			ErrorLoger.error(user, this,
-					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
+			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			// for MUR
 			category.error("検索に失敗\n" + ErrorUtility.error2String(e));
 			throw e;
-
 		} finally {
 			try {
 				if (rs1 != null) {

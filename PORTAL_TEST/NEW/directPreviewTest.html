@@ -51,7 +51,13 @@ function downLoad() {
         alert("図面を入力してください。");
         return;
     }
-    <!-- 1911909003030 0 1 71 28 101 229 -> 111039 -->
+    <!-- 1911909003030 0 1 71 28 101 229 -> 111039 -> USER_39  -->
+    <!-- オリジナル値 -->
+    <!-- update USER_MASTER set USER_GRP_CODE01 = 'G03P', USER_GRP_CODE02 = 'G01T', USER_GRP_CODE03 = 'G999' where USER_ID = 'USER_39';-->
+
+    <!-- 更新してから実施 -->
+    <!-- update USER_MASTER set USER_GRP_CODE01 = '0000', USER_GRP_CODE02 = '0001', USER_GRP_CODE03 = '0002' where USER_ID = 'USER_39';-->
+
     url = "http://localhost:8080/DRASAP/directLoginForPreviewPre.do?en_string=1911909003030 0 1 71 28 101 229";
     url += "&drwg_no="+no;
     url += "&sys_id=0002";
