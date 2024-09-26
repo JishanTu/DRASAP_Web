@@ -49,10 +49,18 @@
 		// 前のXX件、後ろのXX件
 		// 印刷指示
 		function setActSubmit(parm){
+			var language = "${sessionScope.user.language}";
 			if(parm == "PRINT"){
-				if(!confirm("出力を行いますか?")){
-					return;
+				if(language=="Japanese"){
+					if(!confirm("出力を行いますか?")){
+						return;
+					}
+				}else {
+					if(!confirm("Do you want to output ?")){
+						return;
+					}
 				}
+				
 			} else if(parm == "PREV" || parm == "NEXT"){
 				links = document.getElementsByTagName("a");
 				for (var i=0;i<links.length;i++){
@@ -87,9 +95,15 @@
 			parent.result_body.document.forms[0].submit();
 		}
 		function deleteDwg() {
+			var language = "${sessionScope.user.language}";
 			if (selectChk() == 0) {
-				alert("削除する図面が選択されていません。");
-				return;
+				if(language=="Japanese"){
+					alert("削除する図面が選択されていません。");
+					return;
+				}else {
+					alert("The deleting drawings are not selected.");
+					return;
+				}
 			}
 			parent.result_body.document.forms[0].target="_parent";//
 			parent.result_body.document.forms[0].act.value="DELETEDWG";
@@ -137,9 +151,15 @@
 		<%-- 2013.07.16 yamagishi add. end --%>
 		<%-- 2019.10.17 yamamoto add. start --%>
 		function multiPDF() {
+			var language = "${sessionScope.user.language}";
 			if (selectChk() == 0) {
-				alert("図面を１つ以上選択してください。");
-				return;
+				if(language=="Japanese"){
+					alert("図面を１つ以上選択してください。");
+					return;
+				}else {
+					alert("Please select one or more drawings.");
+					return;
+				}
 			}
 			parent.result_body.document.forms[0].target="_parent"; //ターゲットは親
 			parent.result_body.document.forms[0].act.value="MULTI_PDF"; // 隠し属性actにセット
