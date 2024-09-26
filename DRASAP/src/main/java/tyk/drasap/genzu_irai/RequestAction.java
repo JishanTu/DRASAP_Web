@@ -357,13 +357,24 @@ public class RequestAction extends BaseAction {
 			boolean lenFlag = true;//開始番号が12桁で末尾に??があるかフラグをたてる
 			if (kai_syuNo.length() == 11 || kai_syuNo.length() == 12) {
 				if (kai_syuNo.length() == 11) {
-					if ("?".equals(kai_syuNo.substring(10, 11))) {
-						kai_syuNo = kai_syuNo.substring(0, 10);
+					if (!"?".equals(kai_syuNo.substring(9, 10))) {
+						if ("?".equals(kai_syuNo.substring(10, 11))) {
+							kai_syuNo = kai_syuNo.substring(0, 10);
+						}
+					} else {
+						MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("error.hani_seppin_11.check", null, null));
+						request.setAttribute("errors", errors);
 					}
+
 				} else if (kai_syuNo.length() == 12) {
-					if ("??".equals(kai_syuNo.substring(10, 12))) {
-						kai_syuNo = kai_syuNo.substring(0, 10);
-						lenFlag = false;
+					if (!"?".equals(kai_syuNo.substring(9, 10))) {
+						if ("??".equals(kai_syuNo.substring(10, 12))) {
+							kai_syuNo = kai_syuNo.substring(0, 10);
+							lenFlag = false;
+						}
+					} else {
+						MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("error.hani_seppin_12.check", null, null));
+						request.setAttribute("errors", errors);
 					}
 				}
 
