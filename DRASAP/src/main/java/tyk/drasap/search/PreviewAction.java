@@ -1480,9 +1480,13 @@ public class PreviewAction extends BaseAction {
 				// 選択図面の情報取得
 				String drwgNo = selectedList.get(i).getdrwgNo();// 図番
 				String fileName = selectedList.get(i).getFileName();// ファイル名
-				String pathName = drasapInfo.getViewDBDrive() + File.separator +
-						selectedList.get(i).getPathName(); // ディレクトリのフルパス
 
+				String pathName = drasapInfo.getViewDBDrive();
+				if (selectedList.get(i).getPathName().startsWith(File.separator)) {
+					pathName += selectedList.get(i).getPathName(); // ディレクトリのフルパス
+				} else {
+					pathName += File.separator + selectedList.get(i).getPathName(); // ディレクトリのフルパス
+				}
 				final String ORIGIN_FILE_NAME = pathName + File.separator + fileName;// 元の原図ファイル・・・絶対消すな
 
 				// 元の原図があるか確認
