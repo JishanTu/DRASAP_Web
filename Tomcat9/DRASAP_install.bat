@@ -37,6 +37,7 @@ IF "%TomcatServiceFlag%"=="1" (
         CALL :LogAndEcho "Tomcat9サービスの停止中にエラーが発生しました。"
         EXIT /B 1
     )
+    timeout /t 5 > nul
     CALL :LogAndEcho "Tomcat9サービスが停止しました。"
 )
 
@@ -132,6 +133,7 @@ IF "%TomcatServiceFlag%"=="1" (
         CALL :LogAndEcho "Tomcat9サービスの起動中にエラーが発生しました。"
         EXIT /B 1
     )
+    timeout /t 5 > nul
     CALL :LogAndEcho "Tomcat9サービスが起動しました。"
 )
 
