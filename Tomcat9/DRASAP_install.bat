@@ -2,6 +2,9 @@
 REM クリーン
 cls
 
+REM Tomcat service flag
+SET "TomcatServiceFlag=1"
+
 REM ログファイルのディレクトリと名前を設定
 SET "LOG_DIR=D:\Tomcat9\DRASAP\logs"
 IF NOT EXIST "%LOG_DIR%" (
@@ -16,6 +19,26 @@ REM 開始時刻を取得
 SET "START_DATE=%DT:~0,4%-%DT:~4,2%-%DT:~6,2%"
 SET "START_TIME=%DT:~8,2%:%DT:~10,2%:%DT:~12,2%"
 CALL :LogAndEcho "%START_DATE% %START_TIME%に配置バッチ処理が開始しました。"
+
+REM Tomcat9サービスが存在するかチェック
+CALL :LogAndEcho "Tomcat9サービスの存在を確認中..."
+sc query Tomcat9 >nul 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    CALL :LogAndEcho "Tomcat9サービスが見つかりません。処理が続きます。"
+    SET "TomcatServiceFlag=0"
+)
+
+REM Tomcat9サービスが存在の場合
+IF "%TomcatServiceFlag%"=="1" (
+    REM Tomcat9サービスを停止
+    CALL :LogAndEcho "Tomcat9サービスを停止中..."
+    net stop Tomcat9 >> "%LOG_FILE%" 2>&1
+    IF %ERRORLEVEL% NEQ 0 (
+        CALL :LogAndEcho "Tomcat9サービスの停止中にエラーが発生しました。"
+        EXIT /B 1
+    )
+    CALL :LogAndEcho "Tomcat9サービスが停止しました。"
+)
 
 REM バッチファイルが存在するディレクトリを取得
 SET "SOURCE_DIR=%~dp0DRASAP"
@@ -100,6 +123,18 @@ FOR /R "%DEST_DIR%" %%F IN (.gitkeep) DO (
 
 CALL :LogAndEcho ".gitkeepファイルの削除が完了しました。"
 
+REM Tomcat9サービスが存在の場合
+IF "%TomcatServiceFlag%"=="1" (
+    REM Tomcat9サービスを起動
+    CALL :LogAndEcho "Tomcat9サービスを起動中..."
+    net start Tomcat9 >> "%LOG_FILE%" 2>&1
+    IF %ERRORLEVEL% NEQ 0 (
+        CALL :LogAndEcho "Tomcat9サービスの起動中にエラーが発生しました。"
+        EXIT /B 1
+    )
+    CALL :LogAndEcho "Tomcat9サービスが起動しました。"
+)
+
 REM 終了時刻を取得
 FOR /F "tokens=2 delims==" %%A IN ('wmic os get localdatetime /value') DO SET "DT=%%A"
 SET "END_DATE=%DT:~0,4%-%DT:~4,2%-%DT:~6,2%"
@@ -112,8 +147,9 @@ EXIT /B
 
 :LogAndEcho
 REM メッセージをログファイルとコンソールに出力
-echo %* >> "%LOG_FILE%"
-echo %*
+SET "MESSAGE=%*"
+echo %MESSAGE% >> "%LOG_FILE%"
+echo %MESSAGE%
 EXIT /B
 
 :CleanUp
