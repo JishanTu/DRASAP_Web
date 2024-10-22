@@ -185,7 +185,7 @@ public class UserDB {
 			for (int j = 1; j <= User.viewSelColNum; j++) {
 				user.setViewSelCol(j - 1, rs.getString("VIEW_SELCOL" + j));
 			}
-			user.setOnlyNewestFlag(rs.getString("ONLY_NEWEST"));
+			user.setOnlyNewestFlag(rs.getString("LATEST_REV_DISP_FLAG"));
 			user.setDisplayCount(rs.getString("DISPLAY_COUNT"));
 			user.setAdminFlag(rs.getString("ADMIN_FLAG"));// ŠÇ—ŽÒƒtƒ‰ƒO
 			user.setPosition(rs.getString("POSITION"));// EˆÊ

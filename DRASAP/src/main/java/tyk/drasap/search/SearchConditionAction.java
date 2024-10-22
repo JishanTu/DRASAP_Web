@@ -603,7 +603,7 @@ public class SearchConditionAction extends BaseAction {
 					// ユーザーObjectにもセットする
 					user.setViewSelCol(i - 1, val);
 				}
-				strSql2 += " ONLY_NEWEST='" + onlyNewest + "',";
+				strSql2 += " LATEST_REV_DISP_FLAG='" + onlyNewest + "',";
 				strSql2 += " DISPLAY_COUNT='" + searchConditionForm.getDisplayCount() + "'";
 				strSql2 += " where USER_ID='" + user.getId() + "'";
 
@@ -629,7 +629,7 @@ public class SearchConditionAction extends BaseAction {
 					// ユーザーObjectにもセットする
 					user.setViewSelCol(i - 1, val);
 				}
-				strSql2 += " ONLY_NEWEST='" + onlyNewest + "',";
+				strSql2 += " LATEST_REV_DISP_FLAG='" + onlyNewest + "',";
 				strSql2 += " DISPLAY_COUNT='" + searchConditionForm.getDisplayCount() + "'";
 				strSql2 += " where USER_ID='" + user.getId() + "'";
 
