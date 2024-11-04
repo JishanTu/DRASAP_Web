@@ -10,7 +10,6 @@
 	location.replace('<%=request.getContextPath()%>/timeout');
 </script>
 </c:if>
-
 <c:set var="searchConditionForm" value="${sessionScope.searchConditionForm}"/>
 
 <!DOCTYPE html>
@@ -32,7 +31,7 @@
 			cursor: default;
 			top: 35px;
 			right:0;
-			/*	    font-size:16pt;*/
+			/*font-size:16pt;*/
 			visibility: visible;
 			z-index: 100;
 		}
@@ -46,7 +45,7 @@
 			position: relative;
 			left: -10px;
 			border: none;
-			/*		width:20px;*/
+			/*width:20px;*/
 			padding: 0px;
 			margin: 0px;
 		}
@@ -62,8 +61,8 @@
 			border-top-color: #EEEEEE;
 			border-right-color: #AAAAAA;
 			border-bottom-color: #AAAAAA;
-			/*		border-color:#CCCCCC;*/
-			/*		border-style:ridge;*/
+			/*border-color:#CCCCCC;*/
+			/*border-style:ridge;*/
 			border-style: solid;
 		}
 		
@@ -77,8 +76,8 @@
 		}
 		
 		.table-container {
-			overflow-y: auto; 
-			height: 140px;
+			overflow-y: auto;
+			/*height: 140px;*/
 			width: 595px
 		}
 	</style>
@@ -92,12 +91,11 @@
 				break;
 		}
 	}
+
 //	function setTableWidth() {
 //			var availWidth = screen.availWidth;
-
 //			var table1 = document.getElementById('conditionTable1');
 //			var table2 = document.getElementById('conditionTable2');
-
 //			table1.style.width = availWidth + 'px';
 //			table2.style.width = availWidth + 'px';
 //		}
@@ -254,7 +252,7 @@
 
 		WO1=window.open("<%=request.getContextPath() %>/search/searchHelp.jsp", targetName,
 			//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
-				'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h +',top='+ top + ',left='+ left );
+			'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h +',top='+ top + ',left='+ left );
 		//WO1.window.moveTo(50,50);//画面の位置指定
 		WO1.focus();
 	}
@@ -754,16 +752,11 @@
 		}
 		return ret;
 	}
-
-
 // 2020.03.13 yamamoto add end
 </script>
 </head>
-<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;overflow-x: auto;"
-	onload="onLoad()">
+<body style="background-color: #CCCCCC; margin: 0;overflow-y: hidden;overflow-x: auto;" onload="onLoad()">
 	<form action="<%=request.getContextPath() %>/searchCondition" method="post" >
-<%-- 		<c:set var="searchConditionForm" --%>
-<%-- 			value="${sessionScope.searchConditionForm}" /> --%>
 		<input type="hidden" name="act" />
 
 		<%-- 処理を振り分けるための隠し属性 --%>
@@ -807,9 +800,9 @@
 						</tr>
 					</table>
 				</td>
-				<td><img
-					src="<%=request.getContextPath()%>/resources/img/DRASAPTitle.JPG"
-					width="150" height="33" /></td>
+				<td>
+					<img src="<%=request.getContextPath()%>/resources/img/DRASAPTitle.JPG" width="150" height="33" />
+				</td>
 				<td align="right" nowrap="nowrap">
 					<table border="0" cellspacing="0" cellpadding="0">
 						<tr>
@@ -818,9 +811,8 @@
 							<td>
 								<button type='button' onclick="changePassword()">
 									<c:out value="${searchConditionForm.c_label10}" />
-								</button> <a id="chgPass" type="hidden"
-								href="<%=request.getContextPath()%>/switch.do?page=/root/changePassword.jsp"
-								target="_chgPass" onclick="javascript:openNewWindow()"></a>
+								</button>
+								<a id="chgPass" type="hidden" href="<%=request.getContextPath()%>/switch.do?page=/root/changePassword.jsp" target="_chgPass" onclick="javascript:openNewWindow()"></a>
 							</td>
 							<%-- 2019.09.25 yamamoto add. end --%>
 							<%-- 言語切替 --%>
@@ -885,14 +877,12 @@
 		</table>
 
 		<!--============ 検索条件と説明 ============-->
-		<table border="0" cellspacing="0" cellpadding="0"
-			class="normal12" style = "width:100%">
+		<table border="0" cellspacing="0" cellpadding="0" class="normal12" style = "width:100%">
 			<tr>
 				<!--============ 検索条件 ============-->
-				<td style="width: 550px;">
-				<div class="table-container">
-					<table border="0" cellspacing="0" cellpadding="0"
-						style="font-size: 12pt; margin: 0px; padding: 0px;">
+				<td style="width: 550px;" valign="top">
+				<div class="table-container" id="tableContainer">
+					<table border="0" cellspacing="0" cellpadding="0" style="font-size: 12pt; margin: 0px; padding: 0px;">
 						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()}" var="index">
 							<tr>
 								<td>
@@ -934,14 +924,14 @@
 							</tr>
 						</c:forEach>
 					</table>
-					</div>
+				</div>
 				</td>
 
 				<%-- 2013.06.26 yamagishi add. start --%>
 				<%-- 複数図番 --%>
 				<c:choose>
-					<c:when test="${sessionScope.user.language == 'Japanese' }">
-						<td style="width: 220px" align="left" class="normal12">
+					<c:when test="${sessionScope.user.language == 'Japanese'}">
+						<td style="width: 220px" align="left" class="normal12" valign="top">
 							<table style="margin-left: 10px;" align="left" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td style="width: 40px;">
@@ -960,7 +950,7 @@
 				</c:choose>
 				<c:choose>
 					<c:when test="${sessionScope.user.language == 'English' }">
-						<td style="width: 240px" align="left" class="normal12">
+						<td style="width: 240px" align="left" class="normal12" valign="top">
 							<table style="margin-left: 10px;" align="left" border="0"cellspacing="0" cellpadding="0">
 								<tr>
 									<td style="width: 65px;">
@@ -978,7 +968,7 @@
 					</c:when>
 				</c:choose>
 				<%-- 2013.06.26 yamagishi add. end --%>
-				<td valign="bottom" nowrap="nowrap" align="left" class="normal12">
+				<td nowrap="nowrap" align="left" class="normal12" valign="top">
 					<table align="left" border="0" cellspacing="0" cellpadding="0" class="searchbutton">
 						<tr>
 							<%-- 2013.06.27 yamagishi modified.
@@ -1099,12 +1089,24 @@ if (me.isAdmin() || me.isAclBatchUpdateFlag()) {
 			});
 		</script>
 
+		<script>
+			function adjustTableContainerHeight() {
+				const windowHeight = window.innerHeight;
+				const tableContainer = document.getElementById('tableContainer');
+				const height = windowHeight - 50;
+				tableContainer.style.height =height+'px';
+			}
+
+			window.addEventListener('resize', adjustTableContainerHeight);
+			adjustTableContainerHeight();
+		</script>
+
 		<div id="toolotipContents" style="visibility: hidden;">
 			<table bgcolor="#CCCCCC" cellspacing="0" cellpadding="0">
 				<tr>
 					<td class="slideBar">《</td>
 					<td bgcolor="#EEEEEE"valign="top" style=" padding-left:10px;margin: 0;z-index: 100; white-space: normal;" width="420px">
-						<textarea 	name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="background-color: #EEEEEE; border: none; width: 100%; height: 120px; overflow:visible; font-size: 10pt;text-align: left;">${searchConditionForm.searchHelpMsg}</textarea>
+						<textarea name="searchConditionForm_searchHelpMsg" rows="6" readonly="readonly" style="background-color: #EEEEEE; border: none; width: 100%; height: 120px; overflow:visible; font-size: 10pt;text-align: left;">${searchConditionForm.searchHelpMsg}</textarea>
 					</td>
 				</tr>
 			</table>
