@@ -110,26 +110,29 @@ public class SearchResultPreAction extends BaseAction {
 
 			//コピー元ファイル
 			DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
-			String thumbnailSize = (String) session.getAttribute("thumbnailSize");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
-				String subPath = searchResultForm.searchResultList.get(i).pathName;
+				String thumbOrigPath = searchResultForm.searchResultList.get(i).pathName;
+				String thumbnailPath = searchResultForm.searchResultList.get(i).thumbnailPath;
 				String thumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
 
 				// サムネイル画像をコピー
-				String newThumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + subPath, thumbnailName, request);
+				thumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + thumbOrigPath, thumbnailPath, thumbnailName, request);
 
 				// DRWG_SIZEの設定値でTHUMB_SIZEの値を設定
 				searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", searchResultForm.searchResultList.get(i).getAttr("DRWG_SIZE"));
 
 				// アクセス権限がない場合
 				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
-					newThumbnailName = "NotAccess_" + thumbnailSize + "_thumb.jpg";
+					thumbnailPath = "resources/img/thumb";
+					thumbnailName = "NotAccess_thumb.jpg";
 					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
-				} else if (newThumbnailName.startsWith("NotFound_")) {
-					newThumbnailName = "NotFound_" + thumbnailSize + "_thumb.jpg";
+				} else if (thumbnailName.startsWith("NotFound_")) {
+					thumbnailPath = "resources/img/thumb";
+					thumbnailName = "NotFound_thumb.jpg";
 					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
 				}
-				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
+				searchResultForm.searchResultList.get(i).thumbnailPath = thumbnailPath;
+				searchResultForm.searchResultList.get(i).thumbnailName = thumbnailName;
 			}
 			// アクセスログを
 			AccessLoger.loging(user, AccessLoger.FID_SEARCH, user.getSys_id());
@@ -174,26 +177,29 @@ public class SearchResultPreAction extends BaseAction {
 			searchResultForm.searchResultList = search(user, sys_id, request, errors, null);
 			//コピー元ファイル
 			DrasapInfo drasapInfo = (DrasapInfo) session.getAttribute("drasapInfo");
-			String thumbnailSize = (String) session.getAttribute("thumbnailSize");
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
-				String subPath = searchResultForm.searchResultList.get(i).pathName;
+				String thumbOrigPath = searchResultForm.searchResultList.get(i).pathName;
+				String thumbnailPath = searchResultForm.searchResultList.get(i).thumbnailPath;
 				String thumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
 
 				// サムネイル画像をコピー
-				String newThumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + subPath, thumbnailName, request);
+				thumbnailName = thumbnailCopy(drasapInfo.getViewDBDrive() + thumbOrigPath, thumbnailPath, thumbnailName, request);
 
 				// DRWG_SIZEの設定値でTHUMB_SIZEの値を設定
 				searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", searchResultForm.searchResultList.get(i).getAttr("DRWG_SIZE"));
 
 				// アクセス権限がない場合
 				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
-					newThumbnailName = "NotAccess_" + thumbnailSize + "_thumb.jpg";
+					thumbnailPath = "resources/img/thumb";
+					thumbnailName = "NotAccess_thumb.jpg";
 					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
-				} else if (newThumbnailName.startsWith("NotFound_")) {
-					newThumbnailName = "NotFound_" + thumbnailSize + "_thumb.jpg";
+				} else if (thumbnailName.startsWith("NotFound_")) {
+					thumbnailPath = "resources/img/thumb";
+					thumbnailName = "NotFound_thumb.jpg";
 					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
 				}
-				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
+				searchResultForm.searchResultList.get(i).thumbnailPath = thumbnailPath;
+				searchResultForm.searchResultList.get(i).thumbnailName = thumbnailName;
 			}
 			// アクセスログを
 			AccessLoger.loging(user, AccessLoger.FID_SEARCH, sys_id);
@@ -526,25 +532,26 @@ public class SearchResultPreAction extends BaseAction {
 
 	/**
 	 *
-	 * @param outThumbPath
+	 * @param thumbOrigPath
+	 * @param thumbnailPath
 	 * @param thumbnailName
 	 * @param request
 	 * @return
 	 */
-	private String thumbnailCopy(String outThumbPath, String thumbnailName, HttpServletRequest request) {
+	private String thumbnailCopy(String thumbOrigPath, String thumbnailPath, String thumbnailName, HttpServletRequest request) {
 		//コピー元ファイル
-		String outPathName = outThumbPath + File.separator + thumbnailName;
+		String outPathName = thumbOrigPath + File.separator + thumbnailName;
 
 		//コピー先ファイル
 		ServletContext context = request.getServletContext();
-		String thumbDir = context.getRealPath("resources/img/thumb");
+		String thumbDir = context.getRealPath(thumbnailPath);
 		String newOutPathName = thumbDir + File.separator + thumbnailName;
 
 		Path outPath = Paths.get(outPathName);
 		Path newOutPath = Paths.get(newOutPathName);
 		try {
 			if (!Files.exists(outPath)) {
-				return "NotFound_M_thumb.jpg";
+				return "NotFound_thumb.jpg";
 			}
 			FileTime thumbnailLastModifiedTime = Files.getLastModifiedTime(outPath);
 			if (Files.exists(newOutPath)) {
@@ -556,7 +563,7 @@ public class SearchResultPreAction extends BaseAction {
 			Files.copy(outPath, newOutPath, StandardCopyOption.REPLACE_EXISTING);
 			Files.setLastModifiedTime(newOutPath, thumbnailLastModifiedTime);
 		} catch (IOException e) {
-			return "NotFound_M_thumb.jpg";
+			return "NotFound_thumb.jpg";
 		}
 		return thumbnailName;
 	}

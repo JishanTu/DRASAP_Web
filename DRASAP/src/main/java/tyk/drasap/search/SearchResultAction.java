@@ -221,24 +221,11 @@ public class SearchResultAction extends BaseAction {
 			return "result";
 		}
 		if ("THUMBNAIL_SIZE".equals(searchResultForm.getAct())) {
-			changeUserMaster(user, "THUMBNAIL_SIZE", request.getParameter("thumbnailSize"), errors);
+			String thumbnailSize = request.getParameter("thumbnailSize");
+			changeUserMaster(user, "THUMBNAIL_SIZE", thumbnailSize, errors);
 			if (!Objects.isNull(errors.getAttribute("message"))) {
 				request.setAttribute("errors", errors);
 				return "search_error";
-			}
-			String thumbnailSize = request.getParameter("thumbnailSize");
-			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
-				String newThumbnailName = searchResultForm.searchResultList.get(i).thumbnailName;
-
-				// アクセス権限がない場合
-				if (!"1".equals(searchResultForm.searchResultList.get(i).aclFlag)) {
-					newThumbnailName = "NotAccess_" + thumbnailSize + "_thumb.jpg";
-					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
-				} else if (newThumbnailName.startsWith("NotFound_")) {
-					newThumbnailName = "NotFound_" + thumbnailSize + "_thumb.jpg";
-					searchResultForm.searchResultList.get(i).addAttr("THUMB_SIZE", "A0");
-				}
-				searchResultForm.searchResultList.get(i).thumbnailName = newThumbnailName;
 			}
 			session.setAttribute("thumbnailSize", user.getThumbnailSize());
 			session.setAttribute("resultDispMode", "thumbnail_view");

@@ -550,7 +550,7 @@
 									   href='<c:url value="/preview"/>'
 										onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');"
 										class="drwgNo large">
-										<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}"
+										<img src="<%=request.getContextPath()%>/${item.thumbnailPath}/${item.thumbnailName}"
 											 id="thumbnail[${status.index}]"
 											 title='<c:out value="${item.aclBalloon}"/>'
 											 onload="thumbnailLoad(this,'${item.getAttr('THUMB_SIZE')}',${status.index})"
@@ -558,7 +558,7 @@
 									</a>
 								</c:when>
 								<c:otherwise>
-									<img src="<%=request.getContextPath()%>/resources/img/thumb/${item.thumbnailName}"
+									<img src="<%=request.getContextPath()%>/${item.thumbnailPath}/${item.thumbnailName}"
 										 id="thumbnail[${status.index}]"
 										 title='<c:out value="${item.aclBalloon}"/>'
 										 onload="thumbnailLoad(this,'${item.getAttr('THUMB_SIZE')}',${status.index})"

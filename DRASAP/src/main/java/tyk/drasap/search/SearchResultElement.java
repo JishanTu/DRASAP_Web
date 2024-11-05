@@ -32,6 +32,7 @@ public class SearchResultElement {
 	// 2013.06.24 yamagishi add. end
 
 	String printerMaxSize = ""; //プリンタの最大印刷サイズ
+	String thumbnailPath = "";
 	String thumbnailName = ""; //サムネイル
 	// ---------------------------------------------------------- コンストラクタ
 
@@ -55,6 +56,7 @@ public class SearchResultElement {
 		// 2013.07.11 yamagishi add. start
 		aclBalloon = newAclBalloon != null ? newAclBalloon : "";
 		// 2013.07.11 yamagishi add. end
+		thumbnailPath = "temp/thumb";
 		thumbnailName = DrasapUtil.formatDrwgNo(drwgNo) + "_thumb.jpg";
 	}
 
@@ -233,6 +235,22 @@ public class SearchResultElement {
 		this.aclFlag = aclFlag;
 	}
 	// 2013.06.24 yamagishi add. end
+
+	/**
+	 * thumbnailPathを取得します。
+	 * @return thumbnailPath
+	 */
+	public String getThumbnailPath() {
+		return thumbnailPath;
+	}
+
+	/**
+	 * thumbnailPathを設定します。
+	 * @param thumbnailPath thumbnailPath
+	 */
+	public void setThumbnailPath(String thumbnailPath) {
+		this.thumbnailPath = thumbnailPath;
+	}
 
 	/**
 	 * thumbnailNameを取得します。
