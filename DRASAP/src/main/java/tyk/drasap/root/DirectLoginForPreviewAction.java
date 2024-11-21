@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,6 +98,10 @@ public class DirectLoginForPreviewAction extends BaseAction {
 			user_id_col = (String) session.getAttribute("user_id_col");
 			session.removeAttribute("user_id_col");// session‚©‚çremove‚·‚é
 			category.debug("user_id_col = " + user_id_col);
+			if (StringUtils.isBlank(user_id_col)) {
+				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.invalid.useridcol." + user.getLanKey(), new Object[] { "USER_ID_COL is null" }, null));
+				throw new UserException("user_id_col is null");
+			}
 
 			session.setAttribute("default_css", "jp".equals(user.getLanKey()) ? "default.css" : "defaultEN.css");
 

@@ -41,7 +41,7 @@ public class DirectLoginForMultiPreviewPreAction extends BaseAction {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping("/directLoginForMultiPreviewPre")
+	@PostMapping(value = { "/directLoginForMultiPreviewPre", "/directLoginForMultiPreviewPre.do" }) //　外部IFなので、元々アクセスURLをサポートしなければならないため、ここは.doを付けとく
 	public String execute(
 			BaseForm form,
 			HttpServletRequest request,

@@ -30,7 +30,7 @@ public class LoginWithIddePreAction extends BaseAction {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping("/loginWithIddePre")
+	@PostMapping(value = { "/loginWithIddePre", "/loginWithIddePre.do" }) //　外部IFなので、元々アクセスURLをサポートしなければならないため、ここは.doを付けとく
 	public String execute(
 			BaseForm form,
 			HttpServletRequest request,
