@@ -26,18 +26,19 @@
 			<b><font size="5" color="#0033CC">DRASAP</font></b>&nbsp;&nbsp;&nbsp;&nbsp;
 			<font color="#0066FF">Drawing Search and Print System</font>
 			<!-- エラーの表示 -->
-			<c:forEach var="error" items="${errors}">
-				<hr color="sandybrown">
+			<c:if test="${not empty hasError}">
+			<hr color="sandybrown">
+			<c:forEach var="errormsg" items="${message}">
 				<font color="red" size="4">
 					<ul>
 						<li>
-							<c:out value="${message}" />
+							<c:out value="${errormsg}" />
 						</li>
 					</ul>
 				</font>
-				<hr color="sandybrown">
-				<br/>
 			</c:forEach>
+			<hr color="sandybrown">
+			</c:if>
 			<!-- エラーがない場合、水平線を表示 -->
 			<c:if test="${empty hasError}">
 				<hr/>

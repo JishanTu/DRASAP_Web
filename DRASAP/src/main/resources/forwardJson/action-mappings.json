@@ -48,10 +48,7 @@
     "name" : "tyk.drasap.springfw.form.BaseForm",
     "path" : "/loginWithIddePre",
     "type" : "tyk.drasap.root.LoginWithIddePreAction",
-    "forwards" : [ {
-      "name" : "success",
-      "path" : "/loginWithIdde.do"
-    } ]
+    "forwards" : [ ]
   }, {
     "name" : "tyk.drasap.springfw.form.BaseForm",
     "path" : "/directLoginForPreviewPre",
