@@ -57,7 +57,7 @@ public class LoginWithIddePreAction extends BaseAction {
 
 		// リダイレクトする
 		category.debug("redirect --> /loginWithIdde.do");
-		return "success";
+		return "/loginWithIdde.do";
 	}
 
 }
