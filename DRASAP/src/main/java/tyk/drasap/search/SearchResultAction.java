@@ -241,6 +241,17 @@ public class SearchResultAction extends BaseAction {
 				session.setAttribute("OutPut_Flag", "");
 				request.setAttribute("task", "continue");
 				return "search";
+			}else if("NG".equals(session.getAttribute("OutPut_Flag"))) {
+				session.setAttribute("OutPut_Flag", "");
+				for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
+					// ‘I‘ð‚³‚ê‚Ä‚¢‚Ä
+					SearchResultElement searchResultElement = searchResultForm.getSearchResultElement(i);
+					if (searchResultElement.isSelected()) {
+						return "search_thumb";
+					}
+				}
+				request.setAttribute("task", "continue");
+				return "search";
 			}
 			checkForPrint(searchResultForm, user, drasapInfo, errors);
 			session.setAttribute("Thumb_Flag", "SEARCH_THUMBNAIL");
@@ -274,6 +285,7 @@ public class SearchResultAction extends BaseAction {
 			if (!Objects.isNull(errors.getAttribute("message"))) {
 				//saveErrors(request, errors);
 				request.setAttribute("errors", errors);
+				session.setAttribute("OutPut_Flag", "NG");
 				category.debug("--> search_thumb");
 				return "search_thumb";
 			}
