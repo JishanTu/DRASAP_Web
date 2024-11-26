@@ -99,8 +99,8 @@
 		</div>
 	</c:if>
 	<div class="page">
-		<div class="content">
-			<form action="<%=request.getContextPath() %>/result" method="post">
+		<form action="<%=request.getContextPath() %>/result" method="post">
+			<div class="content">
 				<input type="hidden" name="act" value="" />
 				<c:if test="${message == null}">
 					<div class="header"><span class="normal10"><h2>${sessionScope.searchResultForm.h_label11}</h2></span></div>
@@ -203,27 +203,27 @@
 						</c:forEach>
 					</table>
 				</c:if>
-			</form>
-		</div>
-		<c:if test="${message == null}">
-			<div class="footer">
-				<span class="normal10">
-					${searchResultForm.h_label5 }&nbsp;
-					<select name="outputPrinter">
-						<c:forEach items="${searchResultForm.printerKeyList}" var="outputPrinterKey" varStatus="loop">
-							<option value="${outputPrinterKey}" <c:if test="${outputPrinterKey == searchResultForm.outputPrinter}">selected</c:if>>${searchResultForm.printerNameList[loop.index]}</option>
-						</c:forEach>
-					</select>
-				</span>
-				<span class="normal10">
-					&nbsp;&nbsp;
-					<input type="button" value="　${searchResultForm.f_label4}　" onclick="printerIndicationOut('PRIENTER_THUMBNAIL')" />
-				</span>
-				<span class="normal10">
-					&nbsp;&nbsp;
-					<input type="button" value="　${searchResultForm.f_label12}　" onclick="setActSubmit('SEARCH')" />
-				</span>
 			</div>
-		</c:if>
+			<c:if test="${message == null}">
+				<div class="footer">
+					<span class="normal10">
+						${searchResultForm.h_label5 }&nbsp;
+						<select name="outputPrinter">
+							<c:forEach items="${searchResultForm.printerKeyList}" var="outputPrinterKey" varStatus="loop">
+								<option value="${outputPrinterKey}" <c:if test="${outputPrinterKey == searchResultForm.outputPrinter}">selected</c:if>>${searchResultForm.printerNameList[loop.index]}</option>
+							</c:forEach>
+						</select>
+					</span>
+					<span class="normal10">
+						&nbsp;&nbsp;
+						<input type="button" value="　${searchResultForm.f_label4}　" onclick="printerIndicationOut('PRIENTER_THUMBNAIL')" />
+					</span>
+					<span class="normal10">
+						&nbsp;&nbsp;
+						<input type="button" value="　${searchResultForm.f_label12}　" onclick="setActSubmit('SEARCH')" />
+					</span>
+				</div>
+			</c:if>
+		</form>
 	</div>
 </body>

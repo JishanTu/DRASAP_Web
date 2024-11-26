@@ -237,6 +237,11 @@ public class SearchResultAction extends BaseAction {
 			// 1) 次のチェックを行う
 			// - 指定した枚数のチェック
 			// - 正しい出力サイズを指定している?
+			if("OK".equals(session.getAttribute("OutPut_Flag"))) {
+				session.setAttribute("OutPut_Flag", "");
+				request.setAttribute("task", "continue");
+				return "search";
+			}
 			checkForPrint(searchResultForm, user, drasapInfo, errors);
 			session.setAttribute("Thumb_Flag", "SEARCH_THUMBNAIL");
 			if (!Objects.isNull(errors.getAttribute("message"))) {
@@ -292,6 +297,8 @@ public class SearchResultAction extends BaseAction {
 				}
 			}
 
+			//印刷の指示
+			session.setAttribute("OutPut_Flag", "OK");
 			request.setAttribute("errors", errors);
 			category.debug("--> search_thumb");
 			return "search_thumb";
