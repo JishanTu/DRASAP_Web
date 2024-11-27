@@ -59,6 +59,7 @@
 			if(!confirm("出力を行いますか?")){
 				return;
 			}
+			document.getElementById("outputPrinter1").value = document.getElementById("outputPrinter2").value;
 			document.forms[0].act.value=parm;// 隠し属性actにをセット
 			document.forms[0].target="_parent";// ターゲットは画面全体
 			document.forms[0].submit();
@@ -77,6 +78,13 @@
 			}
 			hiddenInput.value = checkElement.value;
 			hiddenInput.name = "searchResultList[" + index + "]."+ 'selected';
+		}
+
+		function updateHiddenInput(index, field) {
+			var selectElement = document.getElementById(field + 'Select' + index);
+			var hiddenInput = document.getElementById(field + 'Hidden' + index);
+			hiddenInput.value = selectElement.value;
+			hiddenInput.name = "searchResultList[" + index + "]."+ field;
 		}
 	</script>
 </head>
@@ -102,6 +110,7 @@
 		<form action="<%=request.getContextPath() %>/result" method="post">
 			<div class="content">
 				<input type="hidden" name="act" value="" />
+				<input type="hidden" name="outputPrinter" id="outputPrinter1" value="" />
 				<c:if test="${message == null}">
 					<div class="header"><span class="normal10"><h2>${sessionScope.searchResultForm.h_label11}</h2></span></div>
 					<table border="0" cellspacing="1" cellpadding="0" align="center">	
@@ -208,9 +217,16 @@
 				<div class="footer">
 					<span class="normal10">
 						${searchResultForm.h_label5 }&nbsp;
-						<select name="outputPrinter">
+						<select id="outputPrinter2">
 							<c:forEach items="${searchResultForm.printerKeyList}" var="outputPrinterKey" varStatus="loop">
-								<option value="${outputPrinterKey}" <c:if test="${outputPrinterKey == searchResultForm.outputPrinter}">selected</c:if>>${searchResultForm.printerNameList[loop.index]}</option>
+								<c:choose>
+									<c:when test="${outputPrinterKey == searchResultForm.getOutputPrinter()}">
+										<option value="${outputPrinterKey}" selected>${searchResultForm.printerNameList[loop.index]}</option>
+									</c:when>
+									<c:otherwise>
+										<option value="${outputPrinterKey}">${searchResultForm.printerNameList[loop.index]}</option>
+									</c:otherwise>
+								</c:choose>
 							</c:forEach>
 						</select>
 					</span>
