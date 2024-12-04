@@ -208,30 +208,31 @@ User me = (User) session.getAttribute("user");
 if (me.isDelAdmin()) { %>
 	<input type="button" value="${sessionScope.searchResultForm.h_label10}" onclick="management()" class = "management"/>
 <%} %>
-
-<table border="1">
-	<tr>
-		<td nowrap="nowrap">
-			<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
-		</td>
-		<c:forEach begin="1" end="${searchResultForm.getViewSelColNum()}" var="index">
+<div style="width: 100%; overflow-x: auto;">
+	<table border="1">
+		<tr>
 			<td nowrap="nowrap">
-				<select name="dispAttr${index}" class = "fixed-width-select">
-					<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
-						<c:choose>
-							<c:when test="${dispKey == searchResultForm.getDispAttr(index - 1)}">
-								<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
-							</c:when>
-							<c:otherwise>
-								<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-				</select>
+				<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
 			</td>
-		</c:forEach>
-	</tr>
-</table>
+			<c:forEach begin="1" end="${searchResultForm.getViewSelColNum()}" var="index">
+				<td nowrap="nowrap">
+					<select name="dispAttr${index}" class = "fixed-width-select">
+						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
+							<c:choose>
+								<c:when test="${dispKey == searchResultForm.getDispAttr(index - 1)}">
+									<option value="${dispKey}" selected>${searchResultForm.dispNameList[loop.index]}</option>
+								</c:when>
+								<c:otherwise>
+									<option value="${dispKey}">${searchResultForm.dispNameList[loop.index]}</option>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</select>
+				</td>
+			</c:forEach>
+		</tr>
+	</table>
+</div>
 </form>
 </body>
 </html>
