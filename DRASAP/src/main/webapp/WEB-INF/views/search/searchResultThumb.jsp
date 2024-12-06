@@ -110,7 +110,8 @@
 		<form action="<%=request.getContextPath() %>/result" method="post">
 			<div class="content">
 				<input type="hidden" name="act" value="" />
-				<input type="hidden" name="outputPrinter" id="outputPrinter1" value="" />
+				<input type="hidden" name="outputPrinter" id="outputPrinter1" value="${searchResultForm.getOutputPrinter()}" />
+				<input type="hidden" name="thumbflag" value="" />
 				<c:if test="${message == null}">
 					<div class="header"><span class="normal10"><h2>${sessionScope.searchResultForm.h_label11}</h2></span></div>
 					<table border="0" cellspacing="1" cellpadding="0" align="center">	

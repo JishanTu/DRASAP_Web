@@ -345,6 +345,7 @@
 <body bgcolor="#FFFFFF" style="margin: 0;" onload="onLoad();">
 	<form action="<%=request.getContextPath() %>/result" method="post" >
 		<input type="hidden" name="act" /> 
+		<input type="hidden" name="thumbflag" value="" />
 		<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
 			<%-- この隠し属性がないと、次のXX件をクリックすると、表示属性が消えてしまう --%>
 			<input type="hidden"name="dispAttr${index}" value="${sessionScope.searchResultForm.getDispAttr(index - 1)}"/>

@@ -69,6 +69,7 @@
 			}
 			if(parm == "SEARCH_THUMBNAIL"){
 				parent.result_body.document.forms[0].outputPrinter.value=parent.result_head.document.forms[0].outputPrinter.value;
+				parent.result_body.document.forms[0].thumbflag.value="OK";
 				parent.result_body.document.forms[0].act.value=parm;// 隠し属性actにをセット
 				parent.result_body.document.forms[0].target="_top";// ターゲットはtop
 				parent.result_body.document.forms[0].submit();

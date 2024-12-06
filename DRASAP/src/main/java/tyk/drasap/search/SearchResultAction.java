@@ -237,11 +237,12 @@ public class SearchResultAction extends BaseAction {
 			// 1) 次のチェックを行う
 			// - 指定した枚数のチェック
 			// - 正しい出力サイズを指定している?
-			if("OK".equals(session.getAttribute("OutPut_Flag"))) {
+			if ("OK".equals(session.getAttribute("OutPut_Flag"))) {
 				session.setAttribute("OutPut_Flag", "");
 				request.setAttribute("task", "continue");
 				return "search";
-			}else if("NG".equals(session.getAttribute("OutPut_Flag"))) {
+			}
+			if ("NG".equals(session.getAttribute("OutPut_Flag"))) {
 				session.setAttribute("OutPut_Flag", "");
 				for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
 					// 選択されていて
@@ -448,7 +449,7 @@ public class SearchResultAction extends BaseAction {
 					}
 					MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.required." + user.getLanKey(), new Object[] { requiredStr }, null));
 				}
-			} else {
+			} else if (!"OK".equals(searchResultForm.getThumbflag())) {
 				// 出力先が指定されていれば、出力サイズの指定をチェックする
 				Printer selectedPrinter = user.getPrinter(searchResultForm.getOutputPrinter());
 				for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
@@ -474,7 +475,6 @@ public class SearchResultAction extends BaseAction {
 						}
 					}
 				}
-
 			}
 		} catch (Exception e) {
 			throw e;

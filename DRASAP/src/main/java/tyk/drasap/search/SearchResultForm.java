@@ -32,6 +32,7 @@ public class SearchResultForm extends BaseForm {
 	// 1件目から表示するときは、0となる。
 	ArrayList<SearchResultElement> searchResultList = new ArrayList<>();// 検索結果を格納する。
 	String outCsvAll = "false";// 全属性をファイル出力するなら true
+	String thumbflag;
 
 	// 表示項目英語化対応
 	// Header 部
@@ -585,6 +586,14 @@ public class SearchResultForm extends BaseForm {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+	public String getThumbflag() {
+		return thumbflag;
+	}
+
+	public void setThumbflag(String thumbflag) {
+		this.thumbflag = thumbflag;
 	}
 
 }
