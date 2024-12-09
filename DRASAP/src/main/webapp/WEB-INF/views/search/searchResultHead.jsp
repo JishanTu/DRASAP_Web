@@ -116,11 +116,13 @@
 		}
 		<%-- 2013.07.16 yamagishi add. end --%>
 		function listViewChange() {
+			parent.result_body.document.forms[0].outputPrinter.value=document.forms[0].outputPrinter.value;
 			parent.result_body.document.forms[0].act.value="LIST_VIEW";
 			parent.result_body.document.forms[0].target="_parent";
 			parent.result_body.document.forms[0].submit();
 		}
 		function thumbnailViewChange() {
+			parent.result_body.document.forms[0].outputPrinter.value=document.forms[0].outputPrinter.value;
 			parent.result_body.document.forms[0].act.value="THUMBNAIL_VIEW";
 			parent.result_body.document.forms[0].target="_parent";
 			parent.result_body.document.forms[0].submit();
