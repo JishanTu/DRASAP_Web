@@ -712,6 +712,7 @@
 		}
 		// 最新追番のみ表示
 		currentForm.onlyNewest.disabled = true;
+		document.getElementById('onlyNewestcheckbox').disabled = true;
 		// 全ての属性条件を
 		currentForm.eachCondition[0].disabled = true;
 		currentForm.eachCondition[1].disabled = true;
@@ -733,6 +734,7 @@
 		}
 		// 最新追番のみ表示
 		currentForm.onlyNewest.disabled = false;
+		document.getElementById('onlyNewestcheckbox').disabled = false;
 		// 全ての属性条件を
 		currentForm.eachCondition[0].disabled = false;
 		currentForm.eachCondition[1].disabled = false;
