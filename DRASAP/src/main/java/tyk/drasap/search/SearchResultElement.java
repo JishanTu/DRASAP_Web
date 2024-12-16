@@ -57,7 +57,7 @@ public class SearchResultElement {
 		aclBalloon = newAclBalloon != null ? newAclBalloon : "";
 		// 2013.07.11 yamagishi add. end
 		thumbnailPath = "temp/thumb";
-		thumbnailName = DrasapUtil.formatDrwgNo(drwgNo) + "_thumb.jpg";
+		thumbnailName = StringUtils.isBlank(newFileName) ? drwgNoFormated + "_thumb.jpg" : newFileName.replace(".tif", "_thumb.jpg");
 	}
 
 	// ---------------------------------------------------------- Method
