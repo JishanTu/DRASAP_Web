@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import tyk.drasap.acslog.AccessLoger;
 import tyk.drasap.common.DrasapInfo;
 import tyk.drasap.common.DrasapPropertiesFactory;
+import tyk.drasap.common.DrasapUtil;
 import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.TableInfo;
 import tyk.drasap.common.TableInfoDB;
@@ -389,11 +390,12 @@ public class DeleteDwgAction extends BaseAction {
 			moveFile.delete();
 		}
 
-		String newDelFileName = delPathName + File.separator + fileName.replace(".tif", "_thumb.jpg");
+		String thumbFileName = DrasapUtil.getBaseName(fileName) + "_thumb.jpg";
+		String newDelFileName = delPathName + File.separator + thumbFileName;
 		File newMoveFile = new File(newDelFileName);
 		if (newMoveFile.exists()) {
 			try {
-				copyFile(newMoveFile.getPath(), targetFolder + File.separator + fileName.replace(".tif", ".jpg"));
+				copyFile(newMoveFile.getPath(), targetFolder + File.separator + thumbFileName);
 			} catch (IOException e) {
 				// ファイルの保存に失敗。
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.delDwg.failed.fileBackup", new Object[] { drwgNo, newDelFileName }, null));

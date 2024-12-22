@@ -423,4 +423,21 @@ public class DrasapUtil {
 		}
 		return val;
 	}
+
+	/**
+	 * ファイル名から拡張子を取り除いて返す
+	 * @param fileName ファイル名
+	 * @return BaseName
+	 */
+	public static String getBaseName(String fileName) {
+		if (StringUtils.isBlank(fileName)) {
+			return StringUtils.EMPTY;
+		}
+
+		int point = fileName.lastIndexOf(".");
+		if (point != -1) {
+			return fileName.substring(0, point);
+		}
+		return fileName;
+	}
 }
