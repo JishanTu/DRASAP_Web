@@ -364,7 +364,7 @@ public class SearchResultPreAction extends BaseAction {
 				resultElement.addAttr("DRWG_TYPE", rs1.getString("DRWG_TYPE"));
 				String drwgSize = rs1.getString("DRWG_SIZE");// 図面サイズ
 				resultElement.addAttr("DRWG_SIZE", drwgSize);
-				String printSize = drwgSize.endsWith("L") ? "ORG" : drwgSize;
+				String printSize = drwgSize.endsWith("L") ? "ORG" : drwgSize; // 図面サイズが長尺の場合、原寸としてセット
 				resultElement.setPrintSize(printSize);// 印刷サイズにセットする
 				resultElement.addAttr("ISSUE", rs1.getString("ISSUE"));
 				resultElement.addAttr("SUPPLY", rs1.getString("SUPPLY"));
