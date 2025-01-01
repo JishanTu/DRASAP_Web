@@ -109,7 +109,7 @@ public class PreviewAction extends BaseAction {
 		String tempDirName = DrasapUtil.getRealTempPath(request);
 		// 2019.10.17 yamamoto add start.
 		SearchResultForm searchResultForm = (SearchResultForm) session.getAttribute("searchResultForm");
-		//		session.removeAttribute("searchResultForm");// sessionから削除
+		// session.removeAttribute("searchResultForm");// sessionから削除
 		// 2019.10.17 yamamoto add end.
 
 		// DLマネージャからのリクエスト情報		// 2013.08.02 yamagishi add. start
@@ -159,20 +159,18 @@ public class PreviewAction extends BaseAction {
 		}
 
 		// リクエストパラメータから取得する
-		//		String drwgNo = request.getParameter("DRWG_NO");// 図番
-		//		String fileName = request.getParameter("FILE_NAME");// ファイル名
-		//		String pathName = request.getParameter("PATH_NAME");// ディレクトリのフルパス
-		//		pathName = drasapInfo.getViewDBDrive() + pathName.replace("/", "\\");
-		//		String drwgSize = request.getParameter("DRWG_SIZE");// 図番サイズ
-		//		String pdfFlug = request.getParameter("PDF");// PDFに変換する?
-		//		String PRINT_SIZE = request.getParameter("PRINT_SIZE");
+		//	String drwgNo = request.getParameter("DRWG_NO");// 図番
+		//	String fileName = request.getParameter("FILE_NAME");// ファイル名
+		//	String pathName = request.getParameter("PATH_NAME");// ディレクトリのフルパス
+		//	pathName = drasapInfo.getViewDBDrive() + pathName.replace("/", "\\");
+		//	String drwgSize = request.getParameter("DRWG_SIZE");// 図番サイズ
+		//	String pdfFlug = request.getParameter("PDF");// PDFに変換する?
 		String drwgNo = (String) request.getAttribute("DRWG_NO");// 図番
 		String fileName = (String) request.getAttribute("FILE_NAME");// ファイル名
 		String pathName = (String) request.getAttribute("PATH_NAME");// ディレクトリのフルパス
 		pathName = drasapInfo.getViewDBDrive() + pathName.replace("/", "\\");
 		String drwgSize = (String) request.getAttribute("DRWG_SIZE");// 図番サイズ
 		String pdfFlug = (String) request.getAttribute("PDF");// PDFに変換する?
-		String PRINT_SIZE = (String) request.getAttribute("PRINT_SIZE");
 
 		// 他システムからの呼び出しに対応するため、パラメータを追加
 		// DRASAP内部からの呼び出しでは、この値は null になる。
@@ -279,8 +277,9 @@ public class PreviewAction extends BaseAction {
 					drasapInfo.getViewStampDateFormat(),
 					// 図番を印字しない場合、nullを渡す
 					drasapInfo.isDispDrwgNoWithView() ? drwgNo : null,
-					//					user, errors);	// 2013.08.02 yamagishi modified.
+					//user, errors);	// 2013.08.02 yamagishi modified.
 					user, errors, dlmInfo);
+
 			// 変換前のファイルがオリジナルでなければ、削除する
 			if (!ORIGIN_FILE_NAME.equals(outFileName)) {
 				if (new File(outFileName).delete()) {
@@ -302,15 +301,11 @@ public class PreviewAction extends BaseAction {
 				return "error";
 			}
 			outFileName = newOutFileName;// バナー処理後のファイル名に変更する
-
 		}
 
 		// 間引きが必要か判定する
 		// 間引きサイズの未設定にも対応する。'04.Jul.19変更 by Hirata。
 		String mabikiDpi = null;// 間引きのdpi
-		if ("ORG".equals(drwgSize)) {
-			drwgSize = PRINT_SIZE;
-		}
 		if (drasapInfo.getMabiki100dpiSize() != null &&
 				DrasapUtil.compareDrwgSize(drwgSize, drasapInfo.getMabiki100dpiSize()) >= 0) {
 			// 図面サイズ >= 100dpiのサイズ、なら
@@ -328,7 +323,7 @@ public class PreviewAction extends BaseAction {
 			String newOutFileName = tempDirName + File.separator + user.getId() + "_"
 					+ drwgNo + "_" + new Date().getTime() + ".tif";
 
-			//			doMabiki(outFileName, newOutFileName, mabikiDpi, user, errors, drwgNo);	// 2013.08.02 yamagishi modified.
+			// doMabiki(outFileName, newOutFileName, mabikiDpi, user, errors, drwgNo);	// 2013.08.02 yamagishi modified.
 			doMabiki(outFileName, newOutFileName, mabikiDpi, user, errors, drwgNo, dlmInfo);
 			// 変換前のファイルがオリジナルでなければ、削除する
 			if (!ORIGIN_FILE_NAME.equals(outFileName)) {

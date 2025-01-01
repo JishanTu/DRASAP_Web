@@ -196,36 +196,32 @@
 			var DRWG_NO = document.getElementById("DRWG_NO[" + idx + "]").value;
 			var FILE_NAME = document.getElementById("FILE_NAME[" + idx + "]").value;
 			var PATH_NAME = document.getElementById("PATH_NAME[" + idx + "]").value;
-			var DRWG_SIZE = document.getElementById("printSizeSelect" + idx).value;
+			var DRWG_SIZE = document.getElementById("DRWG_SIZE[" + idx + "]").value;
 			var PDF = document.getElementById("PDF[" + idx + "]").value;
-			var PRINT_SIZE = document.getElementById("PRINT_SIZE[" + idx + "]").value;
 			if(switchFlag == "drwgNo"){
 				var drwgNoLink = document.getElementById("drwgNoLink[" + idx + "]");
 				drwgNoLink.href = drwgNoLink
-									+ '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
-									+ '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+									+ '?DRWG_NO=' + encodeURIComponent(DRWG_NO)
 									+ '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
-									+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
 									+ '&PDF=' + encodeURIComponent(PDF)
-									+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
+									+ '&FILE_NAME=' + encodeURIComponent(FILE_NAME)
+									+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE);
 			}else if(switchFlag == "thumbnailNo"){
 				var thumbnailNoLink = document.getElementById("thumbnailNoLink[" + idx + "]");
 				thumbnailNoLink.href = thumbnailNoLink
-										+ '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
-										+ '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+										+ '?DRWG_NO=' + encodeURIComponent(DRWG_NO)
 										+ '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
-										+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
 										+ '&PDF=' + encodeURIComponent(PDF)
-										+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
+										+ '&FILE_NAME=' + encodeURIComponent(FILE_NAME)
+										+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE);
 			}else{
 				var thumbnailPhotoLink = document.getElementById("thumbnailPhotoLink[" + idx + "]");
 				thumbnailPhotoLink.href = thumbnailPhotoLink
-										+ '?FILE_NAME=' + encodeURIComponent(FILE_NAME)
-										+ '&DRWG_NO=' + encodeURIComponent(DRWG_NO)
+										+ '?DRWG_NO=' + encodeURIComponent(DRWG_NO)
 										+ '&PATH_NAME=' + encodeURIComponent(PATH_NAME)
-										+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE)
 										+ '&PDF=' + encodeURIComponent(PDF)
-										+ '&PRINT_SIZE=' + encodeURIComponent(PRINT_SIZE);
+										+ '&FILE_NAME=' + encodeURIComponent(FILE_NAME)
+										+ '&DRWG_SIZE=' + encodeURIComponent(DRWG_SIZE);
 			}
 <%--
 	<%		// DLマネージャが利用可能な場合
@@ -446,7 +442,7 @@
 					-->
 					<td align="center">
 						<input type="hidden" id="printSizeHidden${status.index}" value="${item.printSize}"/>
-						<select name="printSize"id="printSizeSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'printSize')">
+						<select name="printSize" id="printSizeSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'printSize')">
 							<option value="ORG">
 								<c:choose>
 									<c:when test="${user.language == 'Japanese'}">原寸</c:when>
@@ -510,6 +506,7 @@
 							<input type="hidden" id="FILE_NAME[${status.index}]" value="${item.fileName}"/>
 							<input type="hidden" id="PATH_NAME[${status.index}]" value="${item.pathName}"/>
 							<input type="hidden" id="PDF[${status.index}]" value="${item.linkParmMap['PDF']}"/>
+							<input type="hidden" id="DRWG_SIZE[${status.index}]" value="${item.linkParmMap['DRWG_SIZE']}"/>
 							<input type="hidden" id="PRINT_SIZE[${status.index}]" value="${item.printSize}"/>
 						</c:when>
 						<c:otherwise>
@@ -591,6 +588,7 @@
 					<input type="hidden" id="FILE_NAME[${status.index}]" value="${item.fileName}"/>
 					<input type="hidden" id="PATH_NAME[${status.index}]" value="${item.pathName}"/>
 					<input type="hidden" id="PDF[${status.index}]" value="${item.linkParmMap['PDF']}"/>
+					<input type="hidden" id="DRWG_SIZE[${status.index}]" value="${item.linkParmMap['DRWG_SIZE']}"/>
 					<input type="hidden" id="PRINT_SIZE[${status.index}]" value="${item.printSize}"/>
 				</c:forEach>
 			</div>
