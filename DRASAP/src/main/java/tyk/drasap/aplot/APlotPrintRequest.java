@@ -389,7 +389,6 @@ public class APlotPrintRequest {
 		} catch (SQLException ex) {
 			category.fatal("A-PLOT出図 出図処理モジュールへ出図指示情報登録でSQLエラー", ex);
 			throw ex;
-		} finally {
 		}
 		category.info("A-PLOT出図 ドキュメント登録数:" + cnt);
 		return cnt;
@@ -436,8 +435,6 @@ public class APlotPrintRequest {
 		} catch (IOException ex) {
 			category.fatal("A-PLOT出図 図面ファイルスプール処理でエラー", ex);
 			throw ex;
-		} finally {
-
 		}
 	}
 
@@ -543,7 +540,6 @@ public class APlotPrintRequest {
 			}
 			conn.rollback();
 			throw ex;
-		} finally {
 		}
 		return cnt;
 	}

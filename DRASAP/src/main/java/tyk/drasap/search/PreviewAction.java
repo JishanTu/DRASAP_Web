@@ -355,7 +355,7 @@ public class PreviewAction extends BaseAction {
 			// WebLogicだとやたらにセッションIDが長いため、一時的なファイル名を変更する。
 			String newOutFileName = tempDirName + File.separator + user.getId() + "_"
 					+ drwgNo + "_" + new Date().getTime() + ".pdf";
-			//			tifToPdf(outFileName, newOutFileName, user, errors, drwgNo, convertPdf.equalsIgnoreCase("printablePdf")?true:false);	// 2013.08.02 yamagishi modified.
+			// tifToPdf(outFileName, newOutFileName, user, errors, drwgNo, convertPdf.equalsIgnoreCase("printablePdf")?true:false);	// 2013.08.02 yamagishi modified.
 			tifToPdf(outFileName, newOutFileName, user, errors, drwgNo, "printablePdf".equalsIgnoreCase(convertPdf) == true, dlmInfo, 1, false);
 			// 変換前のファイルがオリジナルでなければ、削除する
 			if (!ORIGIN_FILE_NAME.equals(outFileName)) {
@@ -394,6 +394,7 @@ public class PreviewAction extends BaseAction {
 				streamFileName = streamFileName.substring(0, lastIndex) + ".pdf";
 			}
 		}
+
 		// ユーザーがこの処理の最中に、別のリクエストを投げた場合（処理が長いので止めた、指定した図番を間違えた)
 		// responseがすでに閉じられている場合がある。
 		// その場合でも、オリジナルのファイル以外を削除したいので、try,catchする
@@ -413,9 +414,9 @@ public class PreviewAction extends BaseAction {
 			while ((c = in.read()) != -1) {
 				out.write(c);
 			}
-
 			out.flush();
-
+		} catch (Exception e) {
+			category.error("responseへ書き込みに失敗しました。\n" + ErrorUtility.error2String(e));
 		} finally {
 			// CLOSE処理
 			try {
@@ -786,7 +787,7 @@ public class PreviewAction extends BaseAction {
 	 */
 	@SuppressWarnings("deprecation")
 	private void tifToPdf(String inFile, String outFile, User user, Model errors,
-			//							String drwgNo, boolean printable){	// 2013.08.02 yamagishi modified.
+			// String drwgNo, boolean printable){	// 2013.08.02 yamagishi modified.
 			String drwgNo, boolean printable, DLManagerInfo dlmInfo, int totalPage,
 			boolean multiPDF) {
 		// Win版の場合、pdf_java.dllをパスが通ったところに置くこと。
@@ -796,7 +797,6 @@ public class PreviewAction extends BaseAction {
 		// といったメッセージが出力される。
 
 		// ファイル名などでサポートされているのはasciiのみ(2004.Jan.14 F.Hirata/MUR)
-
 		category.debug("PDF変換処理の開始");
 		// ビュー専用のログ
 		ViewLoger.info(drwgNo, "PDF変換処理の開始");
@@ -809,11 +809,9 @@ public class PreviewAction extends BaseAction {
 		/* This is where font/image/PDF input files live. Adjust as necessary.*/
 
 		//String searchpath = ".";
-
 		try {
-
-			p = new pdflib();
 			/* open new PDF file */
+			p = new pdflib();
 
 			// アクセス権の削除 （Modified Oce Japan Corporation 2004/01/09）
 			// 2020.02.14 yamamoto mod Multi PDFの場合はパスワードは設定しない
@@ -853,7 +851,6 @@ public class PreviewAction extends BaseAction {
 			}
 
 			p.close(); /* close PDF document   */
-
 		} catch (PDFlibException e) {
 			// 2013.08.02 yamagishi modified. start
 			//			// for ユーザー
@@ -885,7 +882,6 @@ public class PreviewAction extends BaseAction {
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(errMsg);
-
 		} catch (Exception e) {
 			// 2013.08.02 yamagishi modified. start
 			//			// for ユーザー
@@ -912,7 +908,6 @@ public class PreviewAction extends BaseAction {
 			ViewLoger.error(drwgNo, errMsg);
 			// for MUR
 			category.error(errMsg);
-
 		} finally {
 			if (p != null) {
 				p.delete(); /* delete the PDFlib object */

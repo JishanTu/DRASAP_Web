@@ -1031,7 +1031,6 @@ public class TableMaintenanceAction extends BaseAction {
 			// for MUR
 			//			category.error("検索結果のファイル出力に失敗\n" + ErrorUtility.error2String(e));
 
-		} finally {
 		}
 
 	}

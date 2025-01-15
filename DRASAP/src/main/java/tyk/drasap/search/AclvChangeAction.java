@@ -428,6 +428,8 @@ public class AclvChangeAction extends BaseAction {
 					throw new Exception("(" + messageSource.getMessage("system.aclBatchUpdate.update.excusive.acl", null, null) + ")");
 				}
 			}
+		} catch (Exception e) {
+			category.error("属性情報テーブルの図番・ACLが更新されていないかチェック処理に失敗しました。\n" + ErrorUtility.error2String(e));
 		} finally {
 			// CLOSE処理
 			try {
