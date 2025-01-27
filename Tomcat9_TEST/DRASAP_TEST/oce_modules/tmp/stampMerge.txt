@@ -1,0 +1,1 @@
+D:\Tomcat9_TEST\DRASAP_TEST\oce_modules\tmp\tmpStamp.TIF -ALPHA180 -R90 -NM0 -MOR -MORG2 -MREFRD -XM300 -YM2000

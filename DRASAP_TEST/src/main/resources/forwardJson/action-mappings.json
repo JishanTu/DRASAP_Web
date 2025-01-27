@@ -1,0 +1,573 @@
+{
+  "actions" : [ {
+    "name" : "tyk.drasap.root.LoginForm",
+    "path" : "/login",
+    "type" : "tyk.drasap.root.LoginAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/root/login.jsp"
+    }, {
+      "name" : "chgpasswd",
+      "path" : "/root/changePassword.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/search/searchMain.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/root/login.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.change_passwd.ChangePasswdForm",
+    "path" : "/changePasswd",
+    "type" : "tyk.drasap.change_passwd.ChangePasswdAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/root/changePassword.jsp"
+    }, {
+      "name" : "successFromLogin",
+      "path" : "/root/changePasswordSuccess.jsp"
+    }, {
+      "name" : "successFromSearch",
+      "path" : "/root/changePasswordSuccess.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/root/changePassword.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/loginWithIdde",
+    "type" : "tyk.drasap.root.LoginWithIddeAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/root/loginFailed.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/root/menu.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/loginWithIddePre",
+    "type" : "tyk.drasap.root.LoginWithIddePreAction",
+    "forwards" : [ ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/directLoginForPreviewPre",
+    "type" : "tyk.drasap.root.DirectLoginForPreviewPreAction",
+    "forwards" : [ ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/directLoginForPreview",
+    "type" : "tyk.drasap.root.DirectLoginForPreviewAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/root/loginFailed.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/directPreview.do"
+    } ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/directLoginForMultiPreviewPre",
+    "type" : "tyk.drasap.root.DirectLoginForMultiPreviewPreAction",
+    "forwards" : [ ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/directLoginForMultiPreview",
+    "type" : "tyk.drasap.root.DirectLoginForMultiPreviewAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/root/loginFailed.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/search/searchMain.jsp?task=multipreview"
+    } ]
+  }, {
+    "name" : "tyk.drasap.system.SystemMaintenanceLoginForm",
+    "path" : "/systemMaintenanceLogin",
+    "type" : "tyk.drasap.system.SystemMaintenanceLoginAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/system/systemMaintenanceLogin.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/system/masterMaintenanceMenu.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/system/systemMaintenanceLogin.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.system.MasterMaintenanceMenuForm",
+    "path" : "/masterMaintenanceMenu",
+    "type" : "tyk.drasap.system.MasterMaintenanceMenuAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/system/masterMaintenanceMenu.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/system/masterMaintenanceMenu.jsp"
+    }, {
+      "name" : "logout",
+      "path" : "/system/systemMaintenanceLogin.jsp"
+    }, {
+      "name" : "adminSettingList",
+      "path" : "/adminSettingList.do?task=init"
+    }, {
+      "name" : "userGroupMaster",
+      "path" : "/system/masterMaintenanceMenuRight.jsp"
+    }, {
+      "name" : "deptMaster",
+      "path" : "/system/masterMaintenanceMenuRight.jsp"
+    }, {
+      "name" : "userMaster",
+      "path" : "/system/masterMaintenanceMenuRight.jsp"
+    }, {
+      "name" : "accessLevelMaster",
+      "path" : "/accessLevelMasterMaintenance.do?act=init"
+    }, {
+      "name" : "userGroupAclRelation",
+      "path" : "/userGrpAclRelationMaintenance.do?act=init"
+    }, {
+      "name" : "tableMaintenance",
+      "path" : "/tableMaintenance.do?act=init"
+    }, {
+      "name" : "input",
+      "path" : "/system/masterMaintenanceMenu.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.system.AdminSettingListForm",
+    "path" : "/adminSettingList",
+    "type" : "tyk.drasap.system.AdminSettingListAction",
+    "forwards" : [ {
+      "name" : "update",
+      "path" : "/system/adminSettingList.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/system/adminSettingList.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/system/adminSettingList.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.system.AccessLevelMasterMaintenanceForm",
+    "path" : "/accessLevelMasterMaintenance",
+    "type" : "tyk.drasap.system.AccessLevelMasterMaintenanceAction",
+    "forwards" : [ {
+      "name" : "update",
+      "path" : "/system/accessLevelMasterMaintenance.jsp"
+    }, {
+      "name" : "error",
+      "path" : "/system/accessLevelMasterMaintenance.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/system/accessLevelMasterMaintenance.jsp"
+    }, {
+      "name" : "search",
+      "path" : "/system/accessLevelMasterMaintenance.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/system/accessLevelMasterMaintenance.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.system.UserGrpAclRelationMaintenanceForm",
+    "path" : "/userGrpAclRelationMaintenance",
+    "type" : "tyk.drasap.system.UserGrpAclRelationMaintenanceAction",
+    "forwards" : [ {
+      "name" : "update",
+      "path" : "/system/userGrpAclRelationMaintenance.jsp"
+    }, {
+      "name" : "error",
+      "path" : "/system/userGrpAclRelationMaintenance.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/system/userGrpAclRelationMaintenance.jsp"
+    }, {
+      "name" : "search",
+      "path" : "/system/userGrpAclRelationMaintenance.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/system/userGrpAclRelationMaintenance.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.system.TableMaintenanceForm",
+    "path" : "/tableMaintenance",
+    "type" : "tyk.drasap.system.TableMaintenanceAction",
+    "forwards" : [ {
+      "name" : "update",
+      "path" : "/system/tableMaintenance.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/system/tableMaintenance.jsp"
+    }, {
+      "name" : "error",
+      "path" : "/system/tableMaintenance.jsp"
+    }, {
+      "name" : "search",
+      "path" : "/system/tableMaintenance.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/system/tableMaintenance.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/directSearch",
+    "type" : "tyk.drasap.root.DirectSearchAction",
+    "forwards" : [ ]
+  }, {
+    "name" : "tyk.drasap.system.AccessLevelBatchUpdateForm",
+    "path" : "/accessLevelBatchUpdate",
+    "type" : "tyk.drasap.system.AccessLevelBatchUpdateAction",
+    "forwards" : [ {
+      "name" : "init",
+      "path" : "/system/accessLevelBatchUpdateBody.jsp"
+    }, {
+      "name" : "update",
+      "path" : "/system/accessLevelBatchUpdate.jsp"
+    }, {
+      "name" : "upload",
+      "path" : "/system/accessLevelBatchUpdate.jsp"
+    }, {
+      "name" : "error",
+      "path" : "/system/accessLevelBatchUpdate.jsp"
+    }, {
+      "name" : "noPermission",
+      "path" : "/system/accessLevelBatchUpdate_error.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.system.AccessLevelBatchUpdateForm",
+    "path" : "/accessLevelDownload",
+    "type" : "tyk.drasap.system.AccessLevelDownloadAction",
+    "forwards" : [ {
+      "name" : "error",
+      "path" : "/system/accessLevelBatchUpdate_error.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.system.AccessLevelUpdatedResultForm",
+    "path" : "/accessLevelUpdatedResult",
+    "type" : "tyk.drasap.system.AccessLevelUpdatedResultAction",
+    "forwards" : [ {
+      "name" : "init",
+      "path" : "/system/accessLevelUpdatedResultBody.jsp"
+    }, {
+      "name" : "error",
+      "path" : "/system/accessLevelBatchUpdate_error.jsp"
+    }, {
+      "name" : "noPermission",
+      "path" : "/system/accessLevelBatchUpdate_error.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.genzu_irai.RequestForm",
+    "path" : "/req",
+    "type" : "tyk.drasap.genzu_irai.RequestAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/genzu_irai/request.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/genzu_irai/request.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.genzu_irai.Request_listForm",
+    "path" : "/req_list",
+    "type" : "tyk.drasap.genzu_irai.Request_listAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/genzu_irai/requestt_list_body.jsp"
+    }, {
+      "name" : "list",
+      "path" : "/genzu_irai/requestt_list_body.jsp"
+    }, {
+      "name" : "print",
+      "path" : "/req_print.do"
+    }, {
+      "name" : "history",
+      "path" : "/requestHistory.do"
+    }, {
+      "name" : "input",
+      "path" : "/genzu_irai/requestt_list.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.genzu_irai.Request_listForm",
+    "path" : "/req_result",
+    "type" : "tyk.drasap.genzu_irai.RequestResultAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/genzu_irai/requestt_list_foot.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/genzu_irai/requestt_list.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.genzu_irai.Request_listForm",
+    "path" : "/req_print",
+    "type" : "tyk.drasap.genzu_irai.RequestPriAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/genzu_irai/requestt_list_head.jsp"
+    }, {
+      "name" : "printer",
+      "path" : "/genzu_irai/requestt_list_print.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/genzu_irai/requestt_list_print.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.genzu_irai.Request_RefForm",
+    "path" : "/req_ref",
+    "type" : "tyk.drasap.genzu_irai.Request_RefAction",
+    "forwards" : [ {
+      "name" : "list",
+      "path" : "/genzu_irai/requestt_ref_message.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/genzu_irai/requestt_ref_body.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/genzu_irai/requestt_ref.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.genzu_irai.RequestHistoryForm",
+    "path" : "/requestHistory",
+    "type" : "tyk.drasap.genzu_irai.RequestHistoryAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/genzu_irai/request_history.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.SearchConditionForm",
+    "path" : "/searchCondition",
+    "type" : "tyk.drasap.search.SearchConditionAction",
+    "forwards" : [ {
+      "name" : "error",
+      "path" : "/root/common_error.jsp"
+    }, {
+      "name" : "overHit",
+      "path" : "/search/searchWarningOverHit.jsp"
+    }, {
+      "name" : "overLimitHit",
+      "path" : "/search/searchErrorOverHit.jsp"
+    }, {
+      "name" : "overLimitMultipleDrwgNo",
+      "path" : "/search/searchErrorOverHitMultipleDrwgNo.jsp"
+    }, {
+      "name" : "searchResult",
+      "path" : "/resultPre.do?task=search"
+    }, {
+      "name" : "multipreview",
+      "path" : "/search/searchCondition.jsp?act=multipreview"
+    }, {
+      "name" : "changeLanguage",
+      "path" : "/search/searchMain.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/search/searchCondition.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.SearchWarningOverHitForm",
+    "path" : "/warningOverHit",
+    "type" : "tyk.drasap.search.SearchWarningOverHitAction",
+    "forwards" : [ {
+      "name" : "continue",
+      "path" : "/resultPre.do?task=search"
+    }, {
+      "name" : "cancel",
+      "path" : "/resultPre.do?task=init"
+    }, {
+      "name" : "input",
+      "path" : "/search/searchErrorOverHit.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.SearchResultForm",
+    "path" : "/resultPre",
+    "type" : "tyk.drasap.search.SearchResultPreAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/search/searchResult.jsp"
+    }, {
+      "name" : "error",
+      "path" : "/root/common_error.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.SearchResultForm",
+    "path" : "/result",
+    "type" : "tyk.drasap.search.SearchResultAction",
+    "forwards" : [ {
+      "name" : "result",
+      "path" : "/search/searchResult.jsp"
+    }, {
+      "name" : "notPrintable",
+      "path" : "/search/searchWarningNotPrintable.jsp"
+    }, {
+      "name" : "thumbNotPrintable",
+      "path" : "/search/thumbWarningNotPrintable.jsp"
+    }, {
+      "name" : "error",
+      "path" : "/root/common_error.jsp"
+    }, {
+      "name" : "search_error",
+      "path" : "/search/search_common_error.jsp"
+    }, {
+      "name" : "out_csv",
+      "path" : "/outAttrCsv.do"
+    }, {
+      "name" : "aclv_change",
+      "path" : "/aclvChangePre.do"
+    }, {
+      "name" : "deletedwg",
+      "path" : "/search/delete_Login.jsp"
+    }, {
+      "name" : "multi_pdf",
+      "path" : "/preview.do"
+    }, {
+      "name" : "search",
+      "path" : "/search/searchMain.jsp"
+    }, {
+      "name" : "search_thumb",
+      "path" : "/search/searchResultThumb.jsp"
+    }, {
+      "name" : "search_thumb_error",
+      "path" : "/search/search_thumb_error.jsp" 
+    } ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/preview",
+    "type" : "tyk.drasap.search.PreviewAction",
+    "forwards" : [ {
+      "name" : "error",
+      "path" : "/root/common_error.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/directPreview",
+    "type" : "tyk.drasap.search.DirectPreviewAction",
+    "forwards" : [ {
+      "name" : "error",
+      "path" : "/search/directPreview.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/search/directPreview.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.SearchWarningNotPrintableForm",
+    "path" : "/searchWarningNotPrintable",
+    "type" : "tyk.drasap.search.SearchWarningNotPrintableAction",
+    "forwards" : [ {
+      "name" : "backResult",
+      "path" : "/search/searchResult.jsp"
+    }, {
+      "name" : "search_error",
+      "path" : "/search/search_common_error.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/search/searchWarningNotPrintable.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/outAttrCsv",
+    "type" : "tyk.drasap.search.OutAttrCsvAction",
+    "forwards" : [ {
+      "name" : "error",
+      "path" : "/root/common_error.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.springfw.form.BaseForm",
+    "path" : "/aclvChangePre",
+    "type" : "tyk.drasap.search.AclvChangePreAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/search/aclvChange.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.AclvChangeForm",
+    "path" : "/aclvChange",
+    "type" : "tyk.drasap.search.AclvChangeAction",
+    "forwards" : [ {
+      "name" : "input",
+      "path" : "/search/aclvChange.jsp"
+    }, {
+      "name" : "confirm",
+      "path" : "/search/aclvChangeConfirm.jsp"
+    }, {
+      "name" : "search",
+      "path" : "/search/searchMain.jsp"
+    }, {
+      "name" : "search2",
+      "path" : "/search/searchMain.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.Delete_LoginForm",
+    "path" : "/delete_Login",
+    "type" : "tyk.drasap.search.Delete_LoginAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/search/delete_Login.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/deleteDwg.do?task=init"
+    }, {
+      "name" : "input",
+      "path" : "/search/delete_Login.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.DeleteDwgForm",
+    "path" : "/deleteDwg",
+    "type" : "tyk.drasap.search.DeleteDwgAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/search/deleteDwg.jsp"
+    }, {
+      "name" : "failed",
+      "path" : "/search/deleteDwg.jsp"
+    }, {
+      "name" : "deleteComplete",
+      "path" : "/search/deleteDwg.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/search/deleteDwg.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.Management_LoginForm",
+    "path" : "/management_Login",
+    "type" : "tyk.drasap.search.Management_LoginAction",
+    "forwards" : [ {
+      "name" : "failed",
+      "path" : "/search/management_Login.jsp"
+    }, {
+      "name" : "success",
+      "path" : "/delHostReq.do?task=init"
+    }, {
+      "name" : "input",
+      "path" : "/search/management_Login.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.DeleteHostReqForm",
+    "path" : "/delHostReq",
+    "type" : "tyk.drasap.search.DeleteHostReqAction",
+    "forwards" : [ {
+      "name" : "success",
+      "path" : "/search/delHostReq.jsp"
+    }, {
+      "name" : "failed",
+      "path" : "/search/delHostReq.jsp"
+    }, {
+      "name" : "deleteComplete",
+      "path" : "/search/delHostReq.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/search/delHostReq.jsp"
+    } ]
+  }, {
+    "name" : "tyk.drasap.search.ThumbWarningNotPrintableForm",
+    "path" : "/thumbWarningNotPrintable",
+    "type" : "tyk.drasap.search.ThumbWarningNotPrintableAction",
+    "forwards" : [ {
+      "name" : "backResult",
+      "path" : "/search/searchMain.jsp"
+    }, {
+      "name" : "search_error",
+      "path" : "/search/searchResultThumb.jsp"
+    }, {
+      "name" : "input",
+      "path" : "/search/thumbWarningNotPrintable.jsp"
+    } ]
+  } ]
+}

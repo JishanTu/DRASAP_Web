@@ -7,7 +7,7 @@
 -->
 
 
-<Context path="/DRASAP" docBase="${catalina.home}/webapps/drasap">
+<Context path="/DRASAP" docBase="${catalina.home}/webapps/DRASAP">
 	<!-- Link to the user database we will get roles from -->
 	<Resource
 		name="jdbc/drasap_oracle"

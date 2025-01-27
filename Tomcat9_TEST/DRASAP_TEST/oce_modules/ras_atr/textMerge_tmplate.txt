@@ -1,0 +1,56 @@
+# 
+# This file is text-merge template file.
+# 
+MOJI_FONT_WIN=Y
+
+#
+# バナータイトル文字列
+#
+BANNER_TITLE=JTEKT CORP.
+
+#
+# 合成座標の原点
+#     0:左上(初期値) 1:左下 2:右下 3:右上
+#
+MOJI_ORG=1
+
+#
+# 合成基準位置
+#    [L|C|R][U|C|D]
+#
+# RD:右下
+# LD:左下
+# LC:左中央
+#
+#MOJI_REF=RD
+MOJI_REF=LD
+
+#
+# 文字の幅、高さ（㎜）
+#
+MOJI_WIDTH=3.6
+MOJI_HEIGHT=3.6
+#
+# 文字フォント
+#
+#MOJI_FONT_NAME=OCR A Extended
+MOJI_FONT_NAME=ＭＳ ゴシック
+
+MOJI_THETA=0.0
+#
+#    MOJI_PATH:0:横、270:縦
+#
+#MOJI_PATH=90
+MOJI_PATH=0
+#
+#    文字濃度:(0:不透明～255:透明)
+#
+RAS_ALPHA=0
+#
+# Banner（㎜）
+#
+*GROUP
+ORG_X=3.0
+ORG_Y=2.0
+%%BANNER.TEXT
+*END

@@ -1,0 +1,3 @@
+Please choose the drawing number or other attributes, input the search condition and push "Search" button.
+(Please input one or more conditions.)
+Wild-card(*)can be used.Can use OR retrieval by using Comma "," in one attribute.Can use AND retrievel by using Ambasand "&" in one attribute.

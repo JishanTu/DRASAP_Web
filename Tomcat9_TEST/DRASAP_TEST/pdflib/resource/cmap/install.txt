@@ -1,0 +1,24 @@
+CMap configuration
+==================
+
+[2006-08-08 Package created for PDFlib 7.0.0]
+
+In order to create Chinese, Japanese, or Korean (CJK) text output with
+one of the predefined CMaps PDFlib requires the corresponding CMap files
+for processing the incoming text and mapping CJK encodings to Unicode.
+
+The CMap files are available in a separate package. They should be
+installed as follows:
+
+- On Windows the CMap files will be found automatically if you place them
+  in the resource/cmap directory within the PDFlib installation directory.
+
+- On other systems you can place the CMap files at any convenient directory,
+  and must manually configure the CMap files by setting the searchpath at
+  runtime:
+
+    PDF_set_parameter(p, "searchpath", "/path/to/resource/cmap");
+    oPDF.set_parameter("searchpath", "/path/to/resource/cmap")
+
+
+Refer to the PDFlib documentation for more information on CJK text handling.
