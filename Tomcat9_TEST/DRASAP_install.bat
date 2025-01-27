@@ -6,49 +6,49 @@ REM Tomcat service flag
 SET "TomcatServiceFlag=1"
 
 REM ログファイルのディレクトリと名前を設定
-SET "LOG_DIR=D:\Tomcat9\DRASAP\logs"
+SET "LOG_DIR=D:\Tomcat9_TEST\DRASAP_TEST\logs"
 IF NOT EXIST "%LOG_DIR%" (
     mkdir "%LOG_DIR%"
 )
 
 REM タイムスタンプを取得してログファイル名を設定
 FOR /F "tokens=2 delims==" %%A IN ('wmic os get localdatetime /value') DO SET "DT=%%A"
-SET "LOG_FILE=%LOG_DIR%\DRASAP_Deploy-%DT:~0,4%%DT:~4,2%%DT:~6,2%%DT:~8,2%%DT:~10,2%%DT:~12,2%.log"
+SET "LOG_FILE=%LOG_DIR%\DRASAP_TEST_Deploy-%DT:~0,4%%DT:~4,2%%DT:~6,2%%DT:~8,2%%DT:~10,2%%DT:~12,2%.log"
 
 REM 開始時刻を取得
 SET "START_DATE=%DT:~0,4%-%DT:~4,2%-%DT:~6,2%"
 SET "START_TIME=%DT:~8,2%:%DT:~10,2%:%DT:~12,2%"
 CALL :LogAndEcho "%START_DATE% %START_TIME%に配置バッチ処理が開始しました。"
 
-REM Tomcat9サービスが存在するかチェック
-CALL :LogAndEcho "Tomcat9サービスの存在を確認中..."
-sc query Tomcat9 >nul 2>&1
+REM Tomcat9_TESTサービスが存在するかチェック
+CALL :LogAndEcho "Tomcat9_TESTサービスの存在を確認中..."
+sc query Tomcat9_TEST >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
-    CALL :LogAndEcho "Tomcat9サービスが見つかりません。処理が続きます。"
+    CALL :LogAndEcho "Tomcat9_TESTサービスが見つかりません。処理が続きます。"
     SET "TomcatServiceFlag=0"
 )
 
-REM Tomcat9サービスが存在の場合
+REM Tomcat9_TESTサービスが存在の場合
 IF "%TomcatServiceFlag%"=="1" (
-    REM Tomcat9サービスを停止
-    CALL :LogAndEcho "Tomcat9サービスを停止中..."
-    net stop Tomcat9 >> "%LOG_FILE%" 2>&1
+    REM Tomcat9_TESTサービスを停止
+    CALL :LogAndEcho "Tomcat9_TESTサービスを停止中..."
+    net stop Tomcat9_TEST >> "%LOG_FILE%" 2>&1
     IF %ERRORLEVEL% NEQ 0 (
-        CALL :LogAndEcho "Tomcat9サービスの停止中にエラーが発生しました。"
+        CALL :LogAndEcho "Tomcat9_TESTサービスの停止中にエラーが発生しました。"
         EXIT /B 1
     )
     timeout /t 5 > nul
-    CALL :LogAndEcho "Tomcat9サービスが停止しました。"
+    CALL :LogAndEcho "Tomcat9_TESTサービスが停止しました。"
 )
 
 REM バッチファイルが存在するディレクトリを取得
-SET "SOURCE_DIR=%~dp0DRASAP"
-SET "DEST_DIR=D:\Tomcat9\DRASAP"
+SET "SOURCE_DIR=%~dp0DRASAP_TEST"
+SET "DEST_DIR=D:\Tomcat9_TEST\DRASAP_TEST"
 
 REM 処理前のクリーンアップ
 CALL :CleanUp "%DEST_DIR%" "%LOG_DIR%"
-CALL :RemoveDir "D:\Tomcat9\work\Catalina\localhost\DRASAP"
-CALL :RemoveDir "D:\Tomcat9\webapps\DRASAP"
+CALL :RemoveDir "D:\Tomcat9_TEST\work\Catalina\localhost\DRASAP_TEST"
+CALL :RemoveDir "D:\Tomcat9_TEST\webapps\DRASAP_TEST"
 
 REM ソースディレクトリが存在するか確認
 IF NOT EXIST "%SOURCE_DIR%" (
@@ -62,7 +62,7 @@ IF NOT EXIST "%DEST_DIR%" (
     mkdir "%DEST_DIR%"
 )
 
-REM DRASAPディレクトリをコピー（既存ファイルを上書き）
+REM DRASAP_TESTディレクトリをコピー（既存ファイルを上書き）
 xcopy /E /I /Y "%SOURCE_DIR%" "%DEST_DIR%" >> "%LOG_FILE%" 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     CALL :LogAndEcho "ファイルのコピー中にエラーが発生しました。"
@@ -70,10 +70,10 @@ IF %ERRORLEVEL% NEQ 0 (
 )
 
 REM .warファイルのパスを設定
-SET "WAR_FILE=%DEST_DIR%\war\DRASAP.war"
+SET "WAR_FILE=%DEST_DIR%\war\DRASAP_TEST.war"
 
 REM コピー先ディレクトリを設定
-SET "WEBAPPS_DIR=D:\Tomcat9\webapps"
+SET "WEBAPPS_DIR=D:\Tomcat9_TEST\webapps"
 
 REM コピー先ディレクトリが存在するか確認し、存在しない場合は作成
 IF NOT EXIST "%WEBAPPS_DIR%" (
@@ -91,7 +91,7 @@ IF EXIST "%WAR_FILE%" (
     )
     CALL :LogAndEcho "コピーが完了しました。"
 ) ELSE (
-    CALL :LogAndEcho "DRASAP.warファイルが見つかりません: %WAR_FILE%"
+    CALL :LogAndEcho "DRASAP_TEST.warファイルが見つかりません: %WAR_FILE%"
 )
 
 REM warディレクトリのパスを設定
@@ -124,17 +124,17 @@ FOR /R "%DEST_DIR%" %%F IN (.gitkeep) DO (
 
 CALL :LogAndEcho ".gitkeepファイルの削除が完了しました。"
 
-REM Tomcat9サービスが存在の場合
+REM Tomcat9_TESTサービスが存在の場合
 IF "%TomcatServiceFlag%"=="1" (
-    REM Tomcat9サービスを起動
-    CALL :LogAndEcho "Tomcat9サービスを起動中..."
-    net start Tomcat9 >> "%LOG_FILE%" 2>&1
+    REM Tomcat9_TESTサービスを起動
+    CALL :LogAndEcho "Tomcat9_TESTサービスを起動中..."
+    net start Tomcat9_TEST >> "%LOG_FILE%" 2>&1
     IF %ERRORLEVEL% NEQ 0 (
-        CALL :LogAndEcho "Tomcat9サービスの起動中にエラーが発生しました。"
+        CALL :LogAndEcho "Tomcat9_TESTサービスの起動中にエラーが発生しました。"
         EXIT /B 1
     )
     timeout /t 5 > nul
-    CALL :LogAndEcho "Tomcat9サービスが起動しました。"
+    CALL :LogAndEcho "Tomcat9_TESTサービスが起動しました。"
 )
 
 REM 終了時刻を取得
