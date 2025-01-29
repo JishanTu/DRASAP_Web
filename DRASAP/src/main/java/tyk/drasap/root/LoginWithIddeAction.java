@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,17 +62,18 @@ public class LoginWithIddeAction extends BaseAction {
 		//ActionMessages errors = new ActionMessages();
 		DrasapInfo drasapInfo = null;
 		String fn = null;
-
+		String id = "";
+		String enString = "";
 		try {
 			// sessionからパラメータを取得し、複号する
-			String enString = (String) session.getAttribute("en_string");
+			enString = (String) session.getAttribute("en_string");
 			session.removeAttribute("en_string");// sessionからremoveする
 			category.debug("en_string = " + enString);
 			if (enString == null) {
 				return "timeout";
 			}
 
-			String id = IDDE.decode(enString);// 復号化した結果
+			id = IDDE.decode(enString);// 復号化した結果
 			category.debug("id = " + id);
 
 			// パラメータ fnを追加
@@ -107,8 +109,15 @@ public class LoginWithIddeAction extends BaseAction {
 				}
 			}
 		} catch (Exception e) {
+			String errMsg = e.getMessage();
+			// en_string未設定、またはen_string不正
+			if (StringUtils.isEmpty(id)) {
+				String lang = user.getLanKey();
+				errMsg = "jp" == lang ? "復号失敗[en_string=" : "Decode Error[en_string=";
+				errMsg += enString + "]";
+			}
 			// for ユーザー
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.login.othersys." + user.getLanKey(), new Object[] { e.getMessage() }, null));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.login.othersys." + user.getLanKey(), new Object[] { errMsg }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), user.getSys_id());

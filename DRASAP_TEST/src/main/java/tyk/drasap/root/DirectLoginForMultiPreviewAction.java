@@ -75,9 +75,10 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 		String[] drwgNoArray = null;
 		String sys_id = "";
 		String user_id_col = "";
+		String enString = "";
 		try {
 			// sessionからパラメータを取得し、複号する
-			String enString = (String) session.getAttribute("en_string");
+			enString = (String) session.getAttribute("en_string");
 			session.removeAttribute("en_string");// sessionからremoveする
 			category.debug("en_string = " + enString);
 			id = IDDE.decode(enString);// 複合化した結果
@@ -125,8 +126,15 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 				}
 			}
 		} catch (Exception e) {
+			String errMsg = e.getMessage();
+			// en_string未設定、またはen_string不正
+			if (StringUtils.isEmpty(id)) {
+				String lang = user.getLanKey();
+				errMsg = "jp" == lang ? "復号失敗[en_string=" : "Decode Error[en_string=";
+				errMsg += enString + "]";
+			}
 			// for ユーザー
-			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.login.othersys." + user.getLanKey(), new Object[] { e.getMessage() }, null));
+			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.login.othersys." + user.getLanKey(), new Object[] { errMsg }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
 					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.unexpected"), sys_id);
@@ -172,11 +180,11 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 	 */
 	private void addUserInfo(User user, String id, String user_id_col, Model errors) {
 		Connection conn = null;
+		String drasapUserId = id;
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(true);// 非トランザクション
 
-			String drasapUserId = id;
 			//　ユーザID変換テーブルのカラム名が指定されていたらDRASAPユーザＩＤに変換
 			if (user_id_col != null && user_id_col.length() > 0) {
 				drasapUserId = USER_ID_CONVERSION_DB.getDrasapUserId(user_id_col, id, conn);
@@ -189,7 +197,7 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 				MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("directlogin.undefined.drasapuserid." + user.getLanKey(), new Object[] { "Id" }, null));
 				// for システム管理者
 				ErrorLoger.error(user, this,
-						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"), user.getSys_id());
+						DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"), user.getSys_id(), drasapUserId);
 				// for MUR
 				category.error("ユーザID変換テーブルにDRASAPユーザIDが登録されていません。user_id=" + drasapUserId);
 			}
@@ -199,9 +207,9 @@ public class DirectLoginForMultiPreviewAction extends BaseAction {
 			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("directlogin.undefined.extuserid." + user.getLanKey(), new Object[] { e.getMessage() }, null));
 			// for システム管理者
 			ErrorLoger.error(user, this,
-					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"), user.getSys_id());
+					DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"), user.getSys_id(), drasapUserId);
 			// for MUR
-			category.error("ユーザID変換テーブルに外部システムのユーザIDが登録されていません\n" + ErrorUtility.error2String(e));
+			category.error("ユーザID変換テーブルに外部システムのユーザIDが登録されていません。\n" + ErrorUtility.error2String(e));
 		} catch (Exception e) {
 			// for ユーザー
 			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("root.failed.get.userinfo." + user.getLanKey(), new Object[] { e.getMessage() }, null));
