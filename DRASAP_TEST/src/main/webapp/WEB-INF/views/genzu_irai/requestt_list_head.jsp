@@ -49,12 +49,22 @@
 			}
 			document.forms[0].target = targetName;
 			var WO1;
-			var w = screen.availWidth - 10;
-			var h = screen.availHeight - 50;
+			//var w = screen.availWidth - 10;
+			//var h = screen.availHeight - 50;
+
+			var w = window.outerWidth  - 16;
+			var h = window.outerHeight - 70;
+
+			var screenWidth  = window.screen.availWidth;
+			var screenHeight = window.screen.availHeight;
+
+			var left = Math.max(0, (screenWidth  - w) / 2 - 8);
+			var top  = Math.max(0, (screenHeight - h) / 2 - 35);
 
 			WO1=window.open("", targetName,
-						'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
-			WO1.window.moveTo(0,0);
+						//'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h);
+						'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h +',top='+ top + ',left='+ left);
+			//WO1.window.moveTo(0,0);
 			WO1.focus();
 
 			document.forms[0].submit();

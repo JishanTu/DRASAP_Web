@@ -241,14 +241,14 @@
 		var targetName = '_help';//別の画面を開く
 		var WO1;
 		
-		var w = window.outerWidth - 20;
-		var h = window.outerHeight - 72;
+		var w = window.outerWidth  - 16;
+		var h = window.outerHeight - 70;
 		
-		var screenWidth = window.screen.availWidth;
+		var screenWidth  = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
 		
-		var left = (screenWidth - w) / 2;
-		var top = (screenHeight - h) / 2;
+		var left = Math.max(0, (screenWidth  - w) / 2 - 8);
+		var top  = Math.max(0, (screenHeight - h) / 2 - 35);
 
 		WO1=window.open("<%=request.getContextPath() %>/search/searchHelp.jsp", targetName,
 			//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
@@ -374,14 +374,14 @@
 	function openNewWindow(){
 		var targetName = '_chgPass';//別の画面を開く
 		var WO1;
-		var w = window.outerWidth - 20;
-		var h = window.outerHeight - 72;
+		var w = window.outerWidth  - 16;
+		var h = window.outerHeight - 70;
 		
-		var screenWidth = window.screen.availWidth;
+		var screenWidth  = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
 		
-		var left = (screenWidth - w) / 2;
-		var top = (screenHeight - h) / 2;
+		var left = Math.max(0, (screenWidth  - w) / 2 - 8);
+		var top  = Math.max(0, (screenHeight - h) / 2 - 35);
 		var targetUrl = null;
 
 		// その他の場合
@@ -500,14 +500,14 @@
 
 	// 子画面を開く
 	function openSubScreen(fn) {
-		var w = window.outerWidth - 20;
-		var h = window.outerHeight - 72;
+		var w = window.outerWidth  - 16;
+		var h = window.outerHeight - 70;
 
-		var screenWidth = window.screen.availWidth;
+		var screenWidth  = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
 
-		var left = Math.max(0, (screenWidth - w) / 2);
-		var top = Math.max(0, (screenHeight - h) / 2);
+		var left = Math.max(0, (screenWidth  - w) / 2 - 8);
+		var top  = Math.max(0, (screenHeight - h) / 2 - 35);
 
 		var targetName = null;
 		var targetUrl = null;

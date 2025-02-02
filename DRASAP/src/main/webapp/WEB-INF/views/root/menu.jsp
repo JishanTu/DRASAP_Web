@@ -21,15 +21,14 @@
 	<!--
 		// それぞれのFunctionへ遷移する
 		function showFunction(functionNo){
+		var w = window.outerWidth  - 16;
+		var h = window.outerHeight - 70;
 
-		var w = window.outerWidth - 20;
-		var h = window.outerHeight - 72;
-
-		var screenWidth = window.screen.availWidth;
+		var screenWidth  = window.screen.availWidth;
 		var screenHeight = window.screen.availHeight;
 
-		var left = Math.max(0, (screenWidth - w) / 2);
-		var top = Math.max(0, (screenHeight - h) / 2);
+		var left = Math.max(0, (screenWidth  - w) / 2 - 8);
+		var top  = Math.max(0, (screenHeight - h) / 2 - 35);
 
 		var targetName = null;
 		var targetUrl = null;
@@ -67,7 +66,7 @@
 
 			WO1=window.open("<%=request.getContextPath() %>" + targetUrl, targetName,
 						//"toolbar=no,resizable=yes,width=" + w + ",height=" + h);
-					'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=' + left + ',top=' + top);
+						'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=' + left + ',top=' + top);
 			WO1.focus();
 		}
 	//-->

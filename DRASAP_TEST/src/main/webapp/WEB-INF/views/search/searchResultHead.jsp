@@ -74,14 +74,14 @@
 			targetName = '_drasap_management_login';
 			targetUrl = '<%=request.getContextPath() %>/switch.do?page=/search/management_Login.jsp';
 			var WO1;
-			var w = window.outerWidth - 20;
-			var h = window.outerHeight - 72;
+			var w = window.outerWidth  - 16;
+			var h = window.outerHeight - 70;
 			
-			var screenWidth = window.screen.availWidth;
+			var screenWidth  = window.screen.availWidth;
 			var screenHeight = window.screen.availHeight;
 			
-			var left = (screenWidth - w) / 2;
-			var top = (screenHeight - h) / 2;
+			var left = Math.max(0, (screenWidth  - w) / 2 - 8);
+			var top  = Math.max(0, (screenHeight - h) / 2 - 35);
 
 			WO1=window.open(targetUrl, targetName,
 						'toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h +',top='+ top + ',left='+ left );
