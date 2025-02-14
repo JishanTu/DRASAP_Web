@@ -353,7 +353,6 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 			long resultCount = 0;
 			HashSet<String> itemNoShortSet = new HashSet<String>();
 			for (AclUpload aclUpload : aclUploadList) {
-
 				// アップロードデータのチェック実行
 				checkUploadData(aclUpload, itemNoShortSet, conn);
 				// ACLアップロードデータ登録
@@ -678,7 +677,15 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 			if (aclUpload.getMessage() == null || aclUpload.getMessage().length() <= 0) {
 				aclUpload.setMessage(messageSource.getMessage("system.aclBatchUpdate.upload.required.file.input", new Object[] { "品番の入力データが長すきます" }, null));
 			}
+
+			// 桁数（品番（空白、ハイフン「-」を除いた半角大文字））
+			value = aclUpload.getItemNoShort();
+			if (value != null
+					&& value.getBytes(DEFAULT_CHARSET).length > (length = tableInfo.getColInfo("ITEM_NO_SHORT").getData_length())) {
+				aclUpload.setItemNoShort(new String(value.getBytes(DEFAULT_CHARSET), 0, length, DEFAULT_CHARSET));
+			}
 		}
+
 		// 桁数（グループ）
 		value = aclUpload.getGrpCode();
 		if (value != null

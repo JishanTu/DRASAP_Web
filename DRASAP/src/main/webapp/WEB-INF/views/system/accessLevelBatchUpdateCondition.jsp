@@ -149,7 +149,7 @@
 					<td nowrap="nowrap">
 					 <div class="file-input-container">
 						<label class="normal10">アップロードファイル</label>
-						<input type="text" id="filePath" readonly placeholder="ファイルを選択されていません">
+						<input type="text" id="filePath" readonly placeholder="ファイルが選択されていません">
 						<input type="file" id="fileUpload" name="uploadFile">
 						<input type="button" value="参照" onclick="upload()" />
 
@@ -175,7 +175,15 @@
 		</td>
 		<td width="25%">
 			<span style="background-color: #EEEEEE;" class="normal12">管理NO</span>&nbsp;<c:out value="${accessLevelBatchUpdateForm.aclUpdateNo}" />&nbsp;&nbsp;
-			<span style="background-color: #EEEEEE;" class="normal12">品番数</span>&nbsp;<c:out value="${accessLevelBatchUpdateForm.itemNoCount}" />&nbsp;
+			<span style="background-color: #EEEEEE;" class="normal12">品番数</span>&nbsp;
+				<c:choose>
+					<c:when test="${not empty accessLevelBatchUpdateForm}">
+						<c:out value="${accessLevelBatchUpdateForm.itemNoCount}" />
+					</c:when>
+					<c:otherwise>
+						0
+					</c:otherwise>
+				</c:choose>&nbsp;
 		</td>
 		<td width="10%" align="right">
 				<table border="0">
