@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import tyk.drasap.common.DrasapPropertiesFactory;
-import tyk.drasap.common.User;
 
 @Controller
 public class SwitchController {
@@ -29,20 +28,10 @@ public class SwitchController {
 	public String accessLogin(HttpServletRequest request, Model errors) {
 		category.debug("accessLogin called");
 		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
-		if (user == null) {
-			// 未ログイン
-			return "/root/login";
-		}
-		String parentPage = (String) session.getAttribute("parentPage");
-		// 前画面がログイン画面の場合
-		if ("Login".equals(parentPage)) {
-			// パスワード変更中
-			return "/root/login";
-		}
-
-		// ログイン済
-		return "/search/searchMain";
+		// セッション破棄
+		session.invalidate();
+		// ログイン画面へ遷移
+		return "/root/login";
 	}
 
 	@GetMapping("/timeout")
@@ -89,8 +78,7 @@ public class SwitchController {
 			Model errors)
 			throws Exception {
 		category.debug("accessLogout called");
-
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession();
 		// セッション破棄
 		session.invalidate();
 
