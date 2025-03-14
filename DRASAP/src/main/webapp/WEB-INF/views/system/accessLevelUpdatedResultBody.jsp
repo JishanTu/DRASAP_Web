@@ -46,20 +46,20 @@
 			<c:set var="user" value="${sessionScope.user}" />
 			<c:if test="${fileCount > 0}">
 				<tr style="background-color: #CCCCCC;">
-					<td nowrap="nowrap" align="center"><span class="normal10">ログファイル</span></td>
-					<td nowrap="nowrap" align="center"><span class="normal10">更新日時</span></td>
-					<td nowrap="nowrap" align="center"><span class="normal10">ファイル種類</span></td>
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">ログファイル</span></td>
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">更新日時</span></td>
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">ファイル種類</span></td>
 				</tr>
 			</c:if>
 			<c:forEach var="accessLevelUpdatedResultElement" items="${sessionScope.accessLevelUpdatedResultForm.accessLevelUpdatedResultList}">
 				<tr>
-					<td nowrap="nowrap" align="left">
+					<td nowrap="nowrap" align="left" style="line-height: 0.9;">
 						<a href="accessLevelUpdatedResult.do?act=download&FILE_NAME=${accessLevelUpdatedResultElement.fileName}" target="acl_result_body">
 							<span class="normal12blue">&nbsp;${accessLevelUpdatedResultElement.fileName}&nbsp;</span>
 						</a>
 					</td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;${accessLevelUpdatedResultElement.lastModifiedFormatted}&nbsp;</span></td>
-					<td nowrap="nowrap"><span class="normal12">&nbsp;${accessLevelUpdatedResultElement.fileTypeDescription}&nbsp;</span></td>
+					<td nowrap="nowrap" style="line-height: 0.9;"><span class="normal12">&nbsp;${accessLevelUpdatedResultElement.lastModifiedFormatted}&nbsp;</span></td>
+					<td nowrap="nowrap" style="line-height: 0.9;"><span class="normal12">&nbsp;${accessLevelUpdatedResultElement.fileTypeDescription}&nbsp;</span></td>
 				</tr>
 			</c:forEach>
 		</table>

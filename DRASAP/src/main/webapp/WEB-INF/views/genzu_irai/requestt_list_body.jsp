@@ -21,29 +21,29 @@
 		<input type="hidden" name="action" value="${action}" />
 		<table border="0" align="center" name="iraiList">
 			<tr bgcolor="#CCCCCC">
-				<td nowrap="nowrap" align="center"><span class="normal10">チェック</span></td>
-				<td nowrap="nowrap" align="center"><span class="normal10">依頼ID</span></td>
-				<td nowrap="nowrap" align="center"><span class="normal10">時間</span></td>
-				<td nowrap="nowrap" align="center"><span class="normal10">依頼内容</span></td>
-				<td nowrap="nowrap" align="center"><span class="normal10">図番</span></td>
-				<td nowrap="nowrap" align="center"><span class="normal10">メッセージ</span></td>
-				<td nowrap="nowrap" align="center"><span class="normal10">依頼者</span></td>
-				<td nowrap="nowrap" align="left"><span class="normal10">部署名</span></td>
+				<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">チェック</span></td>
+				<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">依頼ID</span></td>
+				<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">時間</span></td>
+				<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">依頼内容</span></td>
+				<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">図番</span></td>
+				<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">メッセージ</span></td>
+				<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">依頼者</span></td>
+				<td nowrap="nowrap" align="left" style="line-height: 0.8;"><span class="normal10">部署名</span></td>
 			</tr>
 			<c:forEach var="e" items="${request_listForm.iraiList}" varStatus="loop">
 				<tr>
-					<td>
+					<td style="line-height: 0.8;">
 						<select name="iraiList[${loop.index}].touroku">
 							<c:forEach items="${sessionScope.request_listForm.checkKeyList}" var="checkKey" varStatus="innerLoop">
 								<option value="${checkKey}">${sessionScope.request_listForm.checkNameList[innerLoop.index]}</option>
 							</c:forEach>
 						</select>
 					</td>
-					<td nowrap="nowrap" align="center"><span class="normal10">${e.job_id}</span></td>
-					<td nowrap="nowrap" align="center"><span class="normal10">${e.zikan}</span></td>
-					<td nowrap="nowrap" align="center"><span class="normal10">${e.irai}</span></td>
-					<td nowrap="nowrap" align="center"><span class="normal10">${e.zuban}</span></td>
-					<td nowrap="nowrap" align="center">
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${e.job_id}</span></td>
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${e.zikan}</span></td>
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${e.irai}</span></td>
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${e.zuban}</span></td>
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;">
 						<select name="iraiList[${loop.index}].message">
 							<c:forEach items="${sessionScope.request_listForm.messageNameList}" var="messageName" varStatus="innerLoop">
 								<option value="${messageName}" <c:if test="${messageName eq request_listForm.iraiList[loop.index].message}">selected</c:if>>
@@ -52,8 +52,8 @@
 							</c:forEach>
 						</select>
 					</td>
-					<td nowrap="nowrap" align="center"><span class="normal10">${e.user_name}</span></td>
-					<td nowrap="nowrap" align="left"><span class="normal10">${e.busyo_name}</span></td>
+					<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${e.user_name}</span></td>
+					<td nowrap="nowrap" align="left" style="line-height: 0.8;"><span class="normal10">${e.busyo_name}</span></td>
 				</tr>
 				<input type="hidden" name="iraiList[${loop.index}].seq" value="${e.seq}" />
 				<input type="hidden" name="iraiList[${loop.index}].job_id" value="${e.job_id}" />

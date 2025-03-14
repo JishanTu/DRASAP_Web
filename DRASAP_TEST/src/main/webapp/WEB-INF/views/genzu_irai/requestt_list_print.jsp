@@ -27,21 +27,21 @@
 		<li><c:out value="${error}" /></li>
 	</c:forEach>
 </font>
-<div style="text-align: center;">
+<div style="text-align: center; line-height: 1;">
 	<span class="normal12">図面登録依頼リスト</span>
 	<span class="normal10">&nbsp;&nbsp;${request_listForm.time}</span>
 </div>
 <table border="0" align="center">
 	<tr bgcolor="#CCCCCC">
-		<td align="center"><span class="normal10">依頼ID</span></td>
-		<td align="center"><span class="normal10">依頼内容</span></td>
-		<td align="center"><span class="normal10">図番</span></td>
+		<td align="center" style="line-height: 0.8;"><span class="normal10">依頼ID</span></td>
+		<td align="center" style="line-height: 0.8;"><span class="normal10">依頼内容</span></td>
+		<td align="center" style="line-height: 0.8;"><span class="normal10">図番</span></td>
 <%-- // 2019.10.23 yamamoto modified. start
 		<td align="center"><span class="normal10">号口・号機</span></td>
 		<td align="center"><span class="normal10">原図内容</span></td>
 // 2019.10.23 yamamoto modified. end --%>
-		<td align="center"><span class="normal10">依頼者</span></td>
-		<td align="left"><span class="normal10">部署名</span></td>
+		<td align="center" style="line-height: 0.8;"><span class="normal10">依頼者</span></td>
+		<td align="left" style="line-height: 0.8;"><span class="normal10">部署名</span></td>
 	</tr>
 	<c:forEach var="item" items="${request_listForm.printList}">
 		<c:set var="e" value="${item}"/>
@@ -63,13 +63,13 @@
 		<c:set var="busyo" value="${e.busyo}"/>
 		
 		<tr>
-			<td align="center"><span class="normal10">&nbsp;${job_id}&nbsp;</span></td>
-			<td align="center"><span class="normal10">&nbsp;${job_name}&nbsp;</span></td>
-			<td align="center"><span class="normal10">&nbsp;${bangou}&nbsp;</span></td>
+			<td align="center" style="line-height: 0.8;"><span class="normal10">&nbsp;${job_id}&nbsp;</span></td>
+			<td align="center" style="line-height: 0.8;"><span class="normal10">&nbsp;${job_name}&nbsp;</span></td>
+			<td align="center" style="line-height: 0.8;"><span class="normal10">&nbsp;${bangou}&nbsp;</span></td>
 			<!-- <td align="center"><span class="normal10">&nbsp;${gouki}&nbsp;</span></td>
-			<td align="center"><span class="normal10">&nbsp;${genzu}&nbsp;</span></td> -->
-			<td align="center"><span class="normal10">&nbsp;${irai}&nbsp;</span></td>
-			<td align="left"><span class="normal10">&nbsp;${busyo}&nbsp;</span></td>
+			<td align="center" style="line-height: 0.8;"><span class="normal10">&nbsp;${genzu}&nbsp;</span></td> -->
+			<td align="center" style="line-height: 0.8;"><span class="normal10">&nbsp;${irai}&nbsp;</span></td>
+			<td align="left" style="line-height: 0.8;"><span class="normal10">&nbsp;${busyo}&nbsp;</span></td>
 		</tr>
 	</c:forEach>
 </table>

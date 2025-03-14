@@ -90,7 +90,7 @@
     </script>
 </head>
 <!-- FRAMESET rows="155,*" -->
-<frameset rows="195,*">
+<frameset rows="175,*">
 <%	// リクエストパラメータを確認し task=continueであれば、
 	// 検索条件や検索結果を元のまま、画面復帰する
 	if("continue".equals(request.getAttribute("task"))){ %>

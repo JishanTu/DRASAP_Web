@@ -387,17 +387,17 @@
 						アクセスレベル1でもプリンタへ印刷指示は出来るように変更。by Hirata at '04.May.6
 						<td></td>
 						-->
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC" style="line-height: 0.9;">
 							<span class="normal10">${sessionScope.searchResultForm.dispOutputSizeName}</span>
 						</td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC" style="line-height: 0.9;">
 							<span class="normal10">${sessionScope.searchResultForm.dispCopiesName}</span>
 						</td>
-						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+						<td nowrap="nowrap" align="center" bgcolor="#CCCCCC" style="line-height: 0.9;">
 							<span class="normal10">${sessionScope.searchResultForm.dispDwgNoName}</span>
 						</td>
 						<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
-							<td nowrap="nowrap" align="center" bgcolor="#CCCCCC">
+							<td nowrap="nowrap" align="center" bgcolor="#CCCCCC" style="line-height: 0.9;">
 								<span class="normal10">${sessionScope.searchResultForm.getDispAttrName(index - 1)}</span>
 							</td>
 						</c:forEach>
@@ -420,7 +420,7 @@
 					<td><html:checkbox name="searchResultElement" property="selected" indexed="true" /></td> --%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1}">
-							<td>
+							<td style="line-height: 0.9;">
 								<input type="hidden" id="checkboxHidden${status.index}" value="${item.selected}"/>
 								<input type="checkbox"id="checkbox${status.index}" value="true" onclick="isChecked(${status.index},'drwg')"
 								<c:if test="${item.selected}">checked="checked"</c:if> />
@@ -440,7 +440,7 @@
 						<td bgcolor="#FF0000"><span class="normal10white">×</span></td>
 					<%-- } --%>
 					-->
-					<td align="center">
+					<td align="center" style="line-height: 0.9;">
 						<input type="hidden" id="printSizeHidden${status.index}" value="${item.printSize}"/>
 						<select name="printSize" id="printSizeSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'printSize')">
 							<option value="ORG">
@@ -469,7 +469,7 @@
 								<c:if test="${item.printSize == '25%'}">selected</c:if>>25%</option>
 						</select>
 					</td>
-					<td>
+					<td style="line-height: 0.9;">
 						<input type="hidden" id="copiesHidden${status.index}" value="${item.copies}"/>
 						<select name="copies" id="copiesSelect${status.index}" onchange="updateHiddenInput(${status.index}, 'copies')">
 							<option value="1"<c:if test="${item.copies == '1'}">selected</c:if>>1</option>
@@ -493,7 +493,7 @@
 					--%>
 					<c:choose>
 						<c:when test="${item.aclFlag == 1 }">
-							<td nowrap="nowrap">
+							<td nowrap="nowrap" style="line-height: 0.9;">
 								<span class="normal12blue">
 									<a id="drwgNoLink[${status.index}]"
 										href='<c:url value="/preview"/>'
@@ -510,14 +510,14 @@
 							<input type="hidden" id="PRINT_SIZE[${status.index}]" value="${item.printSize}"/>
 						</c:when>
 						<c:otherwise>
-							<td nowrap="nowrap">
+							<td nowrap="nowrap" style="line-height: 0.9;">
 								<span class="normal12" title="${item.aclBalloon}"> ${item.drwgNoFormated}</span>
 							</td>
 						</c:otherwise>
 					</c:choose>
 					<%-- 2013.06.24 yamagishi modified. end --%>
 					<c:forEach begin="1" end="${sessionScope.searchResultForm.getViewSelColNum()}" var="index">
-						<td nowrap="nowrap">
+						<td nowrap="nowrap" style="line-height: 0.9;">
 							<span class="normal12">&nbsp; ${item.getAttr(sessionScope.searchResultForm.getDispAttr(index - 1))}&nbsp;</span>
 						</td>
 					</c:forEach>

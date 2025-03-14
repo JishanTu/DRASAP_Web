@@ -78,7 +78,7 @@
 		.table-container {
 			overflow-y: auto;
 			/*height: 140px;*/
-			width: 595px
+			width: 566px
 		}
 	</style>
 <script type="text/javascript">
@@ -882,7 +882,7 @@
 		<table border="0" cellspacing="0" cellpadding="0" class="normal12" style = "width:100%">
 			<tr>
 				<!--============ 検索条件 ============-->
-				<td style="width: 550px;" valign="top">
+				<td style="width: 500px;" valign="top">
 				<div class="table-container" id="tableContainer">
 					<table border="0" cellspacing="0" cellpadding="0" style="font-size: 12pt; margin: 0px; padding: 0px;">
 						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()}" var="index">
@@ -902,14 +902,14 @@
 									</select>
 								</td>
 								<td>
-									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"style="width: 353px;"/>
+									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"style="width: 309px;"/>
 								</td>
 								<td>
-									<input type="button" name="sortWayButton${index}" value="${searchConditionForm.sortWayList[index-1]}" onclick="changeOrder(this)" style="width: 40px;" />
+									<input type="button" name="sortWayButton${index}" value="${searchConditionForm.sortWayList[index-1]}" onclick="changeOrder(this)" style="width: 60px; height: 22px;" />
 									<input type="hidden" name="sortWay${index}" />
 								</td>
 								<td>
-									<select name="sortOrder${index}">
+									<select name="sortOrder${index}" style="width: 30px;">
 										<c:forEach items="${searchConditionForm.sortOrderKeyList}"
 											var="sortOrderKey" varStatus="loop">
 											<c:choose>

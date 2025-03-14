@@ -137,13 +137,13 @@
 <!--================ ヘッダ ==================================-->
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
 	<tr>
-		<td width="100%" height="20px;" align="center" colspan="3">
+		<td width="100%" height="20px;" align="center" colspan="3" style="line-height: 1;">
 			<a href="<%=request.getContextPath() %>/accessLevelDownload.do?dlFileType=0" target="acl_list" class="normal10blue" style = "text-decoration: underline;">雛形ファイルのダウンロード</a>
 		</td>
 		<td />
 	</tr>
 	<tr>
-		<td width="40%" colspan="3">
+		<td width="40%" colspan="3" style="line-height: 1;">
 			<table border="0">
 				<tr>
 					<td nowrap="nowrap">
@@ -165,7 +165,7 @@
 		<td width="60%" />
 	</tr>
 	<tr>
-		<td width="5%">
+		<td width="5%" style="line-height: 1;">
 <%  // 2019.12.26 yamamoto mod start
 	//		<logic:equal name="user" property="aclBatchUpdateFlag" value="1" scope="session">
 %>
@@ -173,7 +173,7 @@
 <%	//		</logic:equal>
     // 2019.12.26 yamamoto mod end %>
 		</td>
-		<td width="25%">
+		<td width="25%" style="line-height: 1;">
 			<span style="background-color: #EEEEEE;" class="normal12">管理NO</span>&nbsp;<c:out value="${accessLevelBatchUpdateForm.aclUpdateNo}" />&nbsp;&nbsp;
 			<span style="background-color: #EEEEEE;" class="normal12">品番数</span>&nbsp;
 				<c:choose>
@@ -185,7 +185,7 @@
 					</c:otherwise>
 				</c:choose>&nbsp;
 		</td>
-		<td width="10%" align="right">
+		<td width="10%" align="right" style="line-height: 1;">
 				<table border="0">
 					<tr>
 						<td><input type="button" value="ダウンロード" onclick="doDownload()" style="width: 100px;" /></td>

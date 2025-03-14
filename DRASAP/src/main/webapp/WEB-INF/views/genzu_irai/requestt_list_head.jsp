@@ -80,20 +80,20 @@
 		<tr>
 			<td>
 				<table border="0" bgcolor="#EEEEEE">
-					<tr><td><span class="normal18">図面登録依頼リスト</span></td></tr>
+					<tr><td style="line-height: 1;"><span class="normal18">図面登録依頼リスト</span></td></tr>
 				</table>
 			</td>
 			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 			<td>
 				<table border="0" bgcolor="#EEEEEE" align="left">
 					<tr>
-						<td><span class="normal10">処理が済んだらチェックを入力して下さい。<br />
+						<td style="line-height: 1;"><span class="normal10">処理が済んだらチェックを入力して下さい。<br />
 						その後に更新するために「更新」をクリックして下さい。</span></td>
 					</tr>
 				</table>
 			</td>
 			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-			<td width="100%" valign="bottom">
+			<td width="100%" valign="bottom" style="line-height: 1;">
 				<input type="submit" value="依頼更新" onclick="doIraiKousin()">
 				<input type="submit" value="印刷画面" onclick="goNext('_printer')">
 				<input type="submit" value="作業依頼履歴" onclick="goNext('_irai_history')">

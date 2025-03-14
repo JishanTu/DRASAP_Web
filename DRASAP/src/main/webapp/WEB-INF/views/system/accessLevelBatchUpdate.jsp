@@ -45,7 +45,7 @@
 	}
 </script>
 </head>
-<frameset rows="45,*" framespacing="0" border="0">
+<frameset rows="38,*" framespacing="0" border="0">
 	<%
 	// リクエストパラメータを確認し、act=initであれば初期化する
 	if (request.getParameter("act") == null || "init".equals(request.getParameter("act"))) {

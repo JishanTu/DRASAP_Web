@@ -56,7 +56,7 @@
 		<% session.removeAttribute("accessLevelBatchUpdate.info"); %>
 		<%-- <c:if test="${itemNoCount == 0}"> --%>
 		<c:if test="${itemNoCount == 0 or empty itemNoCount}">
-			<ul style="color: red; font-size: 12pt;">
+			<ul style="color: red; font-size: 12pt; line-height: 1; margin-top: 2px; margin-bottom: 0;">
 				<li>検索結果は0件です。</li>
 			</ul>
 		</c:if>

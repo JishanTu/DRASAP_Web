@@ -148,7 +148,7 @@
 			<table border="0" bgcolor="#EEEEEE">
 				<tr>
 					<td nowrap="nowrap">
-						<span class="normal10">${searchResultForm.h_label1 }</span>
+						<span class="normal10" style="font-weight: bold;">${searchResultForm.h_label1 }</span>
 					</td>
 				</tr>
 			</table>
@@ -213,11 +213,11 @@ if (me.isDelAdmin()) { %>
 <div style="width: 100%; overflow-x: auto;">
 	<table border="1">
 		<tr>
-			<td nowrap="nowrap">
+			<td nowrap="nowrap" style="line-height: 0.8;">
 				<span class="normal10">${sessionScope.searchResultForm.h_label6}</span>
 			</td>
 			<c:forEach begin="1" end="${searchResultForm.getViewSelColNum()}" var="index">
-				<td nowrap="nowrap">
+				<td nowrap="nowrap" style="line-height: 0.8;">
 					<select name="dispAttr${index}" class = "fixed-width-select">
 						<c:forEach items="${searchResultForm.dispKeyList}" var="dispKey" varStatus="loop">
 							<c:choose>

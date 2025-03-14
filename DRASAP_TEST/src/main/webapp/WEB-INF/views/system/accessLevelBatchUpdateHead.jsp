@@ -62,7 +62,7 @@
 	<tr>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
-				<tr><td><span class="normal18">アクセスレベル一括更新</span></td></tr>
+				<tr><td style="line-height: 1;"><span class="normal18">アクセスレベル一括更新</span></td></tr>
 			</table>
 		</td>
 		<!--=================== 職番などの表示 ===========================-->
@@ -72,9 +72,9 @@
 					<td>
 						<table border="1">
 							<tr>
-								<td><span class="normal12">職番：<c:out value="${user.id}" /></span></td>
-								<td><span class="normal12">氏名：<c:out value="${user.name}" /></span></td>
-								<td><span class="normal12">部署名：<c:out value="${user.deptName}" /></span></td>
+								<td style="line-height: 1;"><span class="normal12">職番：<c:out value="${user.id}" /></span></td>
+								<td style="line-height: 1;"><span class="normal12">氏名：<c:out value="${user.name}" /></span></td>
+								<td style="line-height: 1;"><span class="normal12">部署名：<c:out value="${user.deptName}" /></span></td>
 							</tr>
 						</table>
 					</td>

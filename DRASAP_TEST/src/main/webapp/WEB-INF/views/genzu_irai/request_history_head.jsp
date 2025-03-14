@@ -25,13 +25,13 @@
 	<tr>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
-				<tr><td nowrap="nowrap"><span class="normal18">図面登録依頼履歴</span></td></tr>
+				<tr><td nowrap="nowrap" style="line-height: 1;"><span class="normal18">図面登録依頼履歴</span></td></tr>
 			</table></td>
 		<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>
 			<table border="0" bgcolor="#EEEEEE" align="left">
 				<tr>
-					<td nowrap="nowrap"><span class="normal10">完了した依頼が、過去10日分表示されています。<br />
+					<td nowrap="nowrap" style="line-height: 1;"><span class="normal10">完了した依頼が、過去10日分表示されています。<br />
 					表示は完了日時の降順です。</span></td>
 				</tr>
 			</table>

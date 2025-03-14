@@ -55,13 +55,13 @@
 	<form:errors path="*" cssClass="error-message" />
 	<table border="0" align="center">
 		<tr bgcolor="#CCCCCC">
-			<td nowrap="nowrap" align="center"><span class="normal10">依頼ID</span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10">状態</span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10">依頼内容</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">依頼ID</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">状態</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">依頼内容</span></td>
 			<%-- // 2019.10.23 yamamoto modified. start
     <td nowrap="nowrap" align="center"><span class="normal10">号口・号機</span></td>
     <td nowrap="nowrap" align="center"><span class="normal10">原図内容</span></td> --%>
-			<td nowrap="nowrap" colspan="3" align="center"><span class="normal10">図番</span></td>		
+			<td nowrap="nowrap" colspan="3" align="center" style="line-height: 0.8;"><span class="normal10">図番</span></td>
 <%--<td nowrap="nowrap" align="center"><span class="normal10">部数</span></td>
     <td nowrap="nowrap" align="center"><span class="normal10">縮小</span></td>
     <td nowrap="nowrap" align="center"><span class="normal10">サイズ</span></td>
@@ -156,22 +156,22 @@
 				</c:otherwise>
 			</c:choose>
 
-			<td nowrap="nowrap" align="center"><span class="normal10">${job_id}</span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10">${job_stat}</span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10">${job_name}</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${job_id}</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${job_stat}</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${job_name}</span></td>
 
-			<td nowrap="nowrap" align="center"><span class="normal10">${kaisi}</span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10">～</span></td>
-			<td nowrap="nowrap" align="center"><span class="normal10">${end}</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${kaisi}</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">～</span></td>
+			<td nowrap="nowrap" align="center" style="line-height: 0.8;"><span class="normal10">${end}</span></td>
 
 			<c:choose>
 				<c:when test="${'1' eq tenkai_deta}">
-					<td nowrap="nowrap" align="center" bgcolor="#FF3300">
+					<td nowrap="nowrap" align="center" bgcolor="#FF3300" style="line-height: 0.8;">
 						<a href="javascript:${str_Messege}"> <span class="normal10white">ﾒｯｾｰｼﾞ</span></a>
 					</td>
 				</c:when>
 				<c:when test="${'1' eq sagyo_deta}">
-					<td nowrap="nowrap" align="center" bgcolor="#FF3300">
+					<td nowrap="nowrap" align="center" bgcolor="#FF3300" style="line-height: 0.8;">
 						<a href="javascript:${str_Messege1}"> <span class="normal10white">ﾒｯｾｰｼﾞ</span></a>
 					</td>
 				</c:when>
