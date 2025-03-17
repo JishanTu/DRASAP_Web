@@ -291,14 +291,14 @@
 				<td>
 					<table border="0">
 						<tr>
-							<td bgcolor="#EEEEEE"><span class="normal18">図面登録依頼</span></td>
+							<td bgcolor="#EEEEEE" style="line-height: 1;"><span class="normal18">図面登録依頼</span></td>
 							<!--======================= 職番などの表示 =======================-->
 							<td>
 								<table border="1">
 									<tr>
-										<td><span class="normal12">職番：<c:out value="${user.id}" /></span></td>
-										<td><span class="normal12">氏名：<c:out value="${user.name}" /></span></td>
-										<td><span class="normal12">部署名(店名)：<c:out value="${user.deptName}" /></span></td>
+										<td style="line-height: 1;"><span class="normal12">職番：<c:out value="${user.id}" /></span></td>
+										<td style="line-height: 1;"><span class="normal12">氏名：<c:out value="${user.name}" /></span></td>
+										<td style="line-height: 1;"><span class="normal12">部署名(店名)：<c:out value="${user.deptName}" /></span></td>
 									</tr>
 								</table>
 							</td>

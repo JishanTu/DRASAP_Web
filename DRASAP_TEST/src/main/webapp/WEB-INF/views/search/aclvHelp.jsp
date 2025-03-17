@@ -8,7 +8,7 @@
 	<meta http-equiv="Cache-Control" content="no-cache" />
 	<title>Drawing Search and Print System [Help アクセスレベルの変更]</title>
 </head>
-<body bgcolor="#FFFFCC"><font style="font-family: 'ＭＳ Ｐゴシック','ＭＳ ゴシック';">
+<body bgcolor="#FFFFCC" style="margin-top: 10px; line-height: 1; font-size: 15px;"><font style="font-family: 'ＭＳ Ｐゴシック','ＭＳ ゴシック';">
 ＜アクセスレベルについて＞<br />
 ＤＲＡＳＡＰに登録されている図面全てに「アクセスレベル」情報が付いています。<br />
 この情報でユーザー毎に検索対象を制御しています。<br />

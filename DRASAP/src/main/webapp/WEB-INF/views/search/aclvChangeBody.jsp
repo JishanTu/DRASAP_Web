@@ -24,7 +24,7 @@
 <form action="<%=request.getContextPath() %>/aclvChange" method = "post">
 <input type="hidden" name="act" value="" />
 <!-- メッセージの表示部分 -->
-<font color="red" size="3"><ul>
+<font color="red" size="3"><ul style="line-height: 1; margin-top: 5px; margin-bottom: 20;">
 <c:forEach var="errorMessage" items="${aclvChangeForm.errorMessages}">
 	<li><c:out value="${errorMessage}" /></li>
 </c:forEach>
@@ -34,32 +34,32 @@
 	<!-- 見出し部分 -->
 	<tr>
 		<td rowspan="2"></td>
-		<td align="center" bgcolor="#CCCCCC" rowspan="2"><span class="normal12">図番</span></td>
-		<td align="center" bgcolor="#CCCCCC" colspan="2"><span class="normal12">アクセスレベル</span></td>
-		<td align="center" bgcolor="#CCCCCC" colspan="2"><span class="normal12">使用禁止区分</span></td>
+		<td align="center" bgcolor="#CCCCCC" rowspan="2" style="line-height: 1;"><span class="normal12">図番</span></td>
+		<td align="center" bgcolor="#CCCCCC" colspan="2" style="line-height: 1;"><span class="normal12">アクセスレベル</span></td>
+		<td align="center" bgcolor="#CCCCCC" colspan="2" style="line-height: 1;"><span class="normal12">使用禁止区分</span></td>
 	</tr>
 	<tr>
-		<td align="center" bgcolor="#CCCCCC" width="60"><span class="normal12">現在</span></td>
-		<td align="center" bgcolor="#CCCCCC" width="60"><span class="normal12">変更後</span></td>
-		<td align="center" bgcolor="#CCCCCC" width="60"><span class="normal12">現在</span></td>
-		<td align="center" bgcolor="#CCCCCC" width="60"><span class="normal12">変更後</span></td>
+		<td align="center" bgcolor="#CCCCCC" width="60" style="line-height: 1;"><span class="normal12">現在</span></td>
+		<td align="center" bgcolor="#CCCCCC" width="60" style="line-height: 1;"><span class="normal12">変更後</span></td>
+		<td align="center" bgcolor="#CCCCCC" width="60" style="line-height: 1;"><span class="normal12">現在</span></td>
+		<td align="center" bgcolor="#CCCCCC" width="60" style="line-height: 1;"><span class="normal12">変更後</span></td>
 	</tr>
 	<!-- 変更対象を表示する部分 -->
 	<c:forEach var="aclvChangeElement" items="${sessionScope.aclvChangeForm.aclvChangeList}" varStatus="loop">
 	<tr>
-		<td><input type="checkbox" name="aclvChangeElement[${loop.index}].selected" value="true" 
+		<td style="line-height: 1;"><input type="checkbox" name="aclvChangeElement[${loop.index}].selected" value="true" 
 			<c:if test="${aclvChangeElement.selected}">checked="checked"</c:if> /></td>
-		<td><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
-		<td align="center"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
-		<td align="center">
+		<td style="line-height: 1;"><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
+		<td align="center" style="line-height: 1;"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
+		<td align="center" style="line-height: 1;">
 			<select name="aclvChangeElement[${loop.index}].newAclId" style="font-size:12pt">
 				<c:forEach var="aclvNameElement" items="${sessionScope.aclvChangeForm.aclvNameList}">
 					<option value="${aclvNameElement}" <c:if test="${aclvNameElement == aclvChangeElement.oldAclId}">selected</c:if>>${aclvNameElement}</option>
 				</c:forEach>
 			</select>
 		</td>
-		<td align="center"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
-		<td align="center">
+		<td align="center" style="line-height: 1;"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
+		<td align="center" style="line-height: 1;">
 			<select name="aclvChangeElement[${loop.index}].newProhibit" style="font-size:12pt">
 				<option value="OK">○</option>
 				<option value="NG">×</option>

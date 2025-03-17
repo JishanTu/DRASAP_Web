@@ -90,13 +90,15 @@
 </head>
 <body>
 	<c:if test="${message != null}">
-		<font color="RED">
-			<ul>
-				<c:forEach var="msg" items="${message}">
-					<li>${msg}</li>
-				</c:forEach>
-			</ul>
-		</font>
+		<hr color="sandybrown">
+			<font color="RED">
+				<ul>
+					<c:forEach var="msg" items="${message}">
+						<li>${msg}</li>
+					</c:forEach>
+				</ul>
+			</font>
+		<hr color="sandybrown">
 		<div align="center">
 		<c:if test="${sessionScope.Thumb_Flag == 'SEARCH_THUMBNAIL'}">
 			<input type="button" value="${sessionScope.searchResultForm.f_label11}" onclick="setActSubmit('SEARCH')" style="font-size:12pt;" />

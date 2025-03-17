@@ -774,21 +774,21 @@
 				<td >
 					<table border="0" >
 						<tr>
-							<td nowrap="nowrap" bgcolor="#EEEEEE"><span class="normal10"><b>${searchConditionForm.c_label1}</b></span></td>
+							<td nowrap="nowrap" bgcolor="#EEEEEE" style="line-height: 1;"><span class="normal10"><b>${searchConditionForm.c_label1}</b></span></td>
 							<td valign="top" nowrap="nowrap">
 								<table cellspacing="0" cellpadding="0">
 									<tr>
 										<td nowrap="nowrap">
 											<table border="1">
 												<tr>
-													<td nowrap="nowrap">
+													<td nowrap="nowrap" style="line-height: 1;">
 														<span class="normal10">${searchConditionForm.c_label6}：${user.id}</span>
 													</td>
-													<td nowrap="nowrap">
+													<td nowrap="nowrap" style="line-height: 1;">
 														<span class="normal10">${searchConditionForm.c_label7}：${user.name}
 														</span>
 													</td>
-													<td id="divisionTD">
+													<td id="divisionTD" style="line-height: 1;">
 														<div id="division" class="normal10"
 															style="height: 14px;overflow:hidden">${searchConditionForm.c_label8}：${user.deptName}
 														</div>

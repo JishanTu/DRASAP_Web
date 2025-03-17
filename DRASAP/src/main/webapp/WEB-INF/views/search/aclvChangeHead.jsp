@@ -51,14 +51,14 @@
 			<td>
 				<table border="0" bgcolor="#EEEEEE">
 					<tr>
-						<td nowrap="nowrap"><span class="normal18">アクセスレベル・使用禁止区分の変更</span></td>
+						<td nowrap="nowrap" style="line-height: 1;"><span class="normal18">アクセスレベル・使用禁止区分の変更</span></td>
 					</tr>
 				</table>
 			</td>
 			<td>
 				<table border="0" bgcolor="#EEEEEE">
 					<tr>
-						<td nowrap="nowrap"><span class="normal10">変更後のアクセスレベル、使用禁止区分を入力して下さい。<br />
+						<td nowrap="nowrap" style="line-height: 1;"><span class="normal10">変更後のアクセスレベル、使用禁止区分を入力して下さい。<br />
 								変更したくない品番はチェックを外して下さい。「次へ...」で確認画面に遷移します。
 						</span></td>
 					</tr>
@@ -75,14 +75,14 @@
 			<td>
 				<table border="1">
 					<tr>
-						<td><span class="normal10">職番：<c:out value="${user.id}" /></span></td>
-						<td><span class="normal10">氏名：<c:out value="${user.name}" /></span></td>
-						<td><span class="normal10">部署名(店名)：<c:out value="${user.dept}" /></span></td>
+						<td style="line-height: 1;"><span class="normal10">職番：<c:out value="${user.id}" /></span></td>
+						<td style="line-height: 1;"><span class="normal10">氏名：<c:out value="${user.name}" /></span></td>
+						<td style="line-height: 1;"><span class="normal10">部署名(店名)：<c:out value="${user.dept}" /></span></td>
 					</tr>
 				</table>
 			</td>
 			<!--===================== 表示内容の変更 =====================-->
-			<td>
+			<td style="line-height: 1;">
 				<span class="normal10"> &nbsp;&nbsp;&nbsp;&nbsp;
 					<c:set var="disabledString" value="" />
 					<c:if test="${empty aclvChangeForm.aclvChangeList}">
