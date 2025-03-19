@@ -26,14 +26,14 @@
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
 				<tr>
-					<td nowrap="nowrap"><span class="normal18">アクセスレベル・使用禁止区分の変更前確認</span></td>
+					<td nowrap="nowrap" style="line-height: 1;"><span class="normal18">アクセスレベル・使用禁止区分の変更前確認</span></td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border="0" bgcolor="#EEEEEE">
 				<tr>
-					<td nowrap="nowrap"><span class="normal10">内容を確認してOKなら「変更」をクリックして下さい。<br />
+					<td nowrap="nowrap" style="line-height: 1;"><span class="normal10">内容を確認してOKなら「変更」をクリックして下さい。<br />
 								もう一度修正したい場合は、「戻る」をクリックして下さい。</span></td>
 				</tr>
 			</table>
@@ -47,11 +47,11 @@
 		<td>
 			<table border="1">
 				<tr>
-					<td>
+					<td style="line-height: 1;">
 						<span class="normal10">職番：11103-9</span></td>
-					<td>
+					<td style="line-height: 1;">
 						<span class="normal10">氏名：角野　孝直</span></td>
-					<td>
+					<td style="line-height: 1;">
 						<span class="normal10">部署名(店名)：カッティングマシン標準機部</span></td>
 				</tr>
 			</table>

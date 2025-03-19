@@ -25,25 +25,25 @@
 <table border="0" cellspacing="1" cellpadding="0" align="center">
 	<!-- 見出し部分 -->
 	<tr>
-		<td align="center" bgcolor="#CCCCCC" rowspan="2"><span class="normal12">図番</span></td>
-		<td align="center" bgcolor="#CCCCCC" colspan="2"><span class="normal12">アクセスレベル</span></td>
-		<td align="center" bgcolor="#CCCCCC" colspan="2"><span class="normal12">使用禁止区分</span></td>
+		<td align="center" bgcolor="#CCCCCC" rowspan="2" style="line-height: 1;"><span class="normal12">図番</span></td>
+		<td align="center" bgcolor="#CCCCCC" colspan="2" style="line-height: 1;"><span class="normal12">アクセスレベル</span></td>
+		<td align="center" bgcolor="#CCCCCC" colspan="2" style="line-height: 1;"><span class="normal12">使用禁止区分</span></td>
 	</tr>
 	<tr>
-		<td align="center" bgcolor="#CCCCCC"><span class="normal12">現在</span></td>
-		<td align="center" bgcolor="#CCCCCC"><span class="normal12">変更後</span></td>
-		<td align="center" bgcolor="#CCCCCC"><span class="normal12">現在</span></td>
-		<td align="center" bgcolor="#CCCCCC"><span class="normal12">変更後</span></td>
+		<td align="center" bgcolor="#CCCCCC" style="line-height: 1;"><span class="normal12">現在</span></td>
+		<td align="center" bgcolor="#CCCCCC" style="line-height: 1;"><span class="normal12">変更後</span></td>
+		<td align="center" bgcolor="#CCCCCC" style="line-height: 1;"><span class="normal12">現在</span></td>
+		<td align="center" bgcolor="#CCCCCC" style="line-height: 1;"><span class="normal12">変更後</span></td>
 	</tr>
 	<!-- 変更対象を表示する部分 -->
 	<c:forEach var="aclvChangeElement" items="${aclvChangeForm.aclvChangeList}">
 	<c:if test="${aclvChangeElement.selected and aclvChangeElement.modified}">
 		<tr>
-			<td><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
-			<td align="center"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
-			<td align="center"><span class="normal12">${aclvChangeElement.newAclId}</span></td>
-			<td align="center"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
-			<td align="center"><span class="normal12">${aclvChangeElement.newProhibit eq 'NG' ? '×' : '○'}</span></td>
+			<td style="line-height: 1;"><span class="normal12">${aclvChangeElement.drwgNoFormated}</span></td>
+			<td align="center" style="line-height: 1;"><span class="normal12">${aclvChangeElement.oldAclId}</span></td>
+			<td align="center" style="line-height: 1;"><span class="normal12">${aclvChangeElement.newAclId}</span></td>
+			<td align="center" style="line-height: 1;"><span class="normal12">${aclvChangeElement.oldProhibit eq 'NG' ? '×' : '○'}</span></td>
+			<td align="center" style="line-height: 1;"><span class="normal12">${aclvChangeElement.newProhibit eq 'NG' ? '×' : '○'}</span></td>
 		</tr>
 	</c:if>
 </c:forEach>

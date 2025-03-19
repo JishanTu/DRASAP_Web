@@ -34,12 +34,12 @@
 <br />
 <table border="0" align="center">
 	<tr bgcolor="#FFFF99">
-		<td align="center"><span class="normal12">依頼ID</span></td>
-		<td align="center"><span class="normal12">依頼内容</span></td>
+		<td align="center" style="line-height: 0.9;"><span class="normal12">依頼ID</span></td>
+		<td align="center" style="line-height: 0.9;"><span class="normal12">依頼内容</span></td>
 	</tr>
 	<tr>
-		<td><span class="normal12">&nbsp;<c:out value="${request_refForm.job_id}" />&nbsp;</span></td>
-		<td><span class="normal12">&nbsp;<c:out value="${request_refForm.job_name}" />&nbsp;</span></td>
+		<td style="line-height: 0.9;"><span class="normal12">&nbsp;<c:out value="${request_refForm.job_id}" />&nbsp;</span></td>
+		<td style="line-height: 0.9;"><span class="normal12">&nbsp;<c:out value="${request_refForm.job_name}" />&nbsp;</span></td>
 	</tr>
 </table>
 <hr width="80%" />
@@ -47,11 +47,11 @@
 	<tr bgcolor="#CCCCCC">
 		<td bgcolor="#FFFFFF" />
 		<%-- // 2019.10.23 yamamoto modified. start --%>
-		<td align="center"><span class="normal12">図番</span></td>
+		<td align="center" style="line-height: 1;"><span class="normal12">図番</span></td>
 <%--<td align="center"><span class="normal12">号口・号機</span></td>
     <td align="center"><span class="normal12">原図内容</span></td>
 // 2019.10.23 yamamoto modified. end --%>
-		<td align="center"><span class="normal12">メッセージ</span></td>
+		<td align="center" style="line-height: 1;"><span class="normal12">メッセージ</span></td>
 	</tr>
 
 	<c:forEach var="item" items="${request_refForm.iraiList}">
@@ -83,19 +83,19 @@
 		<tr>
 			<c:choose>
 				<c:when test="${'1' eq gensi}">
-					<td bgcolor="#FF3300"><span class="normal12white">原紙なし</span></td>
+					<td bgcolor="#FF3300" style="line-height: 0.9;"><span class="normal12white">原紙なし</span></td>
 				</c:when>
 				<c:otherwise>
 					<td>&nbsp;</td>
 				</c:otherwise>
 			</c:choose>
 
-			<td><span class="normal12">&nbsp;${start_no}&nbsp;</span></td>
+			<td style="line-height: 0.9;"><span class="normal12">&nbsp;${start_no}&nbsp;</span></td>
 				<%-- // 2019.10.23 yamamoto modified. start
 		<td><span class="normal12">&nbsp;<%= gouki %>&nbsp;</span></td>
 		<td><span class="normal12">&nbsp;<%= genzu %>&nbsp;</span></td>
 // 2019.10.23 yamamoto modified. end --%>
-			<td><span class="normal12">&nbsp;${messege}&nbsp;</span></td>
+			<td style="line-height: 0.9;"><span class="normal12">&nbsp;${messege}&nbsp;</span></td>
 		</tr>
 	</c:forEach>
 </table>

@@ -492,15 +492,16 @@
 					</html:link></span></td>
 					--%>
 					<c:choose>
-						<c:when test="${item.aclFlag == 1 }">
+						<c:when test="${item.aclFlag == 1}">
 							<td nowrap="nowrap" style="line-height: 0.9;">
-								<span class="normal12blue">
-									<a id="drwgNoLink[${status.index}]"
-										href='<c:url value="/preview"/>'
-										title='<c:out value="${item.aclBalloon}"/>'
-										onclick="return openDLManagerDialog(${status.index},'drwgNo');">${item.drwgNoFormated}
-									</a>
-								</span>
+								<a id="drwgNoLink[${status.index}]"
+									href='<c:url value="/preview"/>'
+									title='<c:out value="${item.aclBalloon}"/>'
+									onclick="return openDLManagerDialog(${status.index},'drwgNo');">
+									<span class="normal12blue">
+										${item.drwgNoFormated}
+									</span>
+								</a>
 							</td>
 							<input type="hidden" id="DRWG_NO[${status.index}]" value="${item.drwgNo}"/>
 							<input type="hidden" id="FILE_NAME[${status.index}]" value="${item.fileName}"/>
@@ -543,7 +544,7 @@
 					<div class="galleryr-m" id="galleryr${status.index}">
 						<div style="flex: 1; display: flex; justify-content: center; text-align: center; flex-direction: column;">
 							<c:choose>
-								<c:when test="${item.aclFlag == 1 }">
+								<c:when test="${item.aclFlag == 1}">
 									<a id="thumbnailPhotoLink[${status.index}]"
 									   href='<c:url value="/preview"/>'
 										onclick="return openDLManagerDialog(${status.index},'thumbnailPhoto');"
@@ -566,7 +567,7 @@
 						</div>
 						<div class="controls" style="background-color: ${bgcolor1};">
 							<c:choose>
-								<c:when test="${item.aclFlag == 1 }">
+								<c:when test="${item.aclFlag == 1}">
 									<input type="hidden" id="thumbnailcheckboxHidden${status.index}" value="${item.selected}"/>
 									<input type="checkbox" id="thumbnailcheckbox${status.index}" value="true" style="margin-top: -1px;"
 										<c:if test="${item.selected}">checked="checked"</c:if>
@@ -574,12 +575,14 @@
 									<a id="thumbnailNoLink[${status.index}]" href='<c:url value="/preview"/>'
 										style = "font-size: 16px;"
 										title='<c:out value="${item.aclBalloon}"/>'
-										onclick="return openDLManagerDialog(${status.index},'thumbnailNo');">${item.drwgNoFormated}
+										onclick="return openDLManagerDialog(${status.index},'thumbnailNo');">
+										<span class="normal12blue">
+											${item.drwgNoFormated}
+										</span>
 									</a>
 								</c:when>
 								<c:otherwise>
-									<span class="normal12">&nbsp;&nbsp;</span>
-									${item.drwgNoFormated}
+									<span class="normal12" title='<c:out value="${item.aclBalloon}"/>'>&nbsp;&nbsp;${item.drwgNoFormated}</span>
 								</c:otherwise>
 							</c:choose>
 						</div>

@@ -24,12 +24,15 @@
 <form action="<%=request.getContextPath() %>/aclvChange" method = "post">
 <input type="hidden" name="act" value="" />
 <!-- メッセージの表示部分 -->
-<font color="red" size="3"><ul style="line-height: 1; margin-top: 5px; margin-bottom: 20;">
-<c:forEach var="errorMessage" items="${aclvChangeForm.errorMessages}">
-	<li><c:out value="${errorMessage}" /></li>
-</c:forEach>
-
-</ul></font>
+<c:if test="${not empty aclvChangeForm.errorMessages}">
+    <font color="red" size="3">
+        <ul style="line-height: 1; margin-top: 5px;">
+            <c:forEach var="errorMessage" items="${aclvChangeForm.errorMessages}">
+                <li><c:out value="${errorMessage}" /></li>
+            </c:forEach>
+        </ul>
+    </font>
+</c:if>
 <table border="0" cellspacing="1" cellpadding="0" align="center">
 	<!-- 見出し部分 -->
 	<tr>
