@@ -772,10 +772,10 @@
 		<table border="0" cellspacing="0" cellpadding="0"  style = "width:100%">
 			<tr>
 				<td >
-					<table border="0" >
+					<table border="0">
 						<tr>
-							<td nowrap="nowrap" bgcolor="#EEEEEE" style="line-height: 1;"><span class="normal10"><b>${searchConditionForm.c_label1}</b></span></td>
-							<td valign="top" nowrap="nowrap">
+							<td nowrap="nowrap" bgcolor="#EEEEEE" ><span class="normal10"><b>${searchConditionForm.c_label1}</b></span></td>
+							<td valign="top" nowrap="nowrap" style="padding-top: 0px; padding-bottom: 0px;">
 								<table cellspacing="0" cellpadding="0">
 									<tr>
 										<td nowrap="nowrap">
@@ -992,7 +992,7 @@
 								<br />
 								&emsp; <% // ラジオボタンの前に空白を入れる %>
 								<input type="radio"name="eachCondition" value="OR" ${searchConditionForm.eachCondition == "OR"  ? 'checked ' : ''}/> OR
-								<input type="radio"name="eachCondition" value="AND" ${searchConditionForm.eachCondition == "AND"  ? 'checked ' : ''}/> AND <br /> <br /> 
+								<input type="radio"name="eachCondition" value="AND" ${searchConditionForm.eachCondition == "AND"  ? 'checked ' : ''}/> AND <br />
 								 <%
 								 // ユーザーに検索権限があるか? なければ検索開始ボタンをロックする
 								 User user = (User) session.getAttribute("user");
@@ -1000,7 +1000,7 @@
 								 %>
 								<%-- 検索開始ボタン --%>
 								&emsp; <% // ボタンの前に空白を入れる %> 
-								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold;">
+								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold; margin-top: 7px;">
 									${searchConditionForm.c_label4}
 								</button>
 							</td>

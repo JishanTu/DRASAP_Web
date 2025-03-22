@@ -145,9 +145,9 @@
 <table border="0" cellspacing="0" cellpadding="0"  width="100%">
 	<tr>
 		<td>
-			<table border="0" bgcolor="#EEEEEE">
+			<table border="0" bgcolor="#EEEEEE" style="min-height: 19px;">
 				<tr>
-					<td nowrap="nowrap">
+					<td nowrap="nowrap" style="line-height: 0.8;">
 						<span class="normal10" style="font-weight: bold;">${searchResultForm.h_label1 }</span>
 					</td>
 				</tr>
