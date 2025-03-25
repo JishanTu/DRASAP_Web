@@ -237,7 +237,7 @@ public class AclUploadDB {
 			// ロールバック
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			throw e;
 		} finally {
@@ -368,10 +368,12 @@ public class AclUploadDB {
 					itemNoShort = StringCheck.changeDbToSbAscii(itemNoShort).toUpperCase();
 					aclUpload.setItemNoShort(itemNoShort);
 				}
-				if ((value = rs.getString("PRE_UPDATE_ACL")) != null && value.length() > 0) {
+				value = rs.getString("PRE_UPDATE_ACL");
+				if (value != null && value.length() > 0) {
 					aclUpload.setPreUpdateAcl(value);
 				}
-				if ((value = rs.getString("PRE_UPDATE_ACL_NAME")) != null && value.length() > 0) {
+				value = rs.getString("PRE_UPDATE_ACL_NAME");
+				if (value != null && value.length() > 0) {
 					aclUpload.setPreUpdateAclName(value);
 				}
 				if ((value = rs.getString("POST_UPDATE_ACL")) != null && value.length() > 0) {
@@ -620,7 +622,7 @@ public class AclUploadDB {
 			// ロールバック
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			throw e;
 		} finally {

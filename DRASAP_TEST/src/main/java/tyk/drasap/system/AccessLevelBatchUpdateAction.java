@@ -1005,7 +1005,7 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 					try {
 						// ロールバック
 						conn.rollback();
-					} catch (Exception e2) {
+					} catch (Exception ex) {
 					}
 
 					// for ユーザー
@@ -1026,7 +1026,7 @@ public class AccessLevelBatchUpdateAction extends BaseAction {
 			// ロールバック
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			throw e;
 		} finally {

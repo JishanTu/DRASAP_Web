@@ -170,18 +170,13 @@ public class AdminSettingListAction extends BaseAction {
 					pstmt1.setString(2, adminSettingListElement.getStatus());
 					pstmt1.setString(3, adminSettingListElement.getSettingId());
 					pstmt1.executeUpdate();
-
-					try {
-						pstmt1.close();
-					} catch (Exception e) {
-					}
 					adminSettingListElement.setUpdate(false);
 				}
 			}
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			// for ÉÜÅ[ÉUÅ[
 			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("search.failed.search.list", new Object[] { e.getMessage() }, null));
@@ -192,11 +187,11 @@ public class AdminSettingListAction extends BaseAction {
 		} finally {
 			try {
 				conn.commit();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.setAutoCommit(true);
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				pstmt1.close();

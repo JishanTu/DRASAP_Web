@@ -208,10 +208,10 @@ public class Request_listAction extends BaseAction {
 						conn.rollback();
 						conn.setAutoCommit(true); // 自動コミットをオンに
 					}
-				} catch (java.sql.SQLException se2) {
+				} catch (java.sql.SQLException se) {
 					// SQL失敗しました。
 					ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
-					category.error("ロールバックに失敗しました" + se2.getMessage());
+					category.error("ロールバックに失敗しました" + se.getMessage());
 				}
 
 			} finally {
@@ -344,15 +344,20 @@ public class Request_listAction extends BaseAction {
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			category.error("[" + classId + "]:原図庫作業依頼テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
 		} finally {
-			try {// CLOSE処理
-				stmt.close();
-				stmt = null;
-				stmt1.close();
-				stmt1 = null;
-				rs.close();
-				rs = null;
+			try {
 				rs1.close();
-				rs1 = null;
+			} catch (Exception e) {
+			}
+			try {
+				stmt1.close();
+			} catch (Exception e) {
+			}
+			try {
+				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				stmt.close();
 			} catch (Exception e) {
 			}
 		}
@@ -406,11 +411,12 @@ public class Request_listAction extends BaseAction {
 						ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 						category.error("[" + classId + "]:原図庫作業依頼テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
 					} finally {
-						try {// CLOSE処理
-							stmt.close();
-							stmt = null;
+						try {
 							rs.close();
-							rs = null;
+						} catch (Exception e) {
+						}
+						try {
+							stmt.close();
 						} catch (Exception e) {
 						}
 					}
@@ -444,13 +450,16 @@ public class Request_listAction extends BaseAction {
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			category.error("[" + classId + "]:原図庫作業依頼テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
 		} finally {
-			try {// CLOSE処理
-				stmt.close();
-				stmt = null;
+			try {
 				rs.close();
-				rs = null;
+			} catch (Exception e) {
+			}
+			try {
+				stmt.close();
+			} catch (Exception e) {
+			}
+			try {
 				conn.close();
-				conn = null;
 			} catch (Exception e) {
 			}
 		}

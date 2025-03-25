@@ -366,7 +366,7 @@ public class AclvChangeAction extends BaseAction {
 			// rollback
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			// for ÉÜÅ[ÉUÅ[
 			aclvChangeForm.getErrorMessages().add(

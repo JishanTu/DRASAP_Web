@@ -101,7 +101,7 @@ public class PrintRequestDB extends APlotPrintRequest {
 	//			PrintLoger.info(PrintLoger.FAILED_WRITE, user, logDrwgNo);
 	//// 2013.06.24 yamagishi modified. end
 	//			// rollback‚·‚é
-	//			try{ conn.rollback(); } catch(Exception e2){}
+	//			try{ conn.rollback(); } catch(Exception ex){}
 	//			// —áŠO‚ğŒÄ‚Ño‚µŒ³‚É“Š‚°‚é
 	//			throw e;
 	//

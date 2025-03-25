@@ -98,7 +98,7 @@ public class AclUpdateNoSequenceDB {
 			// ロールバック
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			throw e;
 		} finally {

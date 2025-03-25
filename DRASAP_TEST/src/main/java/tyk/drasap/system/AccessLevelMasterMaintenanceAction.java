@@ -139,7 +139,7 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -151,11 +151,11 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 		} finally {
 			try {
 				conn.commit();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.setAutoCommit(true);
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			//try{ pstmt1.close(); } catch(Exception e) {}
 			try {
@@ -185,7 +185,7 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 					if (aclLevelUsedCheck(accessLevelMasterMaintenanceElement.getAclId(), user, errors)) {
 						try {
 							conn.rollback();
-						} catch (Exception e2) {
+						} catch (Exception ex) {
 						}
 						accessLevelMasterMaintenanceForm.addErrorMsg("※削除しようとしたアクセスレベル「" + accessLevelMasterMaintenanceElement.getAclName() + "」は図面属性情報で使用しているため削除できません。");
 						return;
@@ -213,7 +213,7 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -225,11 +225,11 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 		} finally {
 			try {
 				conn.commit();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.setAutoCommit(true);
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				stmt1.close();
@@ -274,7 +274,7 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -327,7 +327,7 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -455,7 +455,7 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -494,7 +494,7 @@ public class AccessLevelMasterMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー

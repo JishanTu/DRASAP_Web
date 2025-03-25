@@ -201,16 +201,13 @@ public class LoginAction extends BaseAction {
 	 * @throws Exception
 	 */
 	private int isChangePassword(User user, Model errors) throws Exception {
-
 		/*
 		 * 現在のパスワードチェック
 		 */
-		Connection conn = null;
-		conn = ds.getConnection();
-		conn.setAutoCommit(true);// 非トランザクション
-
-		// パスワード有効期限チェック
-		return UserDB.checkPasswordExpiry(user, errors, conn);
+		try (Connection conn = ds.getConnection()) {
+			conn.setAutoCommit(true); // 非トランザクション
+			return UserDB.checkPasswordExpiry(user, errors, conn);
+		}
 	}
 
 }

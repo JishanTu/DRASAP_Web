@@ -369,7 +369,7 @@ public class UserDB {
 			// ロールバック
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			throw e;
 		} finally {

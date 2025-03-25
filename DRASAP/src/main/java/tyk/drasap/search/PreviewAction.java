@@ -220,43 +220,42 @@ public class PreviewAction extends BaseAction {
 
 		// 2013.07.01 yamagishi add. start
 		// バナー処理追加
-		Connection conn = null;
-		conn = ds.getConnection();
+		try (Connection conn = ds.getConnection()) {
+			// バナーを押す（該当図）
+			if (AclvMasterDB.isCorresponding(drwgNo, conn)) {
+				// 一時的なファイル名を変更する。
+				String newOutFileName = tempDirName + File.separator + user.getId()
+						+ "_" + drwgNo + "_" + new Date().getTime() + ".tif";
 
-		// バナーを押す（該当図）
-		if (AclvMasterDB.isCorresponding(drwgNo, conn)) {
-			// 一時的なファイル名を変更する。
-			String newOutFileName = tempDirName + File.separator + user.getId()
-					+ "_" + drwgNo + "_" + new Date().getTime() + ".tif";
+				doCorrespondingBanner(outFileName, newOutFileName,
+						drasapInfo.getCorrespondingStampStr(),
+						drasapInfo.getCorrespondingStampW(), drasapInfo.getCorrespondingStampL(),
+						drasapInfo.getViewStampDeep(),
+						drasapInfo.isDispDrwgNoWithView() ? drwgNo : null, // 図番を印字しない場合、nullを渡す
+						user, errors, dlmInfo);
 
-			doCorrespondingBanner(outFileName, newOutFileName,
-					drasapInfo.getCorrespondingStampStr(),
-					drasapInfo.getCorrespondingStampW(), drasapInfo.getCorrespondingStampL(),
-					drasapInfo.getViewStampDeep(),
-					drasapInfo.isDispDrwgNoWithView() ? drwgNo : null, // 図番を印字しない場合、nullを渡す
-					user, errors, dlmInfo);
-
-			// 変換前のファイルがオリジナルでなければ、削除する
-			if (!ORIGIN_FILE_NAME.equals(outFileName)) {
-				if (new File(outFileName).delete()) {
-					category.debug(outFileName + " を削除した");
+				// 変換前のファイルがオリジナルでなければ、削除する
+				if (!ORIGIN_FILE_NAME.equals(outFileName)) {
+					if (new File(outFileName).delete()) {
+						category.debug(outFileName + " を削除した");
+					}
 				}
-			}
-			if (!Objects.isNull(errors.getAttribute("message"))) {
-				// バナー処理でエラーが発生していたら
-				// 2013.08.02 yamagishi add. start
-				if (dlmInfo != null) {
-					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, dlmInfo.getLabelMessage());
+				if (!Objects.isNull(errors.getAttribute("message"))) {
+					// バナー処理でエラーが発生していたら
+					// 2013.08.02 yamagishi add. start
+					if (dlmInfo != null) {
+						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, dlmInfo.getLabelMessage());
+						category.error("==> error");
+						return null;
+					}
+					// 2013.08.02 yamagishi add. end
+					//saveErrors(request, errors);
+					request.setAttribute("errors", errors);
 					category.error("==> error");
-					return null;
+					return "error";
 				}
-				// 2013.08.02 yamagishi add. end
-				//saveErrors(request, errors);
-				request.setAttribute("errors", errors);
-				category.error("==> error");
-				return "error";
+				outFileName = newOutFileName;// バナー処理後のファイル名に変更する
 			}
-			outFileName = newOutFileName;// バナー処理後のファイル名に変更する
 		}
 		// 2013.07.01 yamagishi add. end
 
@@ -1456,9 +1455,7 @@ public class PreviewAction extends BaseAction {
 		String tmpOutFileName = "";
 
 		try {
-
 			conn = ds.getConnection();
-
 			/*
 			 * 選択図面について以下実施
 			 * ・バナーを押す

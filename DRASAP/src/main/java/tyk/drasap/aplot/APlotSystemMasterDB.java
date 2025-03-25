@@ -26,9 +26,8 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-import tyk.drasap.common.DataSourceFactory;
-import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.UserException;
+import tyk.drasap.springfw.config.DataSourceManager;
 
 /**
  * A-PLOT出図 管理者設定マスタ情報管理クラス.
@@ -49,15 +48,6 @@ public class APlotSystemMasterDB {
 
 	/** Logger（log4j） */
 	private static Logger category = Logger.getLogger(APlotSystemMasterDB.class.getName());
-	/** DB接続データソース */
-	private static DataSource ds;
-	static {
-		try {
-			ds = DataSourceFactory.getOracleDataSource();
-		} catch (Exception e) {
-			category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-		}
-	}
 
 	/** 図面ファイルvaultsフォルダパス. */
 	private String vaultsFolderPath = null;
@@ -67,6 +57,9 @@ public class APlotSystemMasterDB {
 
 	/** 図面ファイルスプール先フォルダパス. */
 	private HashMap<Integer, String> documentFolderPath = new HashMap<>();
+
+	/** DB接続データソース */
+	protected DataSource ds;
 
 	/**
 	 * スタンプ用設定クラス.
@@ -110,7 +103,9 @@ public class APlotSystemMasterDB {
 	 * @throws UserException
 	 */
 	private APlotSystemMasterDB() throws SQLException, UserException {
-		// 初期化.
+		// DataSource取得
+		ds = DataSourceManager.getInstance();
+		// 初期化
 		init();
 		//
 		initCheck();
@@ -196,16 +191,20 @@ public class APlotSystemMasterDB {
 	 * @throws SQLException
 	 */
 	private void init() throws SQLException {
-		Connection conn = ds.getConnection();
-		conn.setAutoCommit(true);// 非トランザクション
-		Statement stmt = conn.createStatement();
-
-		spoolFolderPath.clear();
-		documentFolderPath.clear();
-
-		// システム値を取得.
-		ResultSet rs = stmt.executeQuery(selectAPlotSystemValues());
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(true);// 非トランザクション
+			stmt = conn.createStatement();
+
+			spoolFolderPath.clear();
+			documentFolderPath.clear();
+
+			// システム値を取得.
+			rs = stmt.executeQuery(selectAPlotSystemValues());
+
 			// 取得した情報からスキーマ名を取得.
 			while (rs.next()) {
 
@@ -289,12 +288,19 @@ public class APlotSystemMasterDB {
 			category.fatal("A-PLOT出図 管理者設定マスタ情報取得でSQLエラー", ex);
 			throw ex;
 		} finally {
-			if (rs != null) {
+			try {
 				rs.close();
+			} catch (Exception e) {
+			}
+			try {
+				stmt.close();
+			} catch (Exception e) {
+			}
+			try {
+				conn.close();
+			} catch (Exception e) {
 			}
 		}
-
-		//
 	}
 
 	/**

@@ -66,138 +66,134 @@ public class Request_RefAction extends BaseAction {
 		java.sql.ResultSet rs = null;
 		category.debug("action = " + request_refForm.action);
 		if ("".equals(request_refForm.action) || request_refForm.action == null) {
-			//原図庫作業依頼詳細画面を表示する
-			conn = ds.getConnection();
-			conn.setAutoCommit(true);// 非トランザクション
-			//データを取得する
-			doSyokika(user, request_refForm, conn);
+			try {
+				//原図庫作業依頼詳細画面を表示する
+				conn = ds.getConnection();
+				conn.setAutoCommit(true);// 非トランザクション
+				//データを取得する
+				doSyokika(user, request_refForm, conn);
 
-			ArrayList<Request_RefElement> iraiList = new ArrayList<Request_RefElement>();//画面表示内容を格納する
-			//作業中で表示するものに関してiraiListに格納する
-			Request_RefElement[] items = request_refForm.irai_List.toArray(new Request_RefElement[0]);
-			for (int i = 0; i < items.length; i++) {
-				String job_id = items[i].getJob_id();//ジョブID
-				String job_stat = items[i].getJob_stat();//作業ステータス
-				String job_name = items[i].getJob_name();//依頼内容
-				String gouki = items[i].getGouki();//号口・号機
-				String genzu = items[i].getGenzu();//原図内容
-				String start = items[i].getStart();//開始番号
-				if (start == null) {
-					start = "";
-				}
-				String end = items[i].getEnd();//終了番号
-				if (end == null) {
-					end = "";
-				}
-				String busuu = items[i].getBusuu();//部数
-				String syuku = items[i].getSyuku();//縮小
-				String size = items[i].getSize();//サイズ
-				String printer = items[i].getPrinter();//出力先
-				String messege = items[i].getMessege();//メッセージ(図面登録依頼、図面出力指示)
-				if (messege == null) {
-					messege = "";
-				}
-				String messege1 = items[i].getMessege1();//メッセージ(原図借用依頼、図面以外焼付依頼)
-				String exist = items[i].getExist();//登録有無
-				if (exist == null) {
-					exist = "";
-				}
-				String seq = items[i].getSeq();//シーケンス番号
-				String rowNo = items[i].getRowNo();//行番号
-				String startNo = "";//1つ前の開始番号をチェック
-				String endNo = "";//1つ前の終了番号をチェック
-				if (i > 0) {
-					startNo = items[i - 1].getStart();
-					if (startNo == null) {
-						startNo = "";
+				ArrayList<Request_RefElement> iraiList = new ArrayList<Request_RefElement>();//画面表示内容を格納する
+				//作業中で表示するものに関してiraiListに格納する
+				Request_RefElement[] items = request_refForm.irai_List.toArray(new Request_RefElement[0]);
+				for (int i = 0; i < items.length; i++) {
+					String job_id = items[i].getJob_id();//ジョブID
+					String job_stat = items[i].getJob_stat();//作業ステータス
+					String job_name = items[i].getJob_name();//依頼内容
+					String gouki = items[i].getGouki();//号口・号機
+					String genzu = items[i].getGenzu();//原図内容
+					String start = items[i].getStart();//開始番号
+					if (start == null) {
+						start = "";
 					}
-					endNo = items[i - 1].getEnd();
-					if (endNo == null) {
-						endNo = "";
+					String end = items[i].getEnd();//終了番号
+					if (end == null) {
+						end = "";
 					}
-				}
-				if (i == 0 || "図面登録依頼".equals(job_name) && !start.equals(startNo) && !end.equals(endNo) && !rowNo.equals(items[i - 1].getRowNo()) || "図面出力指示".equals(job_name) && !start.equals(startNo) && !end.equals(endNo) && !rowNo.equals(items[i - 1].getRowNo())
-						|| "図面登録依頼".equals(job_name) && !job_id.equals(items[i - 1].getJob_id()) && start.equals(startNo) && end.equals(endNo) && rowNo.equals(items[i - 1].getRowNo()) || "図面出力指示".equals(job_name) && !job_id.equals(items[i - 1].getJob_id()) && start.equals(startNo) && end.equals(endNo) && rowNo.equals(items[i - 1].getRowNo())
-						|| "図面登録依頼".equals(job_name) && !job_id.equals(items[i - 1].getJob_id()) || "図面出力指示".equals(job_name) && !job_id.equals(items[i - 1].getJob_id()) || "図面登録依頼".equals(job_name) && job_id.equals(items[i - 1].getJob_id()) && !rowNo.equals(items[i - 1].getRowNo()) || "図面出力指示".equals(job_name) && job_id.equals(items[i - 1].getJob_id()) && !rowNo.equals(items[i - 1].getRowNo())
-						|| "原図借用依頼".equals(job_name) || "図面以外焼付依頼".equals(job_name)) {
-					//開始、終了番号がある場合は図番を展開する(依頼内容が図面登録依頼、図面出力依頼の場合)
-					if (!"".equals(start) && !"".equals(end)) {
-						String data = "";//登録とメッセージがあるかチェックをする
-						try {
-							stmt = conn.createStatement();
-							String strSql = "select EXIST,MESSAGE from JOB_REQUEST_EXPAND_TABLE where JOB_ID = '" + job_id + "' and ROW_NO = '" + rowNo + "'";
-							rs = stmt.executeQuery(strSql);
-							while (rs.next()) {
-								String touroku = rs.getString("EXIST");//登録有無
-								String message = rs.getString("MESSAGE");//メッセージ
-								if ("0".equals(touroku) || message != null) {
-									data = "0";
+					String busuu = items[i].getBusuu();//部数
+					String syuku = items[i].getSyuku();//縮小
+					String size = items[i].getSize();//サイズ
+					String printer = items[i].getPrinter();//出力先
+					String messege = items[i].getMessege();//メッセージ(図面登録依頼、図面出力指示)
+					if (messege == null) {
+						messege = "";
+					}
+					String messege1 = items[i].getMessege1();//メッセージ(原図借用依頼、図面以外焼付依頼)
+					String exist = items[i].getExist();//登録有無
+					if (exist == null) {
+						exist = "";
+					}
+					String seq = items[i].getSeq();//シーケンス番号
+					String rowNo = items[i].getRowNo();//行番号
+					String startNo = "";//1つ前の開始番号をチェック
+					String endNo = "";//1つ前の終了番号をチェック
+					if (i > 0) {
+						startNo = items[i - 1].getStart();
+						if (startNo == null) {
+							startNo = "";
+						}
+						endNo = items[i - 1].getEnd();
+						if (endNo == null) {
+							endNo = "";
+						}
+					}
+					if (i == 0 || "図面登録依頼".equals(job_name) && !start.equals(startNo) && !end.equals(endNo) && !rowNo.equals(items[i - 1].getRowNo()) || "図面出力指示".equals(job_name) && !start.equals(startNo) && !end.equals(endNo) && !rowNo.equals(items[i - 1].getRowNo())
+							|| "図面登録依頼".equals(job_name) && !job_id.equals(items[i - 1].getJob_id()) && start.equals(startNo) && end.equals(endNo) && rowNo.equals(items[i - 1].getRowNo()) || "図面出力指示".equals(job_name) && !job_id.equals(items[i - 1].getJob_id()) && start.equals(startNo) && end.equals(endNo) && rowNo.equals(items[i - 1].getRowNo())
+							|| "図面登録依頼".equals(job_name) && !job_id.equals(items[i - 1].getJob_id()) || "図面出力指示".equals(job_name) && !job_id.equals(items[i - 1].getJob_id()) || "図面登録依頼".equals(job_name) && job_id.equals(items[i - 1].getJob_id()) && !rowNo.equals(items[i - 1].getRowNo()) || "図面出力指示".equals(job_name) && job_id.equals(items[i - 1].getJob_id()) && !rowNo.equals(items[i - 1].getRowNo())
+							|| "原図借用依頼".equals(job_name) || "図面以外焼付依頼".equals(job_name)) {
+						//開始、終了番号がある場合は図番を展開する(依頼内容が図面登録依頼、図面出力依頼の場合)
+						if (!"".equals(start) && !"".equals(end)) {
+							String data = "";//登録とメッセージがあるかチェックをする
+							try {
+								stmt = conn.createStatement();
+								String strSql = "select EXIST,MESSAGE from JOB_REQUEST_EXPAND_TABLE where JOB_ID = '" + job_id + "' and ROW_NO = '" + rowNo + "'";
+								rs = stmt.executeQuery(strSql);
+								while (rs.next()) {
+									String touroku = rs.getString("EXIST");//登録有無
+									String message = rs.getString("MESSAGE");//メッセージ
+									if ("0".equals(touroku) || message != null) {
+										data = "0";
+									}
 								}
+
+							} catch (java.sql.SQLException e) {
+								request_refForm.listErrors.add(MessageManager.getInstance().getMessage("msg.sql.error", e.getMessage()));
+								//for システム管理者
+								ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
+								category.error("[" + classId + "]:原図庫作業依頼展開テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
 							}
 
-						} catch (java.sql.SQLException e) {
-							request_refForm.listErrors.add(MessageManager.getInstance().getMessage("msg.sql.error", e.getMessage()));
-							//for システム管理者
-							ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
-							category.error("[" + classId + "]:原図庫作業依頼展開テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
-						} finally {
-							try {// CLOSE処理
-								stmt.close();
-								stmt = null;
-								rs.close();
-								rs = null;
-							} catch (Exception e) {
+							exist = data;//開始、終了番号の範囲内に登録有無=0またはメッセージがあれば原図庫作業依頼リストにメッセージありのリンクをたてる
+							if ("".equals(exist)) {
+								messege = "";
 							}
-						}
-
-						exist = data;//開始、終了番号の範囲内に登録有無=0またはメッセージがあれば原図庫作業依頼リストにメッセージありのリンクをたてる
-						if ("".equals(exist)) {
-							messege = "";
-						}
-						//登録有無またはメッセージのどちらかがあるか確認をする
-					} else if ("図面登録依頼".equals(job_name) || "図面出力指示".equals(job_name)) {
-						try {
-							stmt = conn.createStatement();
-							String strSql = "select EXIST,MESSAGE from JOB_REQUEST_EXPAND_TABLE where JOB_ID = '" + job_id + "' and EXPAND_DRWG_NO = '" + start + "' and ROW_NO = '" + rowNo + "'";
-							rs = stmt.executeQuery(strSql);
-							if (rs.next()) {
-								String touroku = rs.getString("EXIST");//登録有無
-								String message = rs.getString("MESSAGE");//メッセージ
-								if (touroku == null && message == null) {
-									exist = "";
-									messege = "";
-								} else if ("1".equals(touroku) || "2".equals(touroku)) {//原紙なしの表示は登録有無が0の時だけ
-									exist = "";
+							//登録有無またはメッセージのどちらかがあるか確認をする
+						} else if ("図面登録依頼".equals(job_name) || "図面出力指示".equals(job_name)) {
+							try {
+								stmt = conn.createStatement();
+								String strSql = "select EXIST,MESSAGE from JOB_REQUEST_EXPAND_TABLE where JOB_ID = '" + job_id + "' and EXPAND_DRWG_NO = '" + start + "' and ROW_NO = '" + rowNo + "'";
+								rs = stmt.executeQuery(strSql);
+								if (rs.next()) {
+									String touroku = rs.getString("EXIST");//登録有無
+									String message = rs.getString("MESSAGE");//メッセージ
+									if (touroku == null && message == null) {
+										exist = "";
+										messege = "";
+									} else if ("1".equals(touroku) || "2".equals(touroku)) {//原紙なしの表示は登録有無が0の時だけ
+										exist = "";
+									}
 								}
-							}
 
-						} catch (java.sql.SQLException e) {
-							request_refForm.listErrors.add(MessageManager.getInstance().getMessage("msg.sql.error", e.getMessage()));
-							//for システム管理者
-							ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
-							category.error("[" + classId + "]:原図庫作業依頼展開テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
-						} finally {
-							try {// CLOSE処理
-								stmt.close();
-								stmt = null;
-								rs.close();
-								rs = null;
-							} catch (Exception e) {
+							} catch (java.sql.SQLException e) {
+								request_refForm.listErrors.add(MessageManager.getInstance().getMessage("msg.sql.error", e.getMessage()));
+								//for システム管理者
+								ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
+								category.error("[" + classId + "]:原図庫作業依頼展開テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
 							}
 						}
+						iraiList.add(new Request_RefElement(job_id, job_stat, job_name, gouki, genzu, start, end, busuu, syuku, size, printer, messege, messege1, exist, seq, rowNo));
 					}
-					iraiList.add(new Request_RefElement(job_id, job_stat, job_name, gouki, genzu, start, end, busuu, syuku, size, printer, messege, messege1, exist, seq, rowNo));
 				}
-			}
 
-			//原図庫依頼詳細の画面に格納したデータを表示する
-			request_refForm.iraiList = iraiList;
-			if (conn != null) {
-				conn.close();
-			}
-			if (request_refForm.iraiList.isEmpty()) {
-				//依頼しているデータはない
-				request_refForm.listErrors.add(MessageManager.getInstance().getMessage("msg.irai.nodata"));
+				//原図庫依頼詳細の画面に格納したデータを表示する
+				request_refForm.iraiList = iraiList;
+				if (request_refForm.iraiList.isEmpty()) {
+					//依頼しているデータはない
+					request_refForm.listErrors.add(MessageManager.getInstance().getMessage("msg.irai.nodata"));
+				}
+			} finally {
+				try {
+					rs.close();
+				} catch (Exception e) {
+				}
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				try {
+					conn.close();
+				} catch (Exception e) {
+				}
 			}
 		} else if ("button_Mtenkai".equals(request_refForm.action)) {
 			//メッセージありのリンクがある場合で、
@@ -473,13 +469,16 @@ public class Request_RefAction extends BaseAction {
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			category.error("[" + classId + "]:原図庫作業依頼テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
 		} finally {
-			try {// CLOSE処理
-				stmt.close();
-				stmt = null;
+			try {
 				rs.close();
-				rs = null;
+			} catch (Exception e) {
+			}
+			try {
+				stmt.close();
+			} catch (Exception e) {
+			}
+			try {
 				conn.close();
-				conn = null;
 			} catch (Exception e) {
 			}
 		}
@@ -544,13 +543,16 @@ public class Request_RefAction extends BaseAction {
 			ErrorLoger.error(user, this, DrasapPropertiesFactory.getDrasapProperties(this).getProperty("err.sql"));
 			category.error("[" + classId + "]:原図庫作業依頼テーブルの処理に失敗しました\n" + ErrorUtility.error2String(e));
 		} finally {
-			try {// CLOSE処理
-				stmt.close();
-				stmt = null;
+			try {
 				rs.close();
-				rs = null;
+			} catch (Exception e) {
+			}
+			try {
+				stmt.close();
+			} catch (Exception e) {
+			}
+			try {
 				conn.close();
-				conn = null;
 			} catch (Exception e) {
 			}
 		}

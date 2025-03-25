@@ -16,7 +16,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
-import tyk.drasap.common.DataSourceFactory;
 import tyk.drasap.common.DrasapPropertiesFactory;
 import tyk.drasap.common.ErrorUtility;
 import tyk.drasap.common.ProfileString;
@@ -25,6 +24,7 @@ import tyk.drasap.common.UserDB;
 import tyk.drasap.common.UserDef;
 import tyk.drasap.common.UserException;
 import tyk.drasap.errlog.ErrorLoger;
+import tyk.drasap.springfw.config.DataSourceManager;
 import tyk.drasap.springfw.form.BaseForm;
 import tyk.drasap.springfw.utils.MessageSourceUtil;
 
@@ -38,23 +38,19 @@ public class ChangePasswdForm extends BaseForm {
 	 *
 	 */
 	private static Logger category = Logger.getLogger(ChangePasswdAction.class.getName());
-	private static DataSource ds;
-	static {
-		try {
-			ds = DataSourceFactory.getOracleDataSource();
-		} catch (Exception e) {
-			category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-		}
-	}
-
 	private String oldpass;
 	private String newpass;
 	private String newPassConfirm;
 
+	/** DB接続データソース */
+	protected DataSource ds;
+
 	/**
-	 *
+	 * コンストラクタ
 	 */
 	public ChangePasswdForm() {
+		// DataSource取得
+		ds = DataSourceManager.getInstance();
 	}
 
 	/**

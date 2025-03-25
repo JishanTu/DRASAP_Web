@@ -1,6 +1,9 @@
 package tyk.drasap.system;
 
-import static tyk.drasap.common.DrasapPropertiesFactory.*;
+import static tyk.drasap.common.DrasapPropertiesFactory.BEA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.CATALINA_HOME;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_BASE;
+import static tyk.drasap.common.DrasapPropertiesFactory.OCE_AP_SERVER_HOME;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -290,7 +293,7 @@ public class AccessLevelUpdatedResultAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				response.reset();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			// for ÉÜÅ[ÉUÅ[
 			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclUpdatedResult.download.failed", new Object[] { ErrorUtility.error2String(e) }, null));

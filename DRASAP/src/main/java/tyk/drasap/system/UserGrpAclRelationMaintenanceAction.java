@@ -119,7 +119,7 @@ public class UserGrpAclRelationMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -131,11 +131,11 @@ public class UserGrpAclRelationMaintenanceAction extends BaseAction {
 		} finally {
 			try {
 				conn.commit();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.setAutoCommit(true);
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			//try{ pstmt1.close(); } catch(Exception e) {}
 			try {
@@ -178,7 +178,7 @@ public class UserGrpAclRelationMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー

@@ -305,17 +305,17 @@ public class DeleteHostReqAction extends BaseAction {
 		} catch (SQLException e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			throw new SQLException(e.getMessage());
 		} finally {
 			try {
 				conn.commit();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.setAutoCommit(true);
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				stmt1.close();

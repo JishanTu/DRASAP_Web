@@ -8,27 +8,24 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
-import tyk.drasap.common.DataSourceFactory;
-import tyk.drasap.common.ErrorUtility;
+import tyk.drasap.springfw.config.DataSourceManager;
 
 public class BaseAction {
-	protected static DataSource ds;
-	static {
-		try {
-			ds = DataSourceFactory.getOracleDataSource();
-		} catch (Exception e) {
-			//category.error("DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-			System.out.print("!!!! DataSourceの取得に失敗\n" + ErrorUtility.error2String(e));
-		}
-	}
 	// --------------------------------------------------------- Instance Variables
 	protected Logger category;
+	/** DB接続データソース */
+	protected DataSource ds;
 	@Autowired
 	protected MessageSource messageSource;
 	// --------------------------------------------------------- Methods
 
+	/** コンストラクタ */
 	public BaseAction() {
+		// ロガーを初期化
 		category = Logger.getLogger(this.getClass().getName());
+
+		// DataSource取得
+		ds = DataSourceManager.getInstance();
 	}
 
 	public void setMessageSource(MessageSource ms) {

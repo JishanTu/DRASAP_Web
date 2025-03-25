@@ -109,10 +109,15 @@ public class RequestPriAction extends BaseAction {
 				throw new Exception(e.getMessage());
 			} finally {
 				try {
-					if (stmt != null) {
-						stmt.close();
-						stmt = null;
-					}
+					rs.close();
+				} catch (Exception e) {
+				}
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				try {
+					conn.close();
 				} catch (Exception e) {
 				}
 			}

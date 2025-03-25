@@ -92,12 +92,8 @@ public class DeleteDwgAction extends BaseAction {
 			session.removeAttribute("deleteDwgForm");
 			session.setAttribute("deleteDwgForm", deleteDwgForm);
 			//if (deleteDwgForm == null) deleteDwgForm = new DeleteDwgForm();
-			Connection conn = null;
-			conn = ds.getConnection();
-			conn.setAutoCommit(false);// 非トランザクション
-			try {
-				conn.close();
-			} catch (Exception e) {
+			try (Connection conn = ds.getConnection()) {
+				conn.setAutoCommit(false);// 非トランザクション
 			}
 			ArrayList<String> delKeys = new ArrayList<String>();
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {
@@ -240,12 +236,12 @@ public class DeleteDwgAction extends BaseAction {
 				if (delSts == DELETE_FILE_COPY_FAILED || delSts == DELETE_FILE_NOT_FOUND) {
 					try {
 						conn.rollback();
-					} catch (Exception e2) {
+					} catch (Exception e) {
 					}
 				} else if (delSts == DELETE_FILE_SUCCESS) {
 					try {
 						conn.commit();
-					} catch (Exception e2) {
+					} catch (Exception e) {
 					}
 					//MessageSourceUtil.addAttribute(errors, "message",messageSource.getMessage("search.delDwg.success",keyVal));
 					category.info("図番[" + keyVal + "]を削除しました。");
@@ -256,7 +252,7 @@ public class DeleteDwgAction extends BaseAction {
 		} catch (SQLException e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -269,11 +265,11 @@ public class DeleteDwgAction extends BaseAction {
 		} finally {
 			try {
 				conn.commit();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.setAutoCommit(true);
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				stmt1.close();
@@ -312,7 +308,7 @@ public class DeleteDwgAction extends BaseAction {
 		} catch (SQLException e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -641,12 +637,19 @@ public class DeleteDwgAction extends BaseAction {
 			} catch (Exception e) {
 			}
 			try {
+				rs2.close();
+			} catch (Exception e) {
+			}
+			try {
+				stmt2.close();
+			} catch (Exception e) {
+			}
+			try {
 				conn.close();
 			} catch (Exception e) {
 			}
 		}
 		return linkDwgParmMap;
-
 	}
 
 	/**
@@ -745,7 +748,7 @@ public class DeleteDwgAction extends BaseAction {
 			// rollback
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			throw e;

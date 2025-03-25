@@ -81,10 +81,9 @@ public class AclvChangePreAction extends BaseAction {
 		aclvChangeForm.errorMessages = new ArrayList<>();
 
 		Connection conn = null;
-		conn = ds.getConnection();
-		conn.setAutoCommit(false);// 非トランザクション
-
 		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(false);// 非トランザクション
 
 			// SearchResultFormから選択された図面を取得する
 			for (int i = 0; i < searchResultForm.getSearchResultList().size(); i++) {

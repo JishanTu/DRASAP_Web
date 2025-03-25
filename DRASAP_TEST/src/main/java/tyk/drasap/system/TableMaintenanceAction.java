@@ -80,19 +80,16 @@ public class TableMaintenanceAction extends BaseAction {
 		//
 		if ("init".equals(tableMaintenanceForm.getAct())) {
 			ArrayList<String> tableList = getTableList(user, errors);
-			Connection conn = null;
-			conn = ds.getConnection();
-			conn.setAutoCommit(false);// 非トランザクション
-			UserKeyColDB UserKeyColDB = new UserKeyColDB(user, conn);
-			try {
-				conn.close();
-			} catch (Exception e) {
+			UserKeyColDB userKeyColDB = null;
+			try (Connection conn = ds.getConnection()) {
+				conn.setAutoCommit(false);// 非トランザクション
+				userKeyColDB = new UserKeyColDB(user, conn);
 			}
 			tableMaintenanceForm = new TableMaintenanceForm();
 			tableMaintenanceForm.setTableList(tableList);
-			tableMaintenanceForm.UserKeyColDB = UserKeyColDB;
+			tableMaintenanceForm.UserKeyColDB = userKeyColDB;
 			String initTable = tableMaintenanceForm.getTableList().get(0).toString();
-			ArrayList<TableMaintenanceElement> attrList = getTableAttrList(initTable, UserKeyColDB, user, errors);
+			ArrayList<TableMaintenanceElement> attrList = getTableAttrList(initTable, userKeyColDB, user, errors);
 			ArrayList<TableMaintenanceRec> tableValue = getTableValue(initTable, attrList, tableMaintenanceForm, user, errors);
 			tableMaintenanceForm.setAttrList(attrList);
 			tableMaintenanceForm.setRecList(tableValue);
@@ -236,7 +233,7 @@ public class TableMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -248,11 +245,11 @@ public class TableMaintenanceAction extends BaseAction {
 		} finally {
 			try {
 				conn.commit();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.setAutoCommit(true);
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.close();
@@ -314,7 +311,7 @@ public class TableMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -327,11 +324,11 @@ public class TableMaintenanceAction extends BaseAction {
 		} finally {
 			try {
 				conn.commit();
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				conn.setAutoCommit(true);
-			} catch (Exception e2) {
+			} catch (Exception e) {
 			}
 			try {
 				stmt1.close();
@@ -415,7 +412,7 @@ public class TableMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー
@@ -531,7 +528,7 @@ public class TableMaintenanceAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				conn.rollback();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 
 			// for ユーザー

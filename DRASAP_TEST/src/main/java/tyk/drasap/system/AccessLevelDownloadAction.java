@@ -200,7 +200,7 @@ public class AccessLevelDownloadAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				response.reset();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			// for ユーザー
 			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.download.failed.template", new Object[] { ErrorUtility.error2String(e) }, null));
@@ -359,7 +359,7 @@ public class AccessLevelDownloadAction extends BaseAction {
 		} catch (Exception e) {
 			try {
 				response.reset();
-			} catch (Exception e2) {
+			} catch (Exception ex) {
 			}
 			// for ユーザー
 			MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage("system.aclBatchUpdate.download.failed.excel", new Object[] { ErrorUtility.error2String(e) }, null));

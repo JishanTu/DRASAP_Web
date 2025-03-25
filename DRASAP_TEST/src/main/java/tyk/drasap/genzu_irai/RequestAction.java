@@ -94,11 +94,12 @@ public class RequestAction extends BaseAction {
 				}
 
 				String zumenAll = "0";//すべての図番が登録済みかどうかのチェック。1の場合はすべて登録済み
+
+				String job_Id = "";
+				try (Connection conn = ds.getConnection()) {
+					job_Id = JobReqSeqDB.getJobId(irai, conn);//原図庫作業依頼でのジョブIDを取得する
+				}
 				Connection conn = null;
-				conn = ds.getConnection();
-				String job_Id = JobReqSeqDB.getJobId(irai, conn);//原図庫作業依頼でのジョブIDを取得する
-				conn.close();
-				conn = null;
 				java.util.Calendar calendar = java.util.Calendar.getInstance();
 				String day = new java.text.SimpleDateFormat("yyyy/MM/dd").format(calendar.getTime());//本日の日付
 				try {
@@ -248,10 +249,10 @@ public class RequestAction extends BaseAction {
 							conn.rollback();
 							conn.setAutoCommit(true); // 自動コミットをオンに
 						}
-					} catch (java.sql.SQLException se2) {
+					} catch (java.sql.SQLException se) {
 						// SQL失敗しました。
-						MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage(classId, new Object[] { se2.getMessage() }, null));
-						category.error("ロールバックに失敗しました" + ErrorUtility.error2String(se2));
+						MessageSourceUtil.addAttribute(errors, "message", messageSource.getMessage(classId, new Object[] { se.getMessage() }, null));
+						category.error("ロールバックに失敗しました" + ErrorUtility.error2String(se));
 					}
 
 				} finally {

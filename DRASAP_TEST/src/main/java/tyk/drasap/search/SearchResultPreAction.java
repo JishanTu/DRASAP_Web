@@ -455,11 +455,18 @@ public class SearchResultPreAction extends BaseAction {
 			category.error("åüçıÇ…é∏îs\n" + ErrorUtility.error2String(e));
 		} finally {
 			try {
+				rs1.close();
+			} catch (Exception e) {
+			}
+			try {
+				stmt1.close();
+			} catch (Exception e) {
+			}
+			try {
 				conn.close();
 			} catch (Exception e) {
 			}
 		}
-		//
 		return searchResultList;
 	}
 
