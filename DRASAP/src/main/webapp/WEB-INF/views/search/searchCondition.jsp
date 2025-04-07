@@ -77,8 +77,10 @@
 		
 		.table-container {
 			overflow-y: auto;
-			/*height: 140px;*/
-			width: 566px
+			overflow-x: hidden;
+			width: 100%;
+			padding-right: 17px;
+
 		}
 	</style>
 <script type="text/javascript">
@@ -789,9 +791,9 @@
 														</span>
 													</td>
 													<td id="divisionTD" style="line-height: 1;">
-														<div id="division" class="normal10"
+														<span id="division" class="normal10"
 															style="height: 14px;overflow:hidden">${searchConditionForm.c_label8}：${user.deptName}
-														</div>
+														</span>
 													</td>
 												</tr>
 											</table>
@@ -888,7 +890,7 @@
 						<c:forEach begin="1" end="${searchConditionForm.getSearchSelColNum()}" var="index">
 							<tr>
 								<td>
-									<select name="condition${index}" style = "width: 141px;">
+									<select name="condition${index}">
 										<c:forEach items="${searchConditionForm.conditionKeyList}" var="conditionKey" varStatus="loop">
 											<c:choose>
 												<c:when test="${conditionKey == searchConditionForm.getCondition(index - 1)}">
@@ -902,14 +904,14 @@
 									</select>
 								</td>
 								<td>
-									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"style="width: 309px;"/>
+									<input type="text" name="conditionValue${index}" size="40" class="conditionStr" value = "${searchConditionForm.conditionValueList[index-1]}"/>
 								</td>
 								<td>
-									<input type="button" name="sortWayButton${index}" value="${searchConditionForm.sortWayList[index-1]}" onclick="changeOrder(this)" style="width: 60px; height: 22px;" />
+									<input type="button" name="sortWayButton${index}" value="${searchConditionForm.sortWayList[index-1]}" onclick="changeOrder(this)" style="width: 40px; height: 22px;" />
 									<input type="hidden" name="sortWay${index}" />
 								</td>
 								<td>
-									<select name="sortOrder${index}" style="width: 30px;">
+									<select name="sortOrder${index}">
 										<c:forEach items="${searchConditionForm.sortOrderKeyList}"
 											var="sortOrderKey" varStatus="loop">
 											<c:choose>
@@ -1000,7 +1002,7 @@
 								 %>
 								<%-- 検索開始ボタン --%>
 								&emsp; <% // ボタンの前に空白を入れる %> 
-								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold; margin-top: 7px;">
+								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold; margin-top: 2px;">
 									${searchConditionForm.c_label4}
 								</button>
 							</td>
@@ -1101,6 +1103,13 @@ if (me.isAdmin() || me.isAclBatchUpdateFlag()) {
 
 			window.addEventListener('resize', adjustTableContainerHeight);
 			adjustTableContainerHeight();
+			const tableContainer = document.getElementById('tableContainer');
+			tableContainer.addEventListener('click', function() {
+			    tableContainer.style.paddingRight = '0px';
+			});
+			window.addEventListener('load', function() {
+			    tableContainer.style.paddingRight = '0px';
+			});
 		</script>
 
 		<div id="toolotipContents" style="visibility: hidden;">
