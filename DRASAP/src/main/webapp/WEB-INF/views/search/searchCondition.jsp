@@ -985,9 +985,8 @@
 								<br />
 								<%-- 図番指定順 --%>
 								<input type="hidden" id="orderDrwgNoHidden" name="orderDrwgNo" value="false"/>
-								<input type="checkbox" id="orderDrwgNocheckbox" value="true" ${searchConditionForm.isOrderDrwgNo() ? 'checked' : ''} onclick="isOrderDrwgNo()"/>
+								<input type="checkbox" id="orderDrwgNocheckbox" value="true" ${searchConditionForm.isOrderDrwgNo() ? 'checked' : ''} onclick="isOrderDrwgNo()" style="margin-bottom: 12px;"/>
 								${searchConditionForm.c_label17} 
-								<br />
 								<br />
 								<!-- 全ての属性条件を -->
 								${searchConditionForm.c_label3}
@@ -1002,7 +1001,7 @@
 								 %>
 								<%-- 検索開始ボタン --%>
 								&emsp; <% // ボタンの前に空白を入れる %> 
-								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold; margin-top: 2px;">
+								<button type="submit" onclick="event.preventDefault(); doSearch();" <%if (!hasAuth) {%> disabled="disabled" <%}%> style="font-size: 12pt; font-weight: bold; margin-top: 8px;">
 									${searchConditionForm.c_label4}
 								</button>
 							</td>
